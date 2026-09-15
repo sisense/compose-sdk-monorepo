@@ -6,6 +6,14 @@ import { getHeaderItemStyle, resolveHeaderItemSize } from './header-item-size.js
 import { ResolvedHeaderItem } from './types.js';
 
 /**
+ * Prefix of the `data-testid` carried by every header item cell.
+ *
+ * Matches the `csdk-` convention used by the rest of the SDK's test ids, keeping header items
+ * greppable as SDK-rendered nodes in host pages.
+ */
+export const HEADER_ITEM_TESTID_PREFIX = 'csdk-';
+
+/**
  * The cell box wrapping the item's content.
  */
 const CellBox = styled.div``;
@@ -20,6 +28,15 @@ const CellBox = styled.div``;
  */
 const isEmptyContent = (content: ReactNode): boolean =>
   content === null || content === undefined || content === false || content === '';
+
+/**
+ * Builds the `data-testid` of a header item cell from the item's id.
+ *
+ * @param id - The header item id.
+ * @returns The cell's `data-testid`, i.e. the item id prefixed with `csdk-`.
+ * @internal
+ */
+export const getHeaderItemTestId = (id: string): string => `${HEADER_ITEM_TESTID_PREFIX}${id}`;
 
 /**
  * Props for {@link HeaderItemCell}.
@@ -54,7 +71,7 @@ export const HeaderItemCell = ({ item, defaultSize }: HeaderItemCellProps) => {
   const content = item.component({ size });
   return (
     <CellBox
-      data-testid={`header-item-${item.id}`}
+      data-testid={getHeaderItemTestId(item.id)}
       style={{
         ...getHeaderItemStyle(size, item.fill),
         pointerEvents: isEmptyContent(content) ? 'none' : 'auto',

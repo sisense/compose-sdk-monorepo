@@ -15,35 +15,27 @@ export interface AreaChartProps extends AreaChartPropsPreact {}
  * but with filled in areas under each line and an option to display them as stacked.
  *
  * @example
- * Here's how you can use the AreaChart component in a Vue application:
  * ```vue
- * <template>
- * <AreaChart
-      :dataOptions="areaChartProps.dataOptions"
-      :dataSet="areaChartProps.dataSet"
-      :filters="areaChartProps.filters"
-    />
- * </template>
- *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
- * import * as DM from '../assets/sample-retail-model';
- * import { AreaChart, type AreaChartProps } from '@sisense/sdk-ui-vue';
+ * import { AreaChart } from '@sisense/sdk-ui-vue';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
  *
- * const dimProductName = DM.DimProducts.ProductName;
- * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
- * const areaChartProps = ref<AreaChartProps>({
- *   dataSet: DM.DataSource,
+ * const chartProps = ref({
  *   dataOptions: {
- *     category: [dimProductName],
- *     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+ *     category: [DM.Commerce.Date.Quarters],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
  *     breakBy: [],
  *   },
- *   filters: [],
  * });
+ * </script>
+ *
+ * <template>
+ *   <AreaChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+ * </template>
  * ```
- * <img src="media://vue-area-chart-example.png" width="800"/>
+ * <img src="media://area-chart-example-1.png" width="700px" />
  * @param {AreaChartProps} - Area chart properties
  * @returns Area Chart component
  * @group Charts

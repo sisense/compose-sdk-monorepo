@@ -5,6 +5,7 @@ import {
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
   getMembersWithoutDeactivated,
+  withMembersLimitedToSelectionMode,
 } from './utils.js';
 
 /**
@@ -53,5 +54,37 @@ describe('filter-editor-popover sections utils', () => {
     expect(getConfigWithUpdatedDeactivated(filter, ['4', '18'])).toMatchObject({
       deactivatedMembers: ['18'],
     });
+  });
+});
+
+describe('withMembersLimitedToSelectionMode', () => {
+  it('should keep every member when multi-selection is enabled', () => {
+    const members = ['2013-11-12T00:00:00', '2013-11-04T00:00:00'];
+
+    expect(withMembersLimitedToSelectionMode(members, true)).toEqual(members);
+  });
+
+  it('should keep only the earliest member when multi-selection is disabled', () => {
+    expect(
+      withMembersLimitedToSelectionMode(
+        ['2013-11-12T00:00:00', '2013-11-04T00:00:00', '2013-11-08T00:00:00'],
+        false,
+      ),
+    ).toEqual(['2013-11-04T00:00:00']);
+  });
+
+  it('should not mutate the given members', () => {
+    const members = ['2013-11-12T00:00:00', '2013-11-04T00:00:00'];
+
+    withMembersLimitedToSelectionMode(members, false);
+
+    expect(members).toEqual(['2013-11-12T00:00:00', '2013-11-04T00:00:00']);
+  });
+
+  it('should pass empty and single-member selections through unchanged', () => {
+    expect(withMembersLimitedToSelectionMode([], false)).toEqual([]);
+    expect(withMembersLimitedToSelectionMode(['2013-11-04T00:00:00'], false)).toEqual([
+      '2013-11-04T00:00:00',
+    ]);
   });
 });

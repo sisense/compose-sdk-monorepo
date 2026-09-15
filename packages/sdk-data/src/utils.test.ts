@@ -1,4 +1,4 @@
-import { describe } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import * as DM from './__test-helpers__/sample-ecommerce.js';
 import * as filterFactory from './dimensional-model/filters/factory.js';

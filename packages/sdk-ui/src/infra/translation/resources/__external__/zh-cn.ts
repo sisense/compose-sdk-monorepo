@@ -103,6 +103,31 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'Tabber小部件配置无效',
   },
+  notifications: {
+    dismiss: '关闭通知',
+    auth: {
+      sessionExpiredTitle: '会话已过期',
+      sessionExpiredMessage: '您的会话已过期。请重新登录以继续。',
+      authenticationFailedTitle: '身份验证失败',
+      authenticationFailedMessage: '提供的凭据被 Sisense 实例拒绝。',
+    },
+    permission: {
+      forbiddenTitle: '访问被拒绝',
+      forbiddenMessage: '您没有权限访问这些数据。',
+    },
+    network: {
+      unreachableTitle: '连接问题',
+      unreachableMessage: '无法连接到 Sisense 实例。',
+    },
+    server: {
+      errorTitle: '服务器错误',
+      errorMessage: 'Sisense 实例返回了错误。请稍后重试。',
+    },
+    general: {
+      requestFailedTitle: '请求失败',
+      requestFailedMessage: '对 Sisense 实例的请求失败。',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: '无结果',
   filters: '筛选器',
@@ -212,6 +237,7 @@ const translation: TranslationDictionary = {
     allExceptCount: '除 {{count}} 项以外的全部',
     setupTitle: '设置筛选器小部件',
     setupSubtitle: '设置维度并配置筛选器的工作方式',
+    emptySetup: '设置筛选器',
     conditionUnsupported: '条件适用于文本字段和数值字段',
     conditionNotRepresentable: '此条件无法在此处编辑',
     controls: {
@@ -231,6 +257,20 @@ const translation: TranslationDictionary = {
       betweenMax: '最大值',
       selectValues: '选择{{level}}',
       clear: '清除',
+    },
+    calendar: {
+      selectDates: '选择日期',
+      multipleDaysHint: '您可以选择多个日期',
+      formatError: '请使用 {{- format}} 格式',
+      nonexistent: '此日期不存在',
+      chooseDate: '选择日期',
+      chooseDates: '选择日期',
+      previousMonth: '上个月',
+      nextMonth: '下个月',
+      previousYear: '上一年',
+      nextYear: '下一年',
+      openCalendar: '打开日历',
+      clearDate: '清除日期',
     },
   },
   unsupportedFilterMessage: '不支持的筛选器（已应用于数据查询）',
@@ -265,6 +305,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: '删除小部件',
+      duplicateWidget: '复制小部件',
       renameWidget: '重命名小部件',
       distributeEqualWidth: '在此行中平均分配',
       download: '下载',
@@ -276,6 +317,20 @@ const translation: TranslationDictionary = {
   },
   customWidgets: {
     registerPrompt: '未知的自定义小部件类型: {{customWidgetType}}。请注册此自定义小部件。',
+  },
+  narrativeWidget: {
+    generate: '生成叙述',
+    regenerate: '重新生成',
+    retry: '重试生成',
+    disclaimer: '内容由AI提供支持，因此可能会出现错误。',
+    updatedAt: '更新时间：{{timestamp}}',
+    copy: '复制到剪贴板',
+    copied: '已复制',
+    creditsUsed: '已使用 {{usagePercentage}}% 的 AI 积分。',
+    noDataTitle: '没有可用的仪表板数据',
+    noDataDescription: '仪表板数据可用后，您可以生成叙述。',
+    failedTitle: '无法生成叙述',
+    failedDescription: '请稍后重试。如果问题仍然存在，请联系您的管理员。',
   },
   ai: {
     analyticsChatbot: '分析聊天机器人',
@@ -472,6 +527,7 @@ const translation: TranslationDictionary = {
     linkedToWidget: {
       label: '已关联到筛选器小部件',
       tooltip: '此筛选器无法从筛选器面板进行编辑。请直接在仪表板中更改其值。',
+      infoAriaLabel: '关联筛选器小部件的信息',
     },
   },
   chart: {
@@ -487,6 +543,7 @@ const translation: TranslationDictionary = {
     table: {
       label: '数据表',
       totalRows: '共 {{formattedCount}} 行',
+      rowsRange: '第 {{start}}-{{end}} 行',
     },
     sankey: {
       alerts: {

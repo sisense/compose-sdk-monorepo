@@ -8,34 +8,104 @@ A Vue component that provides various options for displaying one or two numeric 
 
 ## Example
 
-Here's how you can use the IndicatorChart component in a Vue application:
 ```vue
-<template>
-     <IndicatorChart
-       :dataOptions="indicatorChartProps.dataOptions"
-       :dataSet="indicatorChartProps.dataSet"
-       :filters="indicatorChartProps.filters"
-     />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { IndicatorChart, type IndicatorChartProps } from '@sisense/sdk-ui-vue';
+import { IndicatorChart, IndicatorStyleOptions } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-  const indicatorChartProps = ref<IndicatorChartProps>({
-    dataSet: DM.DataSource,
-   dataOptions: {
-      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+const chartProps = ref({
+  dataOptions: {
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    max: [measureFactory.constant(125000000)],
+  },
+  styleOptions: {
+    indicatorComponents: {
+      title: { shouldBeShown: true, text: 'Total Revenue' },
+      ticks: { shouldBeShown: false },
+      labels: { shouldBeShown: true },
     },
-    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-  });
+    subtype: 'indicator/gauge',
+    skin: 2,
+  } as IndicatorStyleOptions,
+});
 </script>
+
+<template>
+  <IndicatorChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+    :styleOptions="chartProps.styleOptions"
+  />
+</template>
 ```
-<img src="../../../img/vue-indicator-chart-example.png" width="400px" />
+<img src="../../../img/indicator-chart-example-1.png" width="400px" />
+
+Numeric indicator variant with a secondary value:
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { IndicatorChart } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const chartProps = ref({
+  dataOptions: {
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    // secondary value is optional
+    secondary: [measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity')],
+  },
+});
+</script>
+
+<template>
+  <IndicatorChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+</template>
+```
+
+<img src="../../../img/indicator-chart-example-3.png" width="400px" />
+
+Ticker style indicator variant:
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { IndicatorChart, IndicatorStyleOptions } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const chartProps = ref({
+  dataOptions: {
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    max: [measureFactory.constant(125000000)],
+  },
+  styleOptions: {
+    indicatorComponents: {
+      title: { shouldBeShown: true, text: 'Total Revenue' },
+      ticks: { shouldBeShown: false },
+      labels: { shouldBeShown: true },
+    },
+    subtype: 'indicator/gauge',
+    skin: 2,
+    forceTickerView: true,
+    tickerBarHeight: 30,
+    width: 400,
+  } as IndicatorStyleOptions,
+});
+</script>
+
+<template>
+  <IndicatorChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+    :styleOptions="chartProps.styleOptions"
+  />
+</template>
+```
+
+<img src="../../../img/indicator-chart-example-4.png" width="400px" />
 
 ## Param
 

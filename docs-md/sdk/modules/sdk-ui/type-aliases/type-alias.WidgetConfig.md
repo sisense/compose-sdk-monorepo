@@ -4,7 +4,7 @@ title: WidgetConfig
 
 # Type alias WidgetConfig
 
-> **WidgetConfig**: [`ChartWidgetConfig`](../interfaces/interface.ChartWidgetConfig.md) \| [`CustomWidgetConfig`](../interfaces/interface.CustomWidgetConfig.md) \| [`FilterWidgetConfig`](../interfaces/interface.FilterWidgetConfig.md) \| [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md) \| [`TextWidgetConfig`](../interfaces/interface.TextWidgetConfig.md)
+> **WidgetConfig**: [`ChartWidgetConfig`](../interfaces/interface.ChartWidgetConfig.md) \| [`CustomWidgetConfig`](../interfaces/interface.CustomWidgetConfig.md) \| [`FilterWidgetConfig`](../interfaces/interface.FilterWidgetConfig.md) \| [`NarrativeWidgetConfig`](../interfaces/interface.NarrativeWidgetConfig.md) \| [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md) \| [`TextWidgetConfig`](../interfaces/interface.TextWidgetConfig.md)
 
 Configuration of a widget — the union of every widget-type-specific configuration.
 

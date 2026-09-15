@@ -122,6 +122,31 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'Tabber 위젯 구성이 잘못되었습니다',
   },
+  notifications: {
+    dismiss: '알림 닫기',
+    auth: {
+      sessionExpiredTitle: '세션 만료',
+      sessionExpiredMessage: '세션이 만료되었습니다. 계속하려면 다시 로그인하세요.',
+      authenticationFailedTitle: '인증 실패',
+      authenticationFailedMessage: '제공된 자격 증명이 Sisense 인스턴스에서 거부되었습니다.',
+    },
+    permission: {
+      forbiddenTitle: '접근 거부',
+      forbiddenMessage: '이 데이터에 접근할 권한이 없습니다.',
+    },
+    network: {
+      unreachableTitle: '연결 문제',
+      unreachableMessage: 'Sisense 인스턴스에 연결할 수 없습니다.',
+    },
+    server: {
+      errorTitle: '서버 오류',
+      errorMessage: 'Sisense 인스턴스가 오류를 반환했습니다. 나중에 다시 시도하세요.',
+    },
+    general: {
+      requestFailedTitle: '요청 실패',
+      requestFailedMessage: 'Sisense 인스턴스에 대한 요청이 실패했습니다.',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: '결과 없음',
   filters: '필터',
@@ -231,6 +256,7 @@ const translation: TranslationDictionary = {
     allExceptCount: '{{count}}개 제외한 모두',
     setupTitle: '필터 위젯 설정',
     setupSubtitle: '차원을 설정하고 필터 작동 방식을 구성하세요',
+    emptySetup: '필터 설정',
     conditionUnsupported: '조건은 텍스트 및 숫자 필드에서 사용할 수 있습니다',
     conditionNotRepresentable: '이 조건은 여기에서 편집할 수 없습니다',
     controls: {
@@ -250,6 +276,20 @@ const translation: TranslationDictionary = {
       betweenMax: '최댓값',
       selectValues: '{{level}} 선택',
       clear: '지우기',
+    },
+    calendar: {
+      selectDates: '날짜 선택',
+      multipleDaysHint: '여러 날짜를 선택할 수 있습니다',
+      formatError: '{{- format}} 형식을 따르세요',
+      nonexistent: '존재하지 않는 날짜입니다',
+      chooseDate: '날짜 선택',
+      chooseDates: '날짜 선택',
+      previousMonth: '이전 달',
+      nextMonth: '다음 달',
+      previousYear: '이전 해',
+      nextYear: '다음 해',
+      openCalendar: '캘린더 열기',
+      clearDate: '날짜 지우기',
     },
   },
   unsupportedFilterMessage: '지원되지 않는 필터(데이터 쿼리에 적용됨)',
@@ -284,6 +324,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: '위젯 삭제',
+      duplicateWidget: '위젯 복제',
       renameWidget: '위젯 이름 바꾸기',
       distributeEqualWidth: '이 행에서 균등하게 배포',
       download: '다운로드',
@@ -296,6 +337,20 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       '알 수 없는 사용자 지정 위젯 유형: {{customWidgetType}}. 이 사용자 지정 위젯을 등록하세요.',
+  },
+  narrativeWidget: {
+    generate: '내러티브 생성',
+    regenerate: '다시 생성',
+    retry: '생성 다시 시도',
+    disclaimer: '콘텐츠는 AI로 구동되므로 오류가 발생할 수 있습니다.',
+    updatedAt: '업데이트: {{timestamp}}',
+    copy: '클립보드에 복사',
+    copied: '복사됨',
+    creditsUsed: 'AI 크레딧의 {{usagePercentage}}%가 사용되었습니다.',
+    noDataTitle: '사용 가능한 대시보드 데이터가 없습니다',
+    noDataDescription: '대시보드 데이터가 사용 가능해지면 내러티브를 생성할 수 있습니다.',
+    failedTitle: '내러티브를 생성할 수 없습니다',
+    failedDescription: '나중에 다시 시도하세요. 문제가 지속되면 관리자에게 문의하세요.',
   },
   ai: {
     analyticsChatbot: '분석 챗봇',
@@ -502,6 +557,7 @@ const translation: TranslationDictionary = {
     linkedToWidget: {
       label: '필터 위젯에 연결됨',
       tooltip: '이 필터는 필터 패널에서 편집할 수 없습니다. 대시보드에서 직접 값을 변경하세요.',
+      infoAriaLabel: '필터 위젯 연결 정보',
     },
   },
   chart: {
@@ -517,6 +573,7 @@ const translation: TranslationDictionary = {
     table: {
       label: '데이터 테이블',
       totalRows: '합계: {{formattedCount}}행',
+      rowsRange: '{{start}}-{{end}}행',
     },
     sankey: {
       alerts: {

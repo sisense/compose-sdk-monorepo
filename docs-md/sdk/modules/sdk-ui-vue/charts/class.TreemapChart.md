@@ -10,34 +10,26 @@ This type of chart can be used instead of a column chart for comparing a large n
 
 ## Example
 
-Here's how you can use the TreemapChart component in a Vue application:
 ```vue
-<template>
-     <TreemapChart
-       :dataOptions="treemapChartProps.dataOptions"
-       :dataSet="treemapChartProps.dataSet"
-       :filters="treemapChartProps.filters"
-     />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { TreemapChart, type TreemapChartProps } from '@sisense/sdk-ui-vue';
+import { TreemapChart } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-const treemapChartProps = ref<TreemapChartProps>({
-   dataSet: DM.DataSource,
-   dataOptions: {
-     category: [dimProductName],
-     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-   },
-   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
- });
+const chartProps = ref({
+  dataOptions: {
+    category: [{ column: DM.Commerce.Condition, isColored: true }, DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  },
+});
+</script>
+
+<template>
+  <TreemapChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+</template>
 ```
-<img src="../../../img/vue-treemap-chart-example.png" width="600px" />
+<img src="../../../img/treemap-chart-example-1.png" width="700px" />
 
 ## Param
 

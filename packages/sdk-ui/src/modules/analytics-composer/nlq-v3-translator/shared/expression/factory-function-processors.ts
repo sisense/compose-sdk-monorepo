@@ -34,6 +34,10 @@ import { processMeasuredValue } from './process-measured-value.js';
  */
 export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
   'measureFactory.customFormula': processCustomFormula,
+  // A calculated dimension groups rather than aggregates, so the aggregative-function requirement
+  // that applies to measures is lifted here.
+  'attributeFactory.customFormula': (processedArgs, context) =>
+    processCustomFormula(processedArgs, context, { requireAggregative: false }),
   'measureFactory.measuredValue': processMeasuredValue,
 
   // Numeric-only aggregations: reject text and datetime attributes (BE throws otherwise)

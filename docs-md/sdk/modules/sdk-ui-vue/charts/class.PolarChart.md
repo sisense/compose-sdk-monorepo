@@ -8,35 +8,27 @@ A Vue component comparing multiple categories/variables with a spacial perspecti
 
 ## Example
 
-Here's how you can use the PolarChart component in a Vue application:
 ```vue
-<template>
-     <PolarChart
-       :dataOptions="polarChartProps.dataOptions"
-       :dataSet="polarChartProps.dataSet"
-       :filters="polarChartProps.filters"
-     />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { PolarChart,type PolarChartProps } from '@sisense/sdk-ui-vue';
+import { PolarChart } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-const polarChartProps = ref<PolarChartProps>({
-   dataSet: DM.DataSource,
-   dataOptions: {
-     category: [dimProductName],
-     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-     breakBy: [],
-   },
-   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
- });
+const chartProps = ref({
+  dataOptions: {
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [],
+  },
+});
+</script>
+
+<template>
+  <PolarChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+</template>
 ```
-<img src="../../../img/vue-polar-chart-example.png" width="600px" />
+<img src="../../../img/polar-chart-example-1.png" width="700px" />
 
 ## Param
 

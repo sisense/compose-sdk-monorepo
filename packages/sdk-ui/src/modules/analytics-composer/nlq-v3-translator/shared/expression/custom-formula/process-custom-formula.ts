@@ -23,12 +23,16 @@ import { parseXDiffCalls, validateCustomFormula } from './validate-custom-formul
  *
  * @param processedArgs - [title: string, formula: string, context: Record<string, unknown>, format?: string, description?: string]
  * @param context - Processing context with error prefix and other metadata
+ * @param options - Processing options. `requireAggregative` (default `true`) demands that a formula
+ * referencing raw attributes wrap them in an aggregative function; a calculated dimension groups
+ * rather than aggregates, so it passes `false`
  * @returns New args array with `processedContext` at index 2 (does not mutate `processedArgs`)
  * @throws Error with descriptive message if validation fails
  */
 export function processCustomFormula(
   processedArgs: ProcessedArg[],
   context: FunctionContext,
+  options: { requireAggregative?: boolean } = {},
 ): ProcessedArg[] {
   // Ensure we have the expected number of arguments (should be guaranteed by basic validation)
   // Accept 3, 4, or 5 arguments (4th is optional format, 5th is optional description for LLM context)
@@ -62,6 +66,7 @@ export function processCustomFormula(
     errorOnUnusedContext: true, // Strict validation: all context keys must be used
     allowEmptyFormula: false, // Custom formulas must have content
     schemaIndex: context.schemaIndex,
+    requireAggregative: options.requireAggregative ?? true,
   });
 
   // 2. Build ref -> inferred date level from xdiff calls (for refs without level in name)

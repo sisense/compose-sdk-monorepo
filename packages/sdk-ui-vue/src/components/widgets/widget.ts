@@ -2,6 +2,7 @@ import { Widget as WidgetPreact } from '@sisense/sdk-ui-preact';
 import type {
   CustomWidgetProps as CustomWidgetPropsPreact,
   FilterWidgetProps as FilterWidgetPropsPreact,
+  NarrativeWidgetProps,
   SoftUnion,
   TextWidgetProps as TextWidgetPropsPreact,
   WidgetProps as WidgetPropsPreact,
@@ -64,6 +65,7 @@ export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
   | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
   | WithCommonWidgetProps<FilterWidgetProps, 'filter'>
+  | WithCommonWidgetProps<NarrativeWidgetProps, 'narrative'>
 >;
 
 /**

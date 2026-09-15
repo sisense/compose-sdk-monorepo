@@ -86,6 +86,7 @@ import {
   buildPieSeriesLabelsFromFusionLabels,
   type CategoricalFusionLabels,
 } from './categorical-labels-style.js';
+import { extractNarrativeWidgetStyleOptions } from './narrative-widget-style.js';
 import {
   extractSeriesLabelAffixFromFusion,
   extractSeriesLabelTextStyleFromFusion,
@@ -1141,6 +1142,9 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
       return extractCalendarHeatmapChartStyleOptions(style as CalendarHeatmapWidgetStyle);
     case 'richtexteditor':
       return (style as TextWidgetDtoStyle).content;
+    case 'dashboardnarrative':
+      // Container design is flattened separately by the pipeline; the widget has no keys of its own.
+      return extractNarrativeWidgetStyleOptions() as ChartStyleOptions;
     case 'WidgetsTabber': // DTO type from Fusion (maps to 'tabber-buttons' in CSDK)
       return extractTabberButtonsWidgetStyleOptions(style as TabberWidgetDtoStyle);
     case 'filter':

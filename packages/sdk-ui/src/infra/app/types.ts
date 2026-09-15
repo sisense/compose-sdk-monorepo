@@ -1,3 +1,4 @@
+import type { NotificationsCenter } from '@sisense/sdk-common';
 import { DataSource } from '@sisense/sdk-data';
 import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { QueryClient } from '@sisense/sdk-query-client';
@@ -6,6 +7,7 @@ import { HttpClient } from '@sisense/sdk-rest-client';
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
 import type { Locale } from 'date-fns';
 
+import type { NotificationsConfig } from '@/infra/notifications/types';
 import { DateConfig, LoadingIndicatorConfig, TranslationConfig } from '@/types';
 
 import type { AppSettings } from './settings/settings';
@@ -38,7 +40,6 @@ export type AppConfig = {
    * Query Cache Configurations.
    *
    * See [Client query caching guide](/guides/sdk/guides/client-query-caching.html) for more details.
-   *
    * @beta
    */
   queryCacheConfig?: {
@@ -52,7 +53,6 @@ export type AppConfig = {
 
   /**
    * Query limit (max rows count that will be fetched in query)
-   *
    * @default 20000
    */
   queryLimit?: number;
@@ -85,7 +85,6 @@ export type AppConfig = {
      * Whether to enable tabber widget support
      *
      * If not specified, the default value is `true`
-     *
      * @deprecated Tabber widgets are now supported by default and this property is no longer needed.
      */
     enabled?: boolean;
@@ -103,11 +102,17 @@ export type AppConfig = {
   };
 
   /**
+   * Configures the notifications service, which raises user-facing messages
+   * about errors such as expired sessions or insufficient permissions.
+   * @alpha
+   */
+  notificationsConfig?: NotificationsConfig;
+
+  /**
    * API Telemetry headers to attach to every request made by the SDK.
    * Attached only when the API Telemetry feature flag is enabled.
    *
    * Support only headers with the prefix 'x-sisense-'.
-   *
    * @example
    * ```tsx
    * appConfig={{
@@ -130,7 +135,6 @@ export type AppConfig = {
      * If not specified, the default value is `true`
      *
      * In production, tracking is always enabled.
-     *
      * @internal
      */
     enabled?: boolean;
@@ -187,7 +191,6 @@ export type AppConfig = {
      * When `false`, the Widget Narrative feature is disabled.
      *
      * Note: The Widget Narrative feature requires Sisense Intelligence Narratives to be enabled on the connected Sisense Fusion environment.
-     *
      * @default true
      */
     enabled?: boolean;
@@ -206,12 +209,12 @@ export type AppConfig = {
          *
          * **Note**: The {@link StyledColumn.isHtml} property of columns in `dataOptions` are of higher precedence, and will therefore override this setting.
          * @default true
-         * */
+         */
         enabled?: boolean;
         /**
          * Enables sanitization of HTML content before rendering to prevent XSS attacks.
          * @default true
-         * */
+         */
         sanitizeContents?: boolean;
       };
       /**
@@ -219,20 +222,17 @@ export type AppConfig = {
        *
        * If `true`, the results per page select will be shown even if there is only one page of results.
        * Currently only supported for `PivotTable`.
-       *
        * @default false
        */
       alwaysShowResultsPerPage?: boolean;
     };
     /**
      * Configuration of the default number formatting for visualizations.
-     *
      * @sisenseInternal
      */
     defaultNumberFormatting?: {
       /**
        *  If `false`, raw values are displayed without applying the default number formatting configuration.
-       *
        * @default true
        */
       enabled?: boolean;
@@ -242,7 +242,6 @@ export type AppConfig = {
 
 /**
  * Stands for a Sisense Client Application which connects to a Sisense Environment
- *
  * @internal
  */
 export interface ClientApplication {
@@ -280,6 +279,12 @@ export interface ClientApplication {
      */
     clear: () => void;
   };
+
+  /**
+   * Gets the notifications center holding user-facing messages produced by the SDK.
+   * @internal
+   */
+  readonly notifications: NotificationsCenter;
 }
 
 /**
@@ -294,7 +299,6 @@ export type SystemSettings = {
    * Column display-name feature from the configuration service.
    * When `enabled` and `useNewSearchByDisplayNameApi` are both true, field search
    * uses `fields/searchByDisplayName?isLive=` instead of `fields/search`.
-   *
    * @internal
    */
   displayNameConfig?: DisplayNameConfig;

@@ -8,21 +8,59 @@ import { shouldSkipSisenseContextWaiting } from '../chart/helpers/should-skip-si
  * A React component representing data in a circular graph with the data shown as slices of a whole,
  * with each slice representing a proportion of the total.
  *
- * ## Example
- *
+ * @example
  * Pie chart displaying total revenue per age range from the Sample ECommerce data model.
  *
- * <iframe
- *  src='https://csdk-playground.sisense.com/?example=charts%2Fpie-chart&mode=docs'
- *  width='100%'
- *  height='870'
- *  style='max-width:800px; border:none;'
+ * ```tsx
+ * import { PieChart } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const CodeExample = () => (
+ *   <PieChart
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       category: [DM.Commerce.AgeRange],
+ *       value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     }}
+ *     styleOptions={{ subtype: 'pie/classic' }}
+ *   />
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
+ * <img src="media://pie-chart-example-1.png" width="700px" />
+ *
+ * Donut chart variant, using the same data:
+ *
+ * ```tsx
+ * <PieChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     category: [DM.Commerce.AgeRange],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *   }}
+ *   styleOptions={{ subtype: 'pie/donut' }}
  * />
+ * ```
  *
- * Additional Pie Chart examples:
+ * <img src="media://pie-chart-example-2.png" width="700px" />
  *
- * - [Donut Pie Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpie-chart-donut)
- * - [Ring Pie Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpie-chart-ring)
+ * Ring chart variant, using the same data:
+ *
+ * ```tsx
+ * <PieChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     category: [DM.Commerce.AgeRange],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *   }}
+ *   styleOptions={{ subtype: 'pie/ring' }}
+ * />
+ * ```
+ *
+ * <img src="media://pie-chart-example-3.png" width="700px" />
  *
  * @param props - Pie chart properties
  * @returns Pie Chart component

@@ -281,6 +281,26 @@ export interface ExecuteQueryByWidgetIdParams {
 
 /**
  * Query parameters constructed over either a chart widget or pivot table widget. This is returned as part of the query state {@link QueryByWidgetIdState}.
+ *
+ * @example
+ * ```tsx
+ * import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui';
+ *
+ * const CodeExample = () => {
+ *   const { query, pivotQuery } = useExecuteQueryByWidgetId({
+ *     widgetOid: '64473e07dac1920034bce77f',
+ *     dashboardOid: '6441e728dac1920034bce737',
+ *   });
+ *
+ *   // `query` is populated for chart widgets, `pivotQuery` for pivot table widgets.
+ *   const selectedQuery = query ?? pivotQuery;
+ *   if (!selectedQuery) return null;
+ *
+ *   return <pre>{JSON.stringify(selectedQuery, null, 2)}</pre>;
+ * };
+ *
+ * export default CodeExample;
+ * ```
  */
 export type QueryByWidgetIdQueryParams = {
   /** Query parameters constructed over the chart widget */
@@ -309,7 +329,7 @@ export type QueryByWidgetIdState = QueryState &
 /**
  * Base query parameters
  *
- * @internal
+ * @sisenseInternal
  */
 export interface BaseQueryParams {
   /**
@@ -404,6 +424,9 @@ export interface ExecuteQueryParams extends BaseQueryParams {
 
 /**
  * Result of a query execution.
+ *
+ * This is the return type of {@link useExecuteQuery} — see that hook's documentation for a
+ * usage example.
  */
 export type ExecuteQueryResult = QueryState & {
   /** Function to refetch the query */

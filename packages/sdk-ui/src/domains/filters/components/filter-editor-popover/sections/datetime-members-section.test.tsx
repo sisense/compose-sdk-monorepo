@@ -109,7 +109,7 @@ describe('DatetimeMembersSection', () => {
     const quartersAttribute = {
       ...DM.Commerce.Date.Years,
       granularity: DateLevels.Quarters,
-    } as any;
+    };
 
     const parentFilters = [
       filterFactory.members(yearsAttribute, ['2023-01-01T00:00:00']),
@@ -169,7 +169,7 @@ describe('DatetimeMembersSection', () => {
       ...DM.Commerce.Date.Years,
       expression: '[OrderDate]',
       name: 'OrderDate',
-    } as any;
+    };
 
     const parentFilters = [filterFactory.members(differentDateAttribute, ['2023-01-01T00:00:00'])];
 
@@ -302,5 +302,99 @@ describe('DatetimeMembersSection', () => {
 
     // Should call onChange with updated filter
     expect(filterChangeHandlerMock).toHaveBeenCalled();
+  });
+  describe('at Day granularity', () => {
+    const daysFilter = filterFactory.members(DM.Commerce.Date.Days, ['2013-11-04T00:00:00']);
+
+    const daysSectionTree = (multiSelectEnabled: boolean) => (
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorContextProvider
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+            rankingVisible: true,
+          }}
+        >
+          <DatetimeMembersSection
+            filter={daysFilter}
+            selected={true}
+            multiSelectEnabled={multiSelectEnabled}
+            onChange={filterChangeHandlerMock}
+          />
+        </FilterEditorContextProvider>
+      </SisenseContextProvider>
+    );
+
+    const renderDaysSection = (multiSelectEnabled: boolean) => {
+      const { user, rerender } = setup(daysSectionTree(multiSelectEnabled));
+
+      /**
+       * Opens the calendar popover, which starts on the selected member's month. Days 8-30 are
+       * unique within a Nov 2013 grid, unlike the adjacent-month days it also renders.
+       */
+      const openCalendar = async (label: string) => {
+        const membersSection = await screen.findByLabelText('Members section');
+        await user.click(within(membersSection).getByLabelText(label));
+
+        return screen.findByLabelText('date range filter calendar container');
+      };
+
+      return { openCalendar, user, rerender };
+    };
+
+    it('should keep a single member when multi-select is disabled', async () => {
+      const { openCalendar, user } = renderDaysSection(false);
+
+      const calendar = await openCalendar('Calendar single-select');
+      await user.click(within(calendar).getByText('8'));
+      await user.click(within(calendar).getByText('12'));
+
+      expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({ members: ['2013-11-12T00:00:00'] }),
+      );
+    });
+
+    it('should accumulate members when multi-select is enabled', async () => {
+      const { openCalendar, user } = renderDaysSection(true);
+
+      const calendar = await openCalendar('Calendar multi-select');
+      await user.click(within(calendar).getByText('8'));
+      await user.click(within(calendar).getByText('12'));
+
+      expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          members: ['2013-11-04T00:00:00', '2013-11-08T00:00:00', '2013-11-12T00:00:00'],
+        }),
+      );
+    });
+
+    /**
+     * The calendar owns its "popover open" state, so this also pins down that toggling multiselect
+     * swaps the selection mode on the mounted control instead of remounting it.
+     */
+    it('should switch the mounted calendar to single-select when multiselect is turned off', async () => {
+      const { openCalendar, user, rerender } = renderDaysSection(true);
+
+      const calendar = await openCalendar('Calendar multi-select');
+      await user.click(within(calendar).getByText('8'));
+
+      rerender(daysSectionTree(false));
+
+      const membersSection = await screen.findByLabelText('Members section');
+      expect(within(membersSection).getByLabelText('Calendar single-select')).toBeInTheDocument();
+      expect(within(membersSection).queryByLabelText('Calendar multi-select')).toBeNull();
+
+      // The popover stayed open across the switch, so the same calendar is still on screen.
+      const stillOpenCalendar = await screen.findByLabelText(
+        'date range filter calendar container',
+      );
+      await user.click(within(stillOpenCalendar).getByText('12'));
+
+      expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({ members: ['2013-11-12T00:00:00'] }),
+      );
+    });
   });
 });

@@ -126,6 +126,12 @@ export const WidgetById = defineComponent({
      */
     styleOptions: Object as PropType<WidgetByIdProps['styleOptions']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.config}
+     *
+     * @category Widget
+     */
+    config: Object as PropType<WidgetByIdProps['config']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.title}
      *
      * @category Widget

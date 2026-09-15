@@ -1,6 +1,7 @@
 import { RefObject } from 'react';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider/index.js';
+import { KpiTitleAlign } from '@/types';
 
 import { PeriodText, TitleArea, TitleText } from './kpi-card-styles.js';
 
@@ -17,6 +18,8 @@ export type KpiTitleProps = {
   period?: string;
   /** Whether the card has a custom background, so text needs to contrast against it instead of the theme. */
   onColor: boolean;
+  /** Horizontal alignment of the title text and the period caption within the title row. */
+  align: KpiTitleAlign;
   /**
    * External ref to `TitleArea`, so the orchestrator can measure its height as an input to the
    * headline auto-fit budget on sparkline cards (see `kpi-chart-renderer.tsx`). Stays unattached
@@ -31,7 +34,7 @@ export type KpiTitleProps = {
  * Renders nothing when there's neither a title to show nor a period caption.
  * @internal
  */
-export function KpiTitle({ title, showText, period, onColor, areaRef }: KpiTitleProps) {
+export function KpiTitle({ title, showText, period, onColor, align, areaRef }: KpiTitleProps) {
   const { themeSettings } = useThemeContext();
 
   if (!showText && !period) {
@@ -39,7 +42,7 @@ export function KpiTitle({ title, showText, period, onColor, areaRef }: KpiTitle
   }
 
   return (
-    <TitleArea ref={areaRef} data-kpi-area="title">
+    <TitleArea ref={areaRef} $align={align} data-kpi-area="title">
       {showText && (
         <TitleText theme={themeSettings} $onColor={onColor}>
           {title}

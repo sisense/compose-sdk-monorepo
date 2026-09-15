@@ -9,22 +9,61 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * The chart can include multiple values on both the X and Y-axis, as well as a break down by categories displayed on the Y-axis.
  *
- * ## Example
- *
+ * @example
  * Column chart displaying total revenue per year, broken down by condition, from the Sample ECommerce data model.
  *
- * <iframe
- *  src='https://csdk-playground.sisense.com/?example=charts%2Fcolumn-chart&mode=docs'
- *  width='100%'
- *  height='870'
- *  style='max-width:800px; border:none;'
+ * ```tsx
+ * import { ColumnChart } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const CodeExample = () => (
+ *   <ColumnChart
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       category: [DM.Commerce.Date.Years],
+ *       value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *       breakBy: [DM.Commerce.Condition],
+ *     }}
+ *   />
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
+ * <img src="media://column-chart-example-1.png" width="700px" />
+ *
+ * Stacked column chart variant, broken down by age range:
+ *
+ * ```tsx
+ * <ColumnChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     category: [DM.Commerce.Date.Years],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     breakBy: [DM.Commerce.AgeRange],
+ *   }}
+ *   styleOptions={{ subtype: 'column/stackedcolumn' }}
  * />
+ * ```
  *
+ * <img src="media://column-chart-example-2.png" width="700px" />
  *
- * Additional Column Chart examples:
+ * Stacked percentage column chart variant, using the same data:
  *
- * - [Stacked Column Chart](https://www.sisense.com/developers/playground/?example=charts%2Fcolumn-chart-stacked)
- * - [Stacked Percentage Column Chart](https://www.sisense.com/developers/playground/?example=charts%2Fcolumn-chart-stacked100)
+ * ```tsx
+ * <ColumnChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     category: [DM.Commerce.Date.Years],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     breakBy: [DM.Commerce.AgeRange],
+ *   }}
+ *   styleOptions={{ subtype: 'column/stackedcolumn100' }}
+ * />
+ * ```
+ *
+ * <img src="media://column-chart-example-3.png" width="700px" />
  *
  * @param props - Column chart properties
  * @returns Column Chart component

@@ -19,52 +19,31 @@ export interface FunnelChartProps
  * A component representing data progressively decreasing in size or quantity through a funnel shape.
  *
  * @example
- * ```html
- *    <csdk-funnel-chart
- *      [dataSet]="chart.dataSet"
- *      [dataOptions]="chart.dataOptions"
- *      [highlights]="filters"
- *      [beforeRender]="onBeforeRender"
- *      (dataPointClick)="logArguments($event)"
- *      (dataPointContextMenu)="logArguments($event)"
- *      (dataPointsSelect)="logArguments($event)"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  DM = DM;
-  filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
-  chart = {
-    chartType: 'column' as ChartType,
-    dataSet: DM.DataSource,
-    dataOptions: {
-      category: [DM.Divisions.Divison_name],
-      value: [measureFactory.sum(DM.Admissions.Cost_of_admission)],
-      breakBy: [],
-    },
-  };
-
-  onBeforeRender(options: any) {
-    console.log('beforeRender');
-    console.log(options);
-    return options;
-  }
-
-  logArguments(...args: any[]) {
-    console.log(args);
-  }
-}
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-funnel-chart
+ *       [dataSet]="DM.DataSource"
+ *       [dataOptions]="dataOptions"
+ *       [styleOptions]="styleOptions"
+ *     ></csdk-funnel-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     category: [DM.Commerce.AgeRange],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *   };
+ *   styleOptions = { funnelType: 'regular', funnelSize: 'regular', funnelDirection: 'regular' };
+ * }
  * ```
- * <img src="media://angular-funnel-chart-example.png" width="800px" />
+ * <img src="media://funnel-chart-example-1.png" width="700px" />
  * @group Charts
  */
 @Component({

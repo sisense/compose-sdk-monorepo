@@ -31,6 +31,10 @@ const LAST_PAGE_OFFSET =
   Math.floor((TOTAL_PAGES - 1) / PAGES_BATCH_SIZE) * PAGES_BATCH_SIZE * DEFAULT_TABLE_ROWS_PER_PAGE; // 3000
 
 describe('Table with includeTotalRows', () => {
+  /** Wide enough for the pagination footer to render the total-rows label beside the control. */
+  const FOOTER_ROOMY_WIDTH = 900;
+  const styleOptions = { width: FOOTER_ROOMY_WIDTH };
+
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -74,7 +78,12 @@ describe('Table with includeTotalRows', () => {
 
   it('shows the locale-formatted total row count next to the pagination control', async () => {
     const { findByTestId } = render(
-      <Table dataSet="Sample ECommerce" dataOptions={dataOptions} includeTotalRows />,
+      <Table
+        dataSet="Sample ECommerce"
+        dataOptions={dataOptions}
+        styleOptions={styleOptions}
+        includeTotalRows
+      />,
     );
 
     const totalRowsLabel = await findByTestId('table-total-rows');
@@ -83,7 +92,7 @@ describe('Table with includeTotalRows', () => {
 
   it('does not show the total-rows label when includeTotalRows is not set', async () => {
     const { findByTestId, queryByTestId } = render(
-      <Table dataSet="Sample ECommerce" dataOptions={dataOptions} />,
+      <Table dataSet="Sample ECommerce" dataOptions={dataOptions} styleOptions={styleOptions} />,
     );
 
     await findByTestId('table-root');
@@ -93,7 +102,12 @@ describe('Table with includeTotalRows', () => {
 
   it('renders a direct link to the last page and jumps to it correctly', async () => {
     const { findByTestId, findByRole } = render(
-      <Table dataSet="Sample ECommerce" dataOptions={dataOptions} includeTotalRows />,
+      <Table
+        dataSet="Sample ECommerce"
+        dataOptions={dataOptions}
+        styleOptions={styleOptions}
+        includeTotalRows
+      />,
     );
 
     await findByTestId('table-total-rows');

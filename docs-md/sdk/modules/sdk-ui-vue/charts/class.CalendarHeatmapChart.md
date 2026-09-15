@@ -9,37 +9,31 @@ making it easy to identify daily patterns or anomalies
 
 ## Example
 
-Here's how you can use the CalendarHeatmapChart component in a Vue application:
 ```vue
-<template>
-<CalendarHeatmapChart
-     :dataOptions="calendarChartProps.dataOptions"
-     :dataSet="calendarChartProps.dataSet"
-     :filters="calendarChartProps.filters"
-     :styleOptions="calendarChartProps.styleOptions"
-   />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { CalendarHeatmapChart, type CalendarHeatmapChartProps } from '@sisense/sdk-ui-vue';
+import { CalendarHeatmapChart } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const calendarChartProps = ref<CalendarHeatmapChartProps>({
-  dataSet: DM.DataSource,
+const chartProps = ref({
   dataOptions: {
-    date: DM.DimDate.Date.Days,
-    value: measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue'),
+    date: DM.Commerce.Date.Days,
+    value: { column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity') },
   },
-  styleOptions: {
-    viewType: 'quarter',
-  },
-  filters: [],
+  styleOptions: { viewType: 'quarter' as const },
 });
 </script>
+
+<template>
+  <CalendarHeatmapChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+    :styleOptions="chartProps.styleOptions"
+  />
+</template>
 ```
-<img src="../../../img/vue-calendar-heatmap-chart-example.png" width="800"/>
+<img src="../../../img/calendar-heatmap-chart-example-1.png" width="700px" />
 
 ## Param
 

@@ -19,3 +19,35 @@ Gets the dimensions of a data source.
 [`DataSourceDimensionsState`](../type-aliases/type-alias.DataSourceDimensionsState.md)
 
 The dimensions state
+
+## Example
+
+```ts
+import { useGetDataSourceDimensions } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+  const { dimensions, isLoading, isError } = useGetDataSourceDimensions({
+    dataSource: 'Sample ECommerce',
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error</div>;
+
+  return (
+    <ul>
+      {dimensions?.map((dimension) => (
+        <li key={dimension.name}>
+          {dimension.name}
+          <ul>
+            {dimension.attributes.map((attribute) => (
+              <li key={attribute.name}>{attribute.name}</li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+export default CodeExample;
+```

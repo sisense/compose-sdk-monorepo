@@ -30,6 +30,7 @@ export function translateKpiStyleOptionsToDesignOptions(
       text: styleOptions.title?.text,
       showValueTitle: styleOptions.title?.showValueTitle ?? true,
       showCategoryTitle: styleOptions.title?.showCategoryTitle ?? true,
+      align: styleOptions.title?.align ?? 'space-between',
     },
     card: {
       backgroundColor: styleOptions.card?.backgroundColor,
@@ -87,6 +88,7 @@ export function getDefaultKpiStyleOptions(): KpiStyleOptions {
       enabled: true,
       showValueTitle: true,
       showCategoryTitle: true,
+      align: 'space-between',
     },
     value: {
       textSize: 'auto',

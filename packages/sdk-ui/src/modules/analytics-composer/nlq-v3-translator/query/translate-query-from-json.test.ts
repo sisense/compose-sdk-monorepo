@@ -135,7 +135,7 @@ describe('translateQueryFromJSON', () => {
         path: 'dimensions[0]',
         input: 123,
         message: expect.stringContaining(
-          "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+          "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
         ),
       });
     });
@@ -401,7 +401,7 @@ describe('translateQueryFromJSON', () => {
         path: 'dimensions[0]',
         input: null,
         message: expect.stringContaining(
-          "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+          "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
         ),
       });
 

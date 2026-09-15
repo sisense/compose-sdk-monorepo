@@ -111,6 +111,7 @@ TypeScript type aliases for components and services listed above
 - [KpiSparklineStyleOptions](type-alias.KpiSparklineStyleOptions.md)
 - [KpiSparklineType](type-alias.KpiSparklineType.md)
 - [KpiTextSize](type-alias.KpiTextSize.md)
+- [KpiTitleAlign](type-alias.KpiTitleAlign.md)
 - [KpiTitleStyleOptions](type-alias.KpiTitleStyleOptions.md)
 - [KpiValueMode](type-alias.KpiValueMode.md)
 - [KpiValueStyleOptions](type-alias.KpiValueStyleOptions.md)

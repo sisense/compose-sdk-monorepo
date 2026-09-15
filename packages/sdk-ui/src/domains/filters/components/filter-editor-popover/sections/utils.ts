@@ -48,6 +48,13 @@ export function getMembersWithDeactivated(filter: Filter) {
     : [];
 }
 
+export function withMembersLimitedToSelectionMode(
+  members: string[],
+  enableMultiSelection: boolean,
+): string[] {
+  return enableMultiSelection || members.length <= 1 ? members : [[...members].sort()[0]];
+}
+
 export function getConfigWithUpdatedDeactivated(filter: Filter, selectedMembers: string[]) {
   return isMembersFilter(filter) && filter?.config?.deactivatedMembers
     ? {
@@ -61,7 +68,6 @@ export function getConfigWithUpdatedDeactivated(filter: Filter, selectedMembers:
 
 /**
  * Returns the granularities that are restricted by the parent filters (previous cascading levels)
- *
  * @param datetimeAttribute - The datetime attribute
  * @param parentFilters - The parent filters
  * @returns The restricted granularities

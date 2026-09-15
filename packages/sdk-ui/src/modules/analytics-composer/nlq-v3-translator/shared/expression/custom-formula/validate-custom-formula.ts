@@ -36,6 +36,13 @@ export interface FormulaValidationOptions {
   errorPrefix?: string;
   /** When provided, xdiff args are validated as datetime dimensions and level-matched */
   schemaIndex?: SchemaIndex;
+  /**
+   * Whether a formula referencing raw attributes must wrap them in an aggregative function
+   * (default: true). A calculated dimension is a grouping key, not an aggregation — `Concat`,
+   * `Substring` and `CASE WHEN` over raw attributes are exactly its purpose — so it sets this
+   * to false.
+   */
+  requireAggregative?: boolean;
 }
 
 /**
@@ -163,6 +170,7 @@ interface ValidatorCtx {
   warnUnusedContext: boolean;
   errorOnUnusedContext: boolean;
   schemaIndex?: SchemaIndex;
+  requireAggregative: boolean;
   result: FormulaValidationResult;
 }
 
@@ -184,6 +192,7 @@ function buildValidatorCtx(
     warnUnusedContext: options.warnUnusedContext ?? true,
     errorOnUnusedContext: options.errorOnUnusedContext ?? true,
     schemaIndex: options.schemaIndex,
+    requireAggregative: options.requireAggregative ?? true,
     result: { isValid: true, errors: [], warnings: [], references: [], unusedContextKeys: [] },
   };
 }
@@ -353,6 +362,7 @@ function validateMissingReferences(ctx: ValidatorCtx): void {
 }
 
 function validateAggregativeRequirement(ctx: ValidatorCtx): void {
+  if (!ctx.requireAggregative) return;
   if (AGGREGATIVE_FUNCTION_CALL_PATTERN.test(ctx.formula)) return;
 
   const rawAttrRefs = ctx.result.references.filter((ref) => {

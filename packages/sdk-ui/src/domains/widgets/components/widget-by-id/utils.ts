@@ -5,12 +5,13 @@ import { WidgetTypeInternal } from '@/domains/widgets/widget-model/types.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
 import { ChartProps, PivotTableProps } from '@/props';
 import { combineHandlers } from '@/shared/utils/combine-handlers';
-import { ChartStyleOptions, ChartType, CustomWidgetEventProps } from '@/types.js';
+import { ChartType, CustomWidgetEventProps } from '@/types.js';
 
 import { ChartWidgetProps } from '../chart-widget/types';
 import { CommonWidgetProps } from '../common-widget/types';
 import { CustomWidgetProps } from '../custom-widget/types';
 import { FilterWidgetProps } from '../filter-widget/types';
+import { NarrativeWidgetProps } from '../narrative-widget/types';
 import { PivotTableWidgetProps } from '../pivot-table-widget/types';
 import { TextWidgetProps } from '../text-widget/types';
 import { WidgetProps, WidgetType, WithCommonWidgetProps } from '../widget/types';
@@ -113,6 +114,9 @@ export function getFusionWidgetType(
   if (widgetType === 'text') {
     return 'richtexteditor';
   }
+  if (widgetType === 'narrative') {
+    return 'dashboardnarrative';
+  }
   throw new TranslatableError('errors.widgetModel.unsupportedWidgetType', {
     widgetType,
   });
@@ -127,6 +131,8 @@ export function getWidgetType(fusionWidgetType: FusionWidgetType): WidgetType {
     return 'custom';
   } else if (isTextFusionWidget(fusionWidgetType)) {
     return 'text';
+  } else if (isNarrativeFusionWidget(fusionWidgetType)) {
+    return 'narrative';
   } else if (isChartFusionWidget(fusionWidgetType)) {
     return 'chart';
   }
@@ -195,6 +201,7 @@ export function isSupportedWidgetType(
     'richtexteditor',
     'heatmap',
     'filter',
+    'dashboardnarrative',
   ];
   return supportedWidgetTypes.includes(fusionWidgetType);
 }
@@ -317,6 +324,26 @@ export function isTextWidget(widgetType: WidgetType) {
   return widgetType === 'text';
 }
 
+/**
+ * Checks whether a Fusion widget type is the dashboard narrative widget.
+ * @param fusionWidgetType - The Fusion widget type.
+ * @returns `true` for `dashboardnarrative`.
+ * @internal
+ */
+export function isNarrativeFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'dashboardnarrative';
+}
+
+/**
+ * Checks whether a widget type is the dashboard narrative widget.
+ * @param widgetType - The widget type.
+ * @returns `true` for `narrative`.
+ * @internal
+ */
+export function isNarrativeWidget(widgetType: WidgetType) {
+  return widgetType === 'narrative';
+}
+
 export function isTextWidgetDtoStyle(widgetStyle: WidgetStyle): widgetStyle is TextWidgetDtoStyle {
   return 'content' in widgetStyle && 'html' in widgetStyle.content;
 }
@@ -332,7 +359,8 @@ export function isChartFusionWidget(fusionWidgetType: FusionWidgetType) {
   return (
     fusionWidgetType !== 'filter' &&
     !isPivotTableFusionWidget(fusionWidgetType) &&
-    !isTextFusionWidget(fusionWidgetType)
+    !isTextFusionWidget(fusionWidgetType) &&
+    !isNarrativeFusionWidget(fusionWidgetType)
   );
 }
 export function isChartTypeFusionWidget(fusionWidgetType: FusionWidgetType) {
@@ -359,6 +387,18 @@ export function isTextWidgetProps(
   widgetProps: CommonWidgetProps,
 ): widgetProps is WithCommonWidgetProps<TextWidgetProps, 'text'> {
   return widgetProps.widgetType === 'text';
+}
+
+/**
+ * Type guard for checking if the widget props is for the dashboard narrative widget.
+ * @param widgetProps - The widget props to check.
+ * @returns whether the widget props is for the dashboard narrative widget
+ * @internal
+ */
+export function isNarrativeWidgetProps(
+  widgetProps: CommonWidgetProps,
+): widgetProps is WithCommonWidgetProps<NarrativeWidgetProps, 'narrative'> {
+  return widgetProps.widgetType === 'narrative';
 }
 
 /**
@@ -421,6 +461,8 @@ export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTyp
     return 'custom';
   } else if (isTextWidgetProps(widgetProps)) {
     return 'text';
+  } else if (isNarrativeWidgetProps(widgetProps)) {
+    return 'narrative';
   }
 
   return (widgetProps as WithCommonWidgetProps<ChartWidgetProps, 'chart'>).chartType;

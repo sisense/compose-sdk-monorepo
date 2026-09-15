@@ -25,50 +25,34 @@ export interface ScatterChartProps
  * If omitted, all scatter points are equal in size. If used, the circle sizes are relative to their values.
  *
  * @example
- * ```html
- *    <csdk-scatter-chart
- *      [dataSet]="scatter.dataSet"
- *      [dataOptions]="scatter.dataOptions"
- *      [highlights]="filters"
- *      [beforeRender]="onBeforeRender"
- *      (dataPointClick)="logArguments($event)"
- *      (dataPointContextMenu)="logArguments($event)"
- *      (dataPointsSelect)="logArguments($event)"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  DM = DM;
-  filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
-  scatter = {
-    dataSet: DM.DataSource,
-    dataOptions: {
-      x: DM.Admissions.Room_ID,
-      y: measureFactory.sum(DM.Admissions.Cost_of_admission),
-    },
-  };
-
-  onBeforeRender(options: any) {
-    console.log('beforeRender');
-    console.log(options);
-    return options;
-  }
-
-  logArguments(...args: any[]) {
-    console.log(args);
-  }
-}
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-scatter-chart
+ *       [dataSet]="DM.DataSource"
+ *       [dataOptions]="dataOptions"
+ *       [styleOptions]="styleOptions"
+ *     ></csdk-scatter-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     x: DM.Category.CategoryID,
+ *     y: measureFactory.sum(DM.Commerce.Revenue),
+ *     breakByColor: DM.Commerce.Gender,
+ *   };
+ *   styleOptions = {
+ *     yAxis: { enabled: true, logarithmic: true, title: { enabled: true, text: 'Total Revenue' } },
+ *   };
+ * }
  * ```
- * <img src="media://angular-scatter-chart-example.png" width="800px" />
+ * <img src="media://scatter-chart-example-1.png" width="700px" />
  * @group Charts
  */
 @Component({

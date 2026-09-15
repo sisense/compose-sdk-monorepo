@@ -108,8 +108,8 @@ export const withResolvedWidgetDataSource: ContextfulTransformer<
   WidgetProps,
   Array<DataSource | undefined>
 > = (fallbackDataSources) => (widget) => {
-  // Text widgets are not data-driven and carry no data source.
-  if (widget.widgetType === 'text') {
+  // Text and narrative widgets are not data-driven and carry no data source.
+  if (widget.widgetType === 'text' || widget.widgetType === 'narrative') {
     return widget;
   }
   if (widget.dataSource) {

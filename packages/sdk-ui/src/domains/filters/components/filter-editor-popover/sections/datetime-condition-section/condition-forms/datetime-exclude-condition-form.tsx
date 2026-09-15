@@ -19,20 +19,14 @@ import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCh
 
 import { SingleSelect } from '../../../common/index.js';
 import { ScrollWrapperOnScrollEvent } from '../../../common/scroll-wrapper.js';
-import {
-  CalendarSelect,
-  CalendarSelectTypes,
-} from '../../../common/select/calendar-select/index.js';
+import { CalendarSelect } from '../../../common/select/calendar-select/index.js';
 import { SearchableMultiSelect } from '../../../common/select/searchable-multi-select.js';
 import { SearchableSingleSelect } from '../../../common/select/searchable-single-select.js';
 import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from '../../../constants.js';
 import { useFilterEditorContext } from '../../../filter-editor-context.js';
 import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter.js';
-import {
-  convertDateToMemberString,
-  isExcludeMembersFilter,
-  isIncludeMembersFilter,
-} from '../../../utils.js';
+import { isExcludeMembersFilter, isIncludeMembersFilter } from '../../../utils.js';
+import { getDaysCalendarProps } from '../../common/days-calendar-props.js';
 import { granularities } from '../../common/granularities.js';
 import { DatetimeLimits } from '../../types.js';
 import {
@@ -40,13 +34,15 @@ import {
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
   getRestrictedGranularities,
+  withMembersLimitedToSelectionMode,
 } from '../../utils.js';
 
 function createExcludeConditionFilter(baseFilter: Filter, data: DatetimeConditionFilterData) {
   const { selectedMembers, multiSelectEnabled, attribute } = data;
-  const config = getConfigWithUpdatedDeactivated(baseFilter, selectedMembers);
-  if (selectedMembers?.length) {
-    return createExcludeMembersFilter(attribute, selectedMembers, {
+  const permittedMembers = withMembersLimitedToSelectionMode(selectedMembers, multiSelectEnabled);
+  const config = getConfigWithUpdatedDeactivated(baseFilter, permittedMembers);
+  if (permittedMembers.length) {
+    return createExcludeMembersFilter(attribute, permittedMembers, {
       ...config,
       enableMultiSelection: multiSelectEnabled,
     });
@@ -186,9 +182,7 @@ export const DatetimeExcludeConditionForm = ({
       let newSelectedMembers = selectedMembers;
 
       if (!multiSelectEnabled) {
-        if (selectedMembers.length > 1) {
-          newSelectedMembers = [selectedMembers.sort()[0]];
-        }
+        newSelectedMembers = withMembersLimitedToSelectionMode(selectedMembers, multiSelectEnabled);
         setSelectedMembers(newSelectedMembers);
       }
 
@@ -213,14 +207,6 @@ export const DatetimeExcludeConditionForm = ({
     [multiSelectEnabled, attribute, prepareAndChangeFilter],
   );
 
-  const handleDaysMembersChange = useCallback(
-    (dateMembers: Date[]) => {
-      const members = dateMembers.map((date) => convertDateToMemberString(date));
-      handleMembersChange(members);
-    },
-    [handleMembersChange],
-  );
-
   const handleGranularityChange = useCallback(
     (granularity: string) => {
       const newAttribute = createLevelAttribute(attribute, granularity, t);
@@ -235,12 +221,6 @@ export const DatetimeExcludeConditionForm = ({
     [multiSelectEnabled, attribute, prepareAndChangeFilter, t],
   );
 
-  const selectedDaysMembers = useMemo(() => {
-    return isDaysLevel
-      ? selectedMembers.map((member) => parseISOWithTimezoneCheck(member))
-      : undefined;
-  }, [selectedMembers, isDaysLevel]);
-
   const normalizedLimits = useMemo(() => {
     return limits
       ? {
@@ -249,6 +229,16 @@ export const DatetimeExcludeConditionForm = ({
         }
       : undefined;
   }, [limits]);
+
+  const daysCalendarProps = useMemo(
+    () =>
+      getDaysCalendarProps({
+        members: selectedMembers,
+        multiSelectEnabled,
+        onChange: handleMembersChange,
+      }),
+    [selectedMembers, multiSelectEnabled, handleMembersChange],
+  );
 
   return (
     <>
@@ -287,11 +277,10 @@ export const DatetimeExcludeConditionForm = ({
         {isDaysLevel && (
           <CalendarSelect
             width={152}
-            type={CalendarSelectTypes.MULTI_SELECT}
-            value={selectedDaysMembers}
             limits={normalizedLimits}
-            onChange={handleDaysMembersChange}
             placeholder={t('filterEditor.placeholders.select')}
+            {...daysCalendarProps}
+            aria-label={multiSelectEnabled ? 'Calendar multi-select' : 'Calendar single-select'}
           />
         )}
       </>

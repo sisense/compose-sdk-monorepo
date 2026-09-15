@@ -11,7 +11,9 @@ import {
 } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 
+import { hasAdvancedAnalyticsMeasure } from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query';
 import {
+  isDerivedResultColumn,
   isMeasureColumn,
   translateColumnToAttribute,
   translateColumnToMeasure,
@@ -70,6 +72,11 @@ export const getTableAttributesAndMeasures = (dataOptions: TableDataOptionsInter
   const measures: Measure[] = [];
 
   for (const column of dataOptions.columns) {
+    // Not requested — sourced from an already-requested measure's own query result
+    // (e.g. a forecast measure's confidence-interval bounds).
+    if (isDerivedResultColumn(column)) {
+      continue;
+    }
     if (isMeasureColumn(column)) {
       measures.push(translateColumnToMeasure(column));
     } else {
@@ -157,8 +164,10 @@ export const useTableData = ({
         filterRelations,
         count: count + 1,
         offset,
-        // ungroup is needed so query without aggregation returns correct result
-        ungroup: true,
+        // ungroup is needed so query without aggregation returns correct result. Skipped when a
+        // trend/forecast measure is present — those backend functions require a grouped,
+        // monotonically-sorted-by-date query.
+        ungroup: !hasAdvancedAnalyticsMeasure(measures),
       };
 
       const dataPromise = includeTotalRows

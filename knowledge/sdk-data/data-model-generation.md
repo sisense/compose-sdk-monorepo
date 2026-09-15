@@ -1,0 +1,92 @@
+---
+type: Module
+title: Data model & factory
+description: JSON-to-instance factory functions and the DataModel/DataSource shapes that CLI-generated data model files are built on.
+resource: packages/sdk-data/src/dimensional-model
+tags: [sdk-data, module, data-model]
+---
+
+# Purpose
+
+Turns plain JSON descriptions of attributes, dimensions, measures, and filters into live dimensional-model instances. This is the contract layer under every generated data model file: `@sisense/sdk-cli` emits TypeScript that calls these factory functions at import time.
+
+# Entry point
+
+| What              | Where                                                                                                                         |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Export            | `createAttribute(json)` — packages/sdk-data/src/dimensional-model/attributes/attributes.ts:835                                |
+| Export            | `createDimension(json)` — packages/sdk-data/src/dimensional-model/dimensions/dimensions.ts:605                                |
+| Export            | `createDateDimension(json)` — packages/sdk-data/src/dimensional-model/dimensions/dimensions.ts:720                            |
+| Export (internal) | `create(item)` — dispatcher over all element kinds — packages/sdk-data/src/dimensional-model/factory.ts:29                    |
+| Export (internal) | `createAll(items)` — array form of `create` — packages/sdk-data/src/dimensional-model/factory.ts:18                           |
+| Export (internal) | `DimensionalDataModel` / `DimensionalDataModel.fromConfig(config)` — packages/sdk-data/src/dimensional-model/data-model.ts:14 |
+| Type (internal)   | `DataModel` — packages/sdk-data/src/dimensional-model/interfaces.ts:7                                                         |
+| Type              | `DataSourceInfo` — packages/sdk-data/src/interfaces.ts:187                                                                    |
+| Type              | `DataSource = string \| DataSourceInfo` — packages/sdk-data/src/interfaces.ts:209                                             |
+| Const (internal)  | `DATA_MODEL_MODULE_NAME` — packages/sdk-data/src/dimensional-model/consts.ts:1                                                |
+
+# Contract
+
+Verbatim constant (packages/sdk-data/src/dimensional-model/consts.ts:1) — the module alias assumed by generated `composeCode` strings (e.g. `DM.Commerce.Revenue`, built at packages/sdk-data/src/dimensional-model/attributes/attributes.ts:85):
+
+```ts
+export const DATA_MODEL_MODULE_NAME = 'DM';
+```
+
+Key shapes:
+
+```ts
+// packages/sdk-data/src/dimensional-model/interfaces.ts:7
+interface DataModel {
+  readonly name: string;
+  readonly dataSource: DataSource;
+  readonly metadata: Element[];
+  [propName: string]: any; // metadata elements attached by name
+}
+
+// packages/sdk-data/src/interfaces.ts:187
+type DataSourceInfo = {
+  id?: string;
+  address?: string;
+  fullname?: string; // all @internal
+  title: string;
+  type: 'live' | 'elasticube';
+};
+```
+
+Factory dispatch order in `create` (packages/sdk-data/src/dimensional-model/factory.ts:35): filter → calculated attribute → measure → attribute → dimension; anything else throws `TranslatableError('errors.unsupportedDimensionalElement')` (factory.ts:59).
+
+Generated-file contract (what CLI output relies on):
+
+| Generated construct                                                                         | Backed by                                                                                            |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data'` | emitted at packages/sdk-modeling/src/typescript/writers/imports.ts:21                                |
+| `export const DataSource: DataSourceInfo = { title, type }`                                 | `DataSourceInfo` shape above                                                                         |
+| `createDimension({ name, <AttrName>: createAttribute({...}), ... }) as XDimension`          | attribute props of the JSON object are collected via `MetadataTypes.isAttribute` (dimensions.ts:632) |
+| `createAttribute({ name, type, expression, dataSource })`                                   | `granularity` in JSON switches to a `LevelAttribute` (attributes.ts:841)                             |
+| `createDateDimension({ name, expression })`                                                 | dimensions.ts:720                                                                                    |
+
+Example generated file: examples/angular-demo/src/assets/sample-ecommerce-autogenerated.ts. The CLI writes these via `writeTypescript` (packages/sdk-modeling/src/typescript/writer.ts:73, called from packages/sdk-cli/src/commands/helpers.ts:287).
+
+# How it connects
+
+- `@sisense/sdk-cli get-data-model` → `writeTypescript`/`writeJavascript` in `sdk-modeling` → emits code calling `createAttribute`/`createDimension`/`createDateDimension` from this package.
+- `create`/`createAll` fan out to `createFilter`, `createMeasure`, `createAttribute`, `createDimension` — the deserialization path for JAQL-shaped JSON.
+- `DimensionalDataModel.fromConfig` (data-model.ts:15) validates `name`/`metadata` then delegates every metadata item to `create`.
+- `composeCode` strings produced here are parsed back by [compose-code.md](./compose-code.md) machinery (packages/sdk-data/src/dimensional-model/parse-compose-code.ts).
+- Element kinds created here are detailed in [attributes-and-dimensions.md](./attributes-and-dimensions.md), [measures.md](./measures.md), and [filters.md](./filters.md).
+
+# Invariants and traps
+
+1. Generated data model code must import exactly `createAttribute`, `createDateDimension`, `createDimension` from `@sisense/sdk-data` — the emitter (sdk-modeling imports.ts:21) and these signatures are a matched pair; renaming or changing their JSON contract breaks every previously generated model file.
+2. Data model files must be imported as `import * as DM from ...` (or an alias matching `DATA_MODEL_MODULE_NAME = 'DM'`): auto-generated `composeCode` hardcodes the `DM.` prefix, so widget-to-code round-tripping assumes that alias.
+3. Factory JSON accepts legacy JAQL synonyms (`dim`/`expression`/`attribute`, `desc`/`description`, `dimtype`/`type`) — keep accepting all of them; server payloads and old generated files use different spellings.
+4. `DimensionalDataModel` attaches each metadata element as a named property on the instance (data-model.ts:46) and suffixes a random key on collision — do not rely on property order or on collision-suffixed names.
+5. A `DataSource` may be a bare title string or a `DataSourceInfo` object; code must handle both (use `isDataSource`/`isDataSourceInfo` guards from packages/sdk-data/src/interfaces.ts:375).
+
+# Related
+
+- [attributes-and-dimensions.md](./attributes-and-dimensions.md) - the classes the factories instantiate
+- [compose-code.md](./compose-code.md) - consumes the `DM.`-prefixed composeCode built here
+- [translation.md](./translation.md) - `TranslatableError` keys thrown by factory validation
+- [overview.md](./overview.md) - package map

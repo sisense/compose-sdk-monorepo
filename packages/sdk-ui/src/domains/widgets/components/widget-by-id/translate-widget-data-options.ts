@@ -926,7 +926,11 @@ export function extractDataOptions(
   if (fusionWidgetType === 'heatmap') {
     return extractCaledarHeatmapChartDataOptions(panels, customPaletteColors);
   }
-  if (fusionWidgetType === 'richtexteditor' || fusionWidgetType === 'filter') {
+  if (
+    fusionWidgetType === 'richtexteditor' ||
+    fusionWidgetType === 'filter' ||
+    fusionWidgetType === 'dashboardnarrative'
+  ) {
     return {};
   }
   throw new TranslatableError('errors.unsupportedWidgetType', { widgetType: fusionWidgetType });

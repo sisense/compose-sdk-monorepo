@@ -10,44 +10,55 @@ the minimum and maximum values in a dataset, along with the area between these v
 
 ## Example
 
-Here's how you can use the AreaRangeChart component in a Vue application:
-```vue
-<template>
-<AreaRangeChart
-     :dataOptions="areaRangeChartProps.dataOptions"
-     :dataSet="areaRangeChartProps.dataSet"
-     :filters="areaRangeChartProps.filters"
-   />
-</template>
+Area range chart displaying total revenue per quarter from the Sample ECommerce data model,
+with the range spanning 60%-140% of the actual revenue.
 
+```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
 import { AreaRangeChart, type AreaRangeChartProps } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const areaRangeChartProps = ref<AreaRangeChartProps>({
-  dataSet: DM.DataSource,
+const chartProps = ref<{ dataOptions: AreaRangeChartProps['dataOptions'] }>({
   dataOptions: {
-    category: [dimProductName],
-    value: [{
-      title: 'Order Revenue',
-      upperBound: measureFactory.multiply(
-        measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Lower Revenue'),
-        0.6,
-      ),
-      lowerBound: measureFactory.multiply(
-        measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Upper Revenue'),
-        1.4,
-      ),
-    }],
+    category: [DM.Commerce.Date.Quarters],
+    value: [
+      {
+        title: 'Revenue',
+        upperBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 1.4, 'Upper Revenue'),
+        lowerBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 0.6, 'Lower Revenue'),
+      },
+    ],
     breakBy: [],
   },
-  filters: [],
 });
+</script>
+
+<template>
+  <AreaRangeChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+</template>
 ```
-<img src="../../../img/vue-area-range-chart-example.png" width="800"/>
+
+<img src="../../../img/area-range-chart-example-1.png" width="700px" />
+
+The same range broken down by condition:
+
+```vue
+chartProps.value.dataOptions = {
+  category: [DM.Commerce.Date.Quarters],
+  value: [
+    {
+      title: 'Revenue',
+      upperBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 1.4, 'Upper Revenue'),
+      lowerBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 0.6, 'Lower Revenue'),
+    },
+  ],
+  breakBy: [DM.Commerce.Condition],
+};
+```
+
+<img src="../../../img/area-range-chart-example-2.png" width="700px" />
 
 ## Param
 

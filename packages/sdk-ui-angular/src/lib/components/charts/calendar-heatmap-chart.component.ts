@@ -23,47 +23,31 @@ export interface CalendarHeatmapChartProps
  * making it easy to identify daily patterns or anomalies
  *
  * @example
- * ```html
- *    <csdk-calendar-heatmap-chart
- *      [dataSet]="chart.dataSet"
- *      [dataOptions]="chart.dataOptions"
- *      [highlights]="chart.highlights"
- *      [styleOptions]="chart.styleOptions"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-ecommerce';
-import type { CalendarHeatmapChartProps } from '@sisense/sdk-ui-angular';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  DM = DM;
-  chart = {
-    dataSet: DM.DataSource,
-    dataOptions: {
-      date: DM.Commerce.Date.Days,
-      value: measureFactory.sum(DM.Commerce.Cost),
-    },
-    highlights: [
-      filterFactory.dateRange(
-        DM.Commerce.Date.Days,
-        '2009-11-29',
-        '2009-12-15'
-      ),
-    ],
-    styleOptions: {
-      viewType: 'quarter',
-    },
-  };
-}
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-calendar-heatmap-chart
+ *       [dataSet]="DM.DataSource"
+ *       [dataOptions]="dataOptions"
+ *       [styleOptions]="styleOptions"
+ *     ></csdk-calendar-heatmap-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     date: DM.Commerce.Date.Days,
+ *     value: { column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity') },
+ *   };
+ *   styleOptions = { viewType: 'quarter' as const };
+ * }
  * ```
- * <img src="media://angular-calendar-heatmap-chart-example.png" width="800px" />
+ * <img src="media://calendar-heatmap-chart-example-1.png" width="700px" />
  * @group Charts
  */
 @Component({

@@ -3,12 +3,14 @@ import type { BeforeMenuOpenHandler } from '@/infra/contexts/menu-provider/types
 import type { ChartWidgetProps } from '../chart-widget/types';
 import type { CustomWidgetProps } from '../custom-widget/types';
 import type { FilterWidgetProps } from '../filter-widget/types';
+import type { NarrativeWidgetProps } from '../narrative-widget/types';
 import type { PivotTableWidgetProps } from '../pivot-table-widget/types';
 import type { TextWidgetProps } from '../text-widget/types';
 
 export type {
   ChartWidgetConfig,
   CustomWidgetConfig,
+  NarrativeWidgetConfig,
   FilterWidgetConfig,
   PivotTableWidgetConfig,
   TextWidgetConfig,
@@ -18,7 +20,7 @@ export type {
 /**
  * Type of the widget component.
  */
-export type WidgetType = 'chart' | 'pivot' | 'text' | 'custom' | 'filter';
+export type WidgetType = 'chart' | 'pivot' | 'text' | 'custom' | 'filter' | 'narrative';
 
 /**
  * A utility type that combines widget-specific properties (`BaseWidget`)
@@ -50,4 +52,5 @@ export type WidgetProps =
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
   | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
-  | WithCommonWidgetProps<FilterWidgetProps, 'filter'>;
+  | WithCommonWidgetProps<FilterWidgetProps, 'filter'>
+  | WithCommonWidgetProps<NarrativeWidgetProps, 'narrative'>;

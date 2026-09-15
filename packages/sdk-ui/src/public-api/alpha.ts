@@ -33,6 +33,10 @@ export {
   filterWidgetFilterTypeLabels,
 } from '../domains/widgets/components/filter-widget/index.js';
 
+// Dashboard Narrative Widget (props/config live in beta.ts — they are referenced by the
+// public WidgetProps and WidgetConfig unions)
+export { NarrativeWidget } from '../domains/widgets/components/narrative-widget/index.js';
+
 // Charts related
 export {
   isIndicatorRenderOptions,
@@ -43,3 +47,11 @@ export {
 
 // Modules infrastructure — producer-side API (consumer-side types are @beta)
 export { useModuleApiRegistry } from '../infra/modules/modules-context.js';
+
+// Notifications
+export type { NotificationsConfig } from '@/infra/notifications/types.js';
+export type {
+  NotificationAction,
+  NotificationCategory,
+  NotificationText,
+} from '@sisense/sdk-common';

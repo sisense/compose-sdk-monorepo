@@ -22,39 +22,35 @@ export interface KpiChartProps
  * a second measure, or against a target.
  *
  * @example
- * ```html
- *    <csdk-kpi-chart
- *      [dataSet]="kpi.dataSet"
- *      [dataOptions]="kpi.dataOptions"
- *      [styleOptions]="kpi.styleOptions"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-ecommerce';
-import type { KpiChartProps } from '@sisense/sdk-ui-angular';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  DM = DM;
-  kpi = {
-    dataSet: DM.DataSource,
-    dataOptions: {
-      value: measureFactory.sum(DM.Commerce.Revenue),
-      category: DM.Commerce.Date.Months,
-      comparison: { type: 'previous-period' },
-    },
-    styleOptions: {
-      title: { text: 'Total Revenue' },
-    },
-  } as KpiChartProps;
-}
+ * import { Component } from '@angular/core';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-kpi-chart
+ *       [dataSet]="DM.DataSource"
+ *       [dataOptions]="dataOptions"
+ *       [styleOptions]="styleOptions"
+ *     ></csdk-kpi-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     value: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+ *     category: DM.Commerce.Date.Months,
+ *     comparison: { type: 'previous-period' },
+ *   };
+ *   styleOptions = {
+ *     sparkline: { chartType: 'area' },
+ *     height: 250,
+ *   };
+ * }
  * ```
+ * <img src="media://kpi-chart-example-1.png" width="400px" />
  * @group Charts
  */
 @Component({

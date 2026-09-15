@@ -14,6 +14,7 @@ import {
   ComponentAdapter,
   type CustomWidgetProps as CustomWidgetPropsPreact,
   type FilterWidgetProps as FilterWidgetPropsPreact,
+  type NarrativeWidgetProps,
   type SoftUnion,
   TextWidgetProps as TextWidgetPropsPreact,
   Widget as WidgetPreact,
@@ -103,7 +104,6 @@ export type WithCommonWidgetProps<BaseWidget, Type> = BaseWidget & {
   widgetType: Type;
   /**
    * Optional handler function to process menu options before opening the context menu.
-   *
    * @internal
    */
   beforeMenuOpen?: BeforeMenuOpenHandler;
@@ -118,6 +118,7 @@ export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
   | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
   | WithCommonWidgetProps<FilterWidgetProps, 'filter'>
+  | WithCommonWidgetProps<NarrativeWidgetProps, 'narrative'>
 > & {
   // Explicitly declare event handlers to prevent Angular's template type checker
   // from inferring intersection types when accessing these properties on WidgetProps.
@@ -131,7 +132,6 @@ export type WidgetProps = SoftUnion<
 
 /**
  * Facade component that renders a widget within a dashboard based on the widget type.
- *
  * @example
  * ```html
 <!--Component HTML template in example.component.html-->
@@ -186,7 +186,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * Unique identifier of the widget
-   *
    * @category Widget
    */
   @Input()
@@ -194,7 +193,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * Widget type
-   *
    * @category Widget
    */
   @Input()
@@ -202,7 +200,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.chartType}
-   *
    * @category Chart
    */
   @Input()
@@ -210,7 +207,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.customWidgetType}
-   *
    * @category Widget
    */
   @Input()
@@ -218,7 +214,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
-   *
    * @category Data
    */
   @Input()
@@ -226,7 +221,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
-   *
    * @category Chart
    */
   @Input()
@@ -234,7 +228,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.filters}
-   *
    * @category Data
    */
   @Input()
@@ -242,7 +235,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlights}
-   *
    * @category Data
    */
   @Input()
@@ -250,7 +242,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
-   *
    * @category Widget
    */
   @Input()
@@ -258,7 +249,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.config}
-   *
    * @category Widget
    */
   @Input()
@@ -266,7 +256,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.customOptions}
-   *
    * @category Widget
    * @internal
    */
@@ -275,7 +264,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
-   *
    * @category Widget
    */
   @Input()
@@ -283,7 +271,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
-   *
    * @category Widget
    */
   @Input()
@@ -291,7 +278,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.description}
-   *
    * @category Widget
    */
   @Input()
@@ -299,7 +285,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
-   *
    * @category Widget
    * @internal
    */
@@ -308,7 +293,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onBeforeRender}
-   *
    * @category Callbacks
    */
   @Input()
@@ -316,7 +300,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataReady}
-   *
    * @category Callbacks
    */
   @Input()
@@ -324,7 +307,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * Optional handler function to process menu options before opening the context menu.
-   *
    * @category Callbacks
    * @internal
    */
@@ -333,7 +315,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointClick}
-   *
    * @category Callbacks
    */
   @Output()
@@ -341,7 +322,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
-   *
    * @category Callbacks
    */
   @Output()
@@ -349,7 +329,6 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointsSelected}
-   *
    * @category Callbacks
    */
   @Output()

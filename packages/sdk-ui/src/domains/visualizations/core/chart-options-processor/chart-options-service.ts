@@ -47,6 +47,36 @@ import { DataLabelsSettings } from './translations/value-label-section';
 /**
  * Highcharts options
  *
+ * @example
+ * Used to type the `highchartsOptions` argument of a chart's `onBeforeRender` callback, which
+ * lets you customize the underlying Highcharts config before it renders:
+ *
+ * ```tsx
+ * import { Chart, HighchartsOptions } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const onBeforeRender = (options: HighchartsOptions): HighchartsOptions => ({
+ *   ...options,
+ *   chart: { ...options.chart, backgroundColor: '#f5f5f5' },
+ * });
+ *
+ * const CodeExample = () => (
+ *   <Chart
+ *     chartType="column"
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       category: [DM.Commerce.Date.Years],
+ *       value: [measureFactory.sum(DM.Commerce.Revenue)],
+ *       breakBy: [],
+ *     }}
+ *     onBeforeRender={onBeforeRender}
+ *   />
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
  * @alpha
  */
 export type HighchartsOptions = Pick<Options, keyof Options>;

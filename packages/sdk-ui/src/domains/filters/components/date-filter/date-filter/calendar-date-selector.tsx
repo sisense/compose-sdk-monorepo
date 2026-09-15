@@ -23,6 +23,12 @@ const Container = styled.div<Themable>`
 
 export type SelectorMode = 'fromSelector' | 'toSelector' | 'pointSelector' | 'multiPointsSelector';
 
+export type RangeSelectorMode = Extract<SelectorMode, 'fromSelector' | 'toSelector'>;
+
+export function isRangeSelectorMode(mode: SelectorMode): mode is RangeSelectorMode {
+  return mode === 'fromSelector' || mode === 'toSelector';
+}
+
 export type DateRangeLimits = {
   maxDate?: dayjs.Dayjs;
   minDate?: dayjs.Dayjs;
@@ -49,7 +55,7 @@ export type CalendarDateSelectorProps = {
   selectedDateRange?: Partial<DayjsDateRange>;
   onDateChanged?: (selectedDate: dayjs.Dayjs) => void;
   onDatesChanged?: (selectedDates: dayjs.Dayjs[]) => void;
-  onDateRangeChanged?: (dateRange: DayjsDateRange) => void;
+  onDateRangeChanged?: (dateRange: Partial<DayjsDateRange>) => void;
   onSelectorModeChanged?: (newSelectorMode: SelectorMode) => void;
 };
 
@@ -67,13 +73,9 @@ export function CalendarDateSelector({
   const onDateSelected = (selectedDate: dayjs.Dayjs) => {
     if (selectorMode === 'pointSelector' && onDateChanged) {
       onDateChanged(selectedDate);
-    } else if (limit && onDateRangeChanged && selectedDateRange) {
-      onDateRangeChanged?.(
-        calculateNewDateRange(
-          { from: selectedDateRange.from, to: selectedDateRange.to },
-          selectedDate,
-          selectorMode,
-        ),
+    } else if (isRangeSelectorMode(selectorMode) && onDateRangeChanged) {
+      onDateRangeChanged(
+        calculateNewDateRange(selectedDateRange ?? {}, selectedDate, selectorMode),
       );
       onSelectorModeChanged?.(selectorMode === 'fromSelector' ? 'toSelector' : 'fromSelector');
     } else if (selectorMode === 'multiPointsSelector' && onDatesChanged) {

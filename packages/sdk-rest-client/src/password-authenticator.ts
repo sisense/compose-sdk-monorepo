@@ -3,7 +3,7 @@ import { normalizeUrl } from '@sisense/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
-import { errorInterceptor } from './interceptors.js';
+import { getErrorInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
 
 export class PasswordAuthenticator extends BaseAuthenticator {
@@ -37,7 +37,7 @@ export class PasswordAuthenticator extends BaseAuthenticator {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: this.body,
-      }).catch(errorInterceptor);
+      }).catch(getErrorInterceptor(this, { url: this.url, method: 'POST' }));
 
       if (response.ok) {
         const json = await response.json();
@@ -59,7 +59,6 @@ export class PasswordAuthenticator extends BaseAuthenticator {
 
 /**
  * Checks if an authenticator is a PasswordAuthenticator.
- *
  * @param authenticator - the authenticator to check
  * @internal
  */

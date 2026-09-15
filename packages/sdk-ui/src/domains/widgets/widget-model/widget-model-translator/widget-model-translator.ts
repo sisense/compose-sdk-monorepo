@@ -23,6 +23,7 @@ import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
   PAGES_BATCH_SIZE,
 } from '@/domains/visualizations/components/table/table-component.js';
+import { hasAdvancedAnalyticsMeasure } from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query.js';
 import { getTranslatedDataOptions } from '@/domains/visualizations/core/chart-data-options/get-translated-data-options.js';
 import {
   translatePivotTableDataOptions,
@@ -49,6 +50,7 @@ import { CommonWidgetProps } from '@/domains/widgets/components/common-widget/ty
 import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 import { extractFilterWidgetControlStyle } from '@/domains/widgets/components/filter-widget/filter-widget-design';
 import { FilterWidgetFilterType } from '@/domains/widgets/components/filter-widget/types';
+import { NarrativeWidgetProps } from '@/domains/widgets/components/narrative-widget/types';
 import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
 import { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
 import {
@@ -83,6 +85,7 @@ import {
   toTreemapWidgetStyle,
   withWidgetDesign,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
+import { toNarrativeWidgetStyle } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/narrative-widget-style.js';
 import { toTabberWidgetStyle } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/tabber.js';
 import {
   extractWidgetNarrativeConfigFromDto,
@@ -105,6 +108,8 @@ import {
   isChartWidgetProps,
   isCustomWidget,
   isCustomWidgetProps,
+  isNarrativeWidget,
+  isNarrativeWidgetProps,
   isPivotTableWidgetProps,
   isPivotWidget,
   isSupportedPluginCsdkWidget,
@@ -203,8 +208,10 @@ export function toExecuteQueryParams(widgetModel: WidgetModel): ExecuteQueryPara
     dimensions = tableAttributes;
     measures = tableMeasures;
     count = DEFAULT_TABLE_ROWS_PER_PAGE * PAGES_BATCH_SIZE + 1;
-    // ungroup is needed so query without aggregation returns correct result
-    ungroup = true;
+    // ungroup is needed so query without aggregation returns correct result. Skipped when a
+    // trend/forecast measure is present — those backend functions require a grouped,
+    // monotonically-sorted-by-date query.
+    ungroup = !hasAdvancedAnalyticsMeasure(tableMeasures);
   } else {
     const { attributes: chartAttributes, measures: chartMeasures } = getTranslatedDataOptions(
       widgetModel.dataOptions as ChartDataOptions,
@@ -276,6 +283,10 @@ export function toChartProps(widgetModel: WidgetModel): ChartProps {
 
   if (isTextWidget(widgetModel.widgetType)) {
     throw new TextWidgetNotSupportedMethodError('toChartProps');
+  }
+
+  if (isNarrativeWidget(widgetModel.widgetType)) {
+    throw new NarrativeWidgetNotSupportedMethodError();
   }
 
   if (isTableWidgetModel(widgetModel)) {
@@ -366,6 +377,10 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
     throw new TextWidgetNotSupportedMethodError('toChartWidgetProps');
   }
 
+  if (isNarrativeWidget(widgetModel.widgetType)) {
+    throw new NarrativeWidgetNotSupportedMethodError();
+  }
+
   return {
     chartType: widgetModel.chartType!,
     dataOptions: widgetModel.dataOptions as ChartDataOptions,
@@ -432,6 +447,26 @@ export function toTextWidgetProps(widgetModel: WidgetModel): TextWidgetProps {
 }
 
 /**
+ * Translates a {@link WidgetModel} to the props for rendering the dashboard narrative widget.
+ *
+ * @param widgetModel - Widget model of a `narrative` widget
+ * @returns Dashboard narrative widget props
+ * @throws If the widget model is not a `narrative` widget
+ * @internal
+ */
+export function toNarrativeWidgetProps(widgetModel: WidgetModel): NarrativeWidgetProps {
+  if (!isNarrativeWidget(widgetModel.widgetType)) {
+    throw new TranslatableError('errors.widgetModel.unsupportedWidgetType', {
+      widgetType: widgetModel.widgetType,
+    });
+  }
+  return {
+    title: widgetModel.title,
+    styleOptions: widgetModel.styleOptions as NarrativeWidgetProps['styleOptions'],
+  };
+}
+
+/**
  * Translates a {@link WidgetModel} to the props for rendering a custom widget.
  *
  * @internal
@@ -470,6 +505,8 @@ export function toCommonWidgetProps(widgetModel: WidgetModel): CommonWidgetProps
     return { widgetType: 'pivot', ...toPivotTableWidgetProps(widgetModel) };
   } else if (isTextWidget(widgetType)) {
     return { widgetType: 'text', ...toTextWidgetProps(widgetModel) };
+  } else if (isNarrativeWidget(widgetType)) {
+    return { widgetType: 'narrative', ...toNarrativeWidgetProps(widgetModel) };
   } else if (isCustomWidget(widgetType)) {
     return { widgetType: 'custom', ...toCustomWidgetProps(widgetModel) };
   } else {
@@ -490,6 +527,7 @@ function normalizeFilterWidgetType(
   const value = raw?.startsWith('filter/') ? raw.slice('filter/'.length) : raw;
   const known: FilterWidgetFilterType[] = [
     'members',
+    'calendar',
     'dateRange',
     'period',
     'numericRange',
@@ -931,7 +969,21 @@ const buildWidgetModel = (params: {
   const jtdConfig = jumpToDashboardConfigFromWidgetDto(widgetDto);
 
   const narrativeConfig = extractWidgetNarrativeConfigFromDto(widgetDto.style?.narration);
-  const config = narrativeConfig !== undefined ? { narrative: narrativeConfig } : undefined;
+  // Widget-level AI context is a top-level widget field (sibling to `style`/`metadata`), not part
+  // of `style.narration`. Fold the trimmed, non-empty value into the narrative config so it reaches
+  // the narrative request even when the widget has no other narration settings.
+  const trimmedAiContext =
+    typeof widgetDto.aiContext === 'string' ? widgetDto.aiContext.trim() : '';
+  const widgetAiContext = trimmedAiContext || undefined;
+  const mergedNarrativeConfig =
+    narrativeConfig !== undefined || widgetAiContext !== undefined
+      ? {
+          ...narrativeConfig,
+          ...(widgetAiContext !== undefined ? { aiContext: widgetAiContext } : {}),
+        }
+      : undefined;
+  const config =
+    mergedNarrativeConfig !== undefined ? { narrative: mergedNarrativeConfig } : undefined;
 
   // Merge the opaque DTO `customOptions` bag (persisted plugin runtime state)
   // under any category-specific options (e.g. Tabber's), which take precedence.
@@ -1060,6 +1112,22 @@ export function fromTextWidgetProps(textWidgetProps: TextWidgetProps): WidgetMod
 }
 
 /**
+ * Creates a {@link WidgetModel} from a {@link NarrativeWidgetProps}.
+ *
+ * @param narrativeWidgetProps - The NarrativeWidgetProps to be converted to a widget model
+ * @returns WidgetModel
+ * @internal
+ */
+export function fromNarrativeWidgetProps(narrativeWidgetProps: NarrativeWidgetProps): WidgetModel {
+  return {
+    ...DEFAULT_WIDGET_MODEL,
+    title: narrativeWidgetProps.title ?? '',
+    styleOptions: narrativeWidgetProps.styleOptions ?? {},
+    widgetType: 'narrative',
+  };
+}
+
+/**
  * Creates a {@link WidgetModel} from a {@link CustomWidgetProps}.
  *
  * @param customWidgetProps - The CustomWidgetProps to be converted to a widget model
@@ -1093,6 +1161,9 @@ export function fromWidgetProps(widgetProps: WidgetProps): WidgetModel {
   }
   if (isTextWidgetProps(widgetProps)) {
     return withOid(widgetProps.id)(fromTextWidgetProps(widgetProps));
+  }
+  if (isNarrativeWidgetProps(widgetProps)) {
+    return withOid(widgetProps.id)(fromNarrativeWidgetProps(widgetProps));
   }
   if (isCustomWidgetProps(widgetProps)) {
     return withOid(widgetProps.id)(fromCustomWidgetProps(widgetProps));
@@ -1161,6 +1232,11 @@ export function toWidgetDto(
         textAlign: 'center',
       },
     };
+  } else if (isNarrativeWidget(widgetModel.widgetType)) {
+    // The widget runs no query and persists no style keys of its own; the generated narrative
+    // never survives a reload, so only the container design (appended below) round-trips.
+    subtype = 'dashboardnarrative';
+    style = toNarrativeWidgetStyle();
   } else if (isCustomWidget(widgetModel.widgetType)) {
     panels.push(...toCustomWidgetPanels(widgetModel.dataOptions as GenericDataOptions));
     if (widgetModel.customWidgetType && isSupportedPluginCsdkWidget(widgetModel.customWidgetType)) {
@@ -1334,6 +1410,11 @@ export function toWidgetDto(
     },
     style: styleWithDtoNarration,
     subtype,
+    // Round-trip the widget-level AI context (a top-level widget field, not part of
+    // `style.narration`) so it survives model→DTO conversion, e.g. when a widget is duplicated.
+    ...(typeof narrativeConfig?.aiContext === 'string' && narrativeConfig.aiContext.trim()
+      ? { aiContext: narrativeConfig.aiContext.trim() }
+      : {}),
     // Custom-widget options round-trip opaquely through the DTO's `customOptions` bag.
     ...(isCustomWidget(widgetModel.widgetType) && widgetModel.customOptions
       ? { customOptions: widgetModel.customOptions }
@@ -1362,5 +1443,16 @@ class PivotNotSupportedMethodError extends TranslatableError {
 class TextWidgetNotSupportedMethodError extends TranslatableError {
   constructor(methodName: string) {
     super('errors.widgetModel.textWidgetNotSupported', { methodName });
+  }
+}
+
+/**
+ * Thrown by the widget-model methods that have no meaning for a `narrative` widget, which runs no query.
+ *
+ * @internal
+ */
+class NarrativeWidgetNotSupportedMethodError extends TranslatableError {
+  constructor() {
+    super('errors.widgetModel.unsupportedWidgetType', { widgetType: 'narrative' });
   }
 }

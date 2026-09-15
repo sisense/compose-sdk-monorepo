@@ -1,6 +1,9 @@
+import { Measure } from '@sisense/sdk-data';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { ConditionalDataColorOptions, StyledMeasureColumn } from '@/types';
 
-import { resolveComparisonColor, resolveValueColor } from './value-colors';
+import { resolveComparisonColor, resolveSeriesColor, resolveValueColor } from './value-colors';
 
 /** Shared measure-column fixture: `MeasureColumn`'s only required field is `name`, so this needs no cast. */
 function styledMeasure(overrides: Partial<StyledMeasureColumn> = {}): StyledMeasureColumn {
@@ -54,6 +57,101 @@ describe('resolveValueColor', () => {
     });
 
     expect(resolveValueColor(measure, 42)).toBeUndefined();
+  });
+
+  describe('formula-driven conditions (Fusion color rules keyed on a measure)', () => {
+    const aboveTarget: ConditionalDataColorOptions = {
+      type: 'conditional',
+      conditions: [
+        {
+          color: '#00ff00',
+          expression: '',
+          operator: '>',
+          valueMeasure: { name: 'Target' } as Measure,
+        },
+      ],
+      defaultColor: '#ff0000',
+    };
+
+    it('compares the value against the resolved measure value, not the literal expression', () => {
+      const measure = styledMeasure({ color: aboveTarget });
+
+      expect(resolveValueColor(measure, 150, { Target: 100 })).toBe('#00ff00');
+      expect(resolveValueColor(measure, 50, { Target: 100 })).toBe('#ff0000');
+    });
+
+    it('drops the condition when its measure is unresolved, rather than reading it as 0', () => {
+      const measure = styledMeasure({ color: aboveTarget });
+
+      // A `> 0` reading of the empty expression would color 150 green off a rule the user
+      // never wrote; the honest answer is the default color.
+      expect(resolveValueColor(measure, 150)).toBe('#ff0000');
+      expect(resolveValueColor(measure, 150, { SomethingElse: 100 })).toBe('#ff0000');
+    });
+
+    it('leaves literal conditions alongside a formula-driven one untouched', () => {
+      const measure = styledMeasure({
+        color: {
+          type: 'conditional',
+          conditions: [
+            {
+              color: '#00ff00',
+              expression: '',
+              operator: '>',
+              valueMeasure: { name: 'Target' } as Measure,
+            },
+            { color: '#0000ff', expression: '10', operator: '>' },
+          ],
+          defaultColor: '#ff0000',
+        },
+      });
+
+      // Unresolved formula condition dropped; the literal one still decides.
+      expect(resolveValueColor(measure, 50)).toBe('#0000ff');
+      expect(resolveValueColor(measure, 5)).toBe('#ff0000');
+    });
+  });
+});
+
+describe('resolveSeriesColor', () => {
+  it('resolves a uniform color string', () => {
+    expect(resolveSeriesColor({ column: DM.Commerce.Date.Months, color: '#123456' })).toBe(
+      '#123456',
+    );
+  });
+
+  it('resolves a uniform color object', () => {
+    expect(
+      resolveSeriesColor({
+        column: DM.Commerce.Date.Months,
+        color: { type: 'uniform', color: '#654321' },
+      }),
+    ).toBe('#654321');
+  });
+
+  it('leaves the color undefined without a column or without color options', () => {
+    expect(resolveSeriesColor(undefined)).toBeUndefined();
+    expect(resolveSeriesColor({ column: DM.Commerce.Date.Months })).toBeUndefined();
+  });
+
+  it('ignores conditional and range options, which need a single value to evaluate', () => {
+    expect(
+      resolveSeriesColor({
+        column: DM.Commerce.Date.Months,
+        color: {
+          type: 'conditional',
+          conditions: [{ color: '#00ff00', expression: '100', operator: '>' }],
+          defaultColor: '#ff0000',
+        },
+      }),
+    ).toBeUndefined();
+
+    expect(
+      resolveSeriesColor({
+        column: DM.Commerce.Date.Months,
+        color: { type: 'range', minColor: '#ff0000', maxColor: '#00ff00' },
+      }),
+    ).toBeUndefined();
   });
 });
 

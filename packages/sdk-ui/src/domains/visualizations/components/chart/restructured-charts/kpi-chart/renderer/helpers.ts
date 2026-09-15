@@ -345,6 +345,7 @@ export function toKpiRenderOptions(
     valueTitle: chartData.valueTitle,
     valueColor: chartData.valueColor,
     valuePeriodMs: chartData.valuePeriodMs,
+    categoryDisplayValue: chartData.categoryDisplayValue,
     comparison: chartData.comparison ? toKpiComparisonInfo(chartData.comparison, t) : undefined,
     sparklinePoints: chartData.sparklinePoints,
   };
@@ -628,10 +629,11 @@ export function summarizeComparisonForAria(
       }
       return display === 'both' ? `${ofGoalText}, ${toGoText}` : ofGoalText;
     }
-    case 'value':
-      return `${comparison.label} ${formatKpiValue(
-        comparison.value,
-        comparison.numberFormatConfig,
-      )}`;
+    case 'value': {
+      const valueText = formatKpiValue(comparison.value, comparison.numberFormatConfig);
+      // Same guard as the delta branch: a comparison measure that is just a fixed number has no
+      // label of its own, and prefixing an empty one would leave a stray space in the summary.
+      return comparison.label ? `${comparison.label} ${valueText}` : valueText;
+    }
   }
 }

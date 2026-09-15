@@ -24,7 +24,7 @@ const sampleItem: QueryPillItem = {
 
 const longFilterItem: QueryPillItem = {
   type: 'pill',
-  label: "Category in ['Calculators', 'Camera Flashes', 'Accessories']",
+  label: 'Category: Calculators, Camera Flashes, Accessories',
   category: 'filter',
   id: 'f1',
 };
@@ -96,8 +96,8 @@ export const TruncatedLabel: Story = {
     docs: {
       description: {
         story:
-          'Labels longer than `maxLength` are cut at that length and suffixed with `...`. ' +
-          'The full label is available via the native `title` attribute and tooltip.',
+          'Filter chips longer than `maxLength` are cut from the value side and suffixed with `...`. ' +
+          'The field name stays intact. The full label is available via the native `title` attribute and tooltip.',
       },
     },
   },

@@ -14,6 +14,7 @@ import {
   NlqTranslationErrorContext,
   NlqTranslationResult,
 } from '../../../types.js';
+import { processNode } from '../../shared/expression/process-node.js';
 import {
   createAttributeFromName,
   REQUIRE_EXPLICIT_DATE_LEVEL,
@@ -22,6 +23,9 @@ import {
 import {
   DimensionsInput,
   DimensionTranslationItem,
+  type FunctionCall,
+  isAttributeElement,
+  isFunctionCall,
   isStyledColumnJSON,
   StyledColumnJSON,
 } from '../../types.js';
@@ -61,12 +65,16 @@ const processStyledColumn = (
   context: NlqTranslationErrorContext,
 ): { attribute: Attribute; style: CategoryStyle; error?: NlqTranslationError } => {
   const sortError = validateSortType(styledColumn.sortType, context);
-  const attribute = createAttributeFromName(
-    styledColumn.column,
-    dataSource,
-    schemaIndex,
-    REQUIRE_EXPLICIT_DATE_LEVEL,
-  );
+  // A styled column may hold a calculated dimension, which is defined by a formula and so cannot
+  // be resolved by name.
+  const attribute = isFunctionCall(styledColumn.column)
+    ? processCalculatedDimension(styledColumn.column, dataSource, schemaIndex, context)
+    : createAttributeFromName(
+        styledColumn.column,
+        dataSource,
+        schemaIndex,
+        REQUIRE_EXPLICIT_DATE_LEVEL,
+      );
   if (sortError) {
     return {
       attribute,
@@ -88,6 +96,32 @@ const processStyledColumn = (
  * @param context - Error context
  * @returns Object with the attribute, optional style, and any validation errors
  */
+/**
+ * Builds a calculated attribute (a calculated dimension) from a parsed compose-code function call.
+ *
+ * A calculated dimension has no table/column, so it cannot be resolved by name the way a plain
+ * dimension is — it carries its own `formula` and `context` instead.
+ */
+const processCalculatedDimension = (
+  functionCall: FunctionCall,
+  dataSource: JaqlDataSourceForDto,
+  schemaIndex: SchemaIndex,
+  context: NlqTranslationErrorContext,
+): Attribute => {
+  const element = processNode({
+    data: functionCall,
+    context: { dataSource, schemaIndex, pathPrefix: context.path },
+  });
+
+  if (!isAttributeElement(element)) {
+    throw new Error(
+      `Expected '${functionCall.function}' to produce an attribute, got a different element type.`,
+    );
+  }
+
+  return element;
+};
+
 const processDimensionItem = (
   dimensionJSON: string | StyledColumnJSON | unknown,
   dataSource: JaqlDataSourceForDto,
@@ -104,6 +138,12 @@ const processDimensionItem = (
     return { attribute };
   }
 
+  if (isFunctionCall(dimensionJSON)) {
+    return {
+      attribute: processCalculatedDimension(dimensionJSON, dataSource, schemaIndex, context),
+    };
+  }
+
   if (isStyledColumnJSON(dimensionJSON)) {
     return processStyledColumn(dimensionJSON, dataSource, schemaIndex, context);
   }
@@ -112,7 +152,7 @@ const processDimensionItem = (
     error: {
       ...context,
       message:
-        "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+        "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
     },
   };
 };

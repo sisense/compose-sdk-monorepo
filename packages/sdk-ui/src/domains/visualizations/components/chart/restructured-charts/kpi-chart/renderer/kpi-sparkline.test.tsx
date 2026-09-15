@@ -25,13 +25,21 @@ const JUNE_15_2020 = Date.UTC(2020, 5, 15);
 const datePoints: SparklinePoint[] = [{ x: JUNE_15_2020, y: 100 }];
 
 /** Runs the built tooltip formatter over the given point, as Highcharts would. */
-function formatTooltip(point: { x: number; y: number }): string {
+function formatTooltip(point: Partial<Highcharts.TooltipFormatterContextObject>): string {
   const options = optionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options;
   const formatter = options.tooltip?.formatter as (
     this: Highcharts.TooltipFormatterContextObject,
   ) => string;
   return formatter.call(point as Highcharts.TooltipFormatterContextObject);
 }
+
+/**
+ * A Highcharts point stand-in carrying only what the tooltip formatter reads off it: the custom
+ * property of the data object the point was built from. Double-cast because a real `Point` has
+ * ~20 more members, none of which the formatter touches.
+ */
+const pointLabeled = (categoryDisplayValue: string) =>
+  ({ options: { categoryDisplayValue } } as unknown as Highcharts.Point);
 
 describe('KpiSparkline', () => {
   beforeEach(() => {
@@ -118,16 +126,41 @@ describe('KpiSparkline', () => {
 
   it("formats the tooltip's date with the category's dateFormat when one is set", () => {
     render(
-      <KpiSparkline points={datePoints} chartType="line" color="#123456" dateFormat="yyyy Q" />,
+      <KpiSparkline
+        points={datePoints}
+        chartType="line"
+        color="#123456"
+        isDateCategory
+        dateFormat="yyyy Q"
+      />,
     );
 
     expect(formatTooltip({ x: JUNE_15_2020, y: 100 })).toContain('2020 Q2');
   });
 
   it("falls back to the card's default date format when the category carries none", () => {
-    render(<KpiSparkline points={datePoints} chartType="line" color="#123456" />);
+    render(<KpiSparkline points={datePoints} chartType="line" color="#123456" isDateCategory />);
 
     expect(formatTooltip({ x: JUNE_15_2020, y: 100 })).toContain('Jun 15, 2020');
+  });
+
+  it("names a non-date category's point by its own bucket text, never as a date", () => {
+    // `x` is the bucket ordinal for a non-date category, so formatting it as an epoch would
+    // caption every point 'Jan 1, 1970'.
+    const genderPoints: SparklinePoint[] = [
+      { x: 0, y: 120, categoryDisplayValue: 'Male' },
+      { x: 1, y: 90, categoryDisplayValue: 'Female' },
+    ];
+    render(<KpiSparkline points={genderPoints} chartType="line" color="#123456" />);
+
+    const result = formatTooltip({
+      x: 1,
+      y: 90,
+      point: pointLabeled('Female'),
+    });
+
+    expect(result).toContain('Female');
+    expect(result).not.toContain('1970');
   });
 
   it("leads the tooltip with the measure's title when one is passed", () => {

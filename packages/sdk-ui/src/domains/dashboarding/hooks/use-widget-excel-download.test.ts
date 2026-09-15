@@ -23,7 +23,10 @@ const filterWidget = (): WidgetProps =>
 
 /** Reads the resolved Excel download flag, which only export-capable widgets carry. */
 const downloadExcelEnabled = (widget?: WidgetProps): boolean | undefined =>
-  widget && widget.widgetType !== 'text' && widget.widgetType !== 'filter'
+  widget &&
+  widget.widgetType !== 'text' &&
+  widget.widgetType !== 'filter' &&
+  widget.widgetType !== 'narrative'
     ? widget.config?.actions?.downloadExcel?.enabled
     : undefined;
 

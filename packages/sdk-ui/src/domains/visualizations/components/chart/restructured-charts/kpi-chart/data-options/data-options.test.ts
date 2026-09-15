@@ -4,6 +4,7 @@ import * as DM from '@/__test-helpers__/sample-ecommerce';
 import {
   CartesianChartDataOptions,
   IndicatorChartDataOptions,
+  KpiChartDataOptions,
   KpiChartDataOptionsInternal,
   SankeyChartDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
@@ -11,6 +12,7 @@ import {
 import {
   getKpiAttributes,
   getKpiMeasures,
+  isDateCategory,
   isKpiChartDataOptions,
   isKpiChartDataOptionsInternal,
   translateKpiChartDataOptions,
@@ -118,6 +120,56 @@ describe('kpi - data options translators', () => {
       const internal = translateKpiChartDataOptions({ value: revenue });
 
       expect(getKpiAttributes(internal)).toEqual([]);
+    });
+  });
+
+  describe('colorConditionMeasures', () => {
+    /** A Fusion formula-driven color rule: the threshold is a measure, not a literal number. */
+    const colorByCost: KpiChartDataOptions['value'] = {
+      column: revenue,
+      color: {
+        type: 'conditional',
+        conditions: [{ color: '#00ff00', expression: '', operator: '>', valueMeasure: cost }],
+        defaultColor: '#ff0000',
+      },
+    };
+
+    it('collects the measures backing formula-driven conditions on the value', () => {
+      const result = translateKpiChartDataOptions({ value: colorByCost });
+
+      expect(result.colorConditionMeasures?.map((m) => m.column.name)).toEqual([cost.name]);
+    });
+
+    it('is omitted when the conditions are all literal thresholds', () => {
+      const result = translateKpiChartDataOptions({
+        value: {
+          column: revenue,
+          color: {
+            type: 'conditional',
+            conditions: [{ color: '#00ff00', expression: '100', operator: '>' }],
+            defaultColor: '#ff0000',
+          },
+        },
+      });
+
+      expect(result.colorConditionMeasures).toBeUndefined();
+    });
+
+    it('is omitted for a uniform color', () => {
+      const result = translateKpiChartDataOptions({
+        value: { column: revenue, color: '#123456' },
+      });
+
+      expect(result.colorConditionMeasures).toBeUndefined();
+    });
+
+    it('adds them to the query so their thresholds can be resolved', () => {
+      const internal = translateKpiChartDataOptions({ value: colorByCost });
+
+      expect(getKpiMeasures(internal).map((measure) => measure.name)).toEqual([
+        revenue.name,
+        cost.name,
+      ]);
     });
   });
 
@@ -248,6 +300,39 @@ describe('kpi - data options translators', () => {
           } as unknown as KpiChartDataOptionsInternal),
         ).toBe(false);
       });
+    });
+  });
+
+  describe('isDateCategory', () => {
+    it('accepts a date level attribute', () => {
+      const { category } = translateKpiChartDataOptions({
+        value: revenue,
+        category: DM.Commerce.Date.Months,
+      });
+
+      expect(isDateCategory(category)).toBe(true);
+    });
+
+    it('rejects a text attribute', () => {
+      const { category } = translateKpiChartDataOptions({
+        value: revenue,
+        category: DM.Commerce.Gender,
+      });
+
+      expect(isDateCategory(category)).toBe(false);
+    });
+
+    it('rejects a numeric attribute, whose values would otherwise read as epochs', () => {
+      const { category } = translateKpiChartDataOptions({
+        value: revenue,
+        category: DM.Commerce.DateMonth,
+      });
+
+      expect(isDateCategory(category)).toBe(false);
+    });
+
+    it('rejects a missing category', () => {
+      expect(isDateCategory(undefined)).toBe(false);
     });
   });
 });

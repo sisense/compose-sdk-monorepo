@@ -18,5 +18,12 @@ export const translation: TranslationDictionary = {
       '$t(errorPrefix) Помилка автентифікації за допомогою токена. Перевірте дані для входу.',
     authRedirectLimitExceeded:
       'Досягнуто ліміт перенаправлень SSO. Автентифікацію може блокувати налаштування конфіденційності браузера або обмеження сторонніх cookie. Перевірте конфігурацію SSO або спробуйте інший браузер.',
+    sessionExpired: '$t(errorPrefix) Сесія завершилася. Потрібна повторна автентифікація.',
+    forbidden:
+      '$t(errorPrefix) Доступ заборонено ({{status}}). У вас немає прав для виконання цього запиту.',
+    responseError: '$t(errorPrefix) Запит не вдався зі статусом {{status}}.',
+    responseError_onlyStatus: '$t(errorPrefix) Запит не вдався зі статусом {{status}}.',
+    responseError_withStatusText:
+      '$t(errorPrefix) Запит не вдався зі статусом {{status}} {{statusText}}.',
   },
 };

@@ -122,6 +122,33 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'Tabberウィジェットの設定が無効です',
   },
+  notifications: {
+    dismiss: '通知を閉じる',
+    auth: {
+      sessionExpiredTitle: 'セッションの期限切れ',
+      sessionExpiredMessage:
+        'セッションの有効期限が切れました。続行するには再度サインインしてください。',
+      authenticationFailedTitle: '認証に失敗しました',
+      authenticationFailedMessage:
+        '指定された認証情報は Sisense インスタンスによって拒否されました。',
+    },
+    permission: {
+      forbiddenTitle: 'アクセスが拒否されました',
+      forbiddenMessage: 'このデータにアクセスする権限がありません。',
+    },
+    network: {
+      unreachableTitle: '接続の問題',
+      unreachableMessage: 'Sisense インスタンスに接続できませんでした。',
+    },
+    server: {
+      errorTitle: 'サーバーエラー',
+      errorMessage: 'Sisense インスタンスがエラーを返しました。後でもう一度お試しください。',
+    },
+    general: {
+      requestFailedTitle: 'リクエストに失敗しました',
+      requestFailedMessage: 'Sisense インスタンスへのリクエストが失敗しました。',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: '結果なし',
   filters: 'フィルター',
@@ -231,6 +258,7 @@ const translation: TranslationDictionary = {
     allExceptCount: '{{count}} 件を除くすべて',
     setupTitle: 'フィルターウィジェットを設定',
     setupSubtitle: 'ディメンションを設定し、フィルターの動作を構成します',
+    emptySetup: 'フィルターを設定',
     conditionUnsupported: '条件はテキストフィールドと数値フィールドで利用できます',
     conditionNotRepresentable: 'この条件はここでは編集できません',
     controls: {
@@ -250,6 +278,20 @@ const translation: TranslationDictionary = {
       betweenMax: '最大値',
       selectValues: '{{level}}を選択',
       clear: 'クリア',
+    },
+    calendar: {
+      selectDates: '日付を選択',
+      multipleDaysHint: '複数の日付を選択できます',
+      formatError: '{{- format}} 形式で入力してください',
+      nonexistent: 'この日付は存在しません',
+      chooseDate: '日付の選択',
+      chooseDates: '日付の選択',
+      previousMonth: '前の月',
+      nextMonth: '次の月',
+      previousYear: '前の年',
+      nextYear: '次の年',
+      openCalendar: 'カレンダーを開く',
+      clearDate: '日付をクリア',
     },
   },
   unsupportedFilterMessage: 'サポートされていないフィルター（データクエリに適用）',
@@ -284,6 +326,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: 'ウィジェットを削除',
+      duplicateWidget: 'ウィジェットを複製',
       renameWidget: 'ウィジェットの名前を変更',
       distributeEqualWidth: 'この行で均等に配分',
       download: 'ダウンロード',
@@ -296,6 +339,21 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       '不明なカスタムウィジェットタイプ: {{customWidgetType}}。このカスタムウィジェットを登録してください。',
+  },
+  narrativeWidget: {
+    generate: 'ナレーションを生成',
+    regenerate: '再生成',
+    retry: '生成を再試行',
+    disclaimer: 'コンテンツはAIによって提供されているため、エラーが発生する可能性があります。',
+    updatedAt: '更新日時: {{timestamp}}',
+    copy: 'クリップボードにコピー',
+    copied: 'コピーしました',
+    creditsUsed: 'AIクレジットの{{usagePercentage}}%が使用されました。',
+    noDataTitle: '利用可能なダッシュボードデータがありません',
+    noDataDescription: 'ダッシュボードデータが利用可能になると、ナレーションを生成できます。',
+    failedTitle: 'ナレーションを生成できません',
+    failedDescription:
+      'しばらくしてからもう一度お試しください。問題が解決しない場合は、管理者にお問い合わせください。',
   },
   ai: {
     analyticsChatbot: '分析チャットボット',
@@ -504,6 +562,7 @@ const translation: TranslationDictionary = {
       label: 'フィルターウィジェットにリンク済み',
       tooltip:
         'このフィルターはフィルターパネルから編集できません。ダッシュボードで直接値を変更してください。',
+      infoAriaLabel: 'フィルターウィジェットへのリンクに関する情報',
     },
   },
   chart: {
@@ -519,6 +578,7 @@ const translation: TranslationDictionary = {
     table: {
       label: 'データテーブル',
       totalRows: '合計: {{formattedCount}} 行',
+      rowsRange: '{{start}}〜{{end}}行',
     },
     sankey: {
       alerts: {

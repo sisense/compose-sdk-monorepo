@@ -13,7 +13,12 @@ export { resolveHeaderItems, type ResolveHeaderItemsOptions } from './resolve-he
 export { resolveHeaderMenuItems, type HeaderMenuConfig } from './resolve-header-menu-items.js';
 export { useResolvedHeaderItems } from './use-resolved-header-items.js';
 export { HeaderItemsRenderer, type HeaderItemsRendererProps } from './header-items-renderer.js';
-export { HeaderItemCell, type HeaderItemCellProps } from './header-item-cell.js';
+export {
+  HeaderItemCell,
+  type HeaderItemCellProps,
+  HEADER_ITEM_TESTID_PREFIX,
+  getHeaderItemTestId,
+} from './header-item-cell.js';
 export {
   getHeaderItemStyle,
   resolveHeaderItemSize,

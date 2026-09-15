@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { v4 as uuid } from 'uuid';
 
@@ -57,6 +58,9 @@ export type UseDuplicateWidgetMenuItemParams = {
   persistence?: Pick<DashboardPersistenceManager, 'addWidget'>;
 };
 
+/** Widget types whose context menu carries no "Duplicate widget" item. */
+const WIDGET_TYPES_WITHOUT_DUPLICATE = ['filter', 'narrative'];
+
 /** Output of the duplicate widget middleware. */
 export type DuplicateWidgetMiddlewareOutput = {
   widgets: WidgetProps[];
@@ -101,6 +105,8 @@ export function useDuplicateWidgetMenuItem(
     setTabbersConfig,
     persistence,
   } = params;
+
+  const { t } = useTranslation();
 
   const duplicateWidget = useCallback(
     async (widgetId: string) => {
@@ -169,19 +175,20 @@ export function useDuplicateWidgetMenuItem(
     () =>
       enabled
         ? widgets.map((widget) =>
-            // FilterWidget manages a dashboard filter — duplicating it would create a
-            // conflicting linked filter. Exclude duplicate from its context menu.
-            widget.widgetType === 'filter'
+            // A FilterWidget manages a dashboard filter (a duplicate would create a
+            // conflicting linked filter); a dashboard holds at most one narrative widget.
+            // Neither offers duplicate in its context menu.
+            WIDGET_TYPES_WITHOUT_DUPLICATE.includes(widget.widgetType)
               ? widget
               : withHeaderMenuItem({
                   type: 'action',
                   id: WidgetHeaderMenuTargets.DuplicateWidget,
-                  caption: 'Duplicate widget',
+                  caption: t('widgetHeader.menu.duplicateWidget'),
                   onClick: () => void duplicateWidget(widget.id),
                 })(widget),
           )
         : [...widgets],
-    [widgets, duplicateWidget, enabled],
+    [widgets, duplicateWidget, enabled, t],
   );
 
   return { widgets: widgetsWithDuplicateMenuItem };

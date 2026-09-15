@@ -70,7 +70,16 @@ type FieldProps = FieldOwnProps & {
   /** Contents of the bordered box. */
   children: ReactNode;
   /** Applied to the bordered box, so the control owns its own interactions. */
-  boxProps?: HTMLAttributes<HTMLDivElement>;
+  boxProps?: HTMLAttributes<HTMLDivElement> & { 'data-testid'?: string };
+  /**
+   * Applied to the control's outer element, for interactions that belong to the whole
+   * control rather than the box alone. A date entry watches focus here: paging months in
+   * its calendar must not read as focus leaving the field.
+   */
+  /* `className` and `style` are excluded on purpose: the field takes both as props of its
+     own and applies them after this spread, so passing them here would drop them without
+     a word. Excluding them turns that into a compile error. */
+  rootProps?: Omit<HTMLAttributes<HTMLDivElement>, 'className' | 'style'>;
   /** The whole box is the trigger — paints the pointer cursor. */
   clickable?: boolean;
   /**
@@ -250,6 +259,7 @@ export function Field({
   className,
   children,
   boxProps,
+  rootProps,
   clickable,
   popover,
   tooltip,
@@ -270,6 +280,7 @@ export function Field({
 
   return (
     <Root
+      {...rootProps}
       ref={rootRef}
       className={className}
       $width={width}

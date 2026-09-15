@@ -9,53 +9,27 @@ but with filled in areas under each line and an option to display them as stacke
 
 ## Example
 
-```html
-   <csdk-area-chart
-     [dataSet]="chart.dataSet"
-     [dataOptions]="chart.dataOptions"
-     [highlights]="filters"
-     [beforeRender]="onBeforeRender"
-     (dataPointClick)="logArguments($event)"
-     (dataPointContextMenu)="logArguments($event)"
-     (dataPointsSelect)="logArguments($event)"
-   />
-```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
 @Component({
- selector: 'app-analytics',
- templateUrl: './analytics.component.html',
- styleUrls: ['./analytics.component.scss'],
+  selector: 'code-example',
+  template: `
+    `<csdk-area-chart [dataSet]="DM.DataSource" [dataOptions]="dataOptions">` `</csdk-area-chart>`
+  `,
 })
-export class AnalyticsComponent {
- DM = DM;
- filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
- chart = {
-   chartType: 'column' as ChartType,
-   dataSet: DM.DataSource,
-   dataOptions: {
-     category: [DM.Divisions.Divison_name],
-     value: [measureFactory.sum(DM.Admissions.Cost_of_admission)],
-     breakBy: [],
-   },
- };
-
- onBeforeRender(options: any) {
-   console.log('beforeRender');
-   console.log(options);
-   return options;
- }
-
- logArguments(...args: any[]) {
-   console.log(args);
- }
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    category: [DM.Commerce.Date.Quarters],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [],
+  };
 }
 ```
-<img src="../../../img/angular-area-chart-example.png" width="800px" />
+<img src="../../../img/area-chart-example-1.png" width="700px" />
 
 ## Constructors
 

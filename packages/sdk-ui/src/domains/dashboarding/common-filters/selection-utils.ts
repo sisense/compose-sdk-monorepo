@@ -280,8 +280,8 @@ export function getWidgetSelections(
       points as AbstractDataPointWithEntries[],
       dataOptions as GenericDataOptions,
     );
-  } else if (widgetType === 'text') {
-    // no text support
+  } else if (widgetType === 'text' || widgetType === 'narrative') {
+    // no selections on text and narrative widgets
     return [];
   } else if (widgetType === 'pivot') {
     return getPivotTableSelections(points as PivotTableDataPoint[]);
@@ -334,7 +334,7 @@ export function getSelectableWidgetAttributes(
 
   if (widgetType === 'custom') {
     targetDataOptions = getAllSelectableColumnsForCustomWidget(dataOptions as GenericDataOptions);
-  } else if (widgetType === 'text') {
+  } else if (widgetType === 'text' || widgetType === 'narrative') {
     targetDataOptions = [];
   } else if (widgetType === 'pivot') {
     targetDataOptions = [

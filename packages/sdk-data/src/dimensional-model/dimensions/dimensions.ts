@@ -598,6 +598,25 @@ export const isDimensionalDateDimension = (v: AnyObject): v is DimensionalDateDi
  *
  * See also functions {@link createDateDimension} and {@link createAttribute}.
  *
+ * @example
+ * ```ts
+ * import { createAttribute, createDimension } from '@sisense/sdk-data';
+ *
+ * const Category = createDimension({
+ *   name: 'Category',
+ *   Category: createAttribute({
+ *     name: 'Category',
+ *     type: 'text-attribute',
+ *     expression: '[Category.Category]',
+ *   }),
+ *   CategoryID: createAttribute({
+ *     name: 'Category ID',
+ *     type: 'numeric-attribute',
+ *     expression: '[Category.Category ID]',
+ *   }),
+ * });
+ * ```
+ *
  * @param json - JSON object representing the Dimension
  * @returns A new Dimension instance
  * @group Data Model Utilities
@@ -712,6 +731,19 @@ export function createDimension(json: any): Dimension {
  * This function is used in the generated data model code to create date dimensions for an input data source.
  *
  * See also functions {@link createDimension} and {@link createAttribute}.
+ *
+ * @example
+ * ```ts
+ * import { createDateDimension } from '@sisense/sdk-data';
+ *
+ * const Date = createDateDimension({
+ *   name: 'Date',
+ *   expression: '[Commerce.Date (Calendar)]',
+ * });
+ *
+ * // Access a specific granularity level as a dimension in a query.
+ * const years = Date.Years;
+ * ```
  *
  * @param json - JSON object representing the Date Dimension
  * @returns A new Date Dimension instance

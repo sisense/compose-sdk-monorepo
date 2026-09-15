@@ -1,10 +1,11 @@
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import isEqual from 'lodash-es/isEqual';
 
 import { isFiltersChanged, isRelationsChanged } from '@/shared/utils/filters-comparator';
 import { areMeasuresChanged } from '@/shared/utils/measures-comparator.js';
 
 import { useHasChanged } from '../../../../shared/hooks/use-has-changed';
-import { ExecuteQueryParams } from '../../types.js';
+import { BaseQueryParams, ExecuteQueryParams } from '../../types.js';
 
 /** List of parameters that can be compared by deep comparison */
 const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
@@ -16,22 +17,44 @@ const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
   'onBeforeQuery',
 ];
 
-export function useQueryParamsChanged(params: ExecuteQueryParams) {
-  return useHasChanged(params, simplySerializableParamNames, (params, prev) => {
-    const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelationsJaql(
-      prev.filters,
-    );
-    const { filters: newFilterList, relations: newRelationsList } = getFilterListAndRelationsJaql(
-      params.filters,
-    );
+/**
+ * Deep-compares two sets of query params for a meaningful (non-cosmetic) difference —
+ * dataSource, dimensions, measures, filters (including {@link FilterRelations} structure), and
+ * highlights. Ignores randomly generated filter names/guids (see {@link isFiltersChanged}).
+ *
+ * @param previous - Previous query params
+ * @param next - Next query params
+ * @returns Whether the query params have changed
+ * @sisenseInternal
+ */
+export function haveQueryParamsChanged(previous: BaseQueryParams, next: BaseQueryParams): boolean {
+  const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelationsJaql(
+    previous.filters,
+  );
+  const { filters: nextFilterList, relations: nextRelationsList } = getFilterListAndRelationsJaql(
+    next.filters,
+  );
 
-    // TODO: check if relations are changed
-    // Function has to compare logical structure of relations, not just references
-    return (
-      areMeasuresChanged(prev.measures, params.measures) ||
-      isFiltersChanged(prevFilterList, newFilterList) ||
-      isRelationsChanged(prevFilterList, newFilterList, prevRelationsList, newRelationsList) ||
-      isFiltersChanged(prev.highlights, params.highlights)
-    );
-  });
+  return (
+    !isEqual(previous.dataSource, next.dataSource) ||
+    !isEqual(previous.dimensions, next.dimensions) ||
+    areMeasuresChanged(previous.measures, next.measures) ||
+    isFiltersChanged(prevFilterList, nextFilterList) ||
+    isRelationsChanged(prevFilterList, nextFilterList, prevRelationsList, nextRelationsList) ||
+    isFiltersChanged(previous.highlights, next.highlights)
+  );
+}
+
+/**
+ * Tracks whether `params` changed meaningfully since the previous render, via
+ * {@link haveQueryParamsChanged}.
+ *
+ * @param params - Current query params
+ * @returns Whether the query params changed since the previous render
+ * @internal
+ */
+export function useQueryParamsChanged(params: ExecuteQueryParams) {
+  return useHasChanged(params, simplySerializableParamNames, (params, prev) =>
+    haveQueryParamsChanged(prev, params),
+  );
 }

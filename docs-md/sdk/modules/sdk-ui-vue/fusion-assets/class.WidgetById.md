@@ -76,6 +76,14 @@ If not specified, the default value is `false`.
 
 ### Widget
 
+#### config
+
+> **`readonly`** **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
+
+Configuration of the widget
+
+***
+
 #### dashboardOid
 
 > **`readonly`** **dashboardOid**: `string`

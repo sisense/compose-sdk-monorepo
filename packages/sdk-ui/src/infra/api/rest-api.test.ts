@@ -108,12 +108,29 @@ describe('Rest API', () => {
   describe('getDashboardLegacy', () => {
     it('should send correct request to fetch a dashboard via legacy API', async () => {
       await restApi.getDashboardLegacy('dashboardOid');
-      expect(httpGetMock).toHaveBeenCalledWith('api/dashboards/dashboardOid?');
+      expect(httpGetMock).toHaveBeenCalledWith(
+        'api/dashboards/dashboardOid?',
+        {},
+        { skipErrorNotification: undefined },
+      );
     });
 
     it('should include adminAccess query param when adminAccess is true', async () => {
       await restApi.getDashboardLegacy('dashboardOid', { adminAccess: true });
-      expect(httpGetMock).toHaveBeenCalledWith('api/dashboards/dashboardOid?adminAccess=true');
+      expect(httpGetMock).toHaveBeenCalledWith(
+        'api/dashboards/dashboardOid?adminAccess=true',
+        {},
+        { skipErrorNotification: undefined },
+      );
+    });
+
+    it('should pass skipErrorNotification to httpClient.get when requested', async () => {
+      await restApi.getDashboardLegacy('dashboardOid', { skipErrorNotification: true });
+      expect(httpGetMock).toHaveBeenCalledWith(
+        'api/dashboards/dashboardOid?',
+        {},
+        { skipErrorNotification: true },
+      );
     });
   });
 

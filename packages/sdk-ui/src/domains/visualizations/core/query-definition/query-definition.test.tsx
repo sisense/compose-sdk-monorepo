@@ -2,7 +2,13 @@ import type { ReactElement } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
 import type { Attribute, FilterRelations, Measure } from '@sisense/sdk-data';
-import { createAttribute, createMeasure, DateLevels, filterFactory } from '@sisense/sdk-data';
+import {
+  createAttribute,
+  createMeasure,
+  DateLevels,
+  filterFactory,
+  measureFactory,
+} from '@sisense/sdk-data';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -190,7 +196,7 @@ describe('QueryDefinition', () => {
         }}
       />,
     );
-    expect(screen.getByText('Sum of Sales')).toBeInTheDocument();
+    expect(screen.getByText('Sum of sales')).toBeInTheDocument();
     expect(screen.getByText('Region')).toBeInTheDocument();
     expect(screen.getByText('by')).toBeInTheDocument();
   });
@@ -289,7 +295,7 @@ describe('QueryDefinition', () => {
       />,
     );
     expect(screen.getByText('where')).toBeInTheDocument();
-    expect(screen.getByText('Region is North')).toBeInTheDocument();
+    expect(screen.getByText('Region: North')).toBeInTheDocument();
   });
 
   it('truncates pill labels to maxPillLength by default', () => {
@@ -303,9 +309,9 @@ describe('QueryDefinition', () => {
       'Camera Flashes',
       'Accessories',
     ]);
-    const fullLabel = "Category in ['Calculators', 'Camera Flashes', 'Accessories']";
+    const fullLabel = 'Category: Calculators, Camera Flashes, Accessories';
     renderWithI18n(<QueryDefinition query={{ filters: [filter] }} />);
-    expect(screen.getByText("Category in ['Calculators...")).toBeInTheDocument();
+    expect(screen.getByText('Category: Calculators, Ca...')).toBeInTheDocument();
     expect(screen.queryByText(fullLabel)).not.toBeInTheDocument();
   });
 
@@ -316,8 +322,107 @@ describe('QueryDefinition', () => {
       expression: '[Category.Category]',
     });
     const filter = filterFactory.members(category, ['Calculators', 'Camera Flashes']);
-    const fullLabel = "Category in ['Calculators', 'Camera Flashes']";
+    const fullLabel = 'Category: Calculators, Camera Flashes';
     renderWithI18n(<QueryDefinition query={{ filters: [filter] }} maxPillLength={0} />);
     expect(screen.getByText(fullLabel)).toBeInTheDocument();
+  });
+
+  it('renders pills from restructured chart props (areamap)', () => {
+    const country = createAttribute({
+      name: 'Country',
+      type: 'text-attribute',
+      expression: '[Country.Country]',
+    });
+    const revenueAttr = createAttribute({
+      name: 'Revenue',
+      type: 'numeric',
+      expression: '[Commerce.Revenue]',
+    });
+    const revenue = createMeasure({
+      name: 'Revenue',
+      aggregation: 'sum',
+      attribute: revenueAttr,
+    });
+    renderWithI18n(
+      <QueryDefinition
+        query={{
+          chartType: 'areamap',
+          dataOptions: {
+            geo: [country],
+            color: [revenue],
+          },
+        }}
+      />,
+    );
+    expect(screen.getByText('Revenue')).toBeInTheDocument();
+    expect(screen.getByText('Country')).toBeInTheDocument();
+    expect(screen.getByText('by')).toBeInTheDocument();
+  });
+
+  it('renders pills from table chart props', () => {
+    const months = createAttribute({
+      name: 'Months',
+      type: 'datelevel',
+      expression: '[Commerce.Date (Month)]',
+    });
+    const revenue = measureFactory.sum(
+      createAttribute({
+        name: 'Revenue',
+        type: 'numeric-attribute',
+        expression: '[Commerce.Revenue]',
+      }),
+      'Revenue',
+    );
+    renderWithI18n(
+      <QueryDefinition
+        query={{
+          chartType: 'table',
+          dataOptions: {
+            columns: [{ column: months }, { column: revenue }],
+          },
+        }}
+      />,
+    );
+    expect(screen.getByText('Revenue')).toBeInTheDocument();
+    expect(screen.getByText('Months')).toBeInTheDocument();
+  });
+
+  it('renders Trend/Forecast pills for a table column carrying .trend/.forecast', () => {
+    const months = createAttribute({
+      name: 'Months',
+      type: 'datelevel',
+      expression: '[Commerce.Date (Month)]',
+    });
+    const revenue = measureFactory.sum(
+      createAttribute({
+        name: 'Revenue',
+        type: 'numeric-attribute',
+        expression: '[Commerce.Revenue]',
+      }),
+      'Revenue',
+    );
+    renderWithI18n(
+      <QueryDefinition
+        query={{
+          chartType: 'table',
+          dataOptions: {
+            columns: [
+              { column: months },
+              {
+                column: revenue,
+                trend: { modelType: 'linear' },
+                forecast: { forecastHorizon: 3 },
+              },
+            ],
+          },
+        }}
+      />,
+    );
+    // The table query itself now includes the synthesized Trend/Forecast measures (matching
+    // what actually renders/exports), so the pill summary reflects them too. The pill label
+    // comes from the underlying measure's own (internal) name, not Table's friendly wrapper name.
+    expect(screen.getByText('Revenue')).toBeInTheDocument();
+    expect(screen.getByText('$trend_Revenue')).toBeInTheDocument();
+    expect(screen.getByText('$forecast_Revenue')).toBeInTheDocument();
   });
 });

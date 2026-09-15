@@ -1,13 +1,30 @@
-import { Filter, filterFactory, FilterRelations, Measure, measureFactory } from '@sisense/sdk-data';
+import {
+  Attribute,
+  attributeFactory,
+  Filter,
+  filterFactory,
+  FilterRelations,
+  Measure,
+  measureFactory,
+} from '@sisense/sdk-data';
 
-import { isFilterElement, isFilterRelationsElement, isMeasureElement } from '../../types.js';
+import {
+  isAttributeElement,
+  isFilterElement,
+  isFilterRelationsElement,
+  isMeasureElement,
+} from '../../types.js';
 import { FactoryFunction, ProcessedArg, QueryElement } from '../../types.js';
 
 /**
  * Safe factory function lookup helper
  */
 function getFactoryFunction(
-  factory: typeof measureFactory | typeof filterFactory | typeof filterFactory.logic,
+  factory:
+    | typeof measureFactory
+    | typeof filterFactory
+    | typeof filterFactory.logic
+    | typeof attributeFactory,
   functionName: string,
 ): FactoryFunction {
   // Use Reflect.get for clean dynamic property access
@@ -74,6 +91,28 @@ function executeFilterFactoryFunction(
 }
 
 /**
+ * Executes an `attributeFactory` function, used for calculated dimensions.
+ *
+ * @param functionPath - Full factory path, for example `attributeFactory.customFormula`
+ * @param args - Processed arguments to apply to the factory function
+ * @returns The attribute the factory produced
+ * @throws When the function is unknown or does not return an attribute
+ * @internal
+ */
+function executeAttributeFactoryFunction(functionPath: string, args: ProcessedArg[]): Attribute {
+  const functionName = functionPath.replace('attributeFactory.', '');
+  const factoryFunction = getFactoryFunction(attributeFactory, functionName);
+
+  const result = factoryFunction(...args);
+
+  if (!isAttributeElement(result)) {
+    throw new Error(`Function '${functionPath}' did not return a valid Attribute`);
+  }
+
+  return result;
+}
+
+/**
  * Executes a factory function with validated arguments using direct factory access
  */
 export function executeFunction(functionPath: string, args: ProcessedArg[]): QueryElement {
@@ -84,9 +123,11 @@ export function executeFunction(functionPath: string, args: ProcessedArg[]): Que
     return executeMeasureFactoryFunction(functionPath, args);
   } else if (factoryName === 'filterFactory') {
     return executeFilterFactoryFunction(functionPath, args);
+  } else if (factoryName === 'attributeFactory') {
+    return executeAttributeFactoryFunction(functionPath, args);
   }
 
   throw new Error(
-    `Unsupported factory: '${factoryName}'. Supported factories: measureFactory, filterFactory`,
+    `Unsupported factory: '${factoryName}'. Supported factories: measureFactory, filterFactory, attributeFactory`,
   );
 }

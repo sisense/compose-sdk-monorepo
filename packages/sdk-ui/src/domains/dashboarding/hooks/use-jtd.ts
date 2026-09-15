@@ -98,7 +98,11 @@ export const applyJtdToWidget = (
   }
 
   // Add JTD icon if configured
-  if (normalizedJtdConfig.showJtdIcon && updatedProps.widgetType !== 'text') {
+  if (
+    normalizedJtdConfig.showJtdIcon &&
+    updatedProps.widgetType !== 'text' &&
+    updatedProps.widgetType !== 'narrative'
+  ) {
     updatedProps = addJtdIconToHeader(updatedProps);
   }
 

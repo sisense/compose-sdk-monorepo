@@ -3,23 +3,12 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import dayjs from 'dayjs';
 
-import {
-  CalendarDateSelector,
-  DayjsDateRange,
-} from '@/domains/filters/components/date-filter/date-filter/calendar-date-selector';
-import { useThemeContext } from '@/infra/contexts/theme-provider';
+import { CalendarDateSelector } from '@/domains/filters/components/date-filter/date-filter/calendar-date-selector';
 import { Popper } from '@/shared/components/popper';
 
-import { DateIcon } from '../../../../icons';
-import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter';
-import { SelectField, SelectLabel } from '../base';
-import { CalendarRangeValue, CalendarSelectLimits, CalendarSelectTypes } from './types';
-import {
-  getCalendarDateSelectorMode,
-  getCalendarSelectedItemsDisplayValue,
-  toLocalCalendarDate,
-  toUtcCalendarDate,
-} from './utils';
+import { CalendarSelectField } from './calendar-select-field';
+import { CalendarSelectLimits, CalendarSelectTypes } from './types';
+import { getCalendarDateSelectorMode, toLocalCalendarDate, toUtcCalendarDate } from './utils';
 
 type BaseCalendarSelectProps = {
   limits?: CalendarSelectLimits;
@@ -39,21 +28,10 @@ type CalendarMultiSelectProps = BaseCalendarSelectProps & {
   onChange?: (value: Date[]) => void;
 };
 
-type CalendarRangeSelectProps = BaseCalendarSelectProps & {
-  type: CalendarSelectTypes.RANGE_FROM_SELECT | CalendarSelectTypes.RANGE_TO_SELECT;
-  value?: CalendarRangeValue;
-  onChange?: (value: CalendarRangeValue) => void;
-};
-
-type CalendarSelectProps =
-  | CalendarSingleSelectProps
-  | CalendarMultiSelectProps
-  | CalendarRangeSelectProps;
+type CalendarSelectProps = CalendarSingleSelectProps | CalendarMultiSelectProps;
 
 export function CalendarSelect(props: CalendarSelectProps) {
   const { value, type, limits, placeholder, onChange, width, ...rest } = props;
-  const formatter = useDatetimeFormatter();
-  const { themeSettings } = useThemeContext();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
 
@@ -75,21 +53,6 @@ export function CalendarSelect(props: CalendarSelectProps) {
     [type, onChange],
   );
 
-  const handleDateRangeChange = useCallback(
-    (range: DayjsDateRange) => {
-      if (
-        type === CalendarSelectTypes.RANGE_FROM_SELECT ||
-        type === CalendarSelectTypes.RANGE_TO_SELECT
-      ) {
-        onChange?.({
-          from: toUtcCalendarDate(range.from),
-          to: toUtcCalendarDate(range.to),
-        });
-      }
-    },
-    [type, onChange],
-  );
-
   const selectedDate = useMemo(() => {
     if (type === CalendarSelectTypes.SINGLE_SELECT && value) {
       return toLocalCalendarDate(value);
@@ -104,30 +67,8 @@ export function CalendarSelect(props: CalendarSelectProps) {
     return undefined;
   }, [type, value]);
 
-  const selectedDateRange = useMemo(() => {
-    if (
-      type === CalendarSelectTypes.RANGE_FROM_SELECT ||
-      type === CalendarSelectTypes.RANGE_TO_SELECT
-    ) {
-      return {
-        ...(value?.from && { from: toLocalCalendarDate(value.from) }),
-        ...(value?.to && { to: toLocalCalendarDate(value.to) }),
-      };
-    }
-    return undefined;
-  }, [type, value]);
-
   const valuesToDisplay = useMemo(() => {
-    const values =
-      type === CalendarSelectTypes.SINGLE_SELECT
-        ? [value]
-        : type === CalendarSelectTypes.RANGE_FROM_SELECT
-        ? [value?.from]
-        : type === CalendarSelectTypes.RANGE_TO_SELECT
-        ? [value?.to]
-        : type === CalendarSelectTypes.MULTI_SELECT
-        ? value
-        : [];
+    const values = type === CalendarSelectTypes.SINGLE_SELECT ? [value] : value;
 
     return (values || []).filter((v): v is Date => !!v);
   }, [type, value]);
@@ -144,36 +85,22 @@ export function CalendarSelect(props: CalendarSelectProps) {
   return (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <div style={{ width }}>
-        <SelectField
+        <CalendarSelectField
           ref={selectElementRef}
+          values={valuesToDisplay}
+          placeholder={placeholder}
           focus={open}
           onClick={() => setOpen((isOpen) => !isOpen)}
-          theme={themeSettings}
           {...rest}
-        >
-          <SelectLabel
-            theme={themeSettings}
-            style={{ opacity: valuesToDisplay.length ? '100%' : '50%' }}
-            aria-label="Value"
-          >
-            <>{getCalendarSelectedItemsDisplayValue(valuesToDisplay, formatter) ?? placeholder}</>
-          </SelectLabel>
-          <DateIcon
-            iconColor={themeSettings.general.popover.input.textColor}
-            aria-label="Calendar icon"
-            style={{ marginRight: '3px' }}
-          />
-        </SelectField>
+        />
         <Popper open={open} anchorEl={selectElementRef.current} preventClickPropagation={true}>
           <CalendarDateSelector
             selectorMode={getCalendarDateSelectorMode(type)}
             limit={normalizedLimits}
             selectedDate={selectedDate}
             selectedDates={selectedDates}
-            selectedDateRange={selectedDateRange}
             onDateChanged={handleDateChange}
             onDatesChanged={handleDatesChange}
-            onDateRangeChanged={handleDateRangeChange}
           />
         </Popper>
       </div>

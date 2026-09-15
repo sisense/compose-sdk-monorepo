@@ -38,6 +38,21 @@ export const useDashboardThemeInternal = ({ styleOptions }: DashboardThemeParams
 /**
  * React hook that returns dashboard theme settings
  *
+ * @example
+ * ```tsx
+ * import { useDashboardTheme } from '@sisense/sdk-ui';
+ *
+ * const CodeExample = () => {
+ *   const { themeSettings } = useDashboardTheme({
+ *     styleOptions: { backgroundColor: '#f5f5f5', dividerLineColor: '#e0e0e0' },
+ *   });
+ *
+ *   return <pre>{JSON.stringify(themeSettings, null, 2)}</pre>;
+ * };
+ *
+ * export default CodeExample;
+ * ```
+ *
  * @group Dashboards
  *
  * @alpha

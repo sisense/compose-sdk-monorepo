@@ -2,7 +2,12 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, Mock, vi } from 'vitest';
 
-import { asBuiltInHeaderItem, HeaderItem } from '@/domains/shared/header';
+import {
+  asBuiltInHeaderItem,
+  getHeaderItemTestId,
+  HEADER_ITEM_TESTID_PREFIX,
+  HeaderItem,
+} from '@/domains/shared/header';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import type { AlignmentTypes } from '@/types';
 
@@ -33,13 +38,18 @@ const defaultThemeSettings = {
   },
 };
 
-/** Test id the shared header renderer gives an item's layout cell. */
-const itemTestId = (id: string) => `header-item-${id}`;
-
-/** Ids of the rendered header items, in visual (left-to-right) order. */
+/**
+ * Ids of the rendered header items, in visual (left-to-right) order.
+ *
+ * Only the row's direct children are cells — item content may carry `csdk-` test ids of its own.
+ */
 const renderedItemIds = (container: HTMLElement): string[] =>
-  Array.from(container.querySelectorAll('[data-testid^="header-item-"]')).map((cell) =>
-    (cell.getAttribute('data-testid') as string).replace('header-item-', ''),
+  Array.from(
+    container.querySelectorAll(
+      `[data-testid="header-items-row"] > [data-testid^="${HEADER_ITEM_TESTID_PREFIX}"]`,
+    ),
+  ).map((cell) =>
+    (cell.getAttribute('data-testid') as string).slice(HEADER_ITEM_TESTID_PREFIX.length),
   );
 
 /**
@@ -179,7 +189,7 @@ describe('WidgetHeader', () => {
       expect(component).toHaveBeenCalledWith({
         size: { width: 80, height: WIDGET_HEADER_ITEM_SIZE },
       });
-      expect(getByTestId(itemTestId('clock'))).toHaveStyle({ width: '80px' });
+      expect(getByTestId(getHeaderItemTestId('clock'))).toHaveStyle({ width: '80px' });
     });
 
     it('rejects an unmarked consumer item that claims a reserved slot id', () => {
@@ -287,7 +297,7 @@ describe('WidgetHeader', () => {
         items: [{ ...contributed(WidgetHeaderTargets.DragIcon, 'drag'), size: { width: 200 } }],
       });
 
-      expect(getByTestId(itemTestId(WidgetHeaderTargets.DragIcon))).not.toHaveStyle({
+      expect(getByTestId(getHeaderItemTestId(WidgetHeaderTargets.DragIcon))).not.toHaveStyle({
         width: '200px',
       });
     });
@@ -304,7 +314,8 @@ describe('WidgetHeader', () => {
 
   describe('title alignment (the spacers around the title)', () => {
     const spacerFlex = (container: HTMLElement, id: string) =>
-      container.querySelector<HTMLElement>(`[data-testid="${itemTestId(id)}"]`)?.style.flex;
+      container.querySelector<HTMLElement>(`[data-testid="${getHeaderItemTestId(id)}"]`)?.style
+        .flex;
 
     it.each([
       ['Left', '0 0 auto', '1 1 auto'],

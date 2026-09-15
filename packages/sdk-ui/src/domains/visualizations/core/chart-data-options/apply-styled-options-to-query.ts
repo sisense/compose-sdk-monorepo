@@ -1,12 +1,15 @@
 import {
   Attribute,
-  CalculatedMeasureColumn,
-  Column,
   convertSortDirectionToSort,
+  FORECAST_PREFIX,
+  isAttributeInstance,
+  isForecastMeasure,
+  isMeasureInstance,
   isSortDirection,
+  isTrendMeasure,
   Measure,
-  MeasureColumn,
   measureFactory,
+  TREND_PREFIX,
 } from '@sisense/sdk-data';
 
 import type {
@@ -16,14 +19,6 @@ import type {
   StyledMeasureColumn,
   ValueStyle,
 } from './types.js';
-
-/**
- * Name prefixes for trend and forecast measures in query payloads (aligned with NLQ JSON and chart).
- *
- * @internal
- */
-export const TREND_PREFIX = '$trend';
-export const FORECAST_PREFIX = '$forecast';
 
 /**
  * Dimension + optional category style for {@link adaptDimensionsForQuery}.
@@ -48,35 +43,13 @@ export type MeasureQueryAdaptItem = {
 };
 
 /**
- * Dimensional {@link Attribute} instances expose JAQL sort APIs; plain {@link Column} does not.
- *
- * @internal
- */
-export function isDimensionalAttribute(column: Column): column is Attribute {
-  return typeof column === 'object' && column !== null && 'sort' in column && 'getSort' in column;
-}
-
-/**
- * Narrative / NLQ query measures are dimensional {@link Measure} instances (e.g. from `measureFactory`).
- *
- * @internal
- */
-export function isDimensionalMeasure(
-  column: MeasureColumn | CalculatedMeasureColumn,
-): column is Measure {
-  return (
-    typeof column === 'object' && column !== null && 'composeCode' in column && 'sort' in column
-  );
-}
-
-/**
  * Builds a dimension adapt item using `StyledColumn`’s own shape (no `splitColumn` merge).
  *
  * @internal
  */
 export function toDimensionQueryAdaptItem(sc: StyledColumn): DimensionQueryAdaptItem {
   const { column, ...style } = sc;
-  if (!isDimensionalAttribute(column)) {
+  if (!isAttributeInstance(column)) {
     throw new Error(
       'Narrative styled dimensions require dimensional Attribute instances (data model columns).',
     );
@@ -91,7 +64,7 @@ export function toDimensionQueryAdaptItem(sc: StyledColumn): DimensionQueryAdapt
  */
 export function toMeasureQueryAdaptItem(smc: StyledMeasureColumn): MeasureQueryAdaptItem {
   const { column, ...style } = smc;
-  if (!isDimensionalMeasure(column)) {
+  if (!isMeasureInstance(column)) {
     throw new Error(
       'Narrative styled measures require dimensional Measure instances (e.g. from measureFactory).',
     );
@@ -115,23 +88,14 @@ export function adaptDimensionsForQuery(items: DimensionQueryAdaptItem[]): Attri
 }
 
 /**
+ * Checks whether any measure in the list is a trend or forecast measure.
+ *
+ * @param measures - The measures to check.
+ * @returns `true` if at least one measure is a trend or forecast measure.
  * @internal
  */
-export function isTrendMeasure(measure: Measure): boolean {
-  return (
-    (measure.composeCode?.includes('measureFactory.trend') ?? false) ||
-    (measure.name?.startsWith(TREND_PREFIX) ?? false)
-  );
-}
-
-/**
- * @internal
- */
-export function isForecastMeasure(measure: Measure): boolean {
-  return (
-    (measure.composeCode?.includes('measureFactory.forecast') ?? false) ||
-    (measure.name?.startsWith(FORECAST_PREFIX) ?? false)
-  );
+export function hasAdvancedAnalyticsMeasure(measures: readonly Measure[]): boolean {
+  return measures.some((m) => isTrendMeasure(m) || isForecastMeasure(m));
 }
 
 /**

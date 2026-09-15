@@ -1,5 +1,5 @@
 {
-  "version": "2.35.0",
+  "version": "2.36.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -127,6 +127,8 @@
     "docs:gen:md": "./scripts/gen-docs-md.sh",
     "docs:gen:mdx": "./scripts/gen-docs-mdx.sh",
     "docs:check:md": "./scripts/check-docs-md.sh",
+    "docs:check": "./scripts/check-knowledge.sh",
+    "docs:drift": "./scripts/drift-report.sh",
     "docs:frameworks:diff": "./scripts/diff-docs-ui.sh",
     "docs:frameworks:diff:full": "FULL_DIFF_REPORT=true ./scripts/diff-docs-ui.sh",
     "public-api-check": "yarn workspace @sisense/sdk-ui public-api-check",

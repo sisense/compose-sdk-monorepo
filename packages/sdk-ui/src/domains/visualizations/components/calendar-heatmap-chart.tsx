@@ -12,19 +12,25 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  * @group Charts
  * @example
  * ```tsx
- * <CalendarHeatmapChart
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     date: DM.Commerce.Date.Days,
- *     value: measureFactory.sum(DM.Commerce.Cost)
- *   }}
- *   styleOptions={{
- *     width: 800,
- *     height: 600,
- *     viewType: 'quarter'
- *   }}
- * />
+ * import { CalendarHeatmapChart } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const CodeExample = () => (
+ *   <CalendarHeatmapChart
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       date: DM.Commerce.Date.Days,
+ *       value: { column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity') },
+ *     }}
+ *     styleOptions={{ viewType: 'quarter' }}
+ *   />
+ * );
+ *
+ * export default CodeExample;
  * ```
+ *
+ * <img src="media://calendar-heatmap-chart-example-1.png" width="700px" />
  */
 export const CalendarHeatmapChart = asSisenseComponent({
   componentName: 'CalendarHeatmapChart',

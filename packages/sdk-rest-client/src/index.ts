@@ -5,6 +5,12 @@ export { BearerAuthenticator, isBearerAuthenticator } from './bearer-authenticat
 export { FusionAuthenticator, isFusionAuthenticator } from './fusion-authenticator.js';
 export { isAuthTokenPending } from './helpers.js';
 export { HttpClient } from './http-client.js';
+export type {
+  HttpClientOptions,
+  HttpErrorEvent,
+  HttpErrorKind,
+  HttpErrorListener,
+} from './http-error-event.js';
 export * from './interfaces.js';
 export { PasswordAuthenticator } from './password-authenticator.js';
 export { isSsoAuthenticator, SsoAuthenticator } from './sso-authenticator.js';

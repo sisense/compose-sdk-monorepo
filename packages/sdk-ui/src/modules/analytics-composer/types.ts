@@ -418,6 +418,14 @@ export interface DataSchemaContext {
 }
 
 /**
+ * One {@link DataSchemaContext} per data source, for translating inputs (e.g. dashboards) that
+ * can span more than one data source.
+ *
+ * @internal
+ */
+export type MultiDataSchemaContext = readonly DataSchemaContext[];
+
+/**
  * Context used when building translation errors (before message is attached).
  *
  * @internal

@@ -33,7 +33,16 @@ const AREA_GRADIENT_BOTTOM_OPACITY = 0;
  *
  * @internal
  */
-export type SparklinePoint = { x: number; y: number | null };
+export type SparklinePoint = {
+  x: number;
+  y: number | null;
+  /**
+   * Display text of the bucket this point belongs to, e.g. `'Female'`. Carried by a non-date
+   * category's points, whose `x` is a plain ordinal and therefore names nothing on its own; it is
+   * what the tooltip labels the point with in a formatted date's place.
+   */
+  categoryDisplayValue?: string;
+};
 
 /**
  * A sparkline point as handed to Highcharts: a {@link SparklinePoint} optionally carrying its own
@@ -60,7 +69,11 @@ export type SparklineChartType = 'line' | 'spline' | 'area' | 'column';
 export type SparklineFormatting = {
   /** Format config for the `y` value, matching the headline measure's own format. */
   numberFormatConfig?: NumberFormatConfig;
-  /** Formats the point's `x` (an epoch-ms date) for the tooltip; omitted when there's no date axis. */
+  /**
+   * Formats the point's `x` (an epoch-ms date) for the tooltip; omitted when there's no date axis,
+   * in which case the tooltip names each point by its own
+   * {@link SparklinePoint.categoryDisplayValue} instead.
+   */
   formatDate?: (epochMs: number) => string;
   /**
    * Label above the value, the KPI card's counterpart of the series name every other chart's
@@ -210,7 +223,13 @@ export function buildSparklineOptions(
       useHTML: true,
       formatter(this: Highcharts.TooltipFormatterContextObject) {
         const x = typeof this.x === 'number' ? this.x : undefined;
+        // The footer names the bucket: a formatted date when the category is one, else the
+        // bucket's own text, read off the point's config object (where Highcharts keeps the
+        // properties of the data object it was built from).
         const dateText = x !== undefined && formatDate ? formatDate(x) : undefined;
+        const categoryText = (this.point?.options as SparklinePoint | undefined)
+          ?.categoryDisplayValue;
+        const footerText = dateText ?? categoryText;
         const valueText =
           typeof this.y === 'number' ? applyFormat(completeNumberFormatConfig, this.y) : '';
         // Same three-part layout the other charts use: series label, colored value, then the
@@ -225,7 +244,7 @@ export function buildSparklineOptions(
         // when there is a heading: a titleless measure at a null point leaves nothing above it, and
         // the tooltip would otherwise open with a stray rule.
         const separator = heading ? tooltipSeparator() : '';
-        const footer = dateText ? separator + dateText : '';
+        const footer = footerText ? separator + footerText : '';
 
         return tooltipWrapper(heading + footer);
       },

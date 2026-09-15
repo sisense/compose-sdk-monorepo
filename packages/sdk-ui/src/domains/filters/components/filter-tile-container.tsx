@@ -108,7 +108,6 @@ const LinkedTooltip = styled(({ className, ...props }: TooltipProps & Themable) 
 
 /**
  * Design options for the filter tile component.
- *
  * @internal
  */
 export interface FilterTileDesignOptions {
@@ -143,21 +142,18 @@ interface FilterTileContainerProps {
   /**
    * Determines whether the enable/disable switch is rendered. Rendered by default; hiding it leaves
    * the filter in whichever state it already has.
-   *
    * @internal
    */
   toggleVisible?: boolean;
   /**
    * Determines whether the expand/collapse control is rendered. Rendered by default; hiding it
    * leaves the tile in the state it would otherwise have started in.
-   *
    * @internal
    */
   expandVisible?: boolean;
   /**
    * Renders the tile read-only: controls stay visible but inert (unlike `locked`),
    * plus a "Linked to filter widget" indicator with an info tooltip.
-   *
    * @internal
    */
   linked?: boolean;
@@ -168,7 +164,6 @@ interface FilterTileContainerProps {
   menuItems?: MenuItem[];
   /**
    * Render header title
-   *
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
@@ -415,7 +410,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
               <span
                 role="button"
                 tabIndex={0}
-                aria-label="Linked to filter widget info"
+                aria-label={t('filterTile.linkedToWidget.infoAriaLabel')}
                 data-testid="filter-tile-linked-info"
                 style={{
                   display: 'inline-flex',

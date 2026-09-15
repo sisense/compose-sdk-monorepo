@@ -40,3 +40,30 @@ export const SAMPLE_ECOMMERCE_PIVOT_TABLE_STYLED: PivotTableJSON = {
     ],
   },
 };
+
+/**
+ * Sample ECommerce pivot table with a calculated dimension in rows
+ * Rows are a Concat of brand and category, against gender columns, with grand totals
+ */
+export const SAMPLE_ECOMMERCE_PIVOT_TABLE_WITH_CALCULATED_DIMENSION: PivotTableJSON = {
+  dataOptions: {
+    rows: [
+      {
+        function: 'attributeFactory.customFormula',
+        args: [
+          'Brand & Category',
+          'Concat([brand], " - ", [category])',
+          { brand: 'DM.Brand.Brand', category: 'DM.Category.Category' },
+        ],
+      },
+    ],
+    columns: ['DM.Commerce.Gender'],
+    values: [
+      {
+        function: 'measureFactory.sum',
+        args: ['DM.Commerce.Revenue', 'Total Revenue'],
+      },
+    ],
+    grandTotals: { rows: true, columns: true },
+  },
+};

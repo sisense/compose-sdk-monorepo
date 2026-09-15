@@ -33,6 +33,12 @@ Granularity comes from the column.
 A [StyledColumn](interface.StyledColumn.md) wrapper's `dateFormat` formats every place the card displays the
 category value — the period caption and the sparkline tooltip.
 
+A category that isn't a date is fully supported and simply has nothing to format: the caption
+and the sparkline tooltip name each bucket by its own text ('FEMALE') instead of a formatted
+date, the sparkline places its points in bucket order, and a 'previous-period' comparison —
+against the previous bucket, whatever it is — drops the granularity from its label
+('vs prior period' rather than 'vs prior month').
+
 #### Example
 
 ```ts

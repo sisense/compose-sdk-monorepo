@@ -127,6 +127,32 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'A configuração do widget Tabber é inválida',
   },
+  notifications: {
+    dismiss: 'Fechar notificação',
+    auth: {
+      sessionExpiredTitle: 'Sessão expirada',
+      sessionExpiredMessage: 'Sua sessão expirou. Faça login novamente para continuar.',
+      authenticationFailedTitle: 'Falha na autenticação',
+      authenticationFailedMessage:
+        'As credenciais fornecidas foram rejeitadas pela instância do Sisense.',
+    },
+    permission: {
+      forbiddenTitle: 'Acesso negado',
+      forbiddenMessage: 'Você não tem permissão para acessar estes dados.',
+    },
+    network: {
+      unreachableTitle: 'Problema de conexão',
+      unreachableMessage: 'Não foi possível acessar a instância do Sisense.',
+    },
+    server: {
+      errorTitle: 'Erro do servidor',
+      errorMessage: 'A instância do Sisense retornou um erro. Tente novamente mais tarde.',
+    },
+    general: {
+      requestFailedTitle: 'Falha na solicitação',
+      requestFailedMessage: 'Uma solicitação à instância do Sisense falhou.',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Sem resultados',
   filters: 'Filtros',
@@ -236,6 +262,7 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Todos exceto {{count}}',
     setupTitle: 'Configurar um widget de filtro',
     setupSubtitle: 'Defina uma dimensão e configure como o filtro funciona',
+    emptySetup: 'Configurar filtro',
     conditionUnsupported: 'A condição está disponível para campos de texto e numéricos',
     conditionNotRepresentable: 'Esta condição não pode ser editada aqui',
     controls: {
@@ -255,6 +282,20 @@ const translation: TranslationDictionary = {
       betweenMax: 'Máximo',
       selectValues: 'Selecionar {{level}}',
       clear: 'Limpar',
+    },
+    calendar: {
+      selectDates: 'Selecionar datas',
+      multipleDaysHint: 'Você pode selecionar vários dias',
+      formatError: 'Siga o formato {{- format}}',
+      nonexistent: 'Esta data não existe',
+      chooseDate: 'Escolher data',
+      chooseDates: 'Escolher datas',
+      previousMonth: 'Mês anterior',
+      nextMonth: 'Mês seguinte',
+      previousYear: 'Ano anterior',
+      nextYear: 'Ano seguinte',
+      openCalendar: 'Abrir calendário',
+      clearDate: 'Limpar data',
     },
   },
   unsupportedFilterMessage: 'Filtro não suportado (aplicado à consulta de dados)',
@@ -289,6 +330,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: 'Excluir widget',
+      duplicateWidget: 'Duplicar widget',
       renameWidget: 'Renomear widget',
       distributeEqualWidth: 'Distribuir igualmente nesta linha',
       download: 'Baixar',
@@ -301,6 +343,22 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       'Tipo de widget personalizado desconhecido: {{customWidgetType}}. Por favor, registre este widget personalizado.',
+  },
+  narrativeWidget: {
+    generate: 'Gerar narrativa',
+    regenerate: 'Gerar novamente',
+    retry: 'Tentar gerar novamente',
+    disclaimer: 'O conteúdo é alimentado por IA, então erros são possíveis.',
+    updatedAt: 'Atualizado em {{timestamp}}',
+    copy: 'Copiar para a área de transferência',
+    copied: 'Copiado',
+    creditsUsed: '{{usagePercentage}}% dos créditos de IA foram usados.',
+    noDataTitle: 'Nenhum dado do painel disponível',
+    noDataDescription:
+      'Quando os dados do painel estiverem disponíveis, você poderá gerar uma narrativa.',
+    failedTitle: 'Não foi possível gerar a narrativa',
+    failedDescription:
+      'Tente novamente mais tarde. Se o problema persistir, entre em contato com seu administrador.',
   },
   ai: {
     analyticsChatbot: 'Chatbot de análise',
@@ -511,6 +569,7 @@ const translation: TranslationDictionary = {
       label: 'Vinculado ao widget de filtro',
       tooltip:
         'Este filtro não pode ser editado no painel de filtros. Altere os valores diretamente no painel.',
+      infoAriaLabel: 'Informações sobre o vínculo com o widget de filtro',
     },
   },
   chart: {
@@ -526,6 +585,7 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Tabela de dados',
       totalRows: 'Total de linhas: {{formattedCount}}',
+      rowsRange: 'Linhas {{start}}-{{end}}',
     },
     sankey: {
       alerts: {

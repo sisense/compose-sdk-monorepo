@@ -33,6 +33,53 @@ describe('convertChartWidgetPropsToNarrativeParams', () => {
     expect(params.measures).toHaveLength(3);
   });
 
+  it('forwards widget aiContext from config.narrative onto the params', () => {
+    const params = convertChartWidgetPropsToNarrativeParams({
+      chartType: 'bar',
+      dataSource: DM.DataSource,
+      dataOptions: {
+        category: [DM.Commerce.Date.Months],
+        value: [{ column: measureFactory.sum(DM.Commerce.Revenue) }],
+        breakBy: [],
+      },
+      config: {
+        narrative: { aiContext: 'revenue is in american dollars.' },
+      },
+    });
+    expect(params.aiContext).toBe('revenue is in american dollars.');
+  });
+
+  it('omits aiContext when the widget config is absent', () => {
+    const params = convertChartWidgetPropsToNarrativeParams({
+      chartType: 'bar',
+      dataSource: DM.DataSource,
+      dataOptions: {
+        category: [DM.Commerce.Date.Months],
+        value: [{ column: measureFactory.sum(DM.Commerce.Revenue) }],
+        breakBy: [],
+      },
+    });
+    expect(params.aiContext).toBeUndefined();
+  });
+
+  it('trims aiContext and omits it when blank/whitespace-only', () => {
+    const trimmed = convertChartWidgetPropsToNarrativeParams({
+      chartType: 'bar',
+      dataSource: DM.DataSource,
+      dataOptions: { category: [DM.Commerce.Date.Months], value: [], breakBy: [] },
+      config: { narrative: { aiContext: '  amounts are in USD  ' } },
+    });
+    expect(trimmed.aiContext).toBe('amounts are in USD');
+
+    const blank = convertChartWidgetPropsToNarrativeParams({
+      chartType: 'bar',
+      dataSource: DM.DataSource,
+      dataOptions: { category: [DM.Commerce.Date.Months], value: [], breakBy: [] },
+      config: { narrative: { aiContext: '   ' } },
+    });
+    expect(blank.aiContext).toBeUndefined();
+  });
+
   it('omits trend and forecast companion measures when includeTrendAndForecast is false', () => {
     const params = convertChartWidgetPropsToNarrativeParams({
       chartType: 'bar',
@@ -211,5 +258,46 @@ describe('convertPivotWidgetPropsToNarrativeRequest', () => {
     expect(request.jaql.format).toBe('pivot');
     expect(request.jaql.metadata?.length).toBeGreaterThan(0);
     expect(request.jaql.grandTotals).toBeDefined();
+  });
+
+  it('forwards widget aiContext onto the pivot narrative request', () => {
+    const request = convertPivotWidgetPropsToNarrativeRequest({
+      widgetType: 'pivot',
+      id: 'p1',
+      dataSource: DM.DataSource,
+      dataOptions: {
+        rows: [DM.Commerce.AgeRange],
+        columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],
+        values: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost')],
+      },
+      config: {
+        narrative: { aiContext: 'cost is in american dollars.' },
+      },
+    });
+    expect(request.aiContext).toBe('cost is in american dollars.');
+  });
+
+  it('trims aiContext and omits it when blank/whitespace-only (pivot)', () => {
+    const base = {
+      widgetType: 'pivot' as const,
+      id: 'p1',
+      dataSource: DM.DataSource,
+      dataOptions: {
+        rows: [DM.Commerce.AgeRange],
+        columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],
+        values: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost')],
+      },
+    };
+    const trimmed = convertPivotWidgetPropsToNarrativeRequest({
+      ...base,
+      config: { narrative: { aiContext: '  cost is in USD  ' } },
+    });
+    expect(trimmed.aiContext).toBe('cost is in USD');
+
+    const blank = convertPivotWidgetPropsToNarrativeRequest({
+      ...base,
+      config: { narrative: { aiContext: '   ' } },
+    });
+    expect(blank.aiContext).toBeUndefined();
   });
 });

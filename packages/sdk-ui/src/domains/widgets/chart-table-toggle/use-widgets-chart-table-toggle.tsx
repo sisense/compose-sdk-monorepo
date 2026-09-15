@@ -10,7 +10,6 @@ import {
 import { createChartTableToggleItem } from './chart-table-toggle-header-item';
 import {
   applyChartTableOverride,
-  hasTrendOrForecast,
   shouldShowChartTableToggle,
   toResetIdentity,
 } from './chart-to-table-toggle';
@@ -189,14 +188,12 @@ export function useWidgetsChartTableToggle<T extends ChartTableToggleWidget>(
     }
     return widgets.map((widget) => {
       const widgetId = widgetToggleId(widget);
-      const unavailableForAdvancedAnalytics = hasTrendOrForecast(widget.dataOptions);
       return withWidgetChartTableToggle(
         widget,
-        !unavailableForAdvancedAnalytics && widgetId in tableById,
+        widgetId in tableById,
         (pressed) => onTableViewChange(widgetId, widget.chartType, pressed),
         labels,
-        Boolean(isWidgetDisabled?.(widget)) || unavailableForAdvancedAnalytics,
-        unavailableForAdvancedAnalytics ? labels.unavailableWithTrendForecast : undefined,
+        Boolean(isWidgetDisabled?.(widget)),
       );
     });
   }, [widgets, tableById, onTableViewChange, labels, isWidgetDisabled]);

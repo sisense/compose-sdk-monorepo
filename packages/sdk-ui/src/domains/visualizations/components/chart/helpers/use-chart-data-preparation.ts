@@ -75,8 +75,21 @@ export function useChartDataPreparation({
       isForecastOrTrendChart,
       defaultNumberFormattingEnabled,
     );
+    // `chartDataOptions` must be a dependency of its own: on explicit `Data` the date-format pass
+    // hands back the very same object when it has nothing to format, so `data` alone never changes
+    // identity when only the options do. Callers pass the options that `useSyncedData` updates
+    // together with `data`, which keeps the query path to one recomputation per load.
+    // `attributes`/`measures`/`dataColumnNamesMapping` are derived from those same options and are
+    // deliberately left out so a single options change doesn't recompute several times.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, chartType, isForecastOrTrendChart, defaultNumberFormattingEnabled]);
+  }, [
+    data,
+    chartDataOptions,
+    onDataReady,
+    chartType,
+    isForecastOrTrendChart,
+    defaultNumberFormattingEnabled,
+  ]);
 }
 
 function getChartData(

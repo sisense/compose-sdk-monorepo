@@ -95,6 +95,13 @@ export interface TextWidgetConfig extends Pick<ChartWidgetConfig, 'header'> {}
 export interface FilterWidgetConfig extends Pick<ChartWidgetConfig, 'header'> {}
 
 /**
+ * Configuration of a dashboard narrative widget.
+ *
+ * @beta
+ */
+export interface NarrativeWidgetConfig extends Pick<ChartWidgetConfig, 'header'> {}
+
+/**
  * Configuration of a widget — the union of every widget-type-specific configuration.
  *
  * Used where the widget type is not known statically, for example {@link WidgetModel.config}. When
@@ -106,4 +113,5 @@ export type WidgetConfig =
   | PivotTableWidgetConfig
   | CustomWidgetConfig
   | TextWidgetConfig
-  | FilterWidgetConfig;
+  | FilterWidgetConfig
+  | NarrativeWidgetConfig;

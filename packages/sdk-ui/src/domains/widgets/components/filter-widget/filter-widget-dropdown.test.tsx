@@ -9,9 +9,11 @@ import {
   Sort,
 } from '@sisense/sdk-data';
 import { act, fireEvent, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { withMembersFilterSelection } from '@/domains/filters/shared/members-filter-selection';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
 
 import {
@@ -45,27 +47,33 @@ describe('asSingleSelectionMembers', () => {
 
 describe('getEffectiveMultiselect', () => {
   it('is multi when the widget is configured multiselect', () => {
-    expect(getEffectiveMultiselect(true, 0, false)).toBe(true);
+    expect(getEffectiveMultiselect(true, 0)).toBe(true);
   });
 
-  it('is single when widget is single, filter is single, and one member selected', () => {
-    expect(getEffectiveMultiselect(false, 1, false)).toBe(false);
+  it('is single when the widget is single and holds one member', () => {
+    expect(getEffectiveMultiselect(false, 1)).toBe(false);
   });
 
   it('is single with zero members in a single-select widget', () => {
-    expect(getEffectiveMultiselect(false, 0, false)).toBe(false);
+    expect(getEffectiveMultiselect(false, 0)).toBe(false);
   });
 
-  it('reflects the filter: single-select widget shows multi when the linked filter has >1 member', () => {
-    expect(getEffectiveMultiselect(false, 3, false)).toBe(true);
+  /* The one thing that overrides the widget's own setting: a selection that really does
+     hold several members, so cross-filtering is shown rather than truncated. */
+  it('is multi when the selection holds more than one member', () => {
+    expect(getEffectiveMultiselect(false, 3)).toBe(true);
   });
 
-  it('reflects the filter: single-select widget shows multi when the filter is multi-enabled', () => {
-    expect(getEffectiveMultiselect(false, 0, true)).toBe(true);
-  });
-
-  it('treats undefined filter multiSelection as false', () => {
-    expect(getEffectiveMultiselect(false, 1, undefined)).toBe(false);
+  /**
+   * A single-select widget stays single whatever the filter's own `enableMultiSelection`
+   * says, because that flag is not a signal: a members filter does not serialise
+   * `multiSelection` into JAQL and the parser defaults it to `true`, so every
+   * filter arriving through Fusion claims multi. Honouring it turned each reopened widget
+   * editor multi. One member is a perfectly ordinary single-select state.
+   */
+  it('does not take the filter’s own flag into account at all', () => {
+    expect(getEffectiveMultiselect).toHaveLength(2);
+    expect(getEffectiveMultiselect(false, 1)).toBe(false);
   });
 });
 
@@ -120,6 +128,8 @@ vi.mock('react-i18next', async (importOriginal) => {
     useTranslation: () => ({
       t: (key: string, options?: { columnName?: string }) =>
         options?.columnName ? `${key}(${options.columnName})` : key,
+      // The calendar resolves the reader's date format from the active language.
+      i18n: { language: 'en-US' },
     }),
   };
 });
@@ -260,6 +270,45 @@ vi.mock('./components', () => ({
       </div>
     );
   },
+  // The calendar. Stubbed to what it reports back and the bounds it was handed, so the
+  // dropdown's own publish path is what the tests exercise.
+  DatePickerFilter: ({
+    value,
+    multiselect,
+    earliestData,
+    latestData,
+    onChange,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test stub only reads the props it renders
+  any) => (
+    <div data-testid="date-picker-mock" data-multiselect={String(multiselect)}>
+      <div data-testid="date-picker-value">{(value ?? []).join(',')}</div>
+      <div data-testid="date-picker-bounds">
+        {[earliestData, latestData].map((date) => (date ? date.toISOString() : '')).join('|')}
+      </div>
+      <button data-testid="date-picker-pick" onClick={() => onChange(['09/15/2026'])} />
+      <button
+        data-testid="date-picker-pick-many"
+        onClick={() => onChange(['09/20/2026', '09/15/2026'])}
+      />
+      <button data-testid="date-picker-clear" onClick={() => onChange([])} />
+    </div>
+  ),
+}));
+
+let mockDayStats: { count: number; min: string; max: string } | undefined;
+const mockUseGetAttributeStats = vi.fn(
+  (_params: { attribute: { granularity?: string }; enabled?: boolean }) => ({
+    data: mockDayStats,
+    isLoading: false,
+    isError: false,
+    isSuccess: true,
+    error: undefined,
+  }),
+);
+
+vi.mock('@/domains/filters/components/filter-editor-popover/hooks/use-get-attribute-stats', () => ({
+  useGetAttributeStats: (params: { attribute: { granularity?: string }; enabled?: boolean }) =>
+    mockUseGetAttributeStats(params),
 }));
 
 const textAttribute = createAttribute({
@@ -295,9 +344,41 @@ describe('FilterWidgetDropdown', () => {
     );
     expect(queryByTestId('multi-select')).toBeNull();
     expect(queryByTestId('single-select')).toBeNull();
+    expect(queryByTestId('filter-widget-setup')).toBeNull();
     expect(getByTestId('filter-widget-no-dimension')).toBeInTheDocument();
     expect(getByText('filterWidget.setupTitle')).toBeInTheDocument();
     expect(getByText('filterWidget.setupSubtitle')).toBeInTheDocument();
+  });
+
+  it('renders the Set up filter button when onSetup is provided and no dimension is picked', async () => {
+    const empty = createAttribute({ name: 'x', expression: '', type: 'text' });
+    const onSetup = vi.fn();
+    const user = userEvent.setup();
+    const { queryByTestId, getByTestId, getByRole } = render(
+      <FilterWidgetDropdown attribute={empty} onSetup={onSetup} />,
+    );
+    expect(queryByTestId('filter-widget-no-dimension')).toBeNull();
+    expect(getByTestId('filter-widget-setup')).toBeInTheDocument();
+    const setupButton = getByRole('button', { name: 'filterWidget.emptySetup' });
+    const setupIcon = setupButton.querySelector('use');
+    expect(setupIcon?.getAttribute('href') ?? setupIcon?.getAttribute('xlink:href')).toBe(
+      '#filter-widget-setup',
+    );
+    await user.click(setupButton);
+    expect(onSetup).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders the Set up filter button when emptyState is setupButton', () => {
+    const empty = createAttribute({ name: 'x', expression: '', type: 'text' });
+    const { queryByTestId, getByTestId } = render(
+      <FilterWidgetDropdown attribute={empty} emptyState="setupButton" />,
+    );
+    expect(queryByTestId('filter-widget-no-dimension')).toBeNull();
+    expect(getByTestId('filter-widget-setup-button')).toBeDisabled();
+    const setupIcon = getByTestId('filter-widget-setup-button').querySelector('use');
+    expect(setupIcon?.getAttribute('href') ?? setupIcon?.getAttribute('xlink:href')).toBe(
+      '#filter-widget-setup',
+    );
   });
 
   it('exposes the resolved attribute value type on the root (text / numeric / datetime)', () => {
@@ -324,6 +405,16 @@ describe('FilterWidgetDropdown', () => {
     const { getByTestId } = render(<FilterWidgetDropdown attribute={empty} />);
     expect(
       getByTestId('filter-widget-no-dimension').getAttribute('data-filter-attribute-value-type'),
+    ).toBe('text');
+  });
+
+  it('exposes the value type on the setup button as well', () => {
+    const empty = createAttribute({ name: 'x', expression: '', type: 'text' });
+    const { getByTestId } = render(
+      <FilterWidgetDropdown attribute={empty} emptyState="setupButton" />,
+    );
+    expect(
+      getByTestId('filter-widget-setup').getAttribute('data-filter-attribute-value-type'),
     ).toBe('text');
   });
 
@@ -1762,5 +1853,323 @@ describe('FilterWidgetDropdown — the widget’s own dimension filters', () => 
     );
 
     expect(activeMemberQueries()[0].config.backgroundFilter).toBeUndefined();
+  });
+});
+
+// ── Calendar filter type ──────────────────────────────────────────────────
+// The calendar is offered for datetime dimensions only, works at Day granularity alone,
+// and emits the same member payload the List control does for the same days.
+
+describe('FilterWidgetDropdown — calendar', () => {
+  beforeEach(() => {
+    mockMembersData = {
+      selectedMembers: [],
+      allMembers: [],
+      excludeMembers: false,
+      enableMultiSelection: false,
+    };
+    mockDayStats = { count: 365, min: '2026-01-01T00:00:00', max: '2026-12-31T00:00:00' };
+  });
+
+  afterEach(() => {
+    mockDayStats = undefined;
+    vi.clearAllMocks();
+  });
+
+  /* AC-1: the calendar renders in place of the list for a datetime dimension. */
+  it('renders the calendar for a datetime dimension', () => {
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="calendar" />,
+    );
+
+    expect(getByTestId('filter-widget-date-picker')).toBeInTheDocument();
+    expect(queryByTestId('filter-widget-date-select')).toBeNull();
+  });
+
+  /* AC-2: the calendar is not offered for a non-datetime dimension — a widget configured
+     that way falls back to the member list rather than rendering an empty calendar. */
+  it('falls back to the member list for a non-datetime dimension', () => {
+    const { queryByTestId, getByTestId } = render(
+      <FilterWidgetDropdown attribute={textAttribute} filterType="calendar" />,
+    );
+
+    expect(queryByTestId('filter-widget-date-picker')).toBeNull();
+    expect(getByTestId('filter-widget-members-select')).toBeInTheDocument();
+  });
+
+  /* AC-3: a datetime dimension whose type is List still renders the member list. */
+  it('leaves the List type on a datetime dimension unchanged', () => {
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="members" />,
+    );
+
+    expect(getByTestId('filter-widget-date-select')).toBeInTheDocument();
+    expect(queryByTestId('filter-widget-date-picker')).toBeNull();
+  });
+
+  it('asks for the dimension bounds at Day granularity, and only for the calendar', () => {
+    render(<FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="calendar" />);
+
+    const enabled = mockUseGetAttributeStats.mock.calls.filter(([{ enabled }]) => enabled);
+    expect(enabled).toHaveLength(1);
+    expect(enabled[0][0].attribute.granularity).toBe(DateLevels.Days);
+  });
+
+  it('does not ask for the bounds while the List control is on screen', () => {
+    render(<FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="members" />);
+
+    expect(mockUseGetAttributeStats.mock.calls.every(([{ enabled }]) => !enabled)).toBe(true);
+  });
+
+  it('hands the reported bounds to the calendar', () => {
+    const { getByTestId } = render(
+      <FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="calendar" />,
+    );
+
+    expect(getByTestId('date-picker-bounds').textContent).toBe(
+      `${new Date('2026-01-01T00:00:00').toISOString()}|${new Date(
+        '2026-12-31T00:00:00',
+      ).toISOString()}`,
+    );
+  });
+
+  it('reads the committed day members back as calendar text', () => {
+    mockMembersData = {
+      selectedMembers: [
+        { key: '2026-09-15T00:00:00', title: '2026-09-15', inactive: false },
+        { key: '2026-09-20T00:00:00', title: '2026-09-20', inactive: false },
+      ],
+      allMembers: [],
+      excludeMembers: false,
+      enableMultiSelection: true,
+    };
+
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Days}
+        filterType="calendar"
+        isMultiselect={true}
+      />,
+    );
+
+    expect(getByTestId('date-picker-value').textContent).toBe('09/15/2026,09/20/2026');
+  });
+
+  /* AC-4: the published filter carries the chosen days as Day-granularity members. */
+  it('publishes the chosen days as Day-granularity members', () => {
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="calendar"
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-picker-pick'));
+
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+    const published = onFilterUpdate.mock.calls[0][0] as MembersFilter;
+    expect(published.members).toEqual(['2026-09-15T00:00:00']);
+    expect(isLevelAttribute(published.attribute)).toBe(true);
+    expect((published.attribute as DimensionalLevelAttribute).granularity).toBe(DateLevels.Days);
+  });
+
+  /**
+   * AC-4's real claim: for the same days, the calendar and the List control produce the
+   * same payload. Built here by handing the List control's own commit helper the same
+   * members, so a divergence in either path fails this.
+   */
+  it('publishes the payload the List control produces for the same days', () => {
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="calendar"
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-picker-pick-many'));
+    const fromCalendar = onFilterUpdate.mock.calls[0][0] as MembersFilter;
+
+    const dayAttribute = createLevelAttribute(
+      DM.Commerce.Date.Years as DimensionalLevelAttribute,
+      DateLevels.Days,
+      // The same interpolation the i18n mock above does, so the level's title matches.
+      ((key: string, options?: { columnName?: string }) =>
+        options?.columnName ? `${key}(${options.columnName})` : key) as never,
+    );
+    /* The List control commits by moving the filter to the level and handing it to
+       `withMembersFilterSelection`. Rebuilding the expectation that way means a calendar
+       that ever built its payload by hand — dropping the config, ordering the members
+       differently, adding a clause of its own — fails here. */
+    const fromList = withMembersFilterSelection(
+      filterFactory.members(dayAttribute, [], {
+        guid: fromCalendar.config.guid,
+        enableMultiSelection: fromCalendar.config.enableMultiSelection,
+      }) as MembersFilter,
+      {
+        selectedMembers: [
+          { key: '2026-09-15T00:00:00', title: '09/15/2026' },
+          { key: '2026-09-20T00:00:00', title: '09/20/2026' },
+        ],
+        excludeMembers: false,
+      },
+    );
+
+    expect(fromCalendar.jaql()).toEqual(fromList.jaql());
+    // And the days themselves, spelled out, so the shared helper cannot hide a mistake.
+    expect(fromCalendar.members).toEqual(['2026-09-15T00:00:00', '2026-09-20T00:00:00']);
+  });
+
+  it('publishes an empty selection when the calendar is cleared', () => {
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="calendar"
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-picker-clear'));
+
+    expect((onFilterUpdate.mock.calls[0][0] as MembersFilter).members).toEqual([]);
+  });
+
+  /* The calendar can only speak in days, so committing from a coarser level has to report
+     the level move before the filter — the order a host relies on to keep the selection. */
+  it('reports the move to Day granularity before publishing the filter', () => {
+    const order: string[] = [];
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="calendar"
+        onDateLevelChange={() => order.push('level')}
+        onFilterUpdate={() => order.push('filter')}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-picker-pick'));
+
+    expect(order).toEqual(['level', 'filter']);
+  });
+
+  it('does not report a level move when the dimension is already at Day granularity', () => {
+    const onDateLevelChange = vi.fn();
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Days}
+        filterType="calendar"
+        onDateLevelChange={onDateLevelChange}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-picker-pick'));
+
+    expect(onDateLevelChange).not.toHaveBeenCalled();
+    // The pick still reaches the host — only the level report is withheld.
+    expect(onFilterUpdate).toHaveBeenCalled();
+  });
+
+  /* A host may omit `onFilterUpdate` — the prop is optional. Publishing then has nothing to
+     call, which must be a no-op rather than a `TypeError`: the pick used to reach the hook
+     through a cast that claimed the callback was always there. */
+  it('applies a pick without a host callback, rather than throwing', () => {
+    const { getByTestId } = render(
+      <FilterWidgetDropdown attribute={DM.Commerce.Date.Days} filterType="calendar" />,
+    );
+
+    expect(() => fireEvent.click(getByTestId('date-picker-pick'))).not.toThrow();
+  });
+
+  /* AC-20: the Multi-select setting is what switches the calendar's two shapes. */
+  it('follows the multi-select setting', () => {
+    const { getByTestId, rerender } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Days}
+        filterType="calendar"
+        isMultiselect={false}
+      />,
+    );
+    expect(getByTestId('date-picker-mock').dataset.multiselect).toBe('false');
+
+    rerender(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Days}
+        filterType="calendar"
+        isMultiselect={true}
+      />,
+    );
+    expect(getByTestId('date-picker-mock').dataset.multiselect).toBe('true');
+  });
+
+  /**
+   * AC-28, in the case the settings side cannot cover: a widget still being **created**,
+   * where no dashboard filter is linked yet. The host has nothing to reduce on the control's
+   * behalf, so the control has to honour its own setting — the calendar must drop to one day
+   * (the earliest, which the trigger already names) and render single.
+   *
+   * The selection is seeded through the members data rather than a `filter` prop, which is
+   * how it arrives for an unsaved widget — and is exactly the case the old reduction missed,
+   * because it read the synchronized filter's empty `members` and so published nothing.
+   */
+  it('reduces the calendar selection to the earliest day when Multi-select is turned off', () => {
+    mockMembersData = {
+      selectedMembers: [
+        { key: '2026-09-20T00:00:00', title: '2026-09-20', inactive: false },
+        { key: '2026-09-15T00:00:00', title: '2026-09-15', inactive: false },
+      ],
+      allMembers: [],
+      excludeMembers: false,
+      enableMultiSelection: true,
+    };
+    const onFilterUpdate = vi.fn();
+    const props = {
+      attribute: DM.Commerce.Date.Days,
+      filterType: 'calendar' as const,
+      onFilterUpdate,
+    };
+    const { getByTestId, rerender } = render(<FilterWidgetDropdown {...props} isMultiselect />);
+    expect(getByTestId('date-picker-mock').dataset.multiselect).toBe('true');
+    onFilterUpdate.mockClear();
+
+    rerender(<FilterWidgetDropdown {...props} isMultiselect={false} />);
+
+    // Keeps the EARLIEST day, not the first one clicked.
+    const published = onFilterUpdate.mock.calls.at(-1)?.[0] as MembersFilter | undefined;
+    expect(published?.members).toEqual(['2026-09-15T00:00:00']);
+    expect(published?.config.enableMultiSelection).toBe(false);
+  });
+
+  /* Turning it back on must not discard what is already selected. */
+  it('keeps the calendar selection when Multi-select is turned back on', () => {
+    mockMembersData = {
+      selectedMembers: [
+        { key: '2026-09-15T00:00:00', title: '2026-09-15', inactive: false },
+        { key: '2026-09-20T00:00:00', title: '2026-09-20', inactive: false },
+      ],
+      allMembers: [],
+      excludeMembers: false,
+      enableMultiSelection: false,
+    };
+    const onFilterUpdate = vi.fn();
+    const props = {
+      attribute: DM.Commerce.Date.Days,
+      filterType: 'calendar' as const,
+      onFilterUpdate,
+    };
+    const { rerender } = render(<FilterWidgetDropdown {...props} isMultiselect={false} />);
+    onFilterUpdate.mockClear();
+
+    rerender(<FilterWidgetDropdown {...props} isMultiselect />);
+
+    const published = onFilterUpdate.mock.calls.at(-1)?.[0] as MembersFilter | undefined;
+    expect(published?.members).toEqual(['2026-09-15T00:00:00', '2026-09-20T00:00:00']);
+    expect(published?.config.enableMultiSelection).toBe(true);
   });
 });

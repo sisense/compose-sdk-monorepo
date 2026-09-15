@@ -9,22 +9,6 @@ title: BarChart
 A React component representing categorical data with horizontal rectangular bars,
 whose lengths are proportional to the values that they represent.
 
-## Example
-
-Bar chart displaying total revenue per year from the Sample ECommerce data model.
-
-<iframe
- src='https://csdk-playground.sisense.com/?example=charts%2Fbar-chart&mode=docs'
- width='100%'
- height='870'
- style='max-width:800px; border:none;'
-/>
-
-Additional Bar Chart examples:
-
-- [Stacked Bar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fbar-chart-stacked)
-- [Stacked Percentage Bar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fbar-chart-stacked100)
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -36,3 +20,60 @@ Additional Bar Chart examples:
 `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Bar Chart component
+
+## Example
+
+Bar chart displaying total revenue per year from the Sample ECommerce data model.
+
+```ts
+import { BarChart } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const CodeExample = () => (
+  <BarChart
+    dataSet={DM.DataSource}
+    dataOptions={{
+      category: [DM.Commerce.Date.Years],
+      value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+      breakBy: [DM.Commerce.Condition],
+    }}
+  />
+);
+
+export default CodeExample;
+```
+
+<img src="../../../img/bar-chart-example-1.png" width="700px" />
+
+Stacked bar chart variant, broken down by age range:
+
+```ts
+<BarChart
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.Date.Years],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [DM.Commerce.AgeRange],
+  }}
+  styleOptions={{ subtype: 'bar/stacked' }}
+/>
+```
+
+<img src="../../../img/bar-chart-example-2.png" width="700px" />
+
+Stacked percentage bar chart variant, using the same data:
+
+```ts
+<BarChart
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.Date.Years],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [DM.Commerce.AgeRange],
+  }}
+  styleOptions={{ subtype: 'bar/stacked100' }}
+/>
+```
+
+<img src="../../../img/bar-chart-example-3.png" width="700px" />

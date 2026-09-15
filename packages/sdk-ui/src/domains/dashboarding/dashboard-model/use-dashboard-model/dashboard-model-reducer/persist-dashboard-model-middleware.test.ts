@@ -2,6 +2,7 @@ import { filterFactory } from '@sisense/sdk-data';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { WidgetsPanelColumnLayout } from '@/domains/dashboarding/types.js';
+import { narrativeWidgetDto } from '@/domains/widgets/components/widget-by-id/__mocks__/narrative-widget-dto.js';
 import type { TableWidgetStyle, WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { RestApi } from '@/infra/api/rest-api';
@@ -283,6 +284,41 @@ describe('persistDashboardModelMiddleware', () => {
         widget: expect.objectContaining({ oid: 'server-assigned-oid' }),
         widgetOptions: undefined,
       }),
+    });
+  });
+
+  it('falls back to the dashboard data source for a narrative widget on ADD_WIDGET, like a text widget', async () => {
+    const restApi = {
+      patchDashboard: vi.fn(),
+      addWidgetToDashboard: vi.fn().mockResolvedValue(narrativeWidgetDto),
+      deleteWidgetFromDashboard: vi.fn(),
+    };
+    // A code-composed narrative widget carries no data source of its own.
+    const newWidget = widgetModelTranslator.fromNarrativeWidgetProps({
+      title: 'Dashboard Narrative',
+    });
+
+    await persistDashboardModelMiddleware({
+      dashboardOid,
+      action: { type: UseDashboardModelActionType.ADD_WIDGET, payload: newWidget },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+      dashboardDataSource: {
+        title: 'Sample ECommerce',
+        type: 'elasticube',
+        id: 'localhost_aSampleIAAaECommerce',
+        address: 'LocalHost',
+      },
+    });
+
+    const sentDto = restApi.addWidgetToDashboard.mock.calls[0][1] as WidgetDto;
+    expect(sentDto.type).toBe('dashboardnarrative');
+    expect(sentDto.datasource).toMatchObject({
+      title: 'Sample ECommerce',
+      id: 'localhost_aSampleIAAaECommerce',
+      address: 'LocalHost',
     });
   });
 

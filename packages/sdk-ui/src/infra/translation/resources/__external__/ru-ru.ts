@@ -125,6 +125,31 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'Конфигурация виджета Tabber недопустима',
   },
+  notifications: {
+    dismiss: 'Закрыть уведомление',
+    auth: {
+      sessionExpiredTitle: 'Сессия истекла',
+      sessionExpiredMessage: 'Ваша сессия истекла. Войдите снова, чтобы продолжить.',
+      authenticationFailedTitle: 'Ошибка аутентификации',
+      authenticationFailedMessage: 'Указанные учетные данные были отклонены экземпляром Sisense.',
+    },
+    permission: {
+      forbiddenTitle: 'Доступ запрещен',
+      forbiddenMessage: 'У вас нет разрешения на доступ к этим данным.',
+    },
+    network: {
+      unreachableTitle: 'Проблема с подключением',
+      unreachableMessage: 'Не удалось подключиться к экземпляру Sisense.',
+    },
+    server: {
+      errorTitle: 'Ошибка сервера',
+      errorMessage: 'Экземпляр Sisense вернул ошибку. Повторите попытку позже.',
+    },
+    general: {
+      requestFailedTitle: 'Запрос не выполнен',
+      requestFailedMessage: 'Запрос к экземпляру Sisense не выполнен.',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Нет результатов',
   filters: 'Фильтры',
@@ -234,6 +259,7 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Все, кроме {{count}}',
     setupTitle: 'Настройте виджет фильтр',
     setupSubtitle: 'Выберите измерение и настройте работу фильтра',
+    emptySetup: 'Настроить фильтр',
     conditionUnsupported: 'Условие доступно для текстовых и числовых полей',
     conditionNotRepresentable: 'Это условие нельзя редактировать здесь',
     controls: {
@@ -253,6 +279,20 @@ const translation: TranslationDictionary = {
       betweenMax: 'Максимум',
       selectValues: 'Выберите {{level}}',
       clear: 'Очистить',
+    },
+    calendar: {
+      selectDates: 'Выберите даты',
+      multipleDaysHint: 'Можно выбрать несколько дней',
+      formatError: 'Используйте формат {{- format}}',
+      nonexistent: 'Такой даты не существует',
+      chooseDate: 'Выбор даты',
+      chooseDates: 'Выбор дат',
+      previousMonth: 'Предыдущий месяц',
+      nextMonth: 'Следующий месяц',
+      previousYear: 'Предыдущий год',
+      nextYear: 'Следующий год',
+      openCalendar: 'Открыть календарь',
+      clearDate: 'Очистить дату',
     },
   },
   unsupportedFilterMessage: 'Неподдерживаемый фильтр (применен к запросу данных)',
@@ -287,6 +327,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: 'Удалить виджет',
+      duplicateWidget: 'Дублировать виджет',
       renameWidget: 'Переименовать виджет',
       distributeEqualWidth: 'Равномерно распределить в этой строке',
       download: 'Скачать',
@@ -299,6 +340,21 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       'Неизвестный тип пользовательского виджета: {{customWidgetType}}. Пожалуйста, зарегистрируйте этот пользовательский виджет.',
+  },
+  narrativeWidget: {
+    generate: 'Создать нарратив',
+    regenerate: 'Создать заново',
+    retry: 'Повторить создание',
+    disclaimer: 'Контент создан с помощью ИИ, поэтому возможны ошибки.',
+    updatedAt: 'Обновлено {{timestamp}}',
+    copy: 'Копировать в буфер обмена',
+    copied: 'Скопировано',
+    creditsUsed: 'Использовано {{usagePercentage}}% кредитов ИИ.',
+    noDataTitle: 'Нет доступных данных панели',
+    noDataDescription: 'Когда данные панели станут доступны, вы сможете создать нарратив.',
+    failedTitle: 'Не удалось создать нарратив',
+    failedDescription:
+      'Повторите попытку позже. Если проблема не исчезнет, обратитесь к администратору.',
   },
   ai: {
     analyticsChatbot: 'Аналитический чат-бот',
@@ -505,9 +561,10 @@ const translation: TranslationDictionary = {
     },
     toggleSwitch: 'Включить/отключить фильтр',
     linkedToWidget: {
-      label: 'Связано с виджетом фильтра',
+      label: 'Связано с виджет фильтром',
       tooltip:
         'Этот фильтр нельзя изменить на панели фильтров. Изменяйте значения непосредственно на панели.',
+      infoAriaLabel: 'Сведения о связи с виджетом фильтра',
     },
   },
   chart: {
@@ -523,6 +580,7 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Таблица данных',
       totalRows: 'Всего строк: {{formattedCount}}',
+      rowsRange: 'Строки {{start}}-{{end}}',
     },
     sankey: {
       alerts: {

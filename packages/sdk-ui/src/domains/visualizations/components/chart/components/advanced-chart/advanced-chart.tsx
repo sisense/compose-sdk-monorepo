@@ -2,14 +2,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 
-import { isDataSource } from '@sisense/sdk-data';
+import { FORECAST_PREFIX, isDataSource, TREND_PREFIX } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import {
   extractForecastMeasures,
   extractTrendMeasures,
-  FORECAST_PREFIX,
-  TREND_PREFIX,
 } from '@/domains/visualizations/core/chart-options-processor/advanced-chart-options.js';
 import { useWidgetErrorsAndWarnings } from '@/domains/widgets/shared/widget-errors-and-warnings-context.js';
 import { CartesianChartDataOptions } from '@/index';

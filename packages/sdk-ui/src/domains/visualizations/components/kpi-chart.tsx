@@ -13,22 +13,32 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  * a second measure, or against a target.
  *
  * @example
- * Monthly revenue with its trend and the change from the prior month:
  * ```tsx
- * <KpiChart
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     value: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
- *     category: DM.Commerce.Date.Months,
- *     comparison: { type: 'previous-period' },
- *   }}
- *   styleOptions={{
- *     title: { text: 'Revenue' },
- *     sparkline: { chartType: 'area' },
- *     card: { showBorder: true },
- *   }}
- * />
+ * import { KpiChart } from '@sisense/sdk-ui';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * const CodeExample = () => {
+ *   return (
+ *     <KpiChart
+ *       dataSet={DM.DataSource}
+ *       dataOptions={{
+ *         value: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+ *         category: DM.Commerce.Date.Months,
+ *         comparison: { type: 'previous-period' },
+ *       }}
+ *       styleOptions={{
+ *         sparkline: { chartType: 'area' },
+ *         height: 250,
+ *       }}
+ *     />
+ *   );
+ * };
+ *
+ * export default CodeExample;
  * ```
+ *
+ * <img src="media://kpi-chart-example-1.png" width="400px" />
  * @param props - KPI chart properties
  * @returns KPI Chart component
  * @group Charts

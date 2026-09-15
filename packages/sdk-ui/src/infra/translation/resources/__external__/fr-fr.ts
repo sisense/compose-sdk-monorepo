@@ -128,6 +128,32 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'La configuration du widget Tabber est non valide',
   },
+  notifications: {
+    dismiss: 'Fermer la notification',
+    auth: {
+      sessionExpiredTitle: 'Session expirée',
+      sessionExpiredMessage: 'Votre session a expiré. Reconnectez-vous pour continuer.',
+      authenticationFailedTitle: "Échec de l'authentification",
+      authenticationFailedMessage:
+        "Les identifiants fournis ont été refusés par l'instance Sisense.",
+    },
+    permission: {
+      forbiddenTitle: 'Accès refusé',
+      forbiddenMessage: "Vous n'avez pas l'autorisation d'accéder à ces données.",
+    },
+    network: {
+      unreachableTitle: 'Problème de connexion',
+      unreachableMessage: "L'instance Sisense est injoignable.",
+    },
+    server: {
+      errorTitle: 'Erreur du serveur',
+      errorMessage: "L'instance Sisense a renvoyé une erreur. Réessayez plus tard.",
+    },
+    general: {
+      requestFailedTitle: 'Échec de la requête',
+      requestFailedMessage: "Une requête vers l'instance Sisense a échoué.",
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Aucun résultat',
   filters: 'Filtres',
@@ -237,6 +263,7 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Tous sauf {{count}}',
     setupTitle: 'Configurer un widget de filtre',
     setupSubtitle: 'Définissez une dimension et configurez le fonctionnement du filtre',
+    emptySetup: 'Configurer le filtre',
     conditionUnsupported: 'La condition est disponible pour les champs texte et numériques',
     conditionNotRepresentable: 'Cette condition ne peut pas être modifiée ici',
     controls: {
@@ -256,6 +283,20 @@ const translation: TranslationDictionary = {
       betweenMax: 'Maximum',
       selectValues: 'Sélectionner {{level}}',
       clear: 'Effacer',
+    },
+    calendar: {
+      selectDates: 'Sélectionner des dates',
+      multipleDaysHint: 'Vous pouvez sélectionner plusieurs jours',
+      formatError: 'Respectez le format {{- format}}',
+      nonexistent: "Cette date n'existe pas",
+      chooseDate: 'Choisir une date',
+      chooseDates: 'Choisir des dates',
+      previousMonth: 'Mois précédent',
+      nextMonth: 'Mois suivant',
+      previousYear: 'Année précédente',
+      nextYear: 'Année suivante',
+      openCalendar: 'Ouvrir le calendrier',
+      clearDate: 'Effacer la date',
     },
   },
   unsupportedFilterMessage: 'Filtre non pris en charge (appliqué à la requête de données)',
@@ -290,6 +331,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: 'Supprimer le widget',
+      duplicateWidget: 'Dupliquer le widget',
       renameWidget: 'Renommer le widget',
       distributeEqualWidth: 'Distribuer équitablement dans cette ligne',
       download: 'Télécharger',
@@ -302,6 +344,22 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       'Type de widget personnalisé inconnu : {{customWidgetType}}. Veuillez enregistrer ce widget personnalisé.',
+  },
+  narrativeWidget: {
+    generate: 'Générer la narration',
+    regenerate: 'Régénérer',
+    retry: 'Réessayer la génération',
+    disclaimer: "Le contenu est alimenté par l'IA, donc des erreurs sont possibles.",
+    updatedAt: 'Mis à jour le {{timestamp}}',
+    copy: 'Copier dans le presse-papiers',
+    copied: 'Copié',
+    creditsUsed: '{{usagePercentage}} % des crédits IA ont été utilisés.',
+    noDataTitle: 'Aucune donnée de tableau de bord disponible',
+    noDataDescription:
+      'Une fois les données du tableau de bord disponibles, vous pourrez générer une narration.',
+    failedTitle: 'Impossible de générer la narration',
+    failedDescription:
+      'Veuillez réessayer plus tard. Si le problème persiste, contactez votre administrateur.',
   },
   ai: {
     analyticsChatbot: "Chatbot d'analyse",
@@ -514,6 +572,7 @@ const translation: TranslationDictionary = {
       label: 'Lié au widget de filtre',
       tooltip:
         'Ce filtre ne peut pas être modifié depuis le panneau de filtres. Modifiez ses valeurs directement sur le tableau de bord.',
+      infoAriaLabel: 'Infos sur le lien avec le widget de filtre',
     },
   },
   chart: {
@@ -529,6 +588,7 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Tableau de données',
       totalRows: 'Total : {{formattedCount}} lignes',
+      rowsRange: 'Lignes {{start}}-{{end}}',
     },
     sankey: {
       alerts: {

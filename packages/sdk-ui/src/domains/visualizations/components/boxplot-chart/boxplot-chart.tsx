@@ -7,16 +7,30 @@ import { shouldSkipSisenseContextWaiting } from '../chart/helpers/should-skip-si
  * A React component representing data in a way that visually describes the distribution,
  * variability, and center of a data set along an axis.
  *
- * ## Example
- *
+ * @example
  * Boxplot chart displaying data from the Sample ECommerce data model.
  *
- * <iframe
- *  src='https://csdk-playground.sisense.com/?example=charts%2Fboxplot-chart&mode=docs'
- *  width='100%'
- *  height='870'
- *  style='max-width:800px; border:none;'
- * />
+ * ```tsx
+ * import { BoxplotChart } from '@sisense/sdk-ui';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const CodeExample = () => (
+ *   <BoxplotChart
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       category: [DM.Commerce.Condition],
+ *       value: [{ column: DM.Commerce.Cost, name: 'Total Cost' }],
+ *       boxType: 'iqr',
+ *       outliersEnabled: true,
+ *     }}
+ *     styleOptions={{ subtype: 'boxplot/full' }}
+ *   />
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
+ * <img src="media://boxplot-chart-example-1.png" width="700px" />
  *
  * @param props - Boxplot chart properties
  * @returns Boxplot Chart component

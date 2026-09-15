@@ -235,4 +235,37 @@ describe('useWidgetRenaming', () => {
     // ...while title editing config is still applied.
     expect(result.current.widgets[0]?.config?.header?.title?.editing?.enabled).toBe(true);
   });
+
+  it('NarrativeWidget: wraps the unified onChange for persistence on title/changed', () => {
+    const onChange = vi.fn();
+    const updateWidget = vi.fn().mockResolvedValue(undefined);
+    const widgets = [
+      createMinimalWidget({
+        id: 'nw-1',
+        widgetType: 'narrative',
+        onChange,
+      } as Partial<WidgetProps>),
+    ];
+    const params: UseWidgetRenamingParams = {
+      widgets,
+      enabled: true,
+      persistence: { updateWidget },
+    };
+
+    const { result } = renderHook(() => useWidgetRenaming(params));
+
+    const nw = result.current.widgets[0]!;
+    const wrappedOnChange = getWidgetOnChange(nw)!;
+    expect(wrappedOnChange).not.toBe(onChange);
+    act(() => {
+      wrappedOnChange({ type: 'title/changed', payload: { title: 'My Narrative' } });
+    });
+
+    expect(updateWidget).toHaveBeenCalledWith('nw-1', { title: 'My Narrative' });
+    expect(onChange).toHaveBeenCalledWith({
+      type: 'title/changed',
+      payload: { title: 'My Narrative' },
+    });
+    expect(nw.config?.header?.title?.editing?.enabled).toBe(true);
+  });
 });

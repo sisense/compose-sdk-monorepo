@@ -76,6 +76,7 @@ describe('DashboardContainer', () => {
 
     expect(getByText(DASHBOARD_TITLE)).toBeInTheDocument();
     expect(getByTestId('dashboard-header')).toBeInTheDocument();
+    expect(getByTestId('csdk-widgets-panel')).toBeInTheDocument();
     expect(getByTestId('filter-panel')).toBeInTheDocument();
   });
 

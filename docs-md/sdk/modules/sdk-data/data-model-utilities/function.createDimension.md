@@ -23,3 +23,23 @@ See also functions [createDateDimension](function.createDateDimension.md) and [c
 [`Dimension`](../interfaces/interface.Dimension.md)
 
 A new Dimension instance
+
+## Example
+
+```ts
+import { createAttribute, createDimension } from '@sisense/sdk-data';
+
+const Category = createDimension({
+  name: 'Category',
+  Category: createAttribute({
+    name: 'Category',
+    type: 'text-attribute',
+    expression: '[Category.Category]',
+  }),
+  CategoryID: createAttribute({
+    name: 'Category ID',
+    type: 'numeric-attribute',
+    expression: '[Category.Category ID]',
+  }),
+});
+```

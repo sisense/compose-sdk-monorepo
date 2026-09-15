@@ -8,6 +8,7 @@ import {
   JaqlDataSourceForDto,
   JSONArray,
   Measure,
+  MetadataTypes,
   PivotGrandTotals,
 } from '@sisense/sdk-data';
 
@@ -33,7 +34,7 @@ import type {
   TextWidgetStyleOptions,
 } from '@/types.js';
 
-import { DataSchemaContext, NlqTranslationInput } from '../types.js';
+import { DataSchemaContext, MultiDataSchemaContext, NlqTranslationInput } from '../types.js';
 import type { SchemaIndex } from './shared/utils/schema-index.js';
 
 /**
@@ -97,7 +98,7 @@ export interface ArgSchema {
 }
 
 export type ProcessedArg = unknown;
-export type QueryElement = Filter | FilterRelations | Measure;
+export type QueryElement = Filter | FilterRelations | Measure | Attribute;
 export type FactoryFunction = (...args: unknown[]) => QueryElement;
 
 /**
@@ -170,8 +171,21 @@ export function isFilterRelationsElement(arg: QueryElement): arg is FilterRelati
   return 'left' in arg && 'right' in arg && 'operator' in arg;
 }
 
+/**
+ * Checks whether the query element is a calculated attribute (a calculated dimension).
+ *
+ * @param arg - The query element to test
+ * @returns True when the element is a calculated attribute
+ * @internal
+ */
+export function isAttributeElement(arg: QueryElement): arg is Attribute {
+  return MetadataTypes.isCalculatedAttribute(arg);
+}
+
 export function isMeasureElement(arg: QueryElement): arg is Measure {
-  return !isFilterElement(arg) && !isFilterRelationsElement(arg);
+  // A calculated attribute carries `expression` + `context` like a calculated measure, so it must
+  // be excluded explicitly — otherwise the negative test below classifies it as a measure.
+  return !isFilterElement(arg) && !isFilterRelationsElement(arg) && !isAttributeElement(arg);
 }
 
 export function isStringArray(value: JSONArray): value is string[] {
@@ -205,8 +219,11 @@ export type MeasureTranslationItem = {
  * @internal
  */
 export interface StyledColumnJSON extends CategoryStyle {
-  /** Attribute reference (composeCode), e.g. "DM.Commerce.Gender" */
-  column: string;
+  /**
+   * Attribute reference (composeCode), e.g. "DM.Commerce.Gender", or a calculated-dimension
+   * function call, e.g. `{ function: "attributeFactory.customFormula", args: [...] }`.
+   */
+  column: string | FunctionCall;
 }
 
 /**
@@ -221,11 +238,12 @@ export interface StyledMeasureColumnJSON extends ValueStyle, SeriesStyle {
 }
 
 /**
- * Dimension item in query JSON: plain composeCode string or styled column.
+ * Dimension item in query JSON: plain composeCode string, styled column, or a function call for a
+ * calculated dimension (which has no table/column to reference by name).
  *
  * @internal
  */
-export type DimensionItemJSON = string | StyledColumnJSON;
+export type DimensionItemJSON = string | StyledColumnJSON | FunctionCall;
 
 /**
  * Measure item in query JSON: plain function call or styled measure.
@@ -293,11 +311,25 @@ export type QueryElementItemJSON = DimensionItemJSON | MeasureItemJSON | Functio
  *
  * @internal
  */
+/**
+ * Checks whether the value is a function call producing a calculated dimension.
+ *
+ * A calculated dimension and a calculated measure are both `{ function, args }` with the same
+ * argument shape, so the factory prefix is the only discriminator between them.
+ *
+ * @param value - The value to test
+ * @returns True when the value is an `attributeFactory` function call
+ * @internal
+ */
+export function isCalculatedDimensionFunctionCall(value: unknown): value is FunctionCall {
+  return isFunctionCall(value) && value.function.startsWith('attributeFactory.');
+}
+
 export function isStyledColumnJSON(value: unknown): value is StyledColumnJSON {
   return (
     isRecordStringUnknown(value) &&
     'column' in value &&
-    typeof value.column === 'string' &&
+    (typeof value.column === 'string' || isCalculatedDimensionFunctionCall(value.column)) &&
     !('function' in value && 'args' in value)
   );
 }
@@ -311,7 +343,8 @@ export function isStyledMeasureColumnJSON(value: unknown): value is StyledMeasur
   if (!isRecordStringUnknown(value) || !('column' in value)) {
     return false;
   }
-  return isFunctionCall(value.column);
+  // A styled calculated dimension has the same shape, so it must be excluded here.
+  return isFunctionCall(value.column) && !isCalculatedDimensionFunctionCall(value.column);
 }
 
 /**
@@ -553,6 +586,45 @@ export type WidgetJSON =
 // ─── Dashboard JSON type ──────────────────────────────────────────────────────
 
 /**
+ * A dashboard-level filter tile tagged with the data source it targets.
+ * A filter tile always belongs to exactly one data source (never mixed within one tile) — mirrors
+ * the real Sisense dashboard model, where every filter tile's `jaql` carries its own `datasource`.
+ *
+ * @internal
+ */
+export interface DashboardFilterWithDataSourceJSON {
+  /** Data source this filter tile targets. */
+  dataSource: DataSourceJSON;
+  filter: FunctionCall;
+}
+
+/**
+ * A dashboard-level filter tile: either a bare filter (implies `defaultDataSource`) or one tagged
+ * with the specific data source it targets, for dashboards whose filter panel spans more than one
+ * data source.
+ *
+ * @internal
+ */
+export type DashboardFilterJSON = FunctionCall | DashboardFilterWithDataSourceJSON;
+
+/**
+ * Determines whether a value is the tagged {@link DashboardFilterWithDataSourceJSON} shape, not
+ * a bare {@link FunctionCall}.
+ *
+ * @internal
+ */
+export function isDashboardFilterWithDataSource(
+  value: unknown,
+): value is DashboardFilterWithDataSourceJSON {
+  return (
+    isRecordStringUnknown(value) &&
+    'filter' in value &&
+    'dataSource' in value &&
+    !('function' in value && 'args' in value)
+  );
+}
+
+/**
  * JSON representation of a dashboard.
  *
  * @internal
@@ -560,7 +632,7 @@ export type WidgetJSON =
 export interface DashboardJSON {
   id?: string;
   title?: string;
-  filters?: FunctionCall[];
+  filters?: readonly DashboardFilterJSON[];
   widgets: WidgetJSON[];
   layoutOptions?: DashboardLayoutOptions;
   config?: DashboardConfig;
@@ -581,7 +653,8 @@ export type WidgetInput = NlqTranslationInput<WidgetJSON, DataSchemaContext>;
 
 /**
  * Input type for dashboard translation (JSON → CSDK).
+ * Uses {@link MultiDataSchemaContext} since a dashboard's widgets can span multiple data sources.
  *
  * @internal
  */
-export type DashboardInput = NlqTranslationInput<DashboardJSON, DataSchemaContext>;
+export type DashboardInput = NlqTranslationInput<DashboardJSON, MultiDataSchemaContext>;

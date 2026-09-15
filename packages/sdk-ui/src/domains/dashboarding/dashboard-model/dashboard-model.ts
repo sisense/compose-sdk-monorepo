@@ -24,6 +24,9 @@ export interface DashboardModelConfig {
 /**
  * Model of Sisense Fusion dashboard defined in the abstractions of Compose SDK.
  *
+ * This is the return type of {@link @sisense/sdk-ui!useGetDashboardModel | `useGetDashboardModel`}
+ * — see that hook's documentation for a usage example.
+ *
  * @group Fusion Assets
  * @fusionEmbed
  */

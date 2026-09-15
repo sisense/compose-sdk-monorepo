@@ -23,7 +23,10 @@ const textWidget = (): WidgetProps =>
 
 /** Reads the resolved CSV download flag, which only export-capable widgets carry. */
 const downloadCsvEnabled = (widget?: WidgetProps): boolean | undefined =>
-  widget && widget.widgetType !== 'text' && widget.widgetType !== 'filter'
+  widget &&
+  widget.widgetType !== 'text' &&
+  widget.widgetType !== 'filter' &&
+  widget.widgetType !== 'narrative'
     ? widget.config?.actions?.downloadCsv?.enabled
     : undefined;
 

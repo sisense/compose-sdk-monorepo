@@ -4,6 +4,7 @@ import { SAMPLE_ECOMMERCE_DATA_SOURCE, SAMPLE_ECOMMERCE_TABLES } from './data-sc
 import {
   SAMPLE_ECOMMERCE_PIVOT_TABLE,
   SAMPLE_ECOMMERCE_PIVOT_TABLE_STYLED,
+  SAMPLE_ECOMMERCE_PIVOT_TABLE_WITH_CALCULATED_DIMENSION,
 } from './example-pivot-tables.js';
 
 export const DATA_SOURCE_PIVOT_TABLE_REGISTRY: Record<string, Record<string, PivotTableInput>> = {
@@ -17,6 +18,13 @@ export const DATA_SOURCE_PIVOT_TABLE_REGISTRY: Record<string, Record<string, Piv
     },
     'Styled (Years × Gender)': {
       data: SAMPLE_ECOMMERCE_PIVOT_TABLE_STYLED,
+      context: {
+        dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE,
+        tables: SAMPLE_ECOMMERCE_TABLES,
+      },
+    },
+    'Calculated Dimension (Brand & Category × Gender)': {
+      data: SAMPLE_ECOMMERCE_PIVOT_TABLE_WITH_CALCULATED_DIMENSION,
       context: {
         dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE,
         tables: SAMPLE_ECOMMERCE_TABLES,

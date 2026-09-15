@@ -4,3 +4,4 @@ export {
   PACKAGE_NAMESPACE as translationNamespace,
 } from './i18n/resources/index.js';
 export * from './utils/index.js';
+export * from './notifications/index.js';

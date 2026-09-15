@@ -1,4 +1,5 @@
 import { TFunction } from '@sisense/sdk-common';
+import { FORECAST_PREFIX, TREND_PREFIX } from '@sisense/sdk-data';
 import { describe, expect, it, vi } from 'vitest';
 
 import { NumberFormatConfig } from '@/types';
@@ -6,7 +7,6 @@ import { NumberFormatConfig } from '@/types';
 import { translation } from '../../../../../infra/translation/resources/en';
 import { colorChineseSilver, colorWhite } from '../../chart-data-options/coloring/consts';
 import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
-import { FORECAST_PREFIX, TREND_PREFIX } from '../advanced-chart-options';
 import { cartesianDataFormatter, getCartesianTooltipSettings } from './tooltip';
 import { HighchartsDataPointContext } from './tooltip-utils';
 

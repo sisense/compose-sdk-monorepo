@@ -60,10 +60,32 @@ export type SelectorProps = FieldOwnProps & {
    */
   tooltip?: ReactNode;
   /**
+   * Hover popover under the closed box, shown whenever it is set — unlike `tooltip`, which
+   * appears only when the box has abbreviated its value. For a control whose hover says
+   * something the box never shows at all: what the field takes when it is empty, or the
+   * whole selection when the trigger deliberately names only part of it.
+   */
+  hint?: ReactNode;
+  /**
    * Overrides the trigger's test id. Needed where one screen holds more than one selector
    * — the date panel's level and value fields — so a test can tell them apart.
    */
   dataTestId?: string;
+  /**
+   * Clicking the box only opens the panel, never closes it. For a panel whose edits are a
+   * draft the box itself does not show: re-clicking to close would discard them, which
+   * reads as the control forgetting what was just picked. Escape, Cancel and a click
+   * outside still close it.
+   */
+  openOnly?: boolean;
+  /**
+   * What the panel is, for assistive technology. A `listbox` of options is the default;
+   * `dialog` suits a panel with its own grid and footer, which is named by what it
+   * chooses rather than read as a list.
+   */
+  popupRole?: 'listbox' | 'dialog';
+  /** The glyph closing the box. Defaults to the open/closed chevron. */
+  trailingIcon?: 'chevron' | 'calendar';
 };
 
 /**
@@ -95,7 +117,11 @@ export function Selector({
   title,
   names,
   tooltip,
+  hint,
   dataTestId,
+  openOnly = false,
+  popupRole = 'listbox',
+  trailingIcon = 'chevron',
   label,
   error,
   disabled,
@@ -185,7 +211,15 @@ export function Selector({
      the same thing a second later, so it steps aside while this shows. */
   const isTruncated = hiddenCount > 0 || valueOverflows;
   const shownTooltip = (() => {
-    if (!pointerOver || isOpen || !isTruncated) {
+    if (!pointerOver || isOpen) {
+      return undefined;
+    }
+    /* A hint is what the box never says, so it does not wait for the box to run out of
+       room the way an abbreviated value does. */
+    if (hint) {
+      return hint;
+    }
+    if (!isTruncated) {
       return undefined;
     }
     if (tooltip) {
@@ -215,7 +249,9 @@ export function Selector({
     if (disabled) {
       return;
     }
-    onOpenChange?.(!isOpen);
+    if (!(openOnly && isOpen)) {
+      onOpenChange?.(!isOpen);
+    }
     inputRef.current?.focus();
   };
 
@@ -286,9 +322,11 @@ export function Selector({
         type="text"
         role="combobox"
         aria-expanded={isOpen}
-        aria-haspopup="listbox"
+        aria-haspopup={popupRole}
         aria-controls={listboxId}
-        aria-activedescendant={isOpen ? activeOptionId : undefined}
+        /* A dialog owns its own focus, so there is no active option for the trigger to
+           point at — the grid's cell is focused for real. */
+        aria-activedescendant={isOpen && popupRole === 'listbox' ? activeOptionId : undefined}
         aria-autocomplete={querying ? 'list' : undefined}
         autoComplete="off"
         disabled={disabled}
@@ -321,9 +359,13 @@ export function Selector({
           </IconButton>
         )}
         {/* A span, not a button: the whole box already toggles the control, so the
-            chevron takes the round hover without becoming a second hit target. */}
+            glyph takes the round hover without becoming a second hit target. */}
         <IconButton as="span" aria-hidden="true">
-          <Icon name={isOpen ? 'chevronUp' : 'chevronDown'} />
+          {trailingIcon === 'calendar' ? (
+            <Icon name="calendar" box={16} />
+          ) : (
+            <Icon name={isOpen ? 'chevronUp' : 'chevronDown'} />
+          )}
         </IconButton>
       </Trailing>
     </Field>

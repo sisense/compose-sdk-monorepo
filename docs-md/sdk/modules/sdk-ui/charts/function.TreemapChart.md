@@ -10,17 +10,6 @@ A React component displaying hierarchical data in the form of nested rectangles.
 
 This type of chart can be used instead of a column chart for comparing a large number of categories and sub-categories.
 
-## Example
-
-Tree map chart displaying total revenue, categorized by condition and age range, from the Sample ECommerce data model.
-
-<iframe
- src='https://csdk-playground.sisense.com/?example=charts%2Ftreemap-chart&mode=docs'
- width='100%'
- height='870'
- style='max-width:800px; border:none;'
-/>
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -32,3 +21,27 @@ Tree map chart displaying total revenue, categorized by condition and age range,
 `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Treemap Chart component
+
+## Example
+
+Tree map chart displaying total revenue, categorized by condition and age range, from the Sample ECommerce data model.
+
+```ts
+import { TreemapChart } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const CodeExample = () => (
+  <TreemapChart
+    dataSet={DM.DataSource}
+    dataOptions={{
+      category: [{ column: DM.Commerce.Condition, isColored: true }, DM.Commerce.AgeRange],
+      value: [measureFactory.sum(DM.Commerce.Revenue)],
+    }}
+  />
+);
+
+export default CodeExample;
+```
+
+<img src="../../../img/treemap-chart-example-1.png" width="700px" />

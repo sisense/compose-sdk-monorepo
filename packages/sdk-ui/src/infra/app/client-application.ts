@@ -7,13 +7,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 /* eslint-disable max-params */
-import { normalizeUrl } from '@sisense/sdk-common';
+import { createNotificationsCenter, normalizeUrl } from '@sisense/sdk-common';
 import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { DimensionalQueryClient } from '@sisense/sdk-query-client';
-import { getAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
+import {
+  getAuthenticator,
+  HttpClient,
+  type HttpClientOptions,
+  type HttpErrorEvent,
+} from '@sisense/sdk-rest-client';
 
 import { clearExecuteQueryCache } from '@/domains/query-execution/core/execute-query';
-import { SisenseContextProviderProps } from '@/index';
+import { asNotificationInput } from '@/infra/notifications/as-notification-input';
+import type { SisenseContextProviderProps } from '@/props';
 import { SYSTEM_TENANT_NAME } from '@/shared/const';
 
 import { TranslatableError } from '../translation/translatable-error';
@@ -105,7 +111,18 @@ export const createClientApplication = async ({
   normalizeErrors();
 
   const env = packageName + (__PACKAGE_VERSION__ ? `-${__PACKAGE_VERSION__}` : '');
-  let httpClient: HttpClient = new HttpClient(url, auth, env);
+
+  const notifications = createNotificationsCenter();
+  const httpClientOptions: HttpClientOptions = {
+    onError: (event: HttpErrorEvent) => {
+      const input = asNotificationInput(event, appConfig?.notificationsConfig);
+      if (input) {
+        notifications.notify(input);
+      }
+    },
+  };
+
+  let httpClient: HttpClient = new HttpClient(url, auth, env, {}, httpClientOptions);
   const loginSuccess = await httpClient.login();
 
   // SSO redirect is in flight — the browser is navigating away. Return a never-resolving
@@ -123,6 +140,7 @@ export const createClientApplication = async ({
       auth,
       env,
       prepareApiTelemetryHeaders(packageName, appConfig, useFusionAuth),
+      httpClientOptions,
     );
   }
 
@@ -148,5 +166,6 @@ export const createClientApplication = async ({
     // todo: make it optional (incorrect previous implementation)
     defaultDataSource: defaultDataSource,
     queryCache,
+    notifications,
   };
 };

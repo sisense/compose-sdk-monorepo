@@ -11,6 +11,9 @@ title: ExecuteQueryResult
 
 Result of a query execution.
 
+This is the return type of [useExecuteQuery](../queries/function.useExecuteQuery.md) — see that hook's documentation for a
+usage example.
+
 > ## `ExecuteQueryResult.refetch`
 >
 > **refetch**: () => `void`

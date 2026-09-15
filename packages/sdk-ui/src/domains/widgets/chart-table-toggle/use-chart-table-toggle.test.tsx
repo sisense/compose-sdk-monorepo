@@ -106,27 +106,33 @@ describe('useChartTableToggle', () => {
     expect(result.current.isTableView).toBe(true);
   });
 
-  it('keeps the toggle visible but disabled when trend or forecast is set', () => {
-    const { result } = renderHook(() =>
-      useChartTableToggle('line', {
-        dataOptions: {
-          category: barDataOptions.category,
-          value: [{ column: { name: 'Revenue' }, forecast: { forecastHorizon: 3 } }],
-        },
-      }),
-    );
+  it('allows toggling to table view when trend or forecast is set, instead of disabling it', () => {
+    const dataOptions = {
+      category: barDataOptions.category,
+      value: [{ column: { name: 'Revenue' }, forecast: { forecastHorizon: 3 } }],
+    };
+    const { result } = renderHook(() => useChartTableToggle('line', { dataOptions }));
 
     expect(result.current.showToggle).toBe(true);
     act(() => {
       result.current.setIsTableView(true);
     });
-    expect(result.current.isTableView).toBe(false);
-    expect(
-      result.current.applyOverride({
-        chartType: 'line',
-        dataOptions: barDataOptions,
-      }).chartType,
-    ).toBe('line');
+    expect(result.current.isTableView).toBe(true);
+    expect(result.current.applyOverride({ chartType: 'line', dataOptions }).chartType).toBe(
+      'table',
+    );
+  });
+
+  it('stays disabled via the disabled option, independent of trend/forecast', () => {
+    const { result } = renderHook(() =>
+      useChartTableToggle('bar', { dataOptions: barDataOptions, disabled: true }),
+    );
+
+    const button = result.current.toggleButton;
+    if (!isValidElement(button)) {
+      throw new Error('expected chart-table toggle button');
+    }
+    expect((button.props as ToggleButtonProps).disabled).toBe(true);
   });
 });
 
@@ -270,7 +276,7 @@ describe('useWidgetsChartTableToggle', () => {
     expect(result.current[0]?.chartType).toBe('table');
   });
 
-  it('disables the toggle when a widget has trend or forecast', () => {
+  it('does not disable the toggle when a widget has trend or forecast', () => {
     const widgets: ChartTableToggleWidget[] = [
       {
         ...chartWidget,
@@ -285,12 +291,11 @@ describe('useWidgetsChartTableToggle', () => {
     const toggle = getToggleButtonProps(result.current[0]);
 
     expect(result.current[0]?.chartType).toBe('line');
-    expect(toggle.disabled).toBe(true);
-    expect(toggle.disabledTitle).toMatch(/trend or forecast/i);
+    expect(toggle.disabled).toBeFalsy();
 
     act(() => {
       toggle.onPressedChange(true);
     });
-    expect(result.current[0]?.chartType).toBe('line');
+    expect(result.current[0]?.chartType).toBe('table');
   });
 });

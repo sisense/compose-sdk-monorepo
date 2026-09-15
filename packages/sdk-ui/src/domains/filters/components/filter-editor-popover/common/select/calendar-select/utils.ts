@@ -51,9 +51,5 @@ export function getCalendarDateSelectorMode(type: CalendarSelectTypes): Selector
       return 'pointSelector';
     case CalendarSelectTypes.MULTI_SELECT:
       return 'multiPointsSelector';
-    case CalendarSelectTypes.RANGE_FROM_SELECT:
-      return 'fromSelector';
-    case CalendarSelectTypes.RANGE_TO_SELECT:
-      return 'toSelector';
   }
 }

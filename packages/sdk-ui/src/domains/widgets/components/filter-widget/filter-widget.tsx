@@ -65,6 +65,8 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
     filterType,
     onReady,
     excludedDateLevels,
+    emptyState,
+    onSetup,
   } = props;
 
   /* Split once: the control's own styling goes to the control, and the rest — the widget
@@ -104,6 +106,7 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
   useEffect(() => {
     if (
       !title &&
+      attribute.expression &&
       attribute.name &&
       onChange &&
       defaultedTitleForDimensionRef.current !== attribute.expression
@@ -131,6 +134,8 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
       onReady={onReady}
       excludedDateLevels={excludedDateLevels}
       controlStyleOptions={controlStyleOptions}
+      emptyState={emptyState}
+      onSetup={onSetup}
     />
   );
 

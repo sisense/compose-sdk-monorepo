@@ -25,6 +25,13 @@ export const getPivotWidgetName = (): string => 'pivot';
 export const getTextWidgetName = (): string => 'text';
 
 /**
+ * Resolves the `widgetName` tracking field for the dashboard narrative widget.
+ *
+ * @internal
+ */
+export const getNarrativeWidgetName = (): string => 'narrative';
+
+/**
  * Resolves the `widgetName` tracking field for a custom widget — the registered plugin name
  * (e.g. `'my-org-bullet-chart'`).
  *

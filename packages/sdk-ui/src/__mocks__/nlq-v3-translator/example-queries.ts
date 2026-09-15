@@ -490,3 +490,82 @@ export const BENCHMARK_SNOWFLAKE_TOTAL_PRICE_AND_QUANTITY_GROWTH_SUMMARY_QUERY: 
   ],
   filters: [],
 };
+
+/**
+ * Sample ECommerce query with calculated dimensions
+ * Combines a plain calculated dimension (a CASE WHEN age bucket) with a styled one
+ * (a Concat of brand and category), alongside a plain date-level dimension
+ */
+export const SAMPLE_ECOMMERCE_QUERY_WITH_CALCULATED_DIMENSION: QueryJSON = {
+  dimensions: [
+    'DM.Commerce.Date.Years',
+    {
+      function: 'attributeFactory.customFormula',
+      args: [
+        'Age Group',
+        "CASE WHEN [ageRange] = '0-18' THEN 'Minor' WHEN [ageRange] = '65+' THEN 'Senior' ELSE 'Adult' END",
+        { ageRange: 'DM.Commerce.Age Range' },
+      ],
+    },
+    {
+      column: {
+        function: 'attributeFactory.customFormula',
+        args: [
+          'Brand & Category',
+          'Concat([brand], " - ", [category])',
+          { brand: 'DM.Brand.Brand', category: 'DM.Category.Category' },
+        ],
+      },
+      sortType: 'sortAsc',
+    },
+  ],
+  measures: [
+    {
+      function: 'measureFactory.sum',
+      args: ['DM.Commerce.Revenue', 'Total Revenue'],
+    },
+    {
+      function: 'measureFactory.sum',
+      args: ['DM.Commerce.Cost', 'Total Cost'],
+    },
+  ],
+  filters: [
+    {
+      function: 'filterFactory.members',
+      args: ['DM.Commerce.Gender', ['Female', 'Male']],
+    },
+  ],
+};
+
+/**
+ * Sample ECommerce query with a calculated dimension inside a styled column
+ * Isolates the styled-column shape, which carries a function call rather than a name
+ */
+export const SAMPLE_ECOMMERCE_QUERY_WITH_STYLED_CALCULATED_DIMENSION: QueryJSON = {
+  dimensions: [
+    'DM.Commerce.Date.Years',
+    {
+      column: {
+        function: 'attributeFactory.customFormula',
+        args: [
+          'Cost Band',
+          "CASE WHEN [cost] < 100 THEN 'Low' WHEN [cost] < 500 THEN 'Medium' ELSE 'High' END",
+          { cost: 'DM.Commerce.Cost' },
+        ],
+      },
+      sortType: 'sortDesc',
+    },
+  ],
+  measures: [
+    {
+      function: 'measureFactory.sum',
+      args: ['DM.Commerce.Revenue', 'Total Revenue'],
+    },
+  ],
+  filters: [
+    {
+      function: 'filterFactory.members',
+      args: ['DM.Commerce.Gender', ['Female', 'Male']],
+    },
+  ],
+};

@@ -420,7 +420,7 @@ function jumpToDashboardConfigFromJtdDtoSlice(
  * {@link JumpToDashboardConfig} {@link JumpToDashboardConfigForPivot} for use with {@link useJtdWidget}
  * @param widget - Fusion widget DTO (or the subset of fields used for JTD translation)
  * @returns JTD config, or `undefined` when there is no versioned JTD DTO or the widget type does not support JTD
- * @group Dashboards
+ * @internal
  */
 export function jumpToDashboardConfigFromWidgetDto(
   widget: WidgetJtdDtoSlice,

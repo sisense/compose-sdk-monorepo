@@ -22,6 +22,15 @@ export type WidgetNarrativeConfig = {
    */
   verbosity?: 'low' | 'high';
   /**
+   * Free-text guidance for the narrative summary — context the model can't infer from the data
+   * alone, e.g. `"amounts are in USD"` or `"ignore the March spike, known data issue"`.
+   * Forwarded verbatim to the narrative request.
+   *
+   * Set this directly in code, or it's populated automatically when the widget is loaded from a
+   * Fusion dashboard (from the designer's "AI context" widget setting).
+   */
+  aiContext?: string;
+  /**
    * Whether to include trend and forecast in the narrative.
    *
    * When `true`, any trend and forecast companion measures present on the widget are included in the narrative request.

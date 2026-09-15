@@ -6,6 +6,9 @@ title: DashboardModel
 
 Model of Sisense Fusion dashboard defined in the abstractions of Compose SDK.
 
+This is the return type of [`useGetDashboardModel`](../../sdk-ui/fusion-assets/function.useGetDashboardModel.md)
+— see that hook's documentation for a usage example.
+
 ## Properties
 
 ### dataSource

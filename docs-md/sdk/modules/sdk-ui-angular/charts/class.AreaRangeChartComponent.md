@@ -10,65 +10,52 @@ the area between these values.
 
 ## Example
 
-```html
-   <csdk-area-range-chart
-     [dataSet]="chart.dataSet"
-     [dataOptions]="chart.dataOptions"
-     [highlights]="filters"
-     [beforeRender]="onBeforeRender"
-     (dataPointClick)="logArguments($event)"
-     (dataPointContextMenu)="logArguments($event)"
-     (dataPointsSelect)="logArguments($event)"
-   />
-```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType, RangeChartDataOptions } from '@sisense/sdk-ui-angular';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
 @Component({
- selector: 'app-analytics',
- templateUrl: './analytics.component.html',
- styleUrls: ['./analytics.component.scss'],
+  selector: 'code-example',
+  template: `
+    `<csdk-area-range-chart [dataSet]="DM.DataSource" [dataOptions]="dataOptions">` `</csdk-area-range-chart>`
+  `,
 })
-export class AnalyticsComponent {
- DM = DM;
- filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
- chart = {
-   chartType: 'arearange' as ChartType,
-   dataSet: DM.DataSource,
-   dataOptions: {
-     category: [DM.Admissions.Admission_Time.Years],
-     value: [
-       {
-           title: 'Admission Cost Range',
-           upperBound: measureFactory.multiply(
-             measureFactory.sum(DM.Admissions.Cost_of_admission, 'Lower Admission'),
-             0.6,
-           ),
-           lowerBound: measureFactory.multiply(
-             measureFactory.sum(DM.Admissions.Cost_of_admission, 'Upper Admission'),
-             1.4,
-            ),
-       }
-     ],
-     breakBy: [],
-   } as RangeChartDataOptions,
- };
-
- onBeforeRender(options: any) {
-   console.log('beforeRender');
-   console.log(options);
-   return options;
- }
-
- logArguments(...args: any[]) {
-   console.log(args);
- }
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    category: [DM.Commerce.Date.Quarters],
+    value: [
+      {
+        title: 'Revenue',
+        upperBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 1.4, 'Upper Revenue'),
+        lowerBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 0.6, 'Lower Revenue'),
+      },
+    ],
+    breakBy: [],
+  };
 }
 ```
-<img src="../../../img/angular-area-range-chart-example.png" width="800px" />
+
+<img src="../../../img/area-range-chart-example-1.png" width="700px" />
+
+The same range broken down by condition:
+
+```ts
+dataOptions = {
+  category: [DM.Commerce.Date.Quarters],
+  value: [
+    {
+      title: 'Revenue',
+      upperBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 1.4, 'Upper Revenue'),
+      lowerBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 0.6, 'Lower Revenue'),
+    },
+  ],
+  breakBy: [DM.Commerce.Condition],
+};
+```
+
+<img src="../../../img/area-range-chart-example-2.png" width="700px" />
 
 ## Constructors
 

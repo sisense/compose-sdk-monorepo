@@ -19,6 +19,8 @@ vi.mock('@/infra/contexts/sisense-context/sisense-context');
 
 describe('Table auto height', () => {
   const ROWS_PER_PAGE = 5;
+  /** Wide enough for the pagination footer to render its full, uncompacted control. */
+  const FOOTER_ROOMY_WIDTH = 900;
   const col1 = { name: 'AgeRange', type: 'string' };
   const col2 = { name: 'Cost', type: 'number' };
   const dataOptions = { columns: [col1, col2] };
@@ -51,7 +53,9 @@ describe('Table auto height', () => {
       <TableComponent
         dataSet="Sample ECommerce"
         dataOptions={dataOptions}
-        styleOptions={{ isAutoHeight: true, rowsPerPage: ROWS_PER_PAGE }}
+        // Wide enough that the pagination footer renders its full control: these tests click
+        // page links, and a narrow table compacts the control away from them.
+        styleOptions={{ isAutoHeight: true, rowsPerPage: ROWS_PER_PAGE, width: FOOTER_ROOMY_WIDTH }}
         onHeightChange={onHeightChange}
         {...(includeTotalRows ? { includeTotalRows } : {})}
       />,

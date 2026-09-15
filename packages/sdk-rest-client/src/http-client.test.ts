@@ -45,23 +45,32 @@ describe('HttpClient', () => {
     afterEach(() => {
       vi.restoreAllMocks();
     });
-    it('should execute response interceptor', async () => {
+    it('should execute response interceptor with request context', async () => {
       const getResponseInterceptorSpy = vi.spyOn(interceptors, 'getResponseInterceptor');
 
       global.fetch = vi.fn().mockResolvedValue(mockSuccessResponse);
 
       await httpClient.call(httpClient.url + '/endpoint', {});
-      expect(getResponseInterceptorSpy).toHaveBeenCalledWith(httpClient.auth);
+      expect(getResponseInterceptorSpy).toHaveBeenCalledWith(
+        httpClient.auth,
+        expect.objectContaining({
+          url: expect.stringContaining(httpClient.url + '/endpoint'),
+          method: 'GET',
+        }),
+      );
     });
 
-    it('should execute error interceptor', async () => {
-      const errorInterceptorSpy = vi.spyOn(interceptors, 'errorInterceptor');
+    it('should execute error interceptor with request context', async () => {
+      const getErrorInterceptorSpy = vi.spyOn(interceptors, 'getErrorInterceptor');
 
       const error = 'Test error';
       global.fetch = vi.fn().mockRejectedValue(error);
 
       await expect(httpClient.call(httpClient.url + '/endpoint', {})).rejects.toThrow(error);
-      expect(errorInterceptorSpy).toHaveBeenCalledWith(error);
+      expect(getErrorInterceptorSpy).toHaveBeenCalledWith(
+        httpClient.auth,
+        expect.objectContaining({ method: 'GET' }),
+      );
     });
 
     it('should handle successful API call', async () => {
@@ -285,6 +294,53 @@ describe('HttpClient', () => {
         expect.objectContaining(requestOptions),
         undefined,
       );
+    });
+  });
+
+  describe('options.onError', () => {
+    it('is invoked with a classified event when a request fails', async () => {
+      const auth = getAuthenticator({ url: 'https://example.com/', token: 'test-token' })!;
+      const onError = vi.fn();
+      const client = new HttpClient('https://example.com/', auth, 'test', {}, { onError });
+
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        statusText: 'Forbidden',
+        headers: { get: () => null },
+      });
+
+      await expect(client.post('api/v1/things', { a: 1 })).rejects.toThrow(/Access denied/);
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(onError.mock.calls[0][0]).toMatchObject({
+        kind: 'forbidden',
+        status: 403,
+        method: 'POST',
+        authType: 'bearer',
+        url: expect.stringContaining('https://example.com/api/v1/things'),
+      });
+    });
+
+    it('is not invoked when the request opts out via skipErrorNotification', async () => {
+      const auth = getAuthenticator({ url: 'https://example.com/', token: 'test-token' })!;
+      const onError = vi.fn();
+      const client = new HttpClient('https://example.com/', auth, 'test', {}, { onError });
+
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        statusText: 'Forbidden',
+        headers: { get: () => null },
+      });
+
+      await expect(
+        client.get('api/v1/things', {}, { skipErrorNotification: true }),
+      ).rejects.toThrow(/Access denied/);
+      expect(onError).not.toHaveBeenCalled();
+    });
+
+    it('defaults to an empty options object', () => {
+      expect(httpClient.options).toEqual({});
     });
   });
 });

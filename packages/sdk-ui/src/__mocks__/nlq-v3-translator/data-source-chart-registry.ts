@@ -9,6 +9,7 @@ import {
   SAMPLE_ECOMMERCE_CALENDAR_HEATMAP_CHART,
   SAMPLE_ECOMMERCE_COLUMN_CHART,
   SAMPLE_ECOMMERCE_COLUMN_CHART_BY_AGE,
+  SAMPLE_ECOMMERCE_COLUMN_CHART_WITH_CALCULATED_DIMENSION,
   SAMPLE_ECOMMERCE_COMBO_CHART,
   SAMPLE_ECOMMERCE_FUNNEL_CHART,
   SAMPLE_ECOMMERCE_INDICATOR_CHART,
@@ -20,8 +21,10 @@ import {
   SAMPLE_ECOMMERCE_STREAMGRAPH_CHART,
   SAMPLE_ECOMMERCE_SUNBURST_CHART,
   SAMPLE_ECOMMERCE_TABLE_CHART,
+  SAMPLE_ECOMMERCE_TABLE_CHART_WITH_TREND_AND_FORECAST,
   SAMPLE_ECOMMERCE_TREEMAP_CHART,
 } from './example-charts.js';
+import { FILTER_CHIP_CHART_CASES } from './example-filter-chip-charts.js';
 
 export const DATA_SOURCE_CHART_REGISTRY: Record<string, Record<string, ChartInput>> = {
   'Sample ECommerce': {
@@ -123,6 +126,13 @@ export const DATA_SOURCE_CHART_REGISTRY: Record<string, Record<string, ChartInpu
         tables: SAMPLE_ECOMMERCE_TABLES,
       },
     },
+    'Table - Trend & Forecast': {
+      data: SAMPLE_ECOMMERCE_TABLE_CHART_WITH_TREND_AND_FORECAST,
+      context: {
+        dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE,
+        tables: SAMPLE_ECOMMERCE_TABLES,
+      },
+    },
     Indicator: {
       data: SAMPLE_ECOMMERCE_INDICATOR_CHART,
       context: {
@@ -158,5 +168,24 @@ export const DATA_SOURCE_CHART_REGISTRY: Record<string, Record<string, ChartInpu
         tables: SAMPLE_ECOMMERCE_TABLES,
       },
     },
+    'Column Chart - Calculated Dimension': {
+      data: SAMPLE_ECOMMERCE_COLUMN_CHART_WITH_CALCULATED_DIMENSION,
+      context: {
+        dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE,
+        tables: SAMPLE_ECOMMERCE_TABLES,
+      },
+    },
+    ...Object.fromEntries(
+      Object.entries(FILTER_CHIP_CHART_CASES).map(([name, data]) => [
+        name,
+        {
+          data,
+          context: {
+            dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE,
+            tables: SAMPLE_ECOMMERCE_TABLES,
+          },
+        },
+      ]),
+    ),
   },
 };

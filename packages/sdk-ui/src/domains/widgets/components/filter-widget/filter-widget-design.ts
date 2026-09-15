@@ -13,6 +13,17 @@ import type {
  * @internal
  */
 export const filterWidgetDesign = {
+  emptySetup: {
+    width: 126,
+    height: 28,
+    radius: 4,
+    fontSize: 13,
+    lineHeight: '16px',
+    fontWeight: 400,
+    iconSize: 16,
+    iconGap: 4,
+    paddingInline: 8,
+  },
   /** Empty state shown before a dimension is configured (editor / new widget). */
   noDimPlaceholder: {
     color: '#666666',

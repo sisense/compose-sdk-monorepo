@@ -68,6 +68,14 @@ describe('buildSparklineOptions', () => {
     });
   });
 
+  /**
+   * A Highcharts point stand-in carrying only what the tooltip formatter reads off it: the custom
+   * property of the data object the point was built from. Double-cast because a real `Point` has
+   * ~20 more members, none of which the formatter touches.
+   */
+  const pointLabeled = (categoryDisplayValue: string) =>
+    ({ options: { categoryDisplayValue } } as unknown as Highcharts.Point);
+
   describe('tooltip', () => {
     const formatTooltip = (
       options: Highcharts.Options,
@@ -134,6 +142,36 @@ describe('buildSparklineOptions', () => {
 
       expect(result).toContain('1.5K');
       expect(result).not.toContain('<hr');
+    });
+
+    it('names the point by its own category text when there is no date axis', () => {
+      // A non-date category has no epoch in `x` (it holds the bucket ordinal), so the bucket's
+      // display text is what identifies the point -- the footer other chart tooltips fill with
+      // the category value.
+      const options = buildSparklineOptions(points, 'line', '#123456', {
+        valueTitle: 'Total Revenue',
+      });
+      const result = formatTooltip(options, {
+        x: 1,
+        y: 1500,
+        point: pointLabeled('Female'),
+      });
+
+      expect(result).toMatch(/Total Revenue[\s\S]*1\.5K[\s\S]*<hr[\s\S]*Female/);
+    });
+
+    it('prefers the formatted date over the point text when a date axis is in play', () => {
+      const options = buildSparklineOptions(points, 'line', '#123456', {
+        formatDate: () => 'Jun 2020',
+      });
+      const result = formatTooltip(options, {
+        x: 1,
+        y: 1500,
+        point: pointLabeled('ignored'),
+      });
+
+      expect(result).toContain('Jun 2020');
+      expect(result).not.toContain('ignored');
     });
 
     it('colors the value with the series color by default', () => {

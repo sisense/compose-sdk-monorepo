@@ -8,32 +8,39 @@ Table with aggregation and pagination.
 
 ## Example
 
-```html
- <csdk-table [dataSet]="table.dataSet" [dataOptions]="table.dataOptions" [filters]="filters" />
-```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
 @Component({
- selector: 'app-analytics',
- templateUrl: './analytics.component.html',
- styleUrls: ['./analytics.component.scss'],
+  selector: 'code-example',
+  template: `
+    `<csdk-table
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-table>`
+  `,
 })
-export class AnalyticsComponent {
- DM = DM;
- filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
- table = {
-   dataSet: DM.DataSource,
-   dataOptions: {
-     columns: [DM.Admissions.Patient_ID, measureFactory.sum(DM.Admissions.Cost_of_admission)],
-   },
- };
-
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    columns: [
+      { column: DM.Commerce.Date.Years, name: 'Year', dateFormat: 'yyyy' },
+      DM.Commerce.Condition,
+      measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+    ],
+  };
+  styleOptions = {
+    rowsPerPage: 12,
+    height: 420,
+    header: { color: { enabled: true, backgroundColor: '#94F5F0', textColor: '#121A23' } },
+    rows: { alternatingColor: { enabled: true, backgroundColor: '#f2f2f2' } },
+  };
 }
 ```
-<img src="../../../img/angular-table-chart-example.png" width="800px" />
+<img src="../../../img/table-example-1.png" width="700px" />
 
 ## Implements
 

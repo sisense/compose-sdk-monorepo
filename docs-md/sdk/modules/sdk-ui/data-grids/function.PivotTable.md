@@ -22,102 +22,250 @@ Pivot Table component
 
 ## Example
 
-(1) Example of PivotTable from the `Sample ECommerce` data model:
-
 ```ts
-<PivotTable
-  dataSet={DM.DataSource}
-  dataOptions={{
-    rows: [
-      { column: DM.Category.Category, includeSubTotals: true },
-      { column: DM.Commerce.AgeRange, includeSubTotals: true },
-      DM.Commerce.Condition,
-    ],
-    columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],
-    values: [
-      {
-        column: measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
-        dataBars: true,
-        totalsCalculation: 'sum',
-      },
-      {
-        column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
-        totalsCalculation: 'sum',
-      },
-    ],
-    grandTotals: { rows: true, columns: true },
-  }}
-  filters={[filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])]}
-  styleOptions={{ width: 1000, height: 600, rowsPerPage: 50 }}
-/>
-```
-<img src="../../../img/pivot-example-1.png" width="800px" />
+import { PivotTable } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
 
-(2) Example of PivotTable with the predefined sorting configuration:
-- Sort "Condition" row by its values in Ascending order. This is equivalent to users clicking on the "Condition" row heading and hit Sort Ascending (A-Z)
-- Sort "Category" row by "Total Cost" values under the "columns" values of "Female" (for Gender) and "0-18" (for AgeRange) in Descending order.
-This is equivalent to users clicking on the "Total Cost" value heading under "Female" (for Gender) and "0-18" (for AgeRange) and sort "Category (Subtotals)" in Descending (9-1)
+const CodeExample = () => {
+  return (
+    <PivotTable
+      dataSet={DM.DataSource}
+      dataOptions={{
+        rows: [
+          {
+            column: DM.Commerce.Date.Years,
+            dateFormat: 'yyyy',
+            name: 'Year',
+          },
+          DM.Commerce.Condition,
+        ],
+        columns: [DM.Commerce.AgeRange],
+        values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+      }}
+      styleOptions={{
+        rowsPerPage: 10,
+        height: 425,
+        width: 800,
+      }}
+    />
+  );
+};
 
-```ts
-<PivotTable
-  dataSet={DM.DataSource}
-  dataOptions={{
-    rows: [
-      {
-        column: DM.Category.Category,
-        includeSubTotals: true,
-        sortType: {
-          direction: 'sortDesc',
-          by: {
-            valuesIndex: 0,
-            columnsMembersPath: ['Female', '0-18']
-          }
-        }
-      },
-      {
-        column: DM.Commerce.Condition,
-        sortType: {
-          direction: 'sortAsc'
-        }
-      },
-    ],
-    columns: [
-      DM.Commerce.Gender,
-      DM.Commerce.AgeRange
-    ],
-    values: [
-      measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
-      measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
-    ],
-  }}
-/>
+export default CodeExample;
 ```
 
-<img src="../../../img/pivot-sorting-example-1.png" width="800px" />
+<img src="../../../img/pivot-table-example-1.png" width="800px" />
 
-(3) Example of PivotTable with auto content width enabled:
-When [`isAutoContentWidth: true`](../interfaces/interface.PivotTableStyleOptions.md#isautocontentwidth) is set, all vertical columns will be resized to fit within the component width without requiring horizontal scroll.
+Additional examples:
 
+Highlighting relative magnitude within a column with data bars:
 ```ts
-<PivotTable
-  dataSet={DM.DataSource}
-  dataOptions={{
-    rows: [DM.Category.Category],
-    columns: [DM.Commerce.Gender],
-    values: [
-      measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
-      measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
-    ],
-  }}
-  styleOptions={{
-    width: 800,
-    height: 600,
-    isAutoContentWidth: true,
-    rowsPerPage: 50,
-  }}
-/>
+import { PivotTable } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const CodeExample = () => {
+  return (
+    <PivotTable
+      dataSet={DM.DataSource}
+      dataOptions={{
+        rows: [DM.Commerce.Condition, DM.Commerce.AgeRange],
+        columns: [
+          {
+            column: DM.Commerce.Date.Years,
+            dateFormat: 'yyyy',
+            name: 'Year',
+          },
+        ],
+        values: [
+          {
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            dataBars: true,
+          },
+        ],
+      }}
+      styleOptions={{
+        rowsPerPage: 10,
+        height: 425,
+        width: 850,
+      }}
+    />
+  );
+};
+
+export default CodeExample;
 ```
-<img src="../../../img/pivot-auto-content-width-true.png" width="800px" />
+
+<img src="../../../img/pivot-table-example-2.png" width="800px" />
+
+Sorting rows: `Condition` and `Age Range` rows sorted directly by their own values (equivalent to a user clicking a row heading and choosing Sort Descending):
+```ts
+import { PivotTable } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const CodeExample = () => {
+  return (
+    <PivotTable
+      dataSet={DM.DataSource}
+      dataOptions={{
+        rows: [
+          {
+            column: DM.Commerce.Condition,
+            sortType: 'sortDesc',
+          },
+          {
+            column: DM.Commerce.AgeRange,
+            sortType: 'sortDesc',
+          },
+        ],
+        columns: [{ column: DM.Commerce.Date.Years }],
+        values: [
+          { column: measureFactory.sum(DM.Commerce.Revenue, 'Revenue') },
+          { column: measureFactory.sum(DM.Commerce.Quantity, 'Units') },
+        ],
+      }}
+      styleOptions={{
+        rowsPerPage: 12,
+        height: 425,
+        width: 1200,
+      }}
+    />
+  );
+};
+
+export default CodeExample;
+```
+
+<img src="../../../img/pivot-table-example-3.png" width="800px" />
+
+Sorting rows by a value column: `Age Range` sorted by its `Revenue` values (equivalent to a user clicking the `Revenue` value heading and sorting `Age Range` Descending):
+```ts
+import { PivotTable } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const CodeExample = () => {
+  return (
+    <PivotTable
+      dataSet={DM.DataSource}
+      dataOptions={{
+        rows: [
+          DM.Commerce.Condition,
+          {
+            column: DM.Commerce.AgeRange,
+            sortType: {
+              direction: 'sortDesc',
+              by: {
+                valuesIndex: 0,
+              },
+            },
+          },
+        ],
+        values: [
+          measureFactory.sum(DM.Commerce.Revenue, 'Revenue'),
+          measureFactory.sum(DM.Commerce.Quantity, 'Units'),
+        ],
+      }}
+      styleOptions={{
+        rowsPerPage: 12,
+        height: 425,
+        width: 800,
+      }}
+    />
+  );
+};
+
+export default CodeExample;
+```
+
+<img src="../../../img/pivot-table-example-4.png" width="800px" />
+
+Grand totals across rows and columns:
+```ts
+import { PivotTable } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const CodeExample = () => {
+  return (
+    <PivotTable
+      dataSet={DM.DataSource}
+      dataOptions={{
+        rows: [
+          {
+            column: DM.Commerce.Date.Years,
+            dateFormat: 'yyyy',
+            name: 'Year',
+          },
+          DM.Commerce.Condition,
+        ],
+        columns: [DM.Commerce.AgeRange],
+        values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+        grandTotals: {
+          rows: true,
+          columns: true,
+        },
+      }}
+      styleOptions={{
+        rowsPerPage: 15,
+        height: 550,
+        width: 900,
+        totalsColor: true,
+        headersColor: true,
+      }}
+    />
+  );
+};
+
+export default CodeExample;
+```
+
+<img src="../../../img/pivot-table-example-5.png" width="800px" />
+
+Grand totals plus a subtotal row per `Year`, via [PivotTableDataOptions.rows](../interfaces/interface.PivotTableDataOptions.md#rows)' `includeSubTotals`:
+```ts
+import { PivotTable } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const CodeExample = () => {
+  return (
+    <PivotTable
+      dataSet={DM.DataSource}
+      dataOptions={{
+        rows: [
+          {
+            column: DM.Commerce.Date.Years,
+            dateFormat: 'yyyy',
+            name: 'Year',
+            includeSubTotals: true,
+          },
+          DM.Commerce.Condition,
+        ],
+        columns: [DM.Commerce.AgeRange],
+        values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+        grandTotals: {
+          rows: true,
+          columns: true,
+        },
+      }}
+      styleOptions={{
+        rowsPerPage: 15,
+        height: 550,
+        width: 900,
+        totalsColor: true,
+        headersColor: true,
+      }}
+    />
+  );
+};
+
+export default CodeExample;
+```
+
+<img src="../../../img/pivot-table-example-6.png" width="800px" />
 
 ## Remarks
 

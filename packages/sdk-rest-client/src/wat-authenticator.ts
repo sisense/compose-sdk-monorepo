@@ -3,7 +3,7 @@ import { normalizeUrl } from '@sisense/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
-import { errorInterceptor } from './interceptors.js';
+import { getErrorInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
 import { TranslatableError } from './translation/translatable-error.js';
 
@@ -43,7 +43,7 @@ export class WatAuthenticator extends BaseAuthenticator {
           'Content-Type': 'application/json',
         },
         body: this.body,
-      }).catch(errorInterceptor);
+      }).catch(getErrorInterceptor(this, { url: this.url, method: 'POST' }));
 
       if (response.ok) {
         const responseJson: WebSessionTokenResponse = await response.json();
@@ -74,7 +74,6 @@ export class WatAuthenticator extends BaseAuthenticator {
 
 /**
  * Checks if an authenticator is a WatAuthenticator.
- *
  * @param authenticator - the authenticator to check
  * @internal
  */

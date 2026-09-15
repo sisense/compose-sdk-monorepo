@@ -16,6 +16,9 @@ describe('getCustomPaginationStyles', () => {
     const result = getCustomPaginationStyles(themeSettings);
 
     const expectedStyles = {
+      '& .MuiPagination-ul': {
+        flexWrap: 'nowrap',
+      },
       '& .MuiPaginationItem-circular.Mui-selected': {
         color: 'black',
       },

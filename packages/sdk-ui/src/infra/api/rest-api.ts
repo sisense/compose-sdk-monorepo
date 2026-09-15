@@ -52,6 +52,11 @@ type GetDashboardOptions = {
   expand?: readonly string[];
   sharedMode?: boolean;
   adminAccess?: boolean;
+  /**
+   * Suppresses the error notification hook for this request. Used by best-effort
+   * fallback lookups whose failures are intentionally swallowed by the caller.
+   */
+  skipErrorNotification?: boolean;
 };
 
 export class RestApi {
@@ -125,17 +130,16 @@ export class RestApi {
    * Get a specific dashboard using the legacy API version
    */
   public getDashboardLegacy = (dashboardOid: string, options: GetDashboardOptions = {}) => {
-    const { adminAccess } = options;
+    const { adminAccess, skipErrorNotification } = options;
     const queryParams = new URLSearchParams({
       ...(adminAccess && { adminAccess: 'true' }),
     }).toString();
-    return this.httpClient
-      .get<DashboardDto>(`api/dashboards/${dashboardOid}?${queryParams}`)
-      .catch(() => {
-        // when error is encountered, API may return only status code 422 without informative error message
-        // to remedy, catch error and throw a more informative error message
-        throw new TranslatableError('errors.dashboardInvalidIdentifier', { dashboardOid });
-      });
+    const url = `api/dashboards/${dashboardOid}?${queryParams}`;
+    return this.httpClient.get<DashboardDto>(url, {}, { skipErrorNotification }).catch(() => {
+      // when error is encountered, API may return only status code 422 without informative error message
+      // to remedy, catch error and throw a more informative error message
+      throw new TranslatableError('errors.dashboardInvalidIdentifier', { dashboardOid });
+    });
   };
 
   /**

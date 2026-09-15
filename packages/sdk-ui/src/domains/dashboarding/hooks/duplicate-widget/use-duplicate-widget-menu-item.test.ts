@@ -10,6 +10,16 @@ import {
   type UseDuplicateWidgetMenuItemParams,
 } from './use-duplicate-widget-menu-item.js';
 
+vi.mock('react-i18next', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('react-i18next')>();
+  return {
+    ...mod,
+    useTranslation: () => ({
+      t: (key: string) => (key === 'widgetHeader.menu.duplicateWidget' ? 'Duplicate Widget' : key),
+    }),
+  };
+});
+
 const createMinimalWidget = (overrides?: Partial<WidgetProps>): WidgetProps =>
   ({
     id: 'widget-1',
@@ -82,7 +92,7 @@ describe('useDuplicateWidgetMenuItem', () => {
     expect(duplicateItem).toMatchObject({
       type: 'action',
       id: WidgetHeaderMenuTargets.DuplicateWidget,
-      caption: 'Duplicate widget',
+      caption: 'Duplicate Widget',
     });
     expect(typeof duplicateItem?.onClick).toBe('function');
   });
@@ -416,6 +426,47 @@ describe('useDuplicateWidgetMenuItem', () => {
     expect(newTabbers['server-widget-oid']).toEqual(tabberConfig);
   });
 
+  it('when persistence addWidget rejects, leaves local state untouched and logs the failure', async () => {
+    const widgets = [createMinimalWidget({ id: 'w1' })];
+    const setWidgets = vi.fn();
+    const setWidgetsLayout = vi.fn();
+    const setWidgetsOptions = vi.fn();
+    const setTabbersConfig = vi.fn();
+    const error = new Error('server rejected the widget');
+    const addWidget = vi.fn().mockRejectedValue(error);
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const params: UseDuplicateWidgetMenuItemParams = {
+      widgets,
+      setWidgets,
+      widgetsLayout: createLayout('w1'),
+      setWidgetsLayout,
+      setWidgetsOptions,
+      setTabbersConfig,
+      enabled: true,
+      persistence: { addWidget },
+    };
+
+    const { result } = renderHook(() => useDuplicateWidgetMenuItem(params));
+    const onClick = getDuplicateMenuItemOnClick(result.current.widgets[0]!);
+
+    await act(async () => {
+      onClick?.();
+    });
+
+    expect(addWidget).toHaveBeenCalledTimes(1);
+    // The clone is never added locally, so the dashboard does not show a widget the server rejected.
+    expect(setWidgets).not.toHaveBeenCalled();
+    expect(setWidgetsLayout).not.toHaveBeenCalled();
+    expect(setWidgetsOptions).not.toHaveBeenCalled();
+    expect(setTabbersConfig).not.toHaveBeenCalled();
+    expect(consoleError).toHaveBeenCalledWith(
+      '[useDuplicateWidgetMenuItem] Failed to persist duplicated widget:',
+      error,
+    );
+
+    consoleError.mockRestore();
+  });
+
   it('defaults enabled to false when not provided', () => {
     const widgets = [createMinimalWidget({ id: 'w1' })];
     const params: UseDuplicateWidgetMenuItemParams = {
@@ -431,4 +482,27 @@ describe('useDuplicateWidgetMenuItem', () => {
     expect(result.current.widgets).toEqual(widgets);
     expect(result.current.widgets[0]).not.toHaveProperty('config.header.menu.items');
   });
+
+  it.each(['filter', 'narrative'] as const)(
+    'adds no duplicate menu item to a %s widget while the chart beside it gets one',
+    (widgetType) => {
+      const widgets = [
+        createMinimalWidget({ id: 'w1', widgetType } as Partial<WidgetProps>),
+        createMinimalWidget({ id: 'w2' }),
+      ];
+      const params: UseDuplicateWidgetMenuItemParams = {
+        widgets,
+        setWidgets: vi.fn(),
+        widgetsLayout: createLayout('w1'),
+        setWidgetsLayout: vi.fn(),
+        setWidgetsOptions: vi.fn(),
+        enabled: true,
+      };
+
+      const { result } = renderHook(() => useDuplicateWidgetMenuItem(params));
+
+      expect(getDuplicateMenuItemOnClick(result.current.widgets[0])).toBeUndefined();
+      expect(getDuplicateMenuItemOnClick(result.current.widgets[1])).toBeDefined();
+    },
+  );
 });

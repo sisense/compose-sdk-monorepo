@@ -57,13 +57,24 @@ export type KpiChartData = {
    * Raw value of the category cell the headline was read from (e.g. `'2013-01-01T00:00:00'`),
    * as opposed to {@link valuePeriodMs}'s parsed epoch. This is the form every other chart's
    * `entries.category` carries, so it's what downstream filter builders (cross-filtering, JTD)
-   * can parse. Set only when the headline is a single bucket — never for `valueMode: 'total'`.
+   * can parse. Set only when the headline is a single bucket — so not for a `valueMode: 'total'`
+   * aggregate, barring the marker-less fallback below, which reads the last bucket after all.
    */
   categoryValue?: string | number;
+  /**
+   * Display text of the category cell the headline was read from — the caption's stand-in for
+   * {@link valuePeriodMs} when the category isn't a date, and therefore set only in that case.
+   * Follows {@link categoryValue}'s single-bucket rule otherwise.
+   */
+  categoryDisplayValue?: string;
   numberFormatConfig?: NumberFormatConfig;
   comparison?: KpiComparisonData;
-  /** `null` points are gaps in the sparkline, never rendered as zero. */
-  sparklinePoints?: { x: number; y: number | null }[];
+  /**
+   * `null` points are gaps in the sparkline, never rendered as zero. `x` is the bucket's epoch
+   * for a date category and its plain ordinal otherwise, in which case `categoryDisplayValue`
+   * carries the bucket's own label — see `getKpiChartData`.
+   */
+  sparklinePoints?: { x: number; y: number | null; categoryDisplayValue?: string }[];
 };
 
 /**

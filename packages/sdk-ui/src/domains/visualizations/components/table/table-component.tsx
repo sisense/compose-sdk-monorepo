@@ -16,6 +16,7 @@ import { LoadingOverlay } from '@/shared/components/loading-overlay';
 import { NoResultsOverlay } from '@/shared/components/no-results-overlay/no-results-overlay';
 
 import { TableProps } from '../../../../props';
+import { withForecastRangeColumns } from '../../core/chart-data-options/advanced-analytics-table-columns';
 import {
   translateTableDataOptions,
   withUniqueMeasureNames,
@@ -27,6 +28,12 @@ import { orderBy } from '../../core/chart-data-processor/table-processor';
 import { updateInnerDataOptionsSort } from '../../core/chart-data/table-data';
 import { calcTableContentHeight, TABLE_NO_RESULTS_HEIGHT } from './calc-table-height';
 import { formatRowCount } from './helpers/format-row-count';
+import {
+  getPaginationFooterLayout,
+  PAGINATION_FOOTER_PADDING,
+  ROWS_RANGE_FONT_SIZE,
+  TOTAL_ROWS_FONT_SIZE,
+} from './helpers/pagination-footer-layout';
 import { useTableData } from './hooks/use-table-data';
 import { useTableDataTable } from './hooks/use-table-datatable';
 import { PureTable } from './pure-table';
@@ -38,9 +45,6 @@ export const DEFAULT_TABLE_ROWS_PER_PAGE = 25;
 
 /** How many pages of data will be loaded in one query */
 export const PAGES_BATCH_SIZE = 10;
-
-/** How many page-number links to show at each boundary of the pagination control. */
-const PAGINATION_BOUNDARY_COUNT = 2;
 
 /**
  * Component that renders a table with aggregation and pagination.
@@ -68,12 +72,17 @@ export const TableComponent = ({
     [filters],
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const paginationEl = useRef(null);
 
-  const { dataOptions: translatedDataOptions, mapping: translatedDataColumnNamesMapping } = useMemo(
-    () => withUniqueMeasureNames(translateTableDataOptions(dataOptions)),
-    [dataOptions],
-  );
+  const { dataOptions: translatedDataOptions, mapping: translatedDataColumnNamesMapping } =
+    useMemo(() => {
+      // Trend/forecast synthesizes measures the backend computes from a live query — with no
+      // query (a static in-memory `dataSet`), there's no result for them, so leave `.trend`/
+      // `.forecast` unexpanded rather than crash on a measure the static data can't satisfy.
+      const { dataOptions: uniqueNamedOptions, mapping } = withUniqueMeasureNames(
+        translateTableDataOptions(dataOptions, { includeTrendAndForecast: isDataSource(dataSet) }),
+      );
+      return { dataOptions: withForecastRangeColumns(uniqueNamedOptions), mapping };
+    }, [dataOptions, dataSet]);
 
   const designOptions = useMemo(
     () => translateTableStyleOptionsToDesignOptions(styleOptions),
@@ -141,6 +150,19 @@ export const TableComponent = ({
     filterList,
     filterRelations,
   ]);
+
+  // `dataTable` can shrink to fewer pages than `currentPage` (a narrower live cross-filter, or
+  // `onDataReady` returning fewer rows) — clamp so a page the shrunk data no longer has doesn't
+  // render an inverted "Rows 26-25" range.
+  //
+  // The bound is absolute, not relative to `dataTable`: for a query-backed table `dataTable` holds
+  // only the loaded batch, so its length alone would clamp every page past the first batch away.
+  useEffect(() => {
+    if (!dataTable) return;
+    const lastAvailableRow = rowCount ?? (loadedRowRange?.start ?? 0) + dataTable.rows.length;
+    const maxPage = Math.max(Math.ceil(lastAvailableRow / rowsPerPage), 1);
+    setCurrentPage((page) => Math.min(page, maxPage));
+  }, [dataTable, rowsPerPage, rowCount, loadedRowRange]);
 
   const onPageChange = useCallback(
     (page: number) => {
@@ -281,6 +303,28 @@ export const TableComponent = ({
           rowCount !== undefined
             ? Math.max(1, Math.ceil(rowCount / rowsPerPage))
             : Math.ceil(dataTable.rows.length / rowsPerPage);
+        const firstRowOnPage = (currentPage - 1) * rowsPerPage + 1;
+        const lastRowOnPage = firstRowOnPage + paginatedTable.rows.length - 1;
+        const rowsRangeText = t('chart.table.rowsRange', {
+          start: firstRowOnPage,
+          end: lastRowOnPage,
+        });
+        const totalRowsText =
+          rowCount !== undefined
+            ? t('chart.table.totalRows', {
+                formattedCount: formatRowCount(rowCount, i18n.language),
+              })
+            : undefined;
+        const { paginationSize, boundaryCount, siblingCount, showTotalRows, showRowsRange } =
+          getPaginationFooterLayout({
+            width: size.width,
+            pagesCount,
+            widestRowsRangeText: t('chart.table.rowsRange', {
+              start: (pagesCount - 1) * rowsPerPage + 1,
+              end: rowCount ?? pagesCount * rowsPerPage,
+            }),
+            totalRowsText,
+          });
 
         return (
           <div
@@ -304,37 +348,61 @@ export const TableComponent = ({
               height={size.height - PAGINATION_HEIGHT}
               onSortUpdate={onSortUpdate}
             />
+            {/*
+             * Three equal-sided columns keep the control centred whichever labels end up rendered.
+             * The footer's height is fixed, so it clips: every child is pinned to a single line and
+             * `getPaginationFooterLayout` drops whatever no longer fits.
+             */}
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'row',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)',
+                width: '100%',
                 alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
+                height: PAGINATION_HEIGHT,
+                paddingInline: PAGINATION_FOOTER_PADDING,
+                boxSizing: 'border-box',
+                overflow: 'hidden',
               }}
             >
-              {rowCount !== undefined && (
-                <span
-                  data-testid="table-total-rows"
-                  style={{
-                    color: themeSettings.chart.secondaryTextColor,
-                    fontFamily: themeSettings.typography.fontFamily,
-                    fontSize: '12px',
-                  }}
-                >
-                  {t('chart.table.totalRows', {
-                    formattedCount: formatRowCount(rowCount, i18n.language),
-                  })}
-                </span>
-              )}
+              <div style={{ justifySelf: 'start', minWidth: 0, overflow: 'hidden' }}>
+                {showTotalRows && (
+                  <span
+                    data-testid="table-total-rows"
+                    style={{
+                      whiteSpace: 'nowrap',
+                      color: themeSettings.chart.secondaryTextColor,
+                      fontFamily: themeSettings.typography.fontFamily,
+                      fontSize: TOTAL_ROWS_FONT_SIZE,
+                    }}
+                  >
+                    {totalRowsText}
+                  </span>
+                )}
+              </div>
               <Pagination
-                ref={paginationEl}
                 page={currentPage}
                 count={pagesCount}
-                boundaryCount={rowCount !== undefined ? PAGINATION_BOUNDARY_COUNT : undefined}
+                size={paginationSize}
+                boundaryCount={boundaryCount}
+                siblingCount={siblingCount}
                 onChange={(event, page) => onPageChange(page)}
                 sx={getCustomPaginationStyles(themeSettings)}
               />
+              <div style={{ justifySelf: 'end', minWidth: 0, overflow: 'hidden' }}>
+                {showRowsRange && (
+                  <span
+                    data-testid="table-pagination-rows-range"
+                    style={{
+                      whiteSpace: 'nowrap',
+                      color: themeSettings.typography.primaryTextColor,
+                      fontSize: ROWS_RANGE_FONT_SIZE,
+                    }}
+                  >
+                    {rowsRangeText}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         );

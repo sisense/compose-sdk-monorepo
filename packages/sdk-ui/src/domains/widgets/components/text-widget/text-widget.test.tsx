@@ -2,6 +2,8 @@
 import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { getHeaderItemTestId, HEADER_ITEM_TESTID_PREFIX } from '@/domains/shared/header';
+
 import { WidgetHeaderTargets } from '../../shared/widget-header/widget-header-targets';
 import { isTextWidgetProps, TextWidget } from './text-widget';
 import { TextWidgetProps } from './types';
@@ -188,7 +190,9 @@ describe('TextWidget', () => {
         const { container, queryByTestId } = render(<TextWidget {...props} />);
 
         expect(container.querySelector('.text-widget-header')).toBeInTheDocument();
-        expect(queryByTestId('header-item-widget-header-info-button')).not.toBeInTheDocument();
+        expect(
+          queryByTestId(getHeaderItemTestId(WidgetHeaderTargets.InfoButton)),
+        ).not.toBeInTheDocument();
       });
 
       it('renders only the spacers when nothing is configured — a text widget has no title', () => {
@@ -202,9 +206,14 @@ describe('TextWidget', () => {
         };
         const { container } = render(<TextWidget {...props} />);
 
+        // Only the row's direct children are cells — item content may carry `csdk-` ids of its own.
         const renderedIds = Array.from(
-          container.querySelectorAll('[data-testid^="header-item-"]'),
-        ).map((cell) => (cell.getAttribute('data-testid') as string).replace('header-item-', ''));
+          container.querySelectorAll(
+            `[data-testid="header-items-row"] > [data-testid^="${HEADER_ITEM_TESTID_PREFIX}"]`,
+          ),
+        ).map((cell) =>
+          (cell.getAttribute('data-testid') as string).slice(HEADER_ITEM_TESTID_PREFIX.length),
+        );
         expect(renderedIds).toEqual([
           WidgetHeaderTargets.TitleAlignmentSpacer,
           WidgetHeaderTargets.Spacer,
@@ -228,7 +237,9 @@ describe('TextWidget', () => {
         const headerElement = container.querySelector('.text-widget-header') as HTMLElement;
         expect(getComputedStyle(headerElement).pointerEvents).toBe('none');
 
-        const spacers = container.querySelectorAll<HTMLElement>('[data-testid^="header-item-"]');
+        const spacers = container.querySelectorAll<HTMLElement>(
+          `[data-testid^="${HEADER_ITEM_TESTID_PREFIX}"]`,
+        );
         expect(spacers.length).toBeGreaterThan(0);
         spacers.forEach((spacer) => expect(spacer.style.pointerEvents).toBe('none'));
       });
@@ -255,7 +266,7 @@ describe('TextWidget', () => {
         };
         const { getByTestId } = render(<TextWidget {...props} />);
 
-        expect(getByTestId('header-item-custom').style.pointerEvents).toBe('auto');
+        expect(getByTestId(getHeaderItemTestId('custom')).style.pointerEvents).toBe('auto');
       });
     });
 

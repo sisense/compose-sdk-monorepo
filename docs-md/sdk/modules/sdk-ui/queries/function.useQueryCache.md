@@ -19,3 +19,17 @@ How to enable query cache see in [Query Caching guide](/guides/sdk/guides/client
  } \| `undefined`
 
 QueryCacheClient instance
+
+## Example
+
+```ts
+import { useQueryCache } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+  const queryCache = useQueryCache();
+
+  return <button onClick={() => queryCache?.clear()}>Clear query cache</button>;
+};
+
+export default CodeExample;
+```

@@ -2,6 +2,7 @@ import { HttpClient } from '@sisense/sdk-rest-client';
 import { merge } from 'ts-deepmerge';
 
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings.js';
+import { DEFAULT_NOTIFICATION_CATEGORIES } from '@/infra/notifications/types.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
 import { QUERY_DEFAULT_LIMIT, SYSTEM_TENANT_NAME } from '@/shared/const.js';
 
@@ -38,7 +39,6 @@ type KnownAiFeatureFlags = {
  * (see {@link KnownAiFeatureFlags}); arbitrary string-keyed flags are type-allowed
  * for forward compatibility (unknown keys are readable as `boolean | undefined`)
  * without requiring a CSDK type bump.
- *
  * @sisenseInternal
  */
 export type AiFeatureFlags = KnownAiFeatureFlags & {
@@ -85,7 +85,6 @@ function mapAiSettingsSlice(features: FeatureMap): AiSettingsSlice {
 
 /**
  * Application settings
- *
  * @sisenseInternal
  */
 export type AppSettings = Required<ConfigurableAppSettings> &
@@ -99,7 +98,6 @@ type ConfigurableAppSettings = AppConfig;
 
 /**
  * User role permissions
- *
  * @internal
  */
 type RoleManifest = {
@@ -187,7 +185,6 @@ type ServerSettings = {
     };
     /**
      * User role permissions
-     *
      * @internal
      */
     permissions: RoleManifest;
@@ -237,6 +234,9 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   errorBoundaryConfig: {
     alwaysShowErrorText: false,
   },
+  notificationsConfig: {
+    categories: { ...DEFAULT_NOTIFICATION_CATEGORIES },
+  },
   apiTelemetryHeaders: {},
   trackingConfig: {
     enabled: true,
@@ -262,7 +262,6 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
 
 /**
  * Gets the application settings
- *
  * @param customConfig - Custom application configuration
  * @param httpClient - Sisense REST API client
  * @param useDefaultPalette - Whether to use the default palette
@@ -296,7 +295,6 @@ export async function getAppSettings(
 
 /**
  * Translate Features to FeatureMap
- *
  * @param features - Features to be mapped
  * @returns FeatureMap
  */
@@ -312,7 +310,11 @@ function mapFeatures(features: Features): FeatureMap {
 
 async function loadAiSettings(httpClient: Pick<HttpClient, 'get'>) {
   try {
-    const ai = await httpClient.get<AiSettingsResponse>('api/v2/settings/ai');
+    const ai = await httpClient.get<AiSettingsResponse>(
+      'api/v2/settings/ai',
+      {},
+      { skipErrorNotification: true },
+    );
     return {
       narrative: {
         isEnabled: ai?.narration?.enabled === true,
@@ -335,7 +337,6 @@ function documentationUrlFromBrand(brand: unknown): string | null {
 
 /**
  * Loads the server settings
- *
  * @param httpClient - Sisense REST API client
  * @param isWat - Whether the application is running with WAT authentication
  * @returns - Server settings

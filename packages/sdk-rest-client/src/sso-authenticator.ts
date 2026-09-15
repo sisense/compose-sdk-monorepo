@@ -3,7 +3,7 @@ import { mergeUrlsWithParams, normalizeUrl } from '@sisense/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
-import { errorInterceptor } from './interceptors.js';
+import { getErrorInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
 import { TranslatableError } from './translation/translatable-error.js';
 
@@ -119,7 +119,6 @@ export class SsoAuthenticator extends BaseAuthenticator {
   /**
    * Attempts to authenticate the user via SSO.
    * If silent mode is enabled and supported, tries silent authentication first.
-   *
    * @param silent - Whether to attempt silent authentication first
    * @returns Promise resolving to authentication result
    */
@@ -184,7 +183,6 @@ export class SsoAuthenticator extends BaseAuthenticator {
 
   /**
    * Attempts silent authentication using an invisible iframe
-   *
    * @param loginUrl - The URL to load in the iframe
    */
   private async authenticateSilent(loginUrl: string): Promise<void> {
@@ -204,7 +202,6 @@ export class SsoAuthenticator extends BaseAuthenticator {
 
   /**
    * Checks the current authentication status with the server
-   *
    * @returns Promise with authentication status and login URL if needed
    * @throws {TranslatableError} If authentication check fails
    */
@@ -214,7 +211,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
     const response = await fetch(fetchUrl, {
       headers: { Internal: 'true' },
       credentials: 'include',
-    }).catch(errorInterceptor);
+    }).catch(getErrorInterceptor(this, { url: fetchUrl, method: 'GET' }));
 
     // covers the case when isAuth returns 200 with html in the body
     // (i.e. redirect to /app/main for deleted user)
@@ -246,7 +243,6 @@ export class SsoAuthenticator extends BaseAuthenticator {
 
 /**
  * Type guard to check if an authenticator is an SSO authenticator
- *
  * @param authenticator - The authenticator to check
  * @returns boolean indicating if the authenticator is an SSO authenticator
  * @internal

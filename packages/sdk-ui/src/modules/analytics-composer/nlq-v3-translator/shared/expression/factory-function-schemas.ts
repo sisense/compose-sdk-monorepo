@@ -77,6 +77,14 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
     { type: 'string', required: false }, // description
   ],
 
+  // A calculated dimension: the attribute counterpart of measureFactory.customFormula. Same
+  // title/formula/context shape, but consumed as a grouping key rather than an aggregation.
+  'attributeFactory.customFormula': [
+    { type: 'string', required: true, isName: true }, // title
+    { type: 'string', required: true }, // formula
+    { type: 'CustomFormulaContext', required: true }, // context
+  ],
+
   // Arithmetic operations
   'measureFactory.add': [
     { type: 'Measure | number', required: true },

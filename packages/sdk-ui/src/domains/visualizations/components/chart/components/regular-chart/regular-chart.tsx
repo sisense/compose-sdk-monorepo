@@ -124,10 +124,12 @@ export const RegularChart = (props: RegularChartProps) => {
     return prepareChartDesignOptions(chartType, dataOptions, styleOptions);
   }, [chartDataOptions, chartType, dataOptions, styleOptions, hasNoDimensions]);
 
+  // The SYNCED options (updated in the same state write as `data`), not `syncDataOptions`: the
+  // preparation memo keys off them, and only this pair is guaranteed to describe the same result.
   const chartData = useChartDataPreparation({
     dataSet,
     data,
-    chartDataOptions: syncDataOptions,
+    chartDataOptions: dataOptions,
     chartType,
     isForecastOrTrendChart,
     attributes,

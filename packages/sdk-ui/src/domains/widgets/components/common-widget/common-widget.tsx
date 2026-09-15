@@ -2,6 +2,7 @@ import {
   isChartWidgetProps,
   isCustomWidgetProps,
   isFilterWidgetProps,
+  isNarrativeWidgetProps,
   isPivotTableWidgetProps,
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
@@ -10,6 +11,7 @@ import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 import { ChartWidget } from '../chart-widget';
 import { CustomWidget } from '../custom-widget';
 import { FilterWidget } from '../filter-widget';
+import { NarrativeWidget } from '../narrative-widget';
 import { PivotTableWidget } from '../pivot-table-widget';
 import { TextWidget } from '../text-widget';
 import { CommonWidgetProps } from './types';
@@ -27,6 +29,7 @@ export const CommonWidget: React.FC<CommonWidgetProps> = (widgetProps) => {
       {isCustomWidgetProps(widgetProps) && <CustomWidget {...widgetProps} />}
       {isPivotTableWidgetProps(widgetProps) && <PivotTableWidget {...widgetProps} />}
       {isTextWidgetProps(widgetProps) && <TextWidget {...widgetProps} />}
+      {isNarrativeWidgetProps(widgetProps) && <NarrativeWidget {...widgetProps} />}
       {isChartWidgetProps(widgetProps) && (
         <ChartWidget {...widgetProps} highlightSelectionDisabled={true} />
       )}

@@ -124,6 +124,34 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'Tabber-Widget-Konfiguration ist ungültig',
   },
+  notifications: {
+    dismiss: 'Benachrichtigung schließen',
+    auth: {
+      sessionExpiredTitle: 'Sitzung abgelaufen',
+      sessionExpiredMessage:
+        'Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an, um fortzufahren.',
+      authenticationFailedTitle: 'Authentifizierung fehlgeschlagen',
+      authenticationFailedMessage:
+        'Die angegebenen Anmeldedaten wurden von der Sisense-Instanz abgelehnt.',
+    },
+    permission: {
+      forbiddenTitle: 'Zugriff verweigert',
+      forbiddenMessage: 'Sie haben keine Berechtigung, auf diese Daten zuzugreifen.',
+    },
+    network: {
+      unreachableTitle: 'Verbindungsproblem',
+      unreachableMessage: 'Die Sisense-Instanz konnte nicht erreicht werden.',
+    },
+    server: {
+      errorTitle: 'Serverfehler',
+      errorMessage:
+        'Die Sisense-Instanz hat einen Fehler zurückgegeben. Versuchen Sie es später erneut.',
+    },
+    general: {
+      requestFailedTitle: 'Anfrage fehlgeschlagen',
+      requestFailedMessage: 'Eine Anfrage an die Sisense-Instanz ist fehlgeschlagen.',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Keine Ergebnisse',
   filters: 'Filter',
@@ -233,6 +261,7 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Alle außer {{count}}',
     setupTitle: 'Filter-Widget einrichten',
     setupSubtitle: 'Wählen Sie eine Dimension und konfigurieren Sie, wie der Filter funktioniert',
+    emptySetup: 'Filter einrichten',
     conditionUnsupported: 'Bedingung ist für Text- und numerische Felder verfügbar',
     conditionNotRepresentable: 'Diese Bedingung kann hier nicht bearbeitet werden',
     controls: {
@@ -252,6 +281,20 @@ const translation: TranslationDictionary = {
       betweenMax: 'Maximum',
       selectValues: '{{level}} auswählen',
       clear: 'Löschen',
+    },
+    calendar: {
+      selectDates: 'Datumsangaben auswählen',
+      multipleDaysHint: 'Sie können mehrere Tage auswählen',
+      formatError: 'Format {{- format}} einhalten',
+      nonexistent: 'Dieses Datum existiert nicht',
+      chooseDate: 'Datum auswählen',
+      chooseDates: 'Datumsangaben auswählen',
+      previousMonth: 'Vorheriger Monat',
+      nextMonth: 'Nächster Monat',
+      previousYear: 'Vorheriges Jahr',
+      nextYear: 'Nächstes Jahr',
+      openCalendar: 'Kalender öffnen',
+      clearDate: 'Datum löschen',
     },
   },
   unsupportedFilterMessage: 'Nicht unterstützter Filter (auf Datenabfrage angewendet)',
@@ -286,6 +329,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: 'Widget löschen',
+      duplicateWidget: 'Widget duplizieren',
       renameWidget: 'Widget umbenennen',
       distributeEqualWidth: 'Gleichmäßig in dieser Zeile verteilen',
       download: 'Herunterladen',
@@ -298,6 +342,21 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       'Unbekannter benutzerdefinierter Widget-Typ: {{customWidgetType}}. Bitte registrieren Sie dieses benutzerdefinierte Widget.',
+  },
+  narrativeWidget: {
+    generate: 'Narrativ generieren',
+    regenerate: 'Neu generieren',
+    retry: 'Generierung wiederholen',
+    disclaimer: 'Inhalte werden von KI unterstützt, daher sind Fehler möglich.',
+    updatedAt: 'Aktualisiert {{timestamp}}',
+    copy: 'In die Zwischenablage kopieren',
+    copied: 'Kopiert',
+    creditsUsed: '{{usagePercentage}}% der KI-Credits wurden verbraucht.',
+    noDataTitle: 'Keine Dashboard-Daten verfügbar',
+    noDataDescription: 'Sobald Dashboard-Daten verfügbar sind, können Sie ein Narrativ generieren.',
+    failedTitle: 'Das Narrativ konnte nicht generiert werden',
+    failedDescription:
+      'Bitte versuchen Sie es später erneut. Wenn das Problem weiterhin besteht, wenden Sie sich an Ihren Administrator.',
   },
   ai: {
     analyticsChatbot: 'Analytik-Chatbot',
@@ -510,6 +569,7 @@ const translation: TranslationDictionary = {
       label: 'Mit Filter-Widget verknüpft',
       tooltip:
         'Dieser Filter kann nicht über das Filterfenster bearbeitet werden. Ändern Sie die Werte direkt im Dashboard.',
+      infoAriaLabel: 'Info zur Verknüpfung mit dem Filter-Widget',
     },
   },
   chart: {
@@ -525,6 +585,7 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Datentabelle',
       totalRows: 'Gesamt: {{formattedCount}} Zeilen',
+      rowsRange: 'Zeilen {{start}}-{{end}}',
     },
     sankey: {
       alerts: {

@@ -44,6 +44,7 @@ describe('kpi - design options', () => {
           text: undefined,
           showValueTitle: true,
           showCategoryTitle: true,
+          align: 'space-between',
         });
       });
 
@@ -57,6 +58,7 @@ describe('kpi - design options', () => {
           text: 'Custom title',
           showValueTitle: true,
           showCategoryTitle: true,
+          align: 'space-between',
         });
       });
 
@@ -70,7 +72,16 @@ describe('kpi - design options', () => {
           text: undefined,
           showValueTitle: false,
           showCategoryTitle: false,
+          align: 'space-between',
         });
+      });
+
+      it('honors an explicit align override', () => {
+        const result = translateKpiStyleOptionsToDesignOptions(
+          { title: { align: 'center' } },
+          withoutCategory,
+        );
+        expect(result.title.align).toBe('center');
       });
     });
 

@@ -8,16 +8,29 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * For another way do display data on a map, see {@link @sisense/sdk-ui!ScattermapChart | `ScattermapChart`}.
  *
- * ## Example
- *
+ * @example
  * Areamap chart displaying total revenue per country from the Sample ECommerce data model. The total revenue amount is indicated by the colors on the map.
  *
- * <iframe
- *  src='https://csdk-playground.sisense.com/?example=charts%2Fmap-area&mode=docs'
- *  width='100%'
- *  height='870'
- *  style='max-width:800px; border:none;'
- * />
+ * ```tsx
+ * import { AreamapChart } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const CodeExample = () => (
+ *   <AreamapChart
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       geo: [DM.Country.Country],
+ *       color: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     }}
+ *     styleOptions={{ mapType: 'world' }}
+ *   />
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
+ * <img src="media://areamap-chart-example-1.png" width="700px" />
  *
  * @param props - Areamap chart properties
  * @returns Areamap Chart component

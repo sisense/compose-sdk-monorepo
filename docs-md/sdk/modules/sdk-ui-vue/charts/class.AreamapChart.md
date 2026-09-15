@@ -8,36 +8,34 @@ A Vue component for visualizing geographical data as polygons on a map.
 
 ## Example
 
-Here's how you can use the AreamapChart component in a Vue application:
 ```vue
-<template>
-   <AreamapChart
-     :dataOptions="areamapChartProps.dataOptions"
-     :dataSet="areamapChartProps.dataSet"
-     :filters="areamapChartProps.filters"
-   />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { AreamapChart, type AreamapChartProps } from '@sisense/sdk-ui-vue';
+import { AreamapChart, type AreamapChartDataOptions, type AreamapStyleOptions } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-
- const areamapChartProps = ref<AreamapChartProps>({
-   dataSet: DM.DataSource,
-   dataOptions: {
-     geo: [DM.DimCountries.CountryName],
-     color: [{ column: measureTotalRevenue, title: 'Total Revenue' }],
-   },
-   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
- });
+const chartProps = ref<{
+  dataOptions: AreamapChartDataOptions;
+  styleOptions: AreamapStyleOptions;
+}>({
+  dataOptions: {
+    geo: [DM.Country.Country],
+    color: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+  },
+  styleOptions: { mapType: 'world' },
+});
 </script>
+
+<template>
+  <AreamapChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+    :styleOptions="chartProps.styleOptions"
+  />
+</template>
 ```
-<img src="../../../img/vue-areamap-chart-example.png" width="600px" />
+<img src="../../../img/areamap-chart-example-1.png" width="700px" />
 
 ## Param
 

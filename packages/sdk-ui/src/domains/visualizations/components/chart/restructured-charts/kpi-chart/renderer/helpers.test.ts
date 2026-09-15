@@ -438,6 +438,36 @@ describe('toKpiRenderOptions / toKpiDataPoint', () => {
   });
 });
 
+describe('toKpiRenderOptions with a non-date category', () => {
+  it("carries the bucket's display text through, for the caption and the sparkline tooltip", () => {
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 90,
+      valueTitle: 'Total Revenue',
+      categoryValue: 'Female',
+      categoryDisplayValue: 'Female',
+      sparklinePoints: [
+        { x: 0, y: 120, categoryDisplayValue: 'Male' },
+        { x: 1, y: 90, categoryDisplayValue: 'Female' },
+      ],
+    };
+
+    expect(toKpiRenderOptions(chartData, t)).toEqual({
+      value: 90,
+      valueTitle: 'Total Revenue',
+      valueColor: undefined,
+      valuePeriodMs: undefined,
+      categoryDisplayValue: 'Female',
+      comparison: undefined,
+      sparklinePoints: [
+        { x: 0, y: 120, categoryDisplayValue: 'Male' },
+        { x: 1, y: 90, categoryDisplayValue: 'Female' },
+      ],
+    });
+  });
+});
+
 describe('comparisonMeasureColumn', () => {
   it('reads the measure of a measure-backed comparison', () => {
     expect(comparisonMeasureColumn({ type: 'delta', value: styledCost })).toBe(styledCost);
@@ -760,5 +790,11 @@ describe('summarizeComparisonForAria', () => {
     expect(
       summarizeComparisonForAria({ type: 'value', value: 100, label: 'Total Cost' }, undefined, t),
     ).toBe('Total Cost 100');
+  });
+
+  it('voices only the number for a value comparison whose label was dropped as a bare number', () => {
+    expect(summarizeComparisonForAria({ type: 'value', value: 100, label: '' }, undefined, t)).toBe(
+      '100',
+    );
   });
 });

@@ -24,3 +24,15 @@ See also functions [createDimension](function.createDimension.md) and [createDat
 [`Attribute`](../interfaces/interface.Attribute.md)
 
 An Attribute instance
+
+## Example
+
+```ts
+import { createAttribute } from '@sisense/sdk-data';
+
+const revenue = createAttribute({
+  name: 'Revenue',
+  type: 'numeric-attribute',
+  expression: '[Commerce.Revenue]',
+});
+```

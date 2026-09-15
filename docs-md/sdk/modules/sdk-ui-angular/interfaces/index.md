@@ -90,6 +90,7 @@ TypeScript interfaces for components and services listed above
 - [LineStyleOptions](interface.LineStyleOptions.md)
 - [Member](interface.Member.md)
 - [MemberFilterTileProps](interface.MemberFilterTileProps.md)
+- [NarrativeWidgetProps](interface.NarrativeWidgetProps.md) <Badge type="beta" text="Beta" />
 - [NumericBarIndicatorStyleOptions](interface.NumericBarIndicatorStyleOptions.md)
 - [NumericSimpleIndicatorStyleOptions](interface.NumericSimpleIndicatorStyleOptions.md)
 - [PieChartProps](interface.PieChartProps.md)

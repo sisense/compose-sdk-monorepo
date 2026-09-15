@@ -8,6 +8,16 @@ Props for [GetNlgInsights](../generative-ai/function.GetNlgInsights.md) componen
 
 ## Properties
 
+### aiContext
+
+> **aiContext**?: `string`
+
+Free-text guidance for the narrative summary — context the model can't infer from the data
+alone, e.g. `"amounts are in USD"` or `"ignore the March spike, known data issue"`. Forwarded
+to the narrative endpoint.
+
+***
+
 ### dataSource
 
 > **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

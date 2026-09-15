@@ -23,6 +23,9 @@ import {
   isScattermap,
 } from '../chart-options-processor/translations/types';
 import { isRange } from './../chart-options-processor/translations/types';
+import { withTrendForecastColumns } from './advanced-analytics-table-columns';
+import { AdaptMeasuresForQueryOptions } from './apply-styled-options-to-query';
+import { getColorConditionMeasures } from './coloring/conditional-coloring';
 import { translateBoxplotDataOptions } from './translate-boxplot-data-options';
 import { translateRangeChartDataOptions } from './translate-range-data-options';
 import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
@@ -48,6 +51,7 @@ import {
   TableDataOptionsInternal,
 } from './types';
 import {
+  isDerivedResultColumn,
   isMeasureColumn,
   normalizeAnyColumn,
   normalizeColumn,
@@ -90,27 +94,11 @@ export const translateCategoricalChartDataOptions = (
   };
 };
 
-/**
- * Extracts the hidden measures backing the value column's formula-driven conditional color
- * rules, so they get added to the query alongside it.
- */
-const getColorConditionMeasures = (
-  value: StyledMeasureColumn[] | undefined,
-): StyledMeasureColumn[] => {
-  const color = value?.[0]?.color;
-  if (!color || typeof color === 'string' || color.type !== 'conditional') {
-    return [];
-  }
-  return (color.conditions ?? [])
-    .filter((condition) => condition.valueMeasure)
-    .map((condition) => ({ column: condition.valueMeasure! }));
-};
-
 const translateIndicatorChartDataOptions = (
   indicatorChartDataOptions: IndicatorChartDataOptions,
 ): IndicatorChartDataOptionsInternal => {
   const value = indicatorChartDataOptions.value?.map((c) => normalizeMeasureColumn(c));
-  const colorConditionMeasures = getColorConditionMeasures(value);
+  const colorConditionMeasures = getColorConditionMeasures(value?.[0]?.color);
 
   return {
     value,
@@ -250,12 +238,28 @@ export function getMeasures(
   );
 }
 
-export function translateTableDataOptions(dataOptions: TableDataOptions): TableDataOptionsInternal {
-  return {
+/**
+ * Translates public {@link TableDataOptions} into the internal shape.
+ *
+ * @param dataOptions - The table data options to translate.
+ * @param options - When `includeTrendAndForecast` is `true` (the default), any measure column
+ * carrying `.trend`/`.forecast` is expanded into its base measure plus Trend/Forecast companion
+ * columns (reusing {@link adaptMeasuresForQuery} — the same synthesis the narrative path uses).
+ * Pass `includeTrendAndForecast: false` to leave `.trend`/`.forecast` unexpanded, e.g. for a
+ * caller that wants to decide separately whether/how to expand them.
+ */
+export function translateTableDataOptions(
+  dataOptions: TableDataOptions,
+  options?: AdaptMeasuresForQueryOptions,
+): TableDataOptionsInternal {
+  const normalized: TableDataOptionsInternal = {
     columns: dataOptions.columns
       .map((c) => normalizeAnyColumn(c))
       .map(updateStyledColumnSortForTable),
   };
+  return options?.includeTrendAndForecast === false
+    ? normalized
+    : withTrendForecastColumns(normalized);
 }
 
 /**
@@ -270,14 +274,18 @@ export function withUniqueMeasureNames(dataOptions: TableDataOptionsInternal): {
   dataOptions: TableDataOptionsInternal;
   mapping: DataColumnNamesMapping;
 } {
-  const measureColumns = dataOptions.columns.filter(isMeasureColumn) as StyledMeasureColumn[];
+  const isAliasableMeasureColumn = (
+    c: TableDataOptionsInternal['columns'][number],
+  ): c is StyledMeasureColumn => !isDerivedResultColumn(c) && isMeasureColumn(c);
+
+  const measureColumns = dataOptions.columns.filter(isAliasableMeasureColumn);
   const { measures: uniqueMeasures, mapping } = applyUniqueDataColumnsNames(
     measureColumns.map(translateColumnToMeasure),
   );
 
   let measureIdx = 0;
   const columns = dataOptions.columns.map((c) =>
-    isMeasureColumn(c) ? { ...c, column: uniqueMeasures[measureIdx++] } : c,
+    isAliasableMeasureColumn(c) ? { ...c, column: uniqueMeasures[measureIdx++] } : c,
   );
 
   return { dataOptions: { ...dataOptions, columns }, mapping };

@@ -290,6 +290,26 @@ export const customTypography = template(
   [withCardSize],
 );
 
+/**
+ * The sparkline draws the category series, so it takes that column's color. The headline keeps
+ * its own measure-driven color independently -- two slots, two colors.
+ */
+export const coloredSparkline = template(
+  {
+    chartType: 'kpi',
+    dataSet: kpiData,
+    dataOptions: {
+      value: { column: revenue, color: { type: 'uniform', color: '#7b68ee' } },
+      category: { column: months, color: '#2ea44f' },
+    } satisfies KpiChartDataOptions,
+    styleOptions: {
+      title: { text: 'Monthly Revenue' },
+      sparkline: { chartType: 'line' },
+    } satisfies KpiStyleOptions,
+  },
+  [withCardSize],
+);
+
 /** Conditional icons: a built-in named SVG on the value, a custom svg-path on the comparison. */
 export const conditionalIcons = template(
   {
@@ -330,6 +350,28 @@ export const conditionalIcons = template(
           },
         ],
       },
+    } satisfies KpiStyleOptions,
+  },
+  [withCardSize],
+);
+
+/**
+ * `title.align` packs the title text and the category caption together instead of spreading them
+ * to opposite edges, which is what the default `'space-between'` does. Shown here against a
+ * right-aligned card, so the title row and the value/comparison alignment are visibly independent.
+ */
+export const titleAlignment = template(
+  {
+    chartType: 'kpi',
+    dataSet: kpiData,
+    dataOptions: {
+      value: revenue,
+      category: months,
+      comparison: { type: 'previous-period' },
+    } satisfies KpiChartDataOptions,
+    styleOptions: {
+      title: { align: 'center' },
+      card: { textAlign: 'right' },
     } satisfies KpiStyleOptions,
   },
   [withCardSize],

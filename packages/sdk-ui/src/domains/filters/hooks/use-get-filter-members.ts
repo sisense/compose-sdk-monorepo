@@ -343,8 +343,7 @@ export const useGetFilterMembersInternal = ({
  *
  * Those members can be used to display a list of members in a third-party filter component such as Material UI Select.
  *
- * ## Example
- *
+ * @example
  * Retrieve selected members from a Filter on Country of the Sample ECommerce data model.
  *
  * ```tsx

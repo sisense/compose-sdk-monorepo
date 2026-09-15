@@ -2,11 +2,11 @@ import { type FunctionComponent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ExecuteQueryParams } from '@/domains/query-execution/types';
+import { getTranslatedDataOptions } from '@/domains/visualizations/components/chart/helpers/use-translated-data-options.js';
 import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import type { ChartProps } from '@/props';
 
-import { getTranslatedDataOptions } from '../chart-data-options/get-translated-data-options';
 import { translateTableDataOptions } from '../chart-data-options/translate-data-options';
 import { QUERY_DEFINITION_TEXT_STYLE } from './query-definition-style-constants';
 import { baseQueryParamsToViewModel } from './query-params-to-view-model';
@@ -118,10 +118,12 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
 
   return (
     <div
-      className={`csdk-flex csdk-flex-wrap csdk-items-center csdk-gap-1 csdk-max-w-[800px] ${
-        expanded || !showExpander ? '' : 'csdk-max-h-[3.5rem] csdk-overflow-hidden'
-      }`}
-      style={{ ...QUERY_DEFINITION_TEXT_STYLE, color: themeSettings.chart.textColor }}
+      className="csdk-flex csdk-flex-wrap csdk-items-center csdk-gap-1 csdk-max-w-[800px]"
+      style={{
+        ...QUERY_DEFINITION_TEXT_STYLE,
+        color: themeSettings.chart.textColor,
+        overflow: 'visible',
+      }}
     >
       {displayItems.map((item, index) =>
         item.type === 'connector' ? (

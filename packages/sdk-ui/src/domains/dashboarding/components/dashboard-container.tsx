@@ -105,7 +105,7 @@ export const DashboardContainer = ({
     <DashboardWrapper theme={themeSettings}>
       <ContentColumn theme={themeSettings} showRightBorder={!isFiltersPanelVisible}>
         {isHeaderVisible && <DashboardHeader items={items} config={headerConfig} />}
-        <ContentPanelWrapper responsive={isLayoutResponsive}>
+        <ContentPanelWrapper responsive={isLayoutResponsive} data-testid="csdk-widgets-panel">
           {editMode ? (
             <EditableLayout
               layout={layout}

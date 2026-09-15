@@ -36,6 +36,9 @@ export type { FilterSelectProps } from './filter-select';
 export { PeriodFilter } from './period-filter';
 export type { PeriodFilterProps } from './period-filter';
 
+export { DatePickerFilter } from './date-picker-filter';
+export type { DatePickerFilterProps, DatePickerValue } from './date-picker-filter';
+
 export { useTriggerLabel } from './use-trigger-label';
 export type { TriggerLabel } from './use-trigger-label';
 

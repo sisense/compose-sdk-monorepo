@@ -17,27 +17,17 @@ export interface SankeyChartProps extends SankeyChartPropsPreact {}
  * between two connected nodes.
  *
  * @example
- * Here's how you can use the SankeyChart component in a Vue application:
  * ```vue
- * <template>
- * <SankeyChart
- *      :dataOptions="sankeyChartProps.dataOptions"
- *      :dataSet="sankeyChartProps.dataSet"
- *      :styleOptions="sankeyChartProps.styleOptions"
- *    />
- * </template>
- *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { SankeyChart } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
  * import { measureFactory } from '@sisense/sdk-data';
- * import * as DM from '../assets/sample-ecommerce';
- * import { SankeyChart, type SankeyChartProps } from '@sisense/sdk-ui-vue';
  *
- * const sankeyChartProps = ref<SankeyChartProps>({
- *   dataSet: DM.DataSource,
+ * const chartProps = ref({
  *   dataOptions: {
  *     category: [DM.Commerce.Gender, DM.Commerce.AgeRange],
- *     value: measureFactory.sum(DM.Commerce.Revenue, 'Revenue'),
+ *     value: measureFactory.sum(DM.Commerce.Revenue),
  *   },
  *   styleOptions: {
  *     orientation: 'horizontal',
@@ -45,7 +35,16 @@ export interface SankeyChartProps extends SankeyChartPropsPreact {}
  *   },
  * });
  * </script>
+ *
+ * <template>
+ *   <SankeyChart
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="chartProps.dataOptions"
+ *     :styleOptions="chartProps.styleOptions"
+ *   />
+ * </template>
  * ```
+ * <img src="media://sankey-chart-example-1.png" width="700px" />
  * @param {SankeyChartProps} - Sankey chart properties
  * @returns Sankey Chart component
  * @group Charts

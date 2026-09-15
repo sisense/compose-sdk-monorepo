@@ -9,22 +9,6 @@ title: PieChart
 A React component representing data in a circular graph with the data shown as slices of a whole,
 with each slice representing a proportion of the total.
 
-## Example
-
-Pie chart displaying total revenue per age range from the Sample ECommerce data model.
-
-<iframe
- src='https://csdk-playground.sisense.com/?example=charts%2Fpie-chart&mode=docs'
- width='100%'
- height='870'
- style='max-width:800px; border:none;'
-/>
-
-Additional Pie Chart examples:
-
-- [Donut Pie Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpie-chart-donut)
-- [Ring Pie Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpie-chart-ring)
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -36,3 +20,58 @@ Additional Pie Chart examples:
 `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Pie Chart component
+
+## Example
+
+Pie chart displaying total revenue per age range from the Sample ECommerce data model.
+
+```ts
+import { PieChart } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const CodeExample = () => (
+  <PieChart
+    dataSet={DM.DataSource}
+    dataOptions={{
+      category: [DM.Commerce.AgeRange],
+      value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    }}
+    styleOptions={{ subtype: 'pie/classic' }}
+  />
+);
+
+export default CodeExample;
+```
+
+<img src="../../../img/pie-chart-example-1.png" width="700px" />
+
+Donut chart variant, using the same data:
+
+```ts
+<PieChart
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+  }}
+  styleOptions={{ subtype: 'pie/donut' }}
+/>
+```
+
+<img src="../../../img/pie-chart-example-2.png" width="700px" />
+
+Ring chart variant, using the same data:
+
+```ts
+<PieChart
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+  }}
+  styleOptions={{ subtype: 'pie/ring' }}
+/>
+```
+
+<img src="../../../img/pie-chart-example-3.png" width="700px" />

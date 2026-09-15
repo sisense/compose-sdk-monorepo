@@ -9,47 +9,33 @@ variability, and center of a data set along an axis.
 
 ## Example
 
-```html
-   <csdk-boxplot-chart
-     [dataSet]="boxplotChart.dataSet"
-     [dataOptions]="boxplotChart.dataOptions"
-     [highlights]="boxplotChart.highlights"
-     [beforeRender]="onBeforeRender"
-     (dataPointClick)="logArguments($event)"
-     (dataPointContextMenu)="logArguments($event)"
-     (dataPointsSelect)="logArguments($event)"
-   />
-```
-
 ```ts
 import { Component } from '@angular/core';
-import { filterFactory } from '@sisense/sdk-data';
 import type { BoxplotChartDataOptions } from '@sisense/sdk-ui-angular';
-import * as DM from '../../assets/sample-healthcare-model';
+import * as DM from './sample-ecommerce';
 
 @Component({
- selector: 'app-analytics',
- templateUrl: './analytics.component.html',
- styleUrls: ['./analytics.component.scss'],
+  selector: 'code-example',
+  template: `
+    `<csdk-boxplot-chart
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-boxplot-chart>`
+  `,
 })
-export class AnalyticsComponent {
- boxplotChart = {
-   dataSet: DM.DataSource,
-   dataOptions: {
-     category: [DM.Divisions.Divison_name],
-     value: [DM.Admissions.TimeofStay],
-     boxType: 'iqr',
-     outliersEnabled: true,
-   } as BoxplotChartDataOptions,
-   highlights: [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])],
- };
-
- logArguments(...args: any[]) {
-   console.log(args);
- }
+export class CodeExample {
+  DM = DM;
+  dataOptions: BoxplotChartDataOptions = {
+    category: [DM.Commerce.Condition],
+    value: [{ column: DM.Commerce.Cost, name: 'Total Cost' }],
+    boxType: 'iqr',
+    outliersEnabled: true,
+  };
+  styleOptions = { subtype: 'boxplot/full' };
 }
 ```
-<img src="../../../img/angular-boxplot-chart-example.png" width="800px" />
+<img src="../../../img/boxplot-chart-example-1.png" width="700px" />
 
 ## Constructors
 

@@ -1,7 +1,6 @@
 /**
  * Shared shell for drill-in filter panels — PeriodFilter, ConditionFilter, and any
  * future panel that follows the same Clear · Cancel · Apply frame.
- *
  * @internal
  */
 import styled from '@emotion/styled';
@@ -19,9 +18,12 @@ const RULE = `color-mix(in srgb, ${fwVar('border', fwFallback.border)} 55%, ${fw
   fwFallback.panelBg,
 )})`;
 
+/** English / default layout width — grow past this when footer labels need more room. */
+const PANEL_MIN_WIDTH = '260px';
+
 /**
  * Styles the drill-in panel, which keeps its own tighter rhythm than a bare list — 12px
- * padding, an 8px stack gap, 260px wide.
+ * padding, an 8px stack gap, at least {@link PANEL_MIN_WIDTH} wide (expands for long locales).
  * @internal
  */
 export const Panel = styled.div<{ $radius: FieldRadius }>`
@@ -30,7 +32,10 @@ export const Panel = styled.div<{ $radius: FieldRadius }>`
   gap: ${spacing.m};
   align-items: stretch;
   box-sizing: border-box;
-  width: 260px;
+  /* Fit the footer (Clear · Cancel · Apply) when translations outgrow English; never shrink
+     below the designed English width. */
+  width: fit-content;
+  min-width: ${PANEL_MIN_WIDTH};
   padding: 12px;
   font-family: ${fwVar('fontFamily', fwFallback.fontFamily)};
   background: ${fwVar('panelBg', fwFallback.panelBg)};
@@ -66,6 +71,10 @@ export const Foot = styled.div`
   gap: ${spacing.m};
   align-items: center;
   justify-content: space-between;
+  /* Intrinsic button row width drives Panel's fit-content growth for long locales. */
+  width: 100%;
+  min-width: max-content;
+  flex-wrap: nowrap;
   padding-top: 10px;
   border-top: ${spacing.borderWidth} solid ${RULE};
 `;
@@ -75,11 +84,13 @@ export const Actions = styled.div`
   display: flex;
   gap: ${spacing.m};
   align-items: center;
+  flex-shrink: 0;
 `;
 
 /** Defines the metrics the footer's three buttons share; each variant adds only its colours. @internal */
 export const PanelButton = styled.button<{ $radius: FieldRadius }>`
   display: inline-flex;
+  flex-shrink: 0;
   gap: 6px;
   align-items: center;
   justify-content: center;
@@ -89,6 +100,7 @@ export const PanelButton = styled.button<{ $radius: FieldRadius }>`
   font-size: ${typography.label.size};
   font-weight: ${typography.label.weight};
   line-height: ${typography.label.lineHeight};
+  white-space: nowrap;
   cursor: pointer;
   border: ${spacing.borderWidth} solid transparent;
   border-radius: ${({ $radius }) => FIELD_RADIUS[$radius]};

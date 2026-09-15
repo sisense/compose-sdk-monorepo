@@ -2,6 +2,9 @@ import type { DashboardJSON } from '@/modules/analytics-composer/index-node.js';
 
 import { SAMPLE_ECOMMERCE_DATA_SOURCE_TITLE, SAMPLE_WIDGET_CONFIG } from './example-widgets.js';
 
+/** Title-only data source reference for the Sample Retail examples below. */
+const SAMPLE_RETAIL_DATA_SOURCE_TITLE = 'Sample Retail';
+
 /**
  * ECommerce overview dashboard — column chart + pivot table with a year filter.
  */
@@ -191,6 +194,85 @@ export const SAMPLE_ECOMMERCE_DASHBOARD_MULTI_CHART: DashboardJSON = {
         secondary: [],
         min: [],
         max: [],
+      },
+    },
+  ],
+};
+
+/**
+ * Multi-source dashboard — an ECommerce widget and a Retail widget side by side, a bare
+ * dashboard-level filter (resolved against `defaultDataSource`), and a filter tile explicitly
+ * tagged with `dataSource: 'Sample Retail'`. Demonstrates that each widget and each filter tile is
+ * translated against the data schema context matching its own data source.
+ */
+export const SAMPLE_MULTI_SOURCE_DASHBOARD: DashboardJSON = {
+  id: 'dashboard-multi-source',
+  title: 'ECommerce + Retail Overview',
+  defaultDataSource: SAMPLE_ECOMMERCE_DATA_SOURCE_TITLE,
+  layoutOptions: {
+    widgetsPanel: {
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: [
+            {
+              cells: [
+                { widgetId: 'widget-ecommerce-revenue', widthPercentage: 50 },
+                { widgetId: 'widget-retail-sales', widthPercentage: 50 },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
+  filters: [
+    {
+      function: 'filterFactory.members',
+      args: ['DM.Commerce.Date.Years', ['2013-01-01T00:00:00']],
+    },
+    {
+      dataSource: SAMPLE_RETAIL_DATA_SOURCE_TITLE,
+      filter: {
+        function: 'filterFactory.members',
+        args: ['DM.Fact_Sale_orders.Region', ['USA']],
+      },
+    },
+  ],
+  widgets: [
+    {
+      widgetType: 'chart',
+      id: 'widget-ecommerce-revenue',
+      title: 'ECommerce Revenue by Month',
+      description: 'Monthly revenue from the Sample ECommerce data source',
+      dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE_TITLE,
+      chartType: 'column',
+      dataOptions: {
+        category: ['DM.Commerce.Date.Months'],
+        value: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        breakBy: [],
+      },
+    },
+    {
+      widgetType: 'pivot',
+      id: 'widget-retail-sales',
+      title: 'Retail Sales by Region',
+      description: 'Sales order revenue from the Sample Retail data source',
+      dataSource: SAMPLE_RETAIL_DATA_SOURCE_TITLE,
+      dataOptions: {
+        rows: ['DM.Fact_Sale_orders.Region'],
+        values: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Fact_Sale_orders.OrderRevenue', 'Total Sales'],
+          },
+        ],
+        grandTotals: { rows: true, columns: true },
       },
     },
   ],

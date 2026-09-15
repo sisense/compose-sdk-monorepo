@@ -20,8 +20,19 @@ export type KpiSparklineProps = {
   color: string;
   numberFormatConfig?: NumberFormatConfig;
   /**
+   * Whether the card's category holds dates, i.e. whether each point's `x` is an epoch. Only then
+   * does the tooltip caption a point with a formatted date; otherwise `x` is a plain bucket
+   * ordinal (`0`, `1`, …) that would format as January 1970, and each point is named by its own
+   * {@link SparklinePoint.categoryDisplayValue} instead.
+   *
+   * Defaults to `false`: a caller that hasn't established the category's type must not have a
+   * date invented for it.
+   */
+  isDateCategory?: boolean;
+  /**
    * Date format for the tooltip's category value, taken from the category data option's
-   * `dateFormat`. Falls back to {@link DEFAULT_TOOLTIP_DATE_FORMAT} when unset.
+   * `dateFormat`. Falls back to {@link DEFAULT_TOOLTIP_DATE_FORMAT} when unset. Ignored unless
+   * {@link isDateCategory} is set.
    */
   dateFormat?: string;
   /**
@@ -59,6 +70,7 @@ export function KpiSparkline({
   chartType,
   color,
   numberFormatConfig,
+  isDateCategory = false,
   dateFormat,
   valueTitle,
   tooltipValueColor,
@@ -75,8 +87,12 @@ export function KpiSparkline({
         color,
         {
           numberFormatConfig,
-          formatDate: (epochMs) =>
-            dateFormatter(new Date(epochMs), dateFormat ?? DEFAULT_TOOLTIP_DATE_FORMAT),
+          // Omitted for a dateless category, which switches the tooltip footer over to the
+          // point's own label -- see `SparklineFormatting.formatDate`.
+          formatDate: isDateCategory
+            ? (epochMs) =>
+                dateFormatter(new Date(epochMs), dateFormat ?? DEFAULT_TOOLTIP_DATE_FORMAT)
+            : undefined,
           valueTitle,
           valueColor: tooltipValueColor,
         },
@@ -89,6 +105,7 @@ export function KpiSparkline({
       chartType,
       color,
       numberFormatConfig,
+      isDateCategory,
       dateFormat,
       valueTitle,
       tooltipValueColor,

@@ -23,18 +23,26 @@ ChartWidget component representing a chart type as specified in `ChartWidgetProp
 
 ## Example
 
-Example of using the `ChartWidget` component to
-plot a bar chart of the `Sample ECommerce` data source hosted in a Sisense instance.
 ```ts
-<ChartWidget
-  dataSource={DM.DataSource}
-  chartType="bar"
-  dataOptions={{
-    category: [DM.Category.Category],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-    breakBy: [],
-  }}
-/>
+import { ChartWidget } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const CodeExample = () => (
+  <ChartWidget
+    title="Revenue by Quarter"
+    description="This chart shows the total revenue by quarter."
+    chartType="column"
+    dataSource={DM.DataSource}
+    dataOptions={{
+      category: [DM.Commerce.Date.Quarters],
+      value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+      breakBy: [],
+    }}
+  />
+);
+
+export default CodeExample;
 ```
 
-<img src="../../../img/chart-widget-with-drilldown-example-1.png" width="800px" />
+<img src="../../../img/chart-widget-example-1.png" width="700px" />

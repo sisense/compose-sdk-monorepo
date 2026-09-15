@@ -2,7 +2,10 @@ import {
   Attribute,
   convertSortDirectionToSort,
   convertSortToSortDirection,
+  type FunctionCall,
   JSONValue,
+  MetadataTypes,
+  parseComposeCodeToFunctionCall,
   Sort,
 } from '@sisense/sdk-data';
 import type { SortDirection } from '@sisense/sdk-data';
@@ -60,7 +63,12 @@ export function translateDimensionsToJSON(
       return;
     }
 
-    if (!attr.composeCode.startsWith(DIMENSIONAL_NAME_PREFIX)) {
+    // A calculated dimension is defined by a formula, not by a table/column path, so its compose
+    // code is an attributeFactory call rather than a 'DM.' reference.
+    if (
+      !attr.composeCode.startsWith(DIMENSIONAL_NAME_PREFIX) &&
+      !MetadataTypes.isCalculatedAttribute(attr)
+    ) {
       errors.push({
         path: `dimensions[${index}]`,
         input: getInputJson(),
@@ -82,16 +90,40 @@ export function translateDimensionsToJSON(
     const hasStyle =
       (sort !== undefined && sort !== Sort.None) || (styledItem && Object.keys(style).length > 0);
 
+    // A plain dimension is referenced by name, so its composeCode goes out as-is. A calculated
+    // dimension is a factory call and must go out parsed, the way measures do — emitting the raw
+    // string would produce JSON that translateDimensionsFromJSON cannot read back, since a string
+    // there is resolved as a name.
+    let column: string | FunctionCall;
+    if (MetadataTypes.isCalculatedAttribute(attr)) {
+      try {
+        column = parseComposeCodeToFunctionCall(attr.composeCode);
+      } catch (error) {
+        errors.push({
+          path: `dimensions[${index}]`,
+          input: getInputJson(),
+          message: `Failed to parse composeCode for calculated dimension at index ${index} (${
+            attr.name || 'unnamed'
+          }): ${error instanceof Error ? error.message : 'Unknown error'}. ComposeCode: '${
+            attr.composeCode
+          }'`,
+        });
+        return;
+      }
+    } else {
+      column = attr.composeCode;
+    }
+
     if (hasStyle) {
       const styled: StyledColumnJSON = {
-        column: attr.composeCode,
+        column,
         ...(sort !== undefined &&
           sort !== Sort.None && { sortType: convertSortToSortDirection(sort) }),
         ...style,
       };
       results.push(styled);
     } else {
-      results.push(attr.composeCode);
+      results.push(column);
     }
   });
 

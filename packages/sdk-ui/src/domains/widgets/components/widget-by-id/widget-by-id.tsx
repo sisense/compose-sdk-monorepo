@@ -60,16 +60,32 @@ function withNavigatorScrollSave(
  *
  * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
  *
- * ## Example
- *
+ * @example
  * Display two dashboard widgets from a Fusion instance.
  *
- * <iframe
- *  src='https://csdk-playground.sisense.com/?example=fusion-assets%2Ffusion-widgets&mode=docs'
- *  width='100%'
- *  height='870'
- *  style='max-width:800px; border:none;'
- * />
+ * ```tsx
+ * import { WidgetById } from '@sisense/sdk-ui';
+ *
+ * const CodeExample = () => (
+ *   <>
+ *     <WidgetById
+ *       dashboardOid="65a82171719e7f004018691c"
+ *       widgetOid="65a82171719e7f0040186924"
+ *       includeDashboardFilters={true}
+ *       styleOptions={{ height: 380 }}
+ *     />
+ *     <WidgetById
+ *       dashboardOid="65a82171719e7f004018691c"
+ *       widgetOid="65a82171719e7f004018691f"
+ *       styleOptions={{ height: 380 }}
+ *     />
+ *   </>
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
+ * <img src="media://widget-by-id-example-1.png" width="700px" />
  *
  * @group Fusion Assets
  * @fusionEmbed

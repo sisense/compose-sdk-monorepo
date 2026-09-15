@@ -14,6 +14,10 @@ import {
 import type { Attribute, Filter } from '@sisense/sdk-data';
 import debounce from 'lodash-es/debounce';
 
+import {
+  type DatetimeAttributeStats,
+  useGetAttributeStats,
+} from '@/domains/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
 import { granularities } from '@/domains/filters/components/filter-editor-popover/sections/common/granularities';
 import type {
   Member,
@@ -34,10 +38,12 @@ import { usePrevious } from '@/shared/hooks/use-previous';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
 import { isSameAttribute } from '@/shared/utils/filters';
 
-import { ConditionFilter, FilterSelect, PeriodFilter } from './components';
+import { ConditionFilter, DatePickerFilter, FilterSelect, PeriodFilter } from './components';
 import type { DropdownScrollEvent } from './components';
 import { isEditableNumericConditionFilter } from './components/condition-numeric.js';
 import { isEditableTextConditionFilter } from './components/condition-text.js';
+import { asDateMembers, asDateText, asDateTexts } from './components/date-picker-members';
+import { useDateMask } from './components/use-date-mask';
 import {
   asBackgroundFilter,
   withBackgroundFilter,
@@ -48,6 +54,7 @@ import {
   membersFilterWidgetDesign,
   resolveFilterWidgetControlStyle,
 } from './filter-widget-design';
+import { FilterWidgetSetup } from './filter-widget-setup';
 import filterWidgetSetupImage from './images/filter-widget-setup.svg';
 import type { FilterWidgetControlStyleOptions, FilterWidgetProps } from './types';
 
@@ -66,6 +73,8 @@ type FilterWidgetDropdownProps = Pick<
   | 'parentFilters'
   | 'dimensionFilters'
   | 'excludedDateLevels'
+  | 'emptyState'
+  | 'onSetup'
 > & {
   /** The control's own styling — `styleOptions.control`, unwrapped by the widget. */
   controlStyleOptions?: FilterWidgetControlStyleOptions;
@@ -90,19 +99,28 @@ type FilterWidgetDropdownProps = Pick<
 };
 
 /**
- * Effective selection mode for the dropdown. The widget and its linked dashboard filter
- * must stay in sync: even a single-select-configured widget renders the multi-select
- * control when the backing filter actually carries multiple members (or is multi-enabled),
- * so external changes to the shared filter (e.g. dashboard cross-filtering) are reflected
- * instead of being truncated to the first member.
+ * Effective selection mode for the control.
+ *
+ * The widget's own setting decides — it is the one the reader toggles and the host
+ * persists. The single exception is a selection that actually holds more than one member,
+ * which renders multi whatever the setting says, so an external change to the shared
+ * filter (dashboard cross-filtering, a chart selecting several values) is shown rather
+ * than truncated to the first member.
+ *
+ * The filter's own `enableMultiSelection` is deliberately **not** consulted. A members
+ * filter does not serialise `multiSelection` into its JAQL, and the reader that parses
+ * JAQL back defaults the flag to `true` — so for any filter that reached this widget
+ * through Fusion it is a constant `true`, and cannot tell a genuinely multi-select filter
+ * from a single-select one that made a round trip. Reading it is what made every reopened
+ * widget editor come back multi. The member count carries the same signal and is real data
+ * rather than a defaulted flag.
  * @internal
  */
 export function getEffectiveMultiselect(
   widgetMultiselect: boolean,
   selectedCount: number,
-  filterMultiSelection: boolean | undefined,
 ): boolean {
-  return widgetMultiselect || selectedCount > 1 || !!filterMultiSelection;
+  return widgetMultiselect || selectedCount > 1;
 }
 
 /**
@@ -136,8 +154,14 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   onReady,
   excludedDateLevels,
   controlStyleOptions,
+  emptyState,
+  onSetup,
 }) => {
   const { t } = useTranslation();
+  /* Days are read and written in the reader's own format, so the same mask the calendar
+     control renders with is the one this converts through. The member it stores stays
+     canonical either way — see `date-picker-members.ts`. */
+  const { mask: dateMask } = useDateMask();
 
   /**
    * Same resolution as the dashboard filter editor — text / numeric / datetime —
@@ -148,6 +172,12 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   const isDateAttribute = attributeValueType === 'datetime';
   /** Design / style mode: List (`members`) vs Condition. */
   const isConditionMode = filterType === 'condition';
+  /**
+   * The calendar control, offered for datetime attributes only. It works at Day
+   * granularity alone — the level screen the List control carries has no counterpart here,
+   * because a calendar can only speak in days.
+   */
+  const isCalendarMode = isDateAttribute && filterType === 'calendar';
 
   /**
    * The level the host is on, which is the FILTER's whenever it has one.
@@ -277,9 +307,20 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   // non-members filter injected for the same dimension is intentionally taken
   // over as a members filter on first user selection (same-dim override
   // semantics), preserving its guid via withMembersFilterSelection.
+  /* `onFilterUpdate` is an OPTIONAL prop and the hook calls it on every publish, so an
+     omitted callback has to be absorbed here. It previously reached the hook through a cast
+     that claimed it was always a function, which turned "host did not pass one" into a
+     `TypeError` the first time anything was applied — silent only because no path had
+     published without it before. */
+  const publishToHost = useCallback(
+    (nextFilter: MembersFilter) => updateFilterFromProps?.(nextFilter),
+    [updateFilterFromProps],
+  );
+
+  // Cast rationale for the seed: see the note above about same-dim override semantics.
   const { filter, updateFilter: publishFilter } = useSynchronizedFilter<MembersFilter>(
     membersFilterFromProps,
-    updateFilterFromProps as (f: MembersFilter) => void,
+    publishToHost,
     () =>
       filterFactory.members(effectiveAttribute, [], {
         enableMultiSelection: isMultiselect,
@@ -314,36 +355,6 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
       publishFilter(dimensionFilters ? withBackgroundFilter(backgroundFilter)(next) : next),
     [publishFilter, dimensionFilters, backgroundFilter],
   );
-
-  // Keep the filter's selection mode aligned with the widget's `isMultiselect` config when
-  // it is toggled live (widget editor / standalone). The synchronized filter's
-  // `enableMultiSelection` is seeded only once, so without this a toggle would be ignored —
-  // the control stayed multi after switching to single (SNS-131674). Switching to
-  // single-select also drops the selection to a single member, since a single-select control
-  // cannot hold several — mirroring the filter editor popup's MembersSection. Switching back
-  // to multi keeps the current members.
-  const prevIsMultiselect = usePrevious(isMultiselect);
-  useEffect(() => {
-    if (
-      prevIsMultiselect === undefined ||
-      prevIsMultiselect === isMultiselect ||
-      !updateFilterFromProps
-    ) {
-      return;
-    }
-    const nextMembers = isMultiselect ? filter.members : asSingleSelectionMembers(filter.members);
-    updateFilter(
-      // Cast rationale: filterFactory.members returns the base Filter type but always
-      // constructs a MembersFilter (same as createEmptyFilter / withMembersFilterSelection).
-      filterFactory.members(filter.attribute, nextMembers, {
-        guid: filter.config.guid,
-        excludeMembers: filter.config.excludeMembers,
-        deactivatedMembers: filter.config.deactivatedMembers,
-        backgroundFilter: filter.config.backgroundFilter,
-        enableMultiSelection: isMultiselect,
-      }) as MembersFilter,
-    );
-  }, [isMultiselect, prevIsMultiselect, filter, updateFilter, updateFilterFromProps]);
 
   // Rebuild when dimension or date granularity changes. Filter is seeded once, so
   // expression-only comparison misses host level pushes (empty→Quarters or
@@ -520,28 +531,60 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
 
   useFireOnReady(isConditionMode || (!membersLoading && alignedMembersData !== undefined), onReady);
 
-  const { selectedMembers, allMembers, excludeMembers, enableMultiSelection } =
-    alignedMembersData ?? {
-      selectedMembers: [],
-      allMembers: [],
-      // Prefer the synchronized filter flag — falling back to `false` flashes
-      // "Set filter" for select-all while the members query is still aligning.
-      excludeMembers: filter.config.excludeMembers,
-      enableMultiSelection: filter.config.enableMultiSelection ?? false,
-    };
+  const { selectedMembers, allMembers, excludeMembers } = alignedMembersData ?? {
+    selectedMembers: [],
+    allMembers: [],
+    // Prefer the synchronized filter flag — falling back to `false` flashes
+    // "Set filter" for select-all while the members query is still aligning.
+    excludeMembers: filter.config.excludeMembers,
+  };
 
   const selectedCount = useMemo(
     () => selectedMembers.filter((m) => !m.inactive).length,
     [selectedMembers],
   );
 
-  // Keep the widget in sync with its linked filter: reflect all members even if the
-  // widget itself was configured single-select but the shared filter gained several.
-  const effectiveMultiselect = getEffectiveMultiselect(
-    isMultiselect,
-    selectedCount,
-    enableMultiSelection,
-  );
+  /** The selection as rendered; falls back to the filter's own members before it aligns. */
+  const activeMemberKeys = useMemo(() => {
+    const keys = selectedMembers.filter((member) => !member.inactive).map((member) => member.key);
+    return keys.length > 0 ? keys : filter.members;
+  }, [selectedMembers, filter.members]);
+
+  /**
+   * Follows the widget's own `isMultiselect` setting when it is toggled live (widget editor
+   * / standalone). The filter's `enableMultiSelection` is seeded once, so without this the
+   * toggle would be ignored. Turning it off also drops the selection to a single member —
+   * a single-select control cannot hold several — keeping the first in sort order, which
+   * for Day members is the earliest day. Turning it back on keeps what is selected.
+   *
+   * Gated on the toggle actually changing, which is what keeps it from fighting
+   * {@link getEffectiveMultiselect}: a selection widened from outside (cross-filtering)
+   * arrives with no change of setting, so it is left alone and shown rather than truncated.
+   *
+   * It reduces the selection as RENDERED, not the filter's own `members`. A widget still
+   * being created has no linked filter behind it, so its members never reach the
+   * synchronized filter and reducing that empty list published nothing at all.
+   */
+  const prevIsMultiselect = usePrevious(isMultiselect);
+  useEffect(() => {
+    if (prevIsMultiselect === undefined || prevIsMultiselect === isMultiselect) return;
+    const nextMembers = isMultiselect
+      ? activeMemberKeys
+      : asSingleSelectionMembers(activeMemberKeys);
+    updateFilter(
+      // Cast rationale: filterFactory.members returns the base Filter type but always
+      // constructs a MembersFilter (same as createEmptyFilter / withMembersFilterSelection).
+      filterFactory.members(filter.attribute, nextMembers, {
+        guid: filter.config.guid,
+        excludeMembers: filter.config.excludeMembers,
+        deactivatedMembers: filter.config.deactivatedMembers,
+        backgroundFilter: filter.config.backgroundFilter,
+        enableMultiSelection: isMultiselect,
+      }) as MembersFilter,
+    );
+  }, [isMultiselect, prevIsMultiselect, activeMemberKeys, filter, updateFilter]);
+
+  const effectiveMultiselect = getEffectiveMultiselect(isMultiselect, selectedCount);
 
   const handleListScroll = useCallback(
     ({ top, direction }: DropdownScrollEvent) => {
@@ -695,6 +738,87 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     t,
   ]);
 
+  /* What the dimension covers, at Day granularity — the same lookup the dashboard filter
+     editor's calendar uses, so the two agree on the span. It aims the calendar's
+     Earliest / Latest chips and greys the days beyond the data; it never blocks a pick,
+     because the base can be queried past its current edges. Only asked for while the
+     calendar is the control on screen. */
+  const { data: dayStats } = useGetAttributeStats<DatetimeAttributeStats>({
+    /* Only a datetime attribute can be re-levelled, and only the calendar asks for this —
+       so a text dimension passes through untouched and the query stays disabled. */
+    attribute: useMemo(
+      () =>
+        isCalendarMode
+          ? createLevelAttribute(attribute as DimensionalLevelAttribute, DateLevels.Days, t)
+          : attribute,
+      [isCalendarMode, attribute, t],
+    ),
+    filters: parentFilters,
+    enabled: isCalendarMode && Boolean(attribute.expression),
+    ...(dataSource && { defaultDataSource: dataSource }),
+  });
+
+  /**
+   * The calendar's one publish. It fires only on Apply or Enter, so unlike the List panel
+   * there is no separate draft to hold here — the control owns its own.
+   *
+   * The filter is rebuilt at Day granularity and handed to the same helper the List
+   * control commits through, so an identical set of days produces an identical payload
+   * whichever control chose them.
+   */
+  const handleDatePickerChange = useCallback(
+    (texts: string[]) => {
+      const dayAttribute = createLevelAttribute(
+        // Cast rationale: the calendar only renders for datetime attributes.
+        attribute as DimensionalLevelAttribute,
+        DateLevels.Days,
+        t,
+      );
+      const atDayLevel = filterFactory.members(dayAttribute, [], {
+        guid: filter.config.guid,
+        backgroundFilter: filter.config.backgroundFilter,
+        enableMultiSelection: filter.config.enableMultiSelection,
+        // Cast rationale: filterFactory.members returns the base Filter type but always
+        // constructs a MembersFilter.
+      }) as MembersFilter;
+
+      /* The level is reported before the filter, matching the List panel: a host that
+         rewrites dimension granularity on `dateLevel/changed` discards any selection
+         captured against the old level, so a filter published first would be thrown away. */
+      if (resolvedGranularity !== DateLevels.Days) {
+        onDateLevelChange?.(dayAttribute);
+        setDateGranularity(DateLevels.Days);
+      }
+
+      /* Chronological, which for these members is a plain sort: they are ISO days, whose
+         lexicographic order is their calendar order. Publishing them sorted keeps the
+         payload stable however the days were picked, and makes "the first member" mean
+         "the earliest day" for every host that truncates a multi-selection to one. */
+      const members = asDateMembers(dateMask, texts).sort();
+
+      updateFilter(
+        withMembersFilterSelection(atDayLevel, {
+          selectedMembers: members.map((key) => ({
+            key,
+            // The day as the calendar spells it, which is what a host shows in a tagline.
+            title: asDateText(dateMask, key) ?? key,
+          })),
+          excludeMembers: false,
+        }),
+      );
+    },
+    [
+      attribute,
+      dateMask,
+      filter.config,
+      resolvedGranularity,
+      updateFilter,
+      onDateLevelChange,
+      setDateGranularity,
+      t,
+    ],
+  );
+
   /**
    * Abandoning the draft, in full: drop the drafted level and the drafted selection.
    *
@@ -754,7 +878,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   );
 
   // When no dimension has been selected yet (placeholder attribute with empty expression),
-  // render a minimal placeholder instead of making broken queries.
+  // render a compact dashboard setup button or the editor illustration — never a broken query.
   // All hooks are called above unconditionally to satisfy the Rules of Hooks.
   const layout = membersFilterWidgetDesign;
   /* The two steps and the placement are resolved against the defaults; the colours go to
@@ -787,6 +911,17 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   );
 
   if (!attribute.expression) {
+    const showSetup = emptyState === 'setupButton' || typeof onSetup === 'function';
+    if (showSetup) {
+      return (
+        <FilterWidgetSetup
+          onSetup={onSetup}
+          onReady={onReady}
+          controlStyleOptions={controlStyleOptions}
+          attributeValueType={attributeValueType}
+        />
+      );
+    }
     const empty = filterWidgetDesign.noDimPlaceholder;
     return (
       <div
@@ -925,6 +1060,10 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
       data-testid="filter-widget-dropdown"
       data-filter-type={filterType ?? 'members'}
       data-filter-attribute-value-type={attributeValueType ?? 'unsupported'}
+      /* The control's resolved selection mode. Exposed because it is a function of the
+         widget's own setting and the member count, so which shape rendered — and why — is
+         otherwise invisible from outside. */
+      data-multiselect={String(effectiveMultiselect)}
       style={containerAlign}
     >
       <div
@@ -936,7 +1075,31 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
           boxSizing: BORDER_BOX,
         }}
       >
-        {isDateAttribute ? (
+        {isCalendarMode ? (
+          <div data-testid="filter-widget-date-picker">
+            <DatePickerFilter
+              /* The committed members, not a draft: the calendar holds its own draft and
+                 only reports on Apply, so there is nothing of its own to read back. */
+              /* Active members only. A deactivated member is one the host is holding
+                 aside, so showing it as chosen would be wrong on its own — and worse, the
+                 next Apply would republish it as active, since the calendar reports the
+                 whole selection and `withMembersFilterSelection` re-splits what it is
+                 given. The member count reads them the same way. */
+              value={asDateTexts(
+                dateMask,
+                selectedMembers.filter((member) => !member.inactive).map((member) => member.key),
+              )}
+              onChange={handleDatePickerChange}
+              multiselect={effectiveMultiselect}
+              earliestData={dayStats?.min ? new Date(dayStats.min) : undefined}
+              latestData={dayStats?.max ? new Date(dayStats.max) : undefined}
+              width="100%"
+              size={tokens.size}
+              radius={tokens.cornerRadius}
+              controlStyle={controlStyleOptions}
+            />
+          </div>
+        ) : isDateAttribute ? (
           <div data-testid="filter-widget-date-select">
             <PeriodFilter
               levelItems={levelItems}

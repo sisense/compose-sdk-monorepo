@@ -9,54 +9,41 @@ It can be used along with the [DrilldownWidget](../drilldown/class.DrilldownWidg
 
 ## Example
 
-Here's how you can use the ChartWidget component in a Vue application:
 ```vue
-<template>
-   <DrilldownWidget :drilldownPaths="drilldownPaths" :initialDimension="dimProductName">
-     <template
-       #chart="{ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }"
-     >
-       <ChartWidget
-         chart-type="bar"
-         v-bind:filters="drilldownFilters"
-         :dataOptions="{
-           ...chartProps.dataOptions,
-           category: [drilldownDimension],
-         }"
-         :highlight-selection-disabled="true"
-         :dataSet="chartProps.dataSet"
-         :style="chartProps.styleOptions"
-         :on-data-points-selected="(dataPoints:any,event:any) => {
-         onDataPointsSelected(dataPoints);
-         onContextMenu({ left: event.clientX, top: event.clientY });
-       }"
-         :on-data-point-click="(dataPoint:any,event:any) => {
-         onDataPointsSelected([dataPoint]);
-         onContextMenu({ left: event.clientX, top: event.clientY });
-       }"
-         :on-data-point-context-menu="(dataPoint:any,event:any) => {
-         onDataPointsSelected([dataPoint]);
-         onContextMenu({ left: event.clientX, top: event.clientY });
-       }"
-       />
-     </template>
-   </DrilldownWidget>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { ChartWidget } from '@sisense/sdk-ui-vue';
+import { type ChartDataOptions, type ChartType, ChartWidget } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-const chartWidgetProps = ref({
-  // Configure your ChartWidgetProps here
+const chartProps = ref<{
+  chartType: ChartType;
+  title: string;
+  description: string;
+  dataOptions: ChartDataOptions;
+}>({
+  chartType: 'column',
+  title: 'Revenue by Quarter',
+  description: 'This chart shows the total revenue by quarter.',
+  dataOptions: {
+    category: [DM.Commerce.Date.Quarters],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [],
+  },
 });
 </script>
+
+<template>
+  <ChartWidget
+    :chartType="chartProps.chartType"
+    :title="chartProps.title"
+    :description="chartProps.description"
+    :dataSource="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+  />
+</template>
 ```
-<img src="../../../img/vue-widget-example.png" width="800px" />
+<img src="../../../img/chart-widget-example-1.png" width="700px" />
 
 ## Param
 

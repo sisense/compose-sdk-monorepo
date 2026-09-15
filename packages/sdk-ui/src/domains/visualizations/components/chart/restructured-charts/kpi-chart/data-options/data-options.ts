@@ -1,11 +1,13 @@
-import { Attribute, Measure } from '@sisense/sdk-data';
+import { Attribute, isDatetime, Measure } from '@sisense/sdk-data';
 
+import { getColorConditionMeasures } from '@/domains/visualizations/core/chart-data-options/coloring/conditional-coloring.js';
 import {
   ChartDataOptionsInternal,
   KpiChartDataOptions,
   KpiChartDataOptionsInternal,
   KpiComparison,
   KpiComparisonInternal,
+  StyledColumn,
   StyledMeasureColumn,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
 import {
@@ -48,11 +50,15 @@ function translateKpiComparison(comparison: KpiComparison): KpiComparisonInterna
 export function translateKpiChartDataOptions(
   dataOptions: KpiChartDataOptions,
 ): KpiChartDataOptionsInternal {
+  const value = normalizeMeasureColumn(dataOptions.value);
+  const colorConditionMeasures = getColorConditionMeasures(value.color);
+
   return {
-    value: normalizeMeasureColumn(dataOptions.value),
+    value,
     category: dataOptions.category ? normalizeColumn(dataOptions.category) : undefined,
     valueMode: dataOptions.valueMode ?? 'last',
     comparison: dataOptions.comparison ? translateKpiComparison(dataOptions.comparison) : undefined,
+    ...(colorConditionMeasures.length && { colorConditionMeasures }),
   };
 }
 
@@ -71,12 +77,42 @@ export function getKpiAttributes(dataOptions: KpiChartDataOptionsInternal): Attr
 }
 
 /**
- * Extracts every measure a KPI chart's query needs: the headline `value`, plus whichever
- * comparison measure (`delta`/`target`/`value`) is configured.
+ * Checks whether a KPI `category` column carries dates -- the single question that decides
+ * everything date-shaped on the card: whether the headline's bucket has an epoch to caption the
+ * header with, whether a sparkline point's `x` is an epoch or a plain bucket ordinal, whether the
+ * tooltip footer is a formatted date or the bucket's own label, and whether the
+ * `'previous-period'` comparison may name a granularity ("vs prior month") rather than the
+ * granularity-agnostic "vs prior period".
+ *
+ * The card's public `category` accepts any column, not just a date dimension, so none of those
+ * may be assumed: a numeric attribute's values are finite numbers that would silently read as
+ * epochs (`7` -> January 1970), and a text attribute's would fall back to the row index (`0` ->
+ * January 1970) just as silently.
+ *
+ * Typed as a predicate so a `true` branch also narrows away the `undefined` case, letting callers
+ * read the column itself without a non-null assertion.
+ *
+ * @param category - Internal category column of the KPI data options, if any
+ * @returns `true` when a category is set and its column holds datetime values
+ * @internal
+ */
+export function isDateCategory(category: StyledColumn | undefined): category is StyledColumn {
+  return !!category && isDatetime(category.column.type);
+}
+
+/**
+ * Extracts every measure a KPI chart's query needs: the headline `value`, the hidden measures
+ * backing its formula-driven conditional color rules, and whichever comparison measure
+ * (`delta`/`target`/`value`) is configured.
  * @internal
  */
 export function getKpiMeasures(dataOptions: KpiChartDataOptionsInternal): Measure[] {
-  const styledMeasures: StyledMeasureColumn[] = [dataOptions.value];
+  const styledMeasures: StyledMeasureColumn[] = [
+    dataOptions.value,
+    // Hidden, never rendered: each one resolves the threshold of a formula-driven conditional
+    // color rule on the headline value -- see KpiChartDataOptionsInternal.colorConditionMeasures.
+    ...(dataOptions.colorConditionMeasures ?? []),
+  ];
 
   const comparison = dataOptions.comparison;
   if (comparison?.type === 'delta' || comparison?.type === 'value') {

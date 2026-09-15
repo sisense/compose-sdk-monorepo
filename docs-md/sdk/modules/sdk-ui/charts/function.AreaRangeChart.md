@@ -23,57 +23,53 @@ Area Range Chart component
 
 ## Example
 
-An example of using the component to visualize the `Sample ECommerce` data source:
+Area range chart displaying total revenue per quarter from the Sample ECommerce data model,
+with the range spanning 60%-140% of the actual revenue.
+
 ```ts
-    <AreaRangeChart
-      dataSet={DM.DataSource}
-      dataOptions={{
-        category: [DM.Commerce.Date.Months],
-        value: [
-          {
-            title: 'Revenue',
-            upperBound: measureFactory.multiply(
-              measureFactory.sum(DM.Commerce.Revenue, 'Lower Revenue'),
-              0.6,
-            ),
-            lowerBound: measureFactory.multiply(
-              measureFactory.sum(DM.Commerce.Revenue, 'Upper Revenue'),
-              1.4,
-            ),
-          },
-          {
-            title: 'Cost',
-            upperBound: measureFactory.multiply(
-              measureFactory.sum(DM.Commerce.Cost, 'Lower Cost'),
-              0.9,
-            ),
-            lowerBound: measureFactory.multiply(
-              measureFactory.sum(DM.Commerce.Cost, 'Upper Cost'),
-              2.4,
-            ),
-          },
-        ],
-        breakBy: [],
-      }}
-      styleOptions={{
-        legend: {
-          enabled: true,
-          position: 'top',
+import { AreaRangeChart } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const CodeExample = () => (
+  <AreaRangeChart
+    dataSet={DM.DataSource}
+    dataOptions={{
+      category: [DM.Commerce.Date.Quarters],
+      value: [
+        {
+          title: 'Revenue',
+          upperBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 1.4, 'Upper Revenue'),
+          lowerBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 0.6, 'Lower Revenue'),
         },
-        lineWidth: {
-          width: 'thick',
-        },
-        yAxis: {
-          title: {
-            enabled: true,
-            text: 'ray style options',
-          },
-          enabled: true,
-          gridLines: true,
-          logarithmic: false,
-        },
-      }}
-    />
+      ],
+      breakBy: [],
+    }}
+  />
+);
+
+export default CodeExample;
 ```
 
-<img src="../../../img/area-range-chart-example-1.png" width="800"/>
+<img src="../../../img/area-range-chart-example-1.png" width="700px" />
+
+The same range broken down by condition:
+
+```ts
+<AreaRangeChart
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.Date.Quarters],
+    value: [
+      {
+        title: 'Revenue',
+        upperBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 1.4, 'Upper Revenue'),
+        lowerBound: measureFactory.multiply(measureFactory.sum(DM.Commerce.Revenue), 0.6, 'Lower Revenue'),
+      },
+    ],
+    breakBy: [DM.Commerce.Condition],
+  }}
+/>
+```
+
+<img src="../../../img/area-range-chart-example-2.png" width="700px" />

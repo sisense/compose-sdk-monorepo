@@ -12,41 +12,274 @@ export { PivotTableProps };
  * A Vue component for Pivot table with pagination.
  *
  * @example
- * Here's how you can use the PivotTable component in a Vue application:
  * ```vue
- * <template>
-    <PivotTable :dataOptions="pivotTableProps.dataOptions" :dataSet="pivotTableProps.dataSet"
-        :styleOptions="pivotTableProps.styleOptions" :filters="pivotTableProps.filters" />
- * </template>
- *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
- * import { PivotTable, type PivotTableProps } from '@sisense/sdk-ui-vue';
- * import * as DM from '../assets/sample-retail-model';
+ * import { PivotTable } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
  *
- * const dimCategoryName = DM.DimProducts.CategoryName;
- * const dimColor = DM.DimProducts.Color;
- * const dimProductName = DM.DimProducts.ProductName;
- * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
- *
- * const pivotTableProps = ref<PivotTableProps>({
- *   dataSet: DM.DataSource,
+ * const pivotTableProps = ref({
  *   dataOptions: {
- *     rows: [dimProductName, dimColor],
- *     columns: [dimCategoryName],
- *     values: [measureTotalRevenue],
+ *     rows: [
+ *       {
+ *         column: DM.Commerce.Date.Years,
+ *         dateFormat: 'yyyy',
+ *         name: 'Year',
+ *       },
+ *       DM.Commerce.Condition,
+ *     ],
+ *     columns: [DM.Commerce.AgeRange],
+ *     values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
  *   },
  *   styleOptions: {
- *     width: 1200,
- *     height: 500,
+ *     rowsPerPage: 10,
+ *     height: 425,
+ *     width: 800,
  *   },
- *   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 1000)],
  * });
- *
  * </script>
+ *
+ * <template>
+ *   <PivotTable
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="pivotTableProps.dataOptions"
+ *     :styleOptions="pivotTableProps.styleOptions"
+ *   />
+ * </template>
  * ```
- * <img src="media://vue-pivot-table-example.png" width="800px" />
+ *
+ * <img src="media://pivot-table-example-1.png" width="800px" />
+ *
+ * Additional examples:
+ *
+ * Highlighting relative magnitude within a column with data bars:
+ * ```vue
+ * <script setup lang="ts">
+ * import { ref } from 'vue';
+ * import { PivotTable } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * const pivotTableProps = ref({
+ *   dataOptions: {
+ *     rows: [DM.Commerce.Condition, DM.Commerce.AgeRange],
+ *     columns: [
+ *       {
+ *         column: DM.Commerce.Date.Years,
+ *         dateFormat: 'yyyy',
+ *         name: 'Year',
+ *       },
+ *     ],
+ *     values: [
+ *       {
+ *         column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+ *         dataBars: true,
+ *       },
+ *     ],
+ *   },
+ *   styleOptions: {
+ *     rowsPerPage: 10,
+ *     height: 425,
+ *     width: 850,
+ *   },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <PivotTable
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="pivotTableProps.dataOptions"
+ *     :styleOptions="pivotTableProps.styleOptions"
+ *   />
+ * </template>
+ * ```
+ *
+ * <img src="media://pivot-table-example-2.png" width="800px" />
+ *
+ * Sorting rows: `Condition` and `Age Range` rows sorted directly by their own values (equivalent to a user clicking a row heading and choosing Sort Descending):
+ * ```vue
+ * <script setup lang="ts">
+ * import { ref } from 'vue';
+ * import { PivotTable } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * const pivotTableProps = ref({
+ *   dataOptions: {
+ *     rows: [
+ *       {
+ *         column: DM.Commerce.Condition,
+ *         sortType: 'sortDesc',
+ *       },
+ *       {
+ *         column: DM.Commerce.AgeRange,
+ *         sortType: 'sortDesc',
+ *       },
+ *     ],
+ *     columns: [{ column: DM.Commerce.Date.Years }],
+ *     values: [
+ *       { column: measureFactory.sum(DM.Commerce.Revenue, 'Revenue') },
+ *       { column: measureFactory.sum(DM.Commerce.Quantity, 'Units') },
+ *     ],
+ *   },
+ *   styleOptions: {
+ *     rowsPerPage: 12,
+ *     height: 425,
+ *     width: 1200,
+ *   },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <PivotTable
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="pivotTableProps.dataOptions"
+ *     :styleOptions="pivotTableProps.styleOptions"
+ *   />
+ * </template>
+ * ```
+ *
+ * <img src="media://pivot-table-example-3.png" width="800px" />
+ *
+ * Sorting rows by a value column: `Age Range` sorted by its `Revenue` values (equivalent to a user clicking the `Revenue` value heading and sorting `Age Range` Descending):
+ * ```vue
+ * <script setup lang="ts">
+ * import { ref } from 'vue';
+ * import { PivotTable } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * const pivotTableProps = ref({
+ *   dataOptions: {
+ *     rows: [
+ *       DM.Commerce.Condition,
+ *       {
+ *         column: DM.Commerce.AgeRange,
+ *         sortType: {
+ *           direction: 'sortDesc',
+ *           by: {
+ *             valuesIndex: 0,
+ *           },
+ *         },
+ *       },
+ *     ],
+ *     values: [
+ *       measureFactory.sum(DM.Commerce.Revenue, 'Revenue'),
+ *       measureFactory.sum(DM.Commerce.Quantity, 'Units'),
+ *     ],
+ *   },
+ *   styleOptions: {
+ *     rowsPerPage: 12,
+ *     height: 425,
+ *     width: 800,
+ *   },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <PivotTable
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="pivotTableProps.dataOptions"
+ *     :styleOptions="pivotTableProps.styleOptions"
+ *   />
+ * </template>
+ * ```
+ *
+ * <img src="media://pivot-table-example-4.png" width="800px" />
+ *
+ * Grand totals across rows and columns:
+ * ```vue
+ * <script setup lang="ts">
+ * import { ref } from 'vue';
+ * import { PivotTable } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * const pivotTableProps = ref({
+ *   dataOptions: {
+ *     rows: [
+ *       {
+ *         column: DM.Commerce.Date.Years,
+ *         dateFormat: 'yyyy',
+ *         name: 'Year',
+ *       },
+ *       DM.Commerce.Condition,
+ *     ],
+ *     columns: [DM.Commerce.AgeRange],
+ *     values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     grandTotals: {
+ *       rows: true,
+ *       columns: true,
+ *     },
+ *   },
+ *   styleOptions: {
+ *     rowsPerPage: 15,
+ *     height: 550,
+ *     width: 900,
+ *     totalsColor: true,
+ *     headersColor: true,
+ *   },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <PivotTable
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="pivotTableProps.dataOptions"
+ *     :styleOptions="pivotTableProps.styleOptions"
+ *   />
+ * </template>
+ * ```
+ *
+ * <img src="media://pivot-table-example-5.png" width="800px" />
+ *
+ * Grand totals plus a subtotal row per `Year`, via {@link PivotTableDataOptions.rows}' `includeSubTotals`:
+ * ```vue
+ * <script setup lang="ts">
+ * import { ref } from 'vue';
+ * import { PivotTable } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * const pivotTableProps = ref({
+ *   dataOptions: {
+ *     rows: [
+ *       {
+ *         column: DM.Commerce.Date.Years,
+ *         dateFormat: 'yyyy',
+ *         name: 'Year',
+ *         includeSubTotals: true,
+ *       },
+ *       DM.Commerce.Condition,
+ *     ],
+ *     columns: [DM.Commerce.AgeRange],
+ *     values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     grandTotals: {
+ *       rows: true,
+ *       columns: true,
+ *     },
+ *   },
+ *   styleOptions: {
+ *     rowsPerPage: 15,
+ *     height: 550,
+ *     width: 900,
+ *     totalsColor: true,
+ *     headersColor: true,
+ *   },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <PivotTable
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="pivotTableProps.dataOptions"
+ *     :styleOptions="pivotTableProps.styleOptions"
+ *   />
+ * </template>
+ * ```
+ *
+ * <img src="media://pivot-table-example-6.png" width="800px" />
  *
  * @remarks
  * Configuration options can also be applied within the scope of a `<SisenseContextProvider>` to control the default behavior of PivotTable, by changing available settings within `appConfig.chartConfig.tabular.*`

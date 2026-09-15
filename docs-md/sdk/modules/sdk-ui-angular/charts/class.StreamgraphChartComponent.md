@@ -13,57 +13,71 @@ overall patterns and trends.
 
 ## Example
 
-```html
-   <csdk-streamgraph-chart
-     [dataSet]="chart.dataSet"
-     [dataOptions]="chart.dataOptions"
-     [styleOptions]="chart.styleOptions"
-     [highlights]="filters"
-     [beforeRender]="onBeforeRender"
-     (dataPointClick)="logArguments($event)"
-     (dataPointContextMenu)="logArguments($event)"
-     (dataPointsSelect)="logArguments($event)"
-   />
-```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-ecommerce';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
 
 @Component({
- selector: 'app-analytics',
- templateUrl: './analytics.component.html',
- styleUrls: ['./analytics.component.scss'],
+  selector: 'code-example',
+  template: `
+    `<csdk-streamgraph-chart
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+    >` `</csdk-streamgraph-chart>`
+  `,
 })
-export class AnalyticsComponent {
- DM = DM;
- filters = [filterFactory.members(DM.Category.Category, ['Electronics', 'Clothing'])];
- chart = {
-   chartType: 'streamgraph' as ChartType,
-   dataSet: DM.DataSource,
-   dataOptions: {
-     category: [DM.Commerce.Date.Quarters],
-     value: [measureFactory.sum(DM.Commerce.Revenue, 'Revenue')],
-     breakBy: [DM.Category.Category],
-   },
-   styleOptions: {
-     width: 1200,
-     height: 500,
-   },
- };
-
- onBeforeRender(options: any) {
-   console.log('beforeRender');
-   console.log(options);
-   return options;
- }
-
- logArguments(...args: any[]) {
-   console.log(args);
- }
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    category: [DM.Commerce.Date.Quarters],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [DM.Commerce.Condition],
+  };
 }
 ```
+<img src="../../../img/streamgraph-chart-example-1.png" width="700px" />
+
+Additional examples:
+
+Styled with a visible y-axis, thinned-out x-axis labels, and a legend:
+```ts
+import { Component } from '@angular/core';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+@Component({
+  selector: 'code-example',
+  template: `
+    `<csdk-streamgraph-chart
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-streamgraph-chart>`
+  `,
+})
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    category: [DM.Commerce.Date.Quarters],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [DM.Commerce.Condition],
+  };
+  styleOptions = {
+    yAxis: {
+      enabled: true,
+      labels: { enabled: true },
+      gridLines: false,
+    },
+    xAxis: {
+      intervalJumps: 4,
+      isIntervalEnabled: true,
+    },
+    legend: { enabled: true },
+  };
+}
+```
+<img src="../../../img/streamgraph-chart-example-2.png" width="700px" />
 
 ## Constructors
 

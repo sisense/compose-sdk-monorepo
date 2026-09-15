@@ -721,9 +721,32 @@ export type RangeChartDataOptionsInternal = {
   seriesValues: StyledMeasureColumn[];
 };
 
+/**
+ * A table column addressed directly by a named column in the query result, with no dimensional
+ * Attribute or Measure of its own — for a result column the query itself doesn't request, but
+ * that the backend derives from and returns alongside one that was (e.g. the confidence bounds
+ * returned alongside a `forecast` measure).
+ *
+ * @example
+ * ```ts
+ * const upperBound: DerivedResultColumn = {
+ *   name: '$measure1_$forecast_Revenue_upper',
+ *   title: 'Revenue Forecast Upper Bound',
+ * };
+ * ```
+ * @internal
+ */
+export type DerivedResultColumn = {
+  name: string;
+  title?: string;
+  numberFormatConfig?: NumberFormatConfig;
+  isHtml?: boolean;
+  width?: number;
+};
+
 /** @internal */
 export type TableDataOptionsInternal = {
-  columns: (StyledColumn | StyledMeasureColumn)[];
+  columns: (StyledColumn | StyledMeasureColumn | DerivedResultColumn)[];
 };
 
 /**
@@ -944,6 +967,12 @@ export interface KpiChartDataOptions {
    * A {@link StyledColumn} wrapper's `dateFormat` formats every place the card displays the
    * category value — the period caption and the sparkline tooltip.
    *
+   * A category that isn't a date is fully supported and simply has nothing to format: the caption
+   * and the sparkline tooltip name each bucket by its own text ('FEMALE') instead of a formatted
+   * date, the sparkline places its points in bucket order, and a 'previous-period' comparison —
+   * against the previous bucket, whatever it is — drops the granularity from its label
+   * ('vs prior period' rather than 'vs prior month').
+   *
    * @example
    * ```ts
    * category: DM.Commerce.Date.Months
@@ -988,4 +1017,12 @@ export type KpiChartDataOptionsInternal = {
   category?: StyledColumn;
   valueMode: KpiValueMode;
   comparison?: KpiComparisonInternal;
+  /**
+   * Hidden measures whose resolved values are the comparison thresholds for the `value`
+   * column's formula-driven conditional color rules (see `DataColorCondition.valueMeasure`).
+   * Same treatment `IndicatorChartDataOptionsInternal.colorConditionMeasures` gets.
+   *
+   * @internal
+   */
+  colorConditionMeasures?: StyledMeasureColumn[];
 };

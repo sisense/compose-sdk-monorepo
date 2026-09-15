@@ -1,12 +1,13 @@
 /** @vitest-environment jsdom */
-import { measureFactory } from '@sisense/sdk-data';
+import { createAttribute, measureFactory } from '@sisense/sdk-data';
 import type Highcharts from '@sisense/sisense-charts';
 import { createEvent, fireEvent, render } from '@testing-library/react';
 import get from 'lodash-es/get';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { KpiChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { translation } from '@/infra/translation/resources/en';
-import type { KpiRenderOptions } from '@/types.js';
+import type { KpiRenderOptions, KpiStyleOptions } from '@/types.js';
 
 import { translateKpiChartDataOptions } from '../data-options/data-options.js';
 import { translateKpiStyleOptionsToDesignOptions } from '../design-options/design-options.js';
@@ -82,11 +83,25 @@ const dataOptionsWithCustomDateFormat = translateKpiChartDataOptions({
   value: revenue,
   category: { column: DM.Commerce.Date.Months, dateFormat: 'MMMM yyyy' },
 });
-// A numeric (non-datetime) column: `normalizeColumn` gives it no `dateFormat`, unlike every
-// `DateDimension` level -- the only way a KPI category reaches the renderer without one.
+// A plain datetime column, as opposed to a `DateDimension` level: `normalizeColumn` inherits no
+// `dateFormat` from it, which is how a DATE category reaches the renderer without one. (A numeric
+// column would carry no format either, but it is not a date category at all -- see the
+// 'a category that is not a date' suite.)
 const dataOptionsWithFormatlessCategory = translateKpiChartDataOptions({
   value: revenue,
-  category: DM.Commerce.DateMonth,
+  category: createAttribute({
+    name: 'OrderTimestamp',
+    type: 'datetime',
+    expression: '[Commerce.Date (Timestamp)]',
+  }),
+});
+const dataOptionsWithTextCategory = translateKpiChartDataOptions({
+  value: revenue,
+  category: DM.Commerce.Gender,
+});
+const dataOptionsWithColoredCategory = translateKpiChartDataOptions({
+  value: revenue,
+  category: { column: DM.Commerce.Date.Months, color: '#ff00ff' },
 });
 
 /** Reads `element`'s parent, failing loudly (not with a silent `null`) if it has none. */
@@ -96,6 +111,32 @@ function requireParent(element: Element | null): HTMLElement {
     throw new Error('Expected element to have a parent');
   }
   return parent;
+}
+
+/**
+ * Runs the tooltip formatter the renderer built for its sparkline, over the given point context.
+ * Fails loudly when the card mounted no sparkline at all (no spy output) or its tooltip carries no
+ * formatter, so a card that silently dropped its sparkline reports that rather than an opaque
+ * `TypeError` from reading `tooltip` off `undefined`.
+ *
+ * The context is cast rather than built in full: a real one carries ~20 more members, none of
+ * which the formatter touches — only `x`, `y` and the point's own data object.
+ */
+function formatSparklineTooltip(point: Partial<Highcharts.TooltipFormatterContextObject>): string {
+  const options = sparklineOptionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options | undefined;
+  if (!options) {
+    throw new Error('Expected the card to have mounted a sparkline, but nothing was rendered');
+  }
+  // Narrowed to what this tooltip's own formatter is: Highcharts types the option as returning
+  // `string | false | array | null` and taking a second `tooltip` argument, neither of which the
+  // KPI sparkline's formatter uses.
+  const formatter = options.tooltip?.formatter as
+    | ((this: Highcharts.TooltipFormatterContextObject) => string)
+    | undefined;
+  if (!formatter) {
+    throw new Error("Expected the sparkline's tooltip to carry a formatter");
+  }
+  return formatter.call(point as Highcharts.TooltipFormatterContextObject);
 }
 
 /** Reads the CSS `flex-direction` of `element`'s parent, failing loudly if it has none. */
@@ -279,6 +320,101 @@ describe('KpiChartRenderer', () => {
     expect(document.querySelector('[data-kpi-area="title"]')).toBeNull();
   });
 
+  describe('a category that is not a date', () => {
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+      // The data layer leaves `valuePeriodMs` unset for a dateless category and names the bucket
+      // with its display text instead.
+      categoryDisplayValue: 'Female',
+      sparklinePoints: [
+        { x: 0, y: 1200, categoryDisplayValue: 'Male' },
+        { x: 1, y: 1500, categoryDisplayValue: 'Female' },
+      ],
+    };
+
+    const renderCard = (styleOptions = {}) =>
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithTextCategory}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            styleOptions,
+            dataOptionsWithTextCategory,
+          )}
+        />,
+      );
+
+    it("captions the card with the bucket's own text, where a date category shows its period", () => {
+      const { getByText } = renderCard();
+
+      expect(getByText('Female')).toBeTruthy();
+      expect(dateFormatterMock).not.toHaveBeenCalled();
+    });
+
+    it('hides that caption under showCategoryTitle: false, same as the period caption', () => {
+      const { queryByText, getByText } = renderCard({ title: { showCategoryTitle: false } });
+
+      expect(queryByText('Female')).toBeNull();
+      expect(getByText('Total Revenue')).toBeTruthy();
+    });
+
+    it('names each sparkline point by its bucket text rather than formatting the ordinal x as a date', () => {
+      renderCard();
+      const result = formatSparklineTooltip({
+        x: 1,
+        y: 1500,
+        // Double-cast: a real point carries ~20 more members, none of which the formatter reads —
+        // only the data object it was built from.
+        point: { options: { categoryDisplayValue: 'Female' } } as unknown as Highcharts.Point,
+      });
+
+      expect(result).toContain('Female');
+      expect(dateFormatterMock).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('title.align', () => {
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+      valuePeriodMs: Date.UTC(2020, 5, 15),
+    };
+
+    const renderWithAlign = (styleOptions: KpiStyleOptions) => {
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions(styleOptions, dataOptionsWithDate)}
+        />,
+      );
+      const titleArea = document.querySelector('[data-kpi-area="title"]');
+      expect(titleArea).toBeTruthy();
+      return getComputedStyle(titleArea as Element).justifyContent;
+    };
+
+    it('defaults to space-between, pushing the title text and the caption apart', () => {
+      expect(renderWithAlign({})).toBe('space-between');
+    });
+
+    it.each([
+      ['left', 'flex-start'],
+      ['right', 'flex-end'],
+      ['center', 'center'],
+      ['space-between', 'space-between'],
+    ] as const)(
+      "maps title.align '%s' to the flex-relative justify-content '%s' (RTL-safe -- never 'left'/'right')",
+      (align, expected) => {
+        expect(renderWithAlign({ title: { align } })).toBe(expected);
+      },
+    );
+  });
+
   describe("the category data option's dateFormat", () => {
     const JUNE_15_2020 = Date.UTC(2020, 5, 15);
     const chartData: KpiChartData = {
@@ -292,15 +428,6 @@ describe('KpiChartRenderer', () => {
         { x: JUNE_15_2020, y: 1500 },
       ],
     };
-
-    /** Formats a sparkline point through the tooltip formatter the renderer just built. */
-    function formatSparklineTooltip(point: { x: number; y: number }): string {
-      const options = sparklineOptionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options;
-      const formatter = options.tooltip?.formatter as (
-        this: Highcharts.TooltipFormatterContextObject,
-      ) => string;
-      return formatter.call(point as Highcharts.TooltipFormatterContextObject);
-    }
 
     it('formats both the period caption and the sparkline tooltip when set explicitly', () => {
       render(
@@ -372,17 +499,6 @@ describe('KpiChartRenderer', () => {
       ],
     };
 
-    function formatSparklineTooltip(): string {
-      const options = sparklineOptionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options;
-      const formatter = options.tooltip?.formatter as (
-        this: Highcharts.TooltipFormatterContextObject,
-      ) => string;
-      return formatter.call({
-        x: JUNE_15_2020,
-        y: 1500,
-      } as Highcharts.TooltipFormatterContextObject);
-    }
-
     const renderWithCardBackground = (backgroundColor?: string) =>
       render(
         <KpiChartRenderer
@@ -397,7 +513,7 @@ describe('KpiChartRenderer', () => {
 
     it("leads with the measure's title, like the series name in other chart tooltips", () => {
       renderWithCardBackground();
-      expect(formatSparklineTooltip()).toContain('Total Revenue');
+      expect(formatSparklineTooltip({ x: JUNE_15_2020, y: 1500 })).toContain('Total Revenue');
     });
 
     it('colors the value with the accent even when the sparkline itself was recolored for the card', () => {
@@ -410,7 +526,76 @@ describe('KpiChartRenderer', () => {
       ).color;
 
       expect(seriesColor).not.toBe('#00cee6');
-      expect(formatSparklineTooltip()).toContain('color:#00cee6');
+      expect(formatSparklineTooltip({ x: JUNE_15_2020, y: 1500 })).toContain('color:#00cee6');
+    });
+  });
+
+  describe("the sparkline's color", () => {
+    const JUNE_15_2020 = Date.UTC(2020, 5, 15);
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+      valuePeriodMs: JUNE_15_2020,
+      sparklinePoints: [
+        { x: Date.UTC(2020, 4, 15), y: 1200 },
+        { x: JUNE_15_2020, y: 1500 },
+      ],
+    };
+
+    const renderWith = (dataOptions: KpiChartDataOptionsInternal, styleOptions = {}) => {
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptions}
+          designOptions={translateKpiStyleOptionsToDesignOptions(styleOptions, dataOptions)}
+        />,
+      );
+      return (
+        (sparklineOptionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options)
+          .series?.[0] as Highcharts.SeriesLineOptions
+      ).color;
+    };
+
+    it("takes the category column's color, since the sparkline draws the category series", () => {
+      expect(renderWith(dataOptionsWithColoredCategory)).toBe('#ff00ff');
+    });
+
+    it('falls back to the theme accent when the category carries no color', () => {
+      expect(renderWith(dataOptionsWithDate)).toBe('#00cee6');
+    });
+
+    it('carries that color into the tooltip, which sits off the card', () => {
+      renderWith(dataOptionsWithColoredCategory);
+
+      expect(formatSparklineTooltip({ x: JUNE_15_2020, y: 1500 })).toContain('color:#ff00ff');
+    });
+
+    it('still yields to the contrast guard on a card background it would vanish against', () => {
+      // The authored color loses to legibility, exactly as the accent does -- see
+      // `resolveSparklineColor`. Magenta on magenta would otherwise be an invisible line.
+      const seriesColor = renderWith(dataOptionsWithColoredCategory, {
+        card: { backgroundColor: '#ff00ff' },
+      });
+
+      expect(seriesColor).not.toBe('#ff00ff');
+    });
+
+    it('ignores conditional coloring, which has no single value to test for a whole series', () => {
+      const conditionalCategory = translateKpiChartDataOptions({
+        value: revenue,
+        category: {
+          column: DM.Commerce.Date.Months,
+          color: {
+            type: 'conditional',
+            conditions: [{ color: '#ff00ff', expression: '0', operator: '>' }],
+            defaultColor: '#123456',
+          },
+        },
+      });
+
+      expect(renderWith(conditionalCategory)).toBe('#00cee6');
     });
   });
 

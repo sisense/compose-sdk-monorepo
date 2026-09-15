@@ -15,6 +15,7 @@ import {
 } from '@/domains/visualizations/core/chart-data-processor/table-processor.js';
 import { formatNumber } from '@/infra/formatting/index.js';
 
+import { isDateCategory } from '../data-options/data-options.js';
 import { KpiChartData, KpiComparisonData } from '../types.js';
 import { calcDeltaComparison, calcTargetComparison, inferPeriodLabelKey } from './comparison.js';
 import { KPI_ROW_TYPE_COLUMN } from './load-data.js';
@@ -24,6 +25,37 @@ import { resolveValueColor } from './value-colors.js';
 function readMeasureValue(row: Row, column: Column): number | undefined {
   const raw = getValue(row, column);
   return typeof raw === 'number' && Number.isFinite(raw) ? raw : undefined;
+}
+
+/**
+ * Reads the resolved thresholds of the headline value's formula-driven conditional color rules
+ * from the row the headline itself was read from, keyed by each measure's query column name
+ * (what {@link resolveValueColor} looks them up by).
+ *
+ * Reading them from `currentRow` rather than the first row is what keeps a threshold aligned
+ * with the number it gates: with a `category`, these measures are grouped per bucket like the
+ * value, so the last-bucket headline must be compared against the last bucket's threshold, and
+ * a `'total'` headline against the ungrouped total row's.
+ *
+ * @param row - The row the headline value was read from, or `undefined` when there is none
+ * @param dataTable - Table to locate each measure's column in
+ * @param colorConditionMeasures - Hidden measures backing the color rules
+ * @returns The resolved values, or `undefined` when there is nothing to resolve
+ */
+function readColorConditionValues(
+  row: Row | undefined,
+  dataTable: DataTable,
+  colorConditionMeasures: StyledMeasureColumn[] | undefined,
+): Record<string, number> | undefined {
+  if (!row || !colorConditionMeasures?.length) {
+    return undefined;
+  }
+  const entries = colorConditionMeasures.flatMap((measure) => {
+    const column = getColumnByName(dataTable, measure.column.name);
+    const value = column && readMeasureValue(row, column);
+    return value === undefined ? [] : [[measure.column.name, value] as const];
+  });
+  return entries.length ? Object.fromEntries(entries) : undefined;
 }
 
 /**
@@ -40,6 +72,20 @@ function readRawValue(row: Row, column: Column): string | number | undefined {
   return cell ? cell.rawValue ?? cell.displayValue : undefined;
 }
 
+/**
+ * Reads a cell's display text -- what the query formatted the value as, which is what a card
+ * caption or tooltip should show for a category that isn't a date. A blank cell yields
+ * `undefined` rather than an empty string, so a missing bucket label leaves no empty caption
+ * behind.
+ *
+ * @param row - Row holding the cell
+ * @param column - Column selecting the cell within the row
+ * @returns The cell's display text, or `undefined` when the cell is absent or blank
+ */
+function readDisplayValue(row: Row, column: Column): string | undefined {
+  return row[column.index]?.displayValue || undefined;
+}
+
 /** Narrows a `'target'` comparison's baseline to its fixed-number variant, without an `as` cast. */
 function isFixedTarget(target: StyledMeasureColumn | number): target is number {
   return typeof target === 'number';
@@ -48,6 +94,42 @@ function isFixedTarget(target: StyledMeasureColumn | number): target is number {
 /** Display label rule shared across the module: styled `name` → measure `title` → measure `name`. */
 function measureLabel(measure: StyledMeasureColumn): string {
   return getDataOptionTitle(measure);
+}
+
+/**
+ * Checks whether a label carries nothing but the number it labels.
+ *
+ * A comparison measure that is just a fixed number arrives as a constant formula whose default
+ * title is the formula text itself (a typed-in comparison value is stored as
+ * `{ formula: '1000000', title: '1000000' }`), so showing that title beside the readout prints
+ * the same number twice -- `1,000,000` over `1000000`. Thousand separators and surrounding
+ * whitespace are ignored, so a hand-written `'1,000,000'` reads as numeric too. A renamed item
+ * (`'Goal'`) is a real label and is kept.
+ *
+ * @param label - Display label to test
+ * @returns Whether the label is nothing but a number
+ */
+function isNumericLabel(label: string): boolean {
+  const bare = label.replace(/[\s,]/g, '');
+  // `Number('')` is 0, so the emptiness guard has to come first.
+  return bare !== '' && Number.isFinite(Number(bare));
+}
+
+/**
+ * Resolves the label of a comparison whose label is *displayed* as a title beside its readout
+ * (`'delta'`, `'value'`): the shared label rule, emptied when the label would only repeat the
+ * number already on display.
+ *
+ * `'target'` is deliberately not routed through here: its label is never a title of its own,
+ * only the `{{goal}}` interpolation of the percent-of-goal readout, where the number is the
+ * informative part (`'82% of 1000000 target'`).
+ *
+ * @param measure - Comparison measure supplying the label
+ * @returns The display label, or an empty string when it would only repeat the number
+ */
+function displayedComparisonLabel(measure: StyledMeasureColumn): string {
+  const label = measureLabel(measure);
+  return isNumericLabel(label) ? '' : label;
 }
 
 /**
@@ -103,8 +185,13 @@ function buildComparison(
         baseline: priorBucketValue,
         deltaValue,
         deltaPercent,
+        // Only a date category may name a granularity: `getDataOptionGranularity` defaults every
+        // non-level column to 'Years', which would label e.g. a Gender-bucketed card "vs prior
+        // year". Without one, the granularity-agnostic "vs prior period" is the honest label.
         labelKey: inferPeriodLabelKey(
-          dataOptions.category ? getDataOptionGranularity(dataOptions.category) : undefined,
+          isDateCategory(dataOptions.category)
+            ? getDataOptionGranularity(dataOptions.category)
+            : undefined,
         ),
       };
     }
@@ -120,7 +207,7 @@ function buildComparison(
         baseline,
         deltaValue,
         deltaPercent,
-        label: measureLabel(comparison.value),
+        label: displayedComparisonLabel(comparison.value),
       };
     }
 
@@ -150,7 +237,7 @@ function buildComparison(
       return {
         type: 'value',
         value: secondaryValue,
-        label: measureLabel(comparison.value),
+        label: displayedComparisonLabel(comparison.value),
         color: resolveValueColor(comparison.value, secondaryValue),
         numberFormatConfig: comparison.value.numberFormatConfig,
       };
@@ -216,16 +303,25 @@ export function getKpiChartData(
   let value: number | undefined;
   let valuePeriodMs: number | undefined;
   let categoryValue: string | number | undefined;
-  let sparklinePoints: { x: number; y: number | null }[] | undefined;
+  let categoryDisplayValue: string | undefined;
+  let sparklinePoints: KpiChartData['sparklinePoints'];
   let lastBucketValue: number | undefined;
   let priorBucketValue: number | undefined;
   let currentRow: Row | undefined;
 
   if (dataOptions.category) {
+    // A date category's buckets are placed by their own epoch; every other category's are placed
+    // by bucket order and identified by their display text instead. Ordinal placement is what
+    // keeps one series on one scale: a category whose cells parse to numbers would otherwise mix
+    // real values with the row-index fallback its blank cells take, yielding non-monotonic x.
+    const dateCategory = isDateCategory(dataOptions.category);
     sparklinePoints = bucketRows.map((row, index) => {
-      const rawX = categoryColumn ? getValue(row, categoryColumn) : undefined;
+      const rawX = dateCategory && categoryColumn ? getValue(row, categoryColumn) : undefined;
       const x = typeof rawX === 'number' && Number.isFinite(rawX) ? rawX : index;
-      return { x, y: readMeasureValue(row, valueColumn) ?? null };
+      const y = readMeasureValue(row, valueColumn) ?? null;
+      const label =
+        !dateCategory && categoryColumn ? readDisplayValue(row, categoryColumn) : undefined;
+      return label !== undefined ? { x, y, categoryDisplayValue: label } : { x, y };
     });
 
     const lastBucketRow = bucketRows.length > 0 ? bucketRows[bucketRows.length - 1] : undefined;
@@ -249,9 +345,15 @@ export function getKpiChartData(
       currentRow = lastBucketRow;
       value = lastBucketValue;
       if (lastBucketRow && categoryColumn) {
-        const rawPeriod = getValue(lastBucketRow, categoryColumn);
+        const rawPeriod = dateCategory ? getValue(lastBucketRow, categoryColumn) : undefined;
         valuePeriodMs =
           typeof rawPeriod === 'number' && Number.isFinite(rawPeriod) ? rawPeriod : undefined;
+        // The caption's stand-in for the epoch: what a non-date bucket is called. Set only when
+        // there is no epoch, since a date bucket is identified by `valuePeriodMs` and captioned
+        // through the category's own `dateFormat`.
+        categoryDisplayValue = dateCategory
+          ? undefined
+          : readDisplayValue(lastBucketRow, categoryColumn);
         // Unlike the epoch above, this is kept for every category type (a non-datetime category
         // has no period to caption the header with, but still identifies the bucket).
         categoryValue = readRawValue(lastBucketRow, categoryColumn);
@@ -275,9 +377,14 @@ export function getKpiChartData(
     ...base,
     hasRows: true,
     value,
-    valueColor: resolveValueColor(dataOptions.value, value),
+    valueColor: resolveValueColor(
+      dataOptions.value,
+      value,
+      readColorConditionValues(currentRow, dataTable, dataOptions.colorConditionMeasures),
+    ),
     valuePeriodMs,
     categoryValue,
+    categoryDisplayValue,
     sparklinePoints,
     comparison,
   };

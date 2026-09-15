@@ -79,10 +79,11 @@ export const QueryPill: FunctionComponent<QueryPillProps> = ({
 
   const pill = (
     <span
-      className="csdk-inline-flex csdk-items-center csdk-rounded csdk-px-2 csdk-py-1 csdk-font-normal csdk-whitespace-nowrap csdk-max-w-full csdk-truncate"
+      className="csdk-inline-flex csdk-min-h-min csdk-items-center csdk-rounded csdk-px-2 csdk-py-1 csdk-font-normal csdk-whitespace-nowrap csdk-max-w-full"
       style={{
         backgroundColor: bg,
         color: text,
+        overflow: 'visible',
         ...QUERY_PILL_LABEL_STYLE,
       }}
       title={isTruncated ? item.label : undefined}

@@ -111,6 +111,7 @@ export type {
   KpiStyleOptions,
   KpiValueStyleOptions,
   KpiTitleStyleOptions,
+  KpiTitleAlign,
   KpiComparisonStyleOptions,
   KpiSparklineStyleOptions,
   KpiSparklineType,
@@ -201,6 +202,7 @@ export type {
   Member,
   FilterVariant,
   FilterWidgetFilterType,
+  NarrativeWidgetProps,
   TranslationConfig,
   Plugin,
 } from '@sisense/sdk-ui-preact';

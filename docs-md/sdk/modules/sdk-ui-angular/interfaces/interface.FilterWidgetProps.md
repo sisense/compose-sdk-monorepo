@@ -73,7 +73,8 @@ Configuration of the widget.
 > **filterType**?: [`FilterWidgetFilterType`](../type-aliases/type-alias.FilterWidgetFilterType.md)
 
 How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
-`'condition'` renders a string condition control for text attributes.
+`'condition'` renders a string condition control for text attributes, and `'calendar'`
+a calendar for datetime attributes.
 Additional types will be added as they are implemented.
 
 ##### Default Value

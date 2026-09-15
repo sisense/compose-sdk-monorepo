@@ -63,9 +63,8 @@ export function convertChartWidgetPropsToNarrativeParams(
     );
   }
 
-  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeConfig(
-    getWidgetNarrativeConfigFromWidgetProps(props),
-  );
+  const narrativeConfig = getWidgetNarrativeConfigFromWidgetProps(props);
+  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeConfig(narrativeConfig);
   const adaptMeasureOptions = { includeTrendAndForecast };
   const { dimensions, measures } = isTable(chartType)
     ? getNarrativeDimensionsAndMeasuresFromTable(
@@ -80,6 +79,7 @@ export function convertChartWidgetPropsToNarrativeParams(
     measures,
     filters,
     verbosity: toNlgApiVerbosity(verbosity),
+    ...(narrativeConfig?.aiContext?.trim() ? { aiContext: narrativeConfig.aiContext.trim() } : {}),
   };
 }
 
@@ -106,9 +106,8 @@ export function convertPivotWidgetPropsToNarrativeRequest(
     );
   }
 
-  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeConfig(
-    getWidgetNarrativeConfigFromWidgetProps(props),
-  );
+  const narrativeConfig = getWidgetNarrativeConfigFromWidgetProps(props);
+  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeConfig(narrativeConfig);
 
   const pivotDataOptions =
     !includeTrendAndForecast && props.dataOptions.values
@@ -148,6 +147,7 @@ export function convertPivotWidgetPropsToNarrativeRequest(
   return prepareNarrativeRequest({
     jaql: jaqlPayload,
     verbosity: toNlgApiVerbosity(verbosity),
+    ...(narrativeConfig?.aiContext?.trim() ? { aiContext: narrativeConfig.aiContext.trim() } : {}),
   });
 }
 

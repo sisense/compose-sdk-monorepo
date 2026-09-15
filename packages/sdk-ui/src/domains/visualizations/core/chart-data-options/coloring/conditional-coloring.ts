@@ -3,7 +3,29 @@ import {
   ConditionalDataColorOptions,
   DataColorCondition,
   DataColorOptions,
+  StyledMeasureColumn,
 } from '../../../../../types';
+
+/**
+ * Extracts the hidden measures backing a column's formula-driven conditional color rules
+ * (see {@link DataColorCondition.valueMeasure}), so a chart can add them to its query and
+ * resolve each rule's threshold. Returns an empty array for any other kind of color options,
+ * and for conditions whose thresholds are literal numbers.
+ *
+ * @param colorOptions - Color options of the column being colored.
+ * @returns The measures whose resolved values are the conditions' thresholds.
+ * @internal
+ */
+export const getColorConditionMeasures = (
+  colorOptions: DataColorOptions | undefined,
+): StyledMeasureColumn[] => {
+  if (!colorOptions || typeof colorOptions === 'string' || colorOptions.type !== 'conditional') {
+    return [];
+  }
+  return (colorOptions.conditions ?? []).flatMap((condition) =>
+    condition.valueMeasure ? [{ column: condition.valueMeasure }] : [],
+  );
+};
 
 /**
  * Returns a transformer that replaces formula-driven conditions' `expression` with

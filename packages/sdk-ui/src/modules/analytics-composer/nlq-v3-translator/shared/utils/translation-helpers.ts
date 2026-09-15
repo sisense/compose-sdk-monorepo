@@ -3,7 +3,14 @@
  *
  * @internal
  */
-import type { DataSource, JSONObject } from '@sisense/sdk-data';
+import type {
+  DataSource,
+  Filter,
+  FilterRelations,
+  FilterRelationsNode,
+  JSONObject,
+} from '@sisense/sdk-data';
+import { isFilterRelations } from '@sisense/sdk-data';
 
 import type { WidgetsOptions } from '@/domains/dashboarding/dashboard-model/types.js';
 
@@ -106,6 +113,23 @@ export function getSuccessData<T>(result: NlqTranslationResult<T>): T {
 export function getErrors<T>(result: NlqTranslationResult<T>): string[] {
   if (result.success) throw new Error('Expected error result');
   return result.errors.map((error) => error.message);
+}
+
+/**
+ * Asserts and narrows a `FilterRelationsNode` (which also allows a lone `Filter`) to
+ * `FilterRelations`, for assertions on a relation tree's `left`/`right` children (or on a
+ * translation result's top-level `filters`).
+ *
+ * @internal
+ */
+export function asFilterRelations(
+  node: Filter[] | FilterRelationsNode | undefined,
+): FilterRelations {
+  const candidate = node as Filter[] | FilterRelations | undefined;
+  if (!isFilterRelations(candidate)) {
+    throw new Error('Expected FilterRelations');
+  }
+  return candidate;
 }
 
 /**

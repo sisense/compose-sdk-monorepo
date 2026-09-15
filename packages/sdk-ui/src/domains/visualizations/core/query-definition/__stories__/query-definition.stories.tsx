@@ -29,8 +29,8 @@ const meta: Meta<typeof QueryDefinition> = {
         component:
           'Read-only query definition as colored pills (measures → dimensions → filters). ' +
           'Figma-aligned colors; up to 4 pills then “Show N more” / “Show less”. Hover pills for JSON tooltip. ' +
-          "Filter pills use readable labels (e.g. `Region is North`, `Category in ['A', 'B']`). " +
-          'Long labels truncate at `maxPillLength` (default 25) with an ellipsis; set `maxPillLength={0}` to disable. ' +
+          'Filter pills use readable labels (e.g. `Region: North`, `Category: A, B`). ' +
+          'Long labels truncate from the value side at `maxPillLength` (default 25) with an ellipsis; set `maxPillLength={0}` to disable. ' +
           'Tooltips use the viewport by default; pass `tooltipBoundaryElement` (e.g. chart card) to clamp inside a host.',
       },
     },
@@ -170,8 +170,8 @@ export const TruncatedFilterLabels: Story = {
     docs: {
       description: {
         story:
-          'Multi-value filters produce long readable labels (`Category in […]`). ' +
-          'With the default `maxPillLength={25}`, pills show the first 25 characters plus `...`.',
+          'Multi-value filters produce long readable labels (`Category: A, B, C`). ' +
+          'With the default `maxPillLength={25}`, pills keep the field name and cut the value plus `...`.',
       },
     },
   },

@@ -38,6 +38,13 @@ export interface UseGetNlgInsightsParams {
 
   /** The verbosity of the NLG summarization */
   verbosity?: 'Low' | 'High';
+
+  /**
+   * Free-text guidance for the narrative summary — context the model can't infer from the data
+   * alone, e.g. `"amounts are in USD"` or `"ignore the March spike, known data issue"`. Forwarded
+   * to the narrative endpoint.
+   */
+  aiContext?: string;
 }
 
 /**
@@ -84,6 +91,10 @@ export function prepareNarrativeRequest(
 
   if (params.verbosity) {
     parameters.verbosity = params.verbosity;
+  }
+
+  if (params.aiContext?.trim()) {
+    parameters.aiContext = params.aiContext.trim();
   }
 
   return parameters;

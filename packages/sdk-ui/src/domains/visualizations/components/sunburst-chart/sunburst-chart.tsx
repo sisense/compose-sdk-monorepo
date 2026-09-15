@@ -9,16 +9,28 @@ import { shouldSkipSisenseContextWaiting } from '../chart/helpers/should-skip-si
  *
  * This type of chart can be used in different scenarios, for example, to compare both categories and sub-categories.
  *
- * ## Example
+ * @example
+ * Sunburst chart displaying total quantity, categorized by condition and age range, from the Sample ECommerce data model.
  *
- * Sunburst chart displaying total revenue, categorized by condition and age range, from the Sample ECommerce data model.
+ * ```tsx
+ * import { SunburstChart } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
  *
- * <iframe
- *  src='https://csdk-playground.sisense.com/?example=charts%2Fsunburst-chart&mode=docs'
- *  width='100%'
- *  height='870'
- *  style='max-width:800px; border:none;'
- * />
+ * const CodeExample = () => (
+ *   <SunburstChart
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       category: [DM.Commerce.Condition, DM.Commerce.AgeRange],
+ *       value: [measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity')],
+ *     }}
+ *   />
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
+ * <img src="media://sunburst-chart-example-1.png" width="700px" />
  *
  * @param props - Sunburst chart properties
  * @returns Sunburst Chart component

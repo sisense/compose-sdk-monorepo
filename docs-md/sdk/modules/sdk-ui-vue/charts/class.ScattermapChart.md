@@ -9,35 +9,31 @@ It maintains compatibility with Vue's reactivity system while preserving the fun
 
 ## Example
 
-Here's how you can use the ScattermapChart component in a Vue application:
 ```vue
-<template>
-     <ScattermapChart
-       :dataOptions="scattermapChartProps.dataOptions"
-       :dataSet="scattermapChartProps.dataSet"
-       :filters="scattermapChartProps.filters"
-     />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { ScattermapChart,type ScattermapChartProps } from '@sisense/sdk-ui-vue';
+import { ScattermapChart, type ScattermapChartDataOptions } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-const scattermapChartProps = ref<ScattermapChartProps>({
-   dataSet: DM.DataSource,
-   dataOptions: {
-     geo: [DM.DimCountries.CountryName],
-     size: { column: measureTotalRevenue, title: 'Total Revenue' },
-   },
-   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
- });
+const chartProps = ref<{ dataOptions: ScattermapChartDataOptions }>({
+  dataOptions: {
+    geo: [DM.Country.Country],
+    size: measureFactory.sum(DM.Commerce.Cost, 'Size by Cost'),
+    colorBy: {
+      column: measureFactory.rank(measureFactory.sum(DM.Commerce.Revenue, 'Color by Revenue Rank')),
+      color: { type: 'range', steps: 7, minColor: '#cf9270', maxColor: '#3900b3' },
+    },
+    details: DM.Brand.Brand,
+  },
+});
 </script>
+
+<template>
+  <ScattermapChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+</template>
 ```
-<img src="../../../img/vue-scattermap-chart-example.png" width="600px" />
+<img src="../../../img/scattermap-chart-example-1.png" width="700px" />
 
 ## Param
 

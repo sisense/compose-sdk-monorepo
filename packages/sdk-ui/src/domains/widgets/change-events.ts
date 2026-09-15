@@ -114,6 +114,13 @@ export type FilterWidgetChangeEvent =
   | WidgetTitleChangedEvent;
 
 /**
+ * Events that can be triggered by the NarrativeWidget component.
+ *
+ * @internal
+ */
+export type NarrativeWidgetChangeEvent = WidgetTitleChangedEvent;
+
+/**
  * Events that can be triggered by widget components.
  *
  * Union of all widget-specific change events. Extensible for TextWidget, CustomWidget future events.
@@ -137,4 +144,5 @@ export type FilterWidgetChangeEvent =
 export type WidgetChangeEvent =
   | ChartWidgetChangeEvent
   | PivotTableWidgetChangeEvent
-  | FilterWidgetChangeEvent;
+  | FilterWidgetChangeEvent
+  | NarrativeWidgetChangeEvent;

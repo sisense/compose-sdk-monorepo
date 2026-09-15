@@ -5,7 +5,6 @@ import {
   FilterRelationsNode,
   isLevelAttribute,
   isMembersFilter,
-  mergeFiltersOrFilterRelations,
   simplifyFilterConfig,
 } from '@sisense/sdk-data';
 
@@ -15,6 +14,7 @@ import {
   NlqTranslationResult,
 } from '../../../types.js';
 import { processNode } from '../../shared/expression/process-node.js';
+import { mergeTranslatedFilters } from '../../shared/utils/merge-translated-filters.js';
 import { validateNoDuplicateMembers } from '../../shared/validation/datetime-member-validation.js';
 import { normalizeMemberForGranularity } from '../../shared/validation/normalize-member-for-granularity.js';
 import {
@@ -100,9 +100,9 @@ function postProcessFilters(
     const itemPath = `${pathPrefix}[${index}]`;
     if (isFilterRelationsElement(filter)) {
       try {
-        mergedFilters = mergeFiltersOrFilterRelations(
-          postProcessFilterRelations(filter, itemPath),
+        mergedFilters = mergeTranslatedFilters(
           mergedFilters,
+          postProcessFilterRelations(filter, itemPath),
         );
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MSG;
@@ -111,10 +111,7 @@ function postProcessFilters(
       return;
     }
     try {
-      mergedFilters = mergeFiltersOrFilterRelations(
-        [postProcessFilter(filter, itemPath)],
-        mergedFilters,
-      );
+      mergedFilters = mergeTranslatedFilters(mergedFilters, [postProcessFilter(filter, itemPath)]);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MSG;
       errors.push({ path: itemPath, input: filtersJSON[index], message: errorMsg });

@@ -123,6 +123,32 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'Tabber-widgetconfiguratie is ongeldig',
   },
+  notifications: {
+    dismiss: 'Melding sluiten',
+    auth: {
+      sessionExpiredTitle: 'Sessie verlopen',
+      sessionExpiredMessage: 'Uw sessie is verlopen. Meld u opnieuw aan om door te gaan.',
+      authenticationFailedTitle: 'Authenticatie mislukt',
+      authenticationFailedMessage:
+        'De opgegeven aanmeldgegevens zijn door de Sisense-instantie geweigerd.',
+    },
+    permission: {
+      forbiddenTitle: 'Toegang geweigerd',
+      forbiddenMessage: 'U hebt geen toestemming om deze gegevens te openen.',
+    },
+    network: {
+      unreachableTitle: 'Verbindingsprobleem',
+      unreachableMessage: 'De Sisense-instantie is niet bereikbaar.',
+    },
+    server: {
+      errorTitle: 'Serverfout',
+      errorMessage: 'De Sisense-instantie heeft een fout geretourneerd. Probeer het later opnieuw.',
+    },
+    general: {
+      requestFailedTitle: 'Verzoek mislukt',
+      requestFailedMessage: 'Een verzoek aan de Sisense-instantie is mislukt.',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Geen resultaten',
   filters: 'Filters',
@@ -232,6 +258,7 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Alles behalve {{count}}',
     setupTitle: 'Filterwidget instellen',
     setupSubtitle: 'Stel een dimensie in en configureer hoe het filter werkt',
+    emptySetup: 'Filter instellen',
     conditionUnsupported: 'Voorwaarde is beschikbaar voor tekst- en numerieke velden',
     conditionNotRepresentable: 'Deze voorwaarde kan hier niet worden bewerkt',
     controls: {
@@ -251,6 +278,20 @@ const translation: TranslationDictionary = {
       betweenMax: 'Maximum',
       selectValues: '{{level}} selecteren',
       clear: 'Wissen',
+    },
+    calendar: {
+      selectDates: 'Datums selecteren',
+      multipleDaysHint: 'U kunt meerdere dagen selecteren',
+      formatError: 'Gebruik de notatie {{- format}}',
+      nonexistent: 'Deze datum bestaat niet',
+      chooseDate: 'Datum kiezen',
+      chooseDates: 'Datums kiezen',
+      previousMonth: 'Vorige maand',
+      nextMonth: 'Volgende maand',
+      previousYear: 'Vorig jaar',
+      nextYear: 'Volgend jaar',
+      openCalendar: 'Kalender openen',
+      clearDate: 'Datum wissen',
     },
   },
   unsupportedFilterMessage: 'Niet-ondersteund filter (toegepast op de gegevensquery)',
@@ -285,6 +326,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: 'Widget verwijderen',
+      duplicateWidget: 'Widget dupliceren',
       renameWidget: 'Widget hernoemen',
       distributeEqualWidth: 'Gelijkmatig verdelen in deze rij',
       download: 'Downloaden',
@@ -297,6 +339,21 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       'Onbekend aangepast widgettype: {{customWidgetType}}. Registreer dit aangepaste widget.',
+  },
+  narrativeWidget: {
+    generate: 'Narratief genereren',
+    regenerate: 'Opnieuw genereren',
+    retry: 'Genereren opnieuw proberen',
+    disclaimer: 'Inhoud wordt aangedreven door AI, dus fouten zijn mogelijk.',
+    updatedAt: 'Bijgewerkt {{timestamp}}',
+    copy: 'Kopiëren naar klembord',
+    copied: 'Gekopieerd',
+    creditsUsed: '{{usagePercentage}}% van de AI-credits is gebruikt.',
+    noDataTitle: 'Geen dashboardgegevens beschikbaar',
+    noDataDescription: 'Zodra dashboardgegevens beschikbaar zijn, kunt u een narratief genereren.',
+    failedTitle: 'Kan het narratief niet genereren',
+    failedDescription:
+      'Probeer het later opnieuw. Neem contact op met uw beheerder als het probleem aanhoudt.',
   },
   ai: {
     analyticsChatbot: 'Analytische chatbot',
@@ -508,6 +565,7 @@ const translation: TranslationDictionary = {
       label: 'Gekoppeld aan filterwidget',
       tooltip:
         'Dit filter kan niet worden bewerkt vanuit het filterpaneel. Wijzig de waarden rechtstreeks op het dashboard.',
+      infoAriaLabel: 'Info over koppeling met filterwidget',
     },
   },
   chart: {
@@ -523,6 +581,7 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Gegevenstabel',
       totalRows: 'Totaal aantal rijen: {{formattedCount}}',
+      rowsRange: 'Rijen {{start}}-{{end}}',
     },
     sankey: {
       alerts: {

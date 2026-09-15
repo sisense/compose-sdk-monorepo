@@ -1,10 +1,13 @@
-import { Measure, parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
-
-import type { ExecuteQueryParams } from '@/domains/query-execution/index.js';
 import {
   FORECAST_PREFIX,
+  isForecastMeasure,
+  isTrendMeasure,
+  Measure,
+  parseComposeCodeToFunctionCall,
   TREND_PREFIX,
-} from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query.js';
+} from '@sisense/sdk-data';
+
+import type { ExecuteQueryParams } from '@/domains/query-execution/index.js';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../types.js';
 import { translateDimensionsToJSON } from '../constructs/dimensions/translate-dimensions-to-json.js';
@@ -26,20 +29,6 @@ type StyledMeasureColumnForQuery = {
   forecast?: Record<string, unknown>;
   [key: string]: unknown;
 };
-
-function isTrendMeasure(m: Measure): boolean {
-  return (
-    (m.composeCode?.includes('measureFactory.trend') ?? false) ||
-    (m.name?.startsWith(TREND_PREFIX) ?? false)
-  );
-}
-
-function isForecastMeasure(m: Measure): boolean {
-  return (
-    (m.composeCode?.includes('measureFactory.forecast') ?? false) ||
-    (m.name?.startsWith(FORECAST_PREFIX) ?? false)
-  );
-}
 
 /**
  * Extracts trend/forecast options from a companion measure's composeCode (args[2]).
@@ -79,6 +68,15 @@ function collapseMeasuresForJSON(measures: Measure[]): (Measure | StyledMeasureC
     const expectedTrendName = `${TREND_PREFIX}_${baseName}`;
     const expectedForecastName = `${FORECAST_PREFIX}_${baseName}`;
 
+    // Whether a companion was MATCHED (by position + TREND_PREFIX/FORECAST_PREFIX name) is tracked
+    // separately from whether its composeCode's options object could be parsed — a companion built
+    // with no explicit options (e.g. `trend: {}`, the default) has a 2-argument composeCode with no
+    // options object at all, so `getCompanionOptions` correctly returns `undefined` for it. Losing
+    // track of "matched" in that case (as the `trendOpts !== undefined` check below used to) drops
+    // the companion silently instead of tagging it with empty options — the query round-trips into
+    // JSON missing a real trend/forecast measure with no error anywhere.
+    let trendMatched = false;
+    let forecastMatched = false;
     let trendOpts: Record<string, unknown> | undefined;
     let forecastOpts: Record<string, unknown> | undefined;
     let nextIdx = i + 1;
@@ -91,6 +89,7 @@ function collapseMeasuresForJSON(measures: Measure[]): (Measure | StyledMeasureC
     ) {
       const companionCode = measures[nextIdx].composeCode?.trim();
       if (companionCode) {
+        trendMatched = true;
         trendOpts = getCompanionOptions(companionCode);
         consumed.add(nextIdx);
         nextIdx++;
@@ -105,16 +104,17 @@ function collapseMeasuresForJSON(measures: Measure[]): (Measure | StyledMeasureC
     ) {
       const companionCode = measures[nextIdx].composeCode?.trim();
       if (companionCode) {
+        forecastMatched = true;
         forecastOpts = getCompanionOptions(companionCode);
         consumed.add(nextIdx);
       }
     }
 
-    if (trendOpts !== undefined || forecastOpts !== undefined) {
+    if (trendMatched || forecastMatched) {
       result.push({
         column: measure,
-        ...(trendOpts && Object.keys(trendOpts).length > 0 && { trend: trendOpts }),
-        ...(forecastOpts && Object.keys(forecastOpts).length > 0 && { forecast: forecastOpts }),
+        ...(trendMatched && { trend: trendOpts ?? {} }),
+        ...(forecastMatched && { forecast: forecastOpts ?? {} }),
       });
     } else {
       result.push(measure);

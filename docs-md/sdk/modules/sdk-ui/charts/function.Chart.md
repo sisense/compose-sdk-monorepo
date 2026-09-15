@@ -8,17 +8,6 @@ title: Chart
 
 A React component used for easily switching chart types or rendering multiple series of different chart types.
 
-## Example
-
-A chart component displaying total revenue per quarter from the Sample ECommerce data model. The component is currently set to show the data in a column chart.
-
-<iframe
- src='https://csdk-playground.sisense.com/?example=charts/chart&mode=docs'
- width='100%'
- height='870'
- style='max-width:800px; border:none;'
-/>
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -30,3 +19,29 @@ A chart component displaying total revenue per quarter from the Sample ECommerce
 `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Chart component representing a chart type as specified in `ChartProps.`[chartType](../interfaces/interface.ChartProps.md#charttype)
+
+## Example
+
+A chart component displaying total revenue per quarter from the Sample ECommerce data model. The component is currently set to show the data in a column chart.
+
+```ts
+import { Chart } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const CodeExample = () => (
+  <Chart
+    chartType="column" // Change this to "line" to see a line chart
+    dataSet={DM.DataSource}
+    dataOptions={{
+      category: [DM.Commerce.Date.Quarters],
+      value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+      breakBy: [],
+    }}
+  />
+);
+
+export default CodeExample;
+```
+
+<img src="../../../img/chart-example-1.png" width="700px" />

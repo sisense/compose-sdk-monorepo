@@ -13,6 +13,9 @@ import {
   isCustomWidget,
   isCustomWidgetFusionWidget,
   isCustomWidgetProps,
+  isNarrativeFusionWidget,
+  isNarrativeWidgetProps,
+  isSupportedWidgetType,
   isTextWidgetDtoStyle,
   mergeFilters,
   registerDataPointClickHandler,
@@ -400,5 +403,29 @@ describe('widget-by-id utils', () => {
       registerDataPointsSelectedHandler(widgetProps, handler);
       expect(widgetProps.onDataPointsSelected).toBeUndefined();
     });
+  });
+});
+
+describe('dashboard narrative widget type', () => {
+  it('maps the Fusion type to the CSDK type and back', () => {
+    expect(getWidgetType('dashboardnarrative')).toBe('narrative');
+    expect(getFusionWidgetType('narrative')).toBe('dashboardnarrative');
+  });
+
+  it('is a supported first-class Fusion widget type, not a chart and not a custom widget', () => {
+    expect(isSupportedWidgetType('dashboardnarrative')).toBe(true);
+    expect(isNarrativeFusionWidget('dashboardnarrative')).toBe(true);
+    expect(isNarrativeFusionWidget('chart/line')).toBe(false);
+    expect(isCustomWidgetFusionWidget('dashboardnarrative')).toBe(false);
+  });
+
+  it('recognizes narrative widget props', () => {
+    expect(isNarrativeWidgetProps({ widgetType: 'narrative' })).toBe(true);
+    expect(
+      isNarrativeWidgetProps({
+        widgetType: 'text',
+        styleOptions: { html: '', vAlign: 'valign-middle', bgColor: '#FFFFFF' },
+      }),
+    ).toBe(false);
   });
 });

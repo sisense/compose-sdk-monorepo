@@ -21,14 +21,15 @@ import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCh
 
 import { SingleSelect } from '../common';
 import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
-import { CalendarSelect, CalendarSelectTypes } from '../common/select/calendar-select';
+import { CalendarSelect } from '../common/select/calendar-select';
 import { SearchableMultiSelect } from '../common/select/searchable-multi-select';
 import { SearchableSingleSelect } from '../common/select/searchable-single-select';
 import { SelectableSection } from '../common/selectable-section';
 import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from '../constants';
 import { useFilterEditorContext } from '../filter-editor-context';
 import { useDatetimeFormatter } from '../hooks/use-datetime-formatter';
-import { convertDateToMemberString, isIncludeMembersFilter } from '../utils';
+import { isIncludeMembersFilter } from '../utils';
+import { getDaysCalendarProps } from './common/days-calendar-props';
 import { granularities } from './common/granularities';
 import { DatetimeLimits } from './types';
 import {
@@ -36,6 +37,7 @@ import {
   getMembersWithDeactivated,
   getMembersWithoutDeactivated,
   getRestrictedGranularities,
+  withMembersLimitedToSelectionMode,
 } from './utils';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
@@ -140,8 +142,12 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
 
   const prepareAndChangeFilter = useCallback(
     ({ selectedMembers, multiSelectEnabled, attribute }: MembersFilterData) => {
-      const config = getConfigWithUpdatedDeactivated(filter, selectedMembers);
-      const members = getMembersWithoutDeactivated(filter, selectedMembers);
+      const permittedMembers = withMembersLimitedToSelectionMode(
+        selectedMembers,
+        multiSelectEnabled,
+      );
+      const config = getConfigWithUpdatedDeactivated(filter, permittedMembers);
+      const members = getMembersWithoutDeactivated(filter, permittedMembers);
       const newFilter = createMembersFilter(attribute, members, {
         ...config,
         enableMultiSelection: multiSelectEnabled,
@@ -155,9 +161,7 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
     if (isMultiSelectChanged && selected) {
       let newSelectedMembers = selectedMembers;
       if (!multiSelectEnabled) {
-        if (selectedMembers.length > 1) {
-          newSelectedMembers = [selectedMembers.sort()[0]];
-        }
+        newSelectedMembers = withMembersLimitedToSelectionMode(selectedMembers, multiSelectEnabled);
         setSelectedMembers(newSelectedMembers);
       }
 
@@ -189,14 +193,6 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
     [multiSelectEnabled, attribute, prepareAndChangeFilter],
   );
 
-  const handleDaysMembersChange = useCallback(
-    (dateMembers: Date[]) => {
-      const members = dateMembers.map((date) => convertDateToMemberString(date));
-      handleMembersChange(members);
-    },
-    [handleMembersChange],
-  );
-
   const handleGranularityChange = useCallback(
     (granularity: string) => {
       const newAttribute = createLevelAttribute(attribute, granularity, t);
@@ -207,12 +203,6 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
     [multiSelectEnabled, attribute, prepareAndChangeFilter, t],
   );
 
-  const selectedDaysMembers = useMemo(() => {
-    return isDaysLevel
-      ? selectedMembers.map((member) => parseISOWithTimezoneCheck(member))
-      : undefined;
-  }, [selectedMembers, isDaysLevel]);
-
   const normalizedLimits = useMemo(() => {
     return limits
       ? {
@@ -221,6 +211,16 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
         }
       : undefined;
   }, [limits]);
+
+  const daysCalendarProps = useMemo(
+    () =>
+      getDaysCalendarProps({
+        members: selectedMembers,
+        multiSelectEnabled,
+        onChange: handleMembersChange,
+      }),
+    [selectedMembers, multiSelectEnabled, handleMembersChange],
+  );
 
   return (
     <SelectableSection
@@ -265,11 +265,10 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
             {isDaysLevel && (
               <CalendarSelect
                 width={152}
-                type={CalendarSelectTypes.MULTI_SELECT}
-                value={selectedDaysMembers}
                 limits={normalizedLimits}
-                onChange={handleDaysMembersChange}
                 placeholder={t('filterEditor.placeholders.select')}
+                {...daysCalendarProps}
+                aria-label={multiSelectEnabled ? 'Calendar multi-select' : 'Calendar single-select'}
               />
             )}
           </>

@@ -155,6 +155,14 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   styleOptions: WidgetByIdProps['styleOptions'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.config}
+   *
+   * @category Widget
+   */
+  @Input()
+  config: WidgetByIdProps['config'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.highlightSelectionDisabled}
    *
    * @category Widget
@@ -211,6 +219,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
       title: this.title,
       description: this.description,
       styleOptions: this.styleOptions,
+      config: this.config,
       highlightSelectionDisabled: this.highlightSelectionDisabled,
       drilldownOptions: this.drilldownOptions,
       onDataReady: this.dataReady?.bind(this),

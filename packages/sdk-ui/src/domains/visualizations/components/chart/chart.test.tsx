@@ -1,6 +1,6 @@
 /** @vitest-environment jsdom */
 import { Data } from '@sisense/sdk-data';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { setTimeout } from 'timers/promises';
 
 import { ThemeProvider } from '@/infra/contexts/theme-provider';
@@ -517,6 +517,37 @@ describe('Chart', () => {
       expect(await findByText('N/A')).toBeTruthy();
       expect(queryByText('No Results')).toBeNull();
     });
+  });
+
+  it('rebuilds series when dataOptions change on explicit data without a remount', async () => {
+    const seriesNamesPerRender: string[][] = [];
+    const onBeforeRender = (options: HighchartsOptions) => {
+      seriesNamesPerRender.push((options.series ?? []).map((series) => String(series.name)));
+      return options;
+    };
+    const { rerender, findByTestId } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'line'}
+        dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
+        onBeforeRender={onBeforeRender}
+      />,
+    );
+    await waitFor(() => expect(seriesNamesPerRender.at(-1)).toEqual(['Quantity']));
+    const rootBeforeUpdate = await findByTestId('chart-root');
+
+    // Same instance, no `key`: the chart must pick up the new measure from the same dataset.
+    rerender(
+      <Chart
+        dataSet={dataSet}
+        chartType={'line'}
+        dataOptions={{ category: [cat1], value: [meas2], breakBy: [] }}
+        onBeforeRender={onBeforeRender}
+      />,
+    );
+    await waitFor(() => expect(seriesNamesPerRender.at(-1)).toEqual(['Units']));
+    // The very same DOM node survived the update, i.e. the chart was updated, not remounted.
+    expect(await findByTestId('chart-root')).toBe(rootBeforeUpdate);
   });
 
   it('should show No Results overlay in Table when data missing', async () => {

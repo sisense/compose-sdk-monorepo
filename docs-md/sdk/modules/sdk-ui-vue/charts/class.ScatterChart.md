@@ -14,34 +14,34 @@ If omitted, all scatter points are equal in size. If used, the circle sizes are 
 
 ## Example
 
-Here's how you can use the ScatterChart component in a Vue application:
 ```vue
-<template>
-     <ScatterChart
-       :dataOptions="scatterChartProps.dataOptions"
-       :dataSet="scatterChartProps.dataSet"
-       :filters="scatterChartProps.filters"
-     />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { ScatterChart, type ScatterChartProps } from '@sisense/sdk-ui-vue';
+import { ScatterChart } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-const scatterChartProps = ref<ScatterChartProps>({
-   dataSet: DM.DataSource,
-   dataOptions: {
-     x: dimProductName,
-     y: measureTotalRevenue,
-   },
-   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
- });
+const chartProps = ref({
+  dataOptions: {
+    x: DM.Category.CategoryID,
+    y: measureFactory.sum(DM.Commerce.Revenue),
+    breakByColor: DM.Commerce.Gender,
+  },
+  styleOptions: {
+    yAxis: { enabled: true, logarithmic: true, title: { enabled: true, text: 'Total Revenue' } },
+  },
+});
+</script>
+
+<template>
+  <ScatterChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+    :styleOptions="chartProps.styleOptions"
+  />
+</template>
 ```
-<img src="../../../img/vue-scatter-chart-example.png" width="800px" />
+<img src="../../../img/scatter-chart-example-1.png" width="700px" />
 
 ## Param
 

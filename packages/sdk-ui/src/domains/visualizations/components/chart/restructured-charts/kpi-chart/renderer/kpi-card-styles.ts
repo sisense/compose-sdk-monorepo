@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 import { KpiChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
+import { KpiTitleAlign } from '@/types';
 
 type CardLayout = KpiChartDesignOptions['layout'];
 
@@ -123,12 +124,35 @@ export const CardRoot = styled.figure<
   }
 `;
 
+/**
+ * Maps the card's `textAlign` to a writing-mode-relative flex alignment keyword, matching
+ * `CardRoot`'s logical `text-align` mapping (`left`->start, `right`->end) so the comparison
+ * readout mirrors correctly in RTL rather than pinning to a physical edge.
+ * @internal
+ */
+export type CardTextAlign = 'left' | 'center' | 'right';
+const FLEX_ALIGN: Record<CardTextAlign, string> = {
+  left: 'flex-start',
+  center: 'center',
+  right: 'flex-end',
+};
+
+/**
+ * Maps a {@link KpiTitleAlign} to the `justify-content` value {@link TitleArea} lays its children
+ * out with. Reuses {@link FLEX_ALIGN} for the three edge/center values, so the title row and the
+ * comparison readout mirror identically in RTL, and adds the title-only `'space-between'`.
+ */
+const TITLE_JUSTIFY_CONTENT: Record<KpiTitleAlign, string> = {
+  ...FLEX_ALIGN,
+  'space-between': 'space-between',
+};
+
 /** The card's title row: the title text and, when present, the current-period caption. @internal */
-export const TitleArea = styled.div`
+export const TitleArea = styled.div<{ $align: KpiTitleAlign }>`
   grid-area: title;
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: ${({ $align }) => TITLE_JUSTIFY_CONTENT[$align]};
   gap: 8px;
   min-width: 0;
 `;
@@ -266,19 +290,6 @@ export const ConditionalIconSvgSpan = styled(ConditionalIconSpan)`
     fill: currentColor;
   }
 `;
-
-/**
- * Maps the card's `textAlign` to a writing-mode-relative flex alignment keyword, matching
- * `CardRoot`'s logical `text-align` mapping (`left`->start, `right`->end) so the comparison
- * readout mirrors correctly in RTL rather than pinning to a physical edge.
- * @internal
- */
-export type CardTextAlign = 'left' | 'center' | 'right';
-const FLEX_ALIGN: Record<CardTextAlign, string> = {
-  left: 'flex-start',
-  center: 'center',
-  right: 'flex-end',
-};
 
 /**
  * The comparison readout's root: row layout when `compact`, column layout otherwise. Honors the

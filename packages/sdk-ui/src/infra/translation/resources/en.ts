@@ -115,6 +115,32 @@ export const translation = {
     },
     tabberInvalidConfiguration: 'Tabber widget configuration is invalid',
   },
+  notifications: {
+    dismiss: 'Dismiss notification',
+    auth: {
+      sessionExpiredTitle: 'Session expired',
+      sessionExpiredMessage: 'Your session has expired. Sign in again to continue.',
+      authenticationFailedTitle: 'Authentication failed',
+      authenticationFailedMessage:
+        'The provided credentials were rejected by the Sisense instance.',
+    },
+    permission: {
+      forbiddenTitle: 'Access denied',
+      forbiddenMessage: "You don't have permission to access this data.",
+    },
+    network: {
+      unreachableTitle: 'Connection problem',
+      unreachableMessage: 'The Sisense instance could not be reached.',
+    },
+    server: {
+      errorTitle: 'Server error',
+      errorMessage: 'The Sisense instance returned an error. Try again later.',
+    },
+    general: {
+      requestFailedTitle: 'Request failed',
+      requestFailedMessage: 'A request to the Sisense instance failed.',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
   filters: 'Filters',
@@ -224,6 +250,7 @@ export const translation = {
     allExceptCount: 'All except {{count}}',
     setupTitle: 'Set up a filter widget',
     setupSubtitle: 'Set a dimension and configure how the filter works',
+    emptySetup: 'Set up filter',
     conditionUnsupported: 'Condition is available for text and numeric fields',
     conditionNotRepresentable: 'This condition cannot be edited here',
     controls: {
@@ -247,6 +274,33 @@ export const translation = {
       /** Accessible names for Between min/max inputs (no visible labels). */
       betweenMin: 'Minimum',
       betweenMax: 'Maximum',
+    },
+    calendar: {
+      /** Multi-select trigger, before anything is chosen. */
+      selectDates: 'Select dates',
+      /** Hover hint on an empty multi-select trigger. */
+      multipleDaysHint: 'You can select multiple days',
+      /**
+       * The entry is not the shape of a date, or its month/day cannot be one.
+       *
+       * `format` is the reader's own date pattern — `MM/DD/YYYY`, `DD.MM.YYYY`, `YYYY/MM/DD`
+       * — so it must stay a placeholder: a pattern written into the translation would be
+       * wrong in every locale that does not use it. The `-` keeps the pattern unescaped,
+       * without which its separators render as `&#x2F;`.
+       */
+      formatError: 'Follow {{- format}} format',
+      /** The shape is right but the day is not on the calendar, e.g. 02/31. */
+      nonexistent: "This date doesn't exist",
+      /** Accessible names for the calendar panel, one date and several. */
+      chooseDate: 'Choose date',
+      chooseDates: 'Choose dates',
+      /** Accessible names for the calendar's navigation, which carry glyphs only. */
+      previousMonth: 'Previous month',
+      nextMonth: 'Next month',
+      previousYear: 'Previous year',
+      nextYear: 'Next year',
+      openCalendar: 'Open calendar',
+      clearDate: 'Clear date',
     },
   },
   unsupportedFilterMessage: 'Unsupported Filter (applied to the data query)',
@@ -281,6 +335,7 @@ export const translation = {
     },
     menu: {
       deleteWidget: 'Delete Widget',
+      duplicateWidget: 'Duplicate Widget',
       renameWidget: 'Rename Widget',
       distributeEqualWidth: 'Distribute equally in this row',
       download: 'Download',
@@ -293,6 +348,21 @@ export const translation = {
   customWidgets: {
     registerPrompt:
       'Unknown custom widget type: {{customWidgetType}}. Please register this custom widget.',
+  },
+  narrativeWidget: {
+    generate: 'Generate Narrative',
+    regenerate: 'Regenerate',
+    retry: 'Retry Generation',
+    disclaimer: 'Content is powered by AI, so mistakes are possible.',
+    updatedAt: 'Updated {{timestamp}}',
+    copy: 'Copy to clipboard',
+    copied: 'Copied',
+    creditsUsed: '{{usagePercentage}}% of AI credits have been used.',
+    noDataTitle: 'No dashboard data available',
+    noDataDescription: 'Once dashboard data is available, you can generate a narrative.',
+    failedTitle: 'Unable to generate the narrative',
+    failedDescription:
+      'Please try again later. If the problem persists, contact your administrator.',
   },
   ai: {
     analyticsChatbot: 'Analytics Chatbot',
@@ -503,6 +573,7 @@ export const translation = {
       label: 'Linked to filter widget',
       tooltip:
         "This filter can't be edited from the filter panel. Change its values directly on the dashboard.",
+      infoAriaLabel: 'Linked to filter widget info',
     },
   },
   chart: {
@@ -518,6 +589,7 @@ export const translation = {
     table: {
       label: 'Data table',
       totalRows: 'Total: {{formattedCount}} rows',
+      rowsRange: 'Rows {{start}}-{{end}}',
     },
     sankey: {
       alerts: {

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { SelectorMode } from './calendar-date-selector.js';
+import { RangeSelectorMode } from './calendar-date-selector.js';
 
 type DayjsDateRange = {
   from: dayjs.Dayjs;
@@ -10,38 +10,19 @@ type DayjsDateRange = {
 export function calculateNewDateRange(
   existingDateRange: Partial<DayjsDateRange>,
   newSelectedDate: dayjs.Dayjs,
-  selectorMode: SelectorMode,
-): DayjsDateRange {
-  const currentDateRange = {
-    from: existingDateRange.from || newSelectedDate,
-    to: existingDateRange.to || newSelectedDate,
-  };
-  const isBeforeCurrentFrom = newSelectedDate.isBefore(currentDateRange.from);
-  const isAfterCurrentTo = newSelectedDate.isAfter(currentDateRange.to);
-
-  let newFrom: dayjs.Dayjs;
-  let newTo: dayjs.Dayjs;
+  selectorMode: RangeSelectorMode,
+): Partial<DayjsDateRange> {
+  const { from, to } = existingDateRange;
 
   if (selectorMode === 'fromSelector') {
-    if (isAfterCurrentTo) {
-      newFrom = newSelectedDate;
-      newTo = newSelectedDate;
-    } else {
-      newFrom = newSelectedDate;
-      newTo = currentDateRange.to;
-    }
-  } else {
-    if (isBeforeCurrentFrom) {
-      newFrom = newSelectedDate;
-      newTo = newSelectedDate;
-    } else {
-      newFrom = currentDateRange.from;
-      newTo = newSelectedDate;
-    }
+    return {
+      from: newSelectedDate,
+      to: to !== undefined && newSelectedDate.isAfter(to) ? newSelectedDate : to,
+    };
   }
 
   return {
-    from: newFrom,
-    to: newTo,
+    from: from !== undefined && newSelectedDate.isBefore(from) ? newSelectedDate : from,
+    to: newSelectedDate,
   };
 }

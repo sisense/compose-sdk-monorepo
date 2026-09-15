@@ -1842,17 +1842,36 @@ export type KpiRenderOptions = {
    * Category bucket the headline value was read from, as epoch milliseconds. Drives the
    * period caption in the title section, e.g. 'DEC 2013'.
    *
-   * Undefined when there is no single bucket to caption: no `category` configured,
-   * a non-date category, or `valueMode: 'total'` making the headline a whole-period aggregate.
+   * Set only when the headline belongs to a single bucket AND that bucket is a date. Undefined
+   * otherwise: no `category` configured, a category that isn't a date (which captions the section
+   * through `categoryDisplayValue` instead), or `valueMode: 'total'` aggregating over every
+   * bucket. Note that a `'total'` headline falls back to the last bucket whenever no whole-period
+   * aggregate is available — for an explicit `Data` set, say, where no query runs — and is then
+   * captioned as the bucket it actually came from.
    */
   valuePeriodMs?: number;
+  /**
+   * Display text of the category bucket the headline value was read from, for a category that
+   * isn't a date — a Gender-bucketed card's 'Female'. Captions the title section in
+   * `valuePeriodMs`'s place, so at most one of the two is ever set.
+   *
+   * Set under the same single-bucket rule as `valuePeriodMs` (including its `'total'` fallback),
+   * and undefined wherever that one is: no `category` configured, a date category — whose bucket
+   * `valuePeriodMs` names instead — or a headline aggregating over every bucket.
+   */
+  categoryDisplayValue?: string;
   /** Resolved comparison shown on the card, when a comparison is configured and computable. */
   comparison?: KpiComparisonInfo;
   /**
    * Points of the sparkline, one per category bucket, ordered as queried. A `null` `y` marks
    * a gap in the line and is never rendered as zero.
+   *
+   * `x` is the bucket's date as epoch milliseconds for a date category. For any other category
+   * it is the bucket's position instead (0, 1, 2, …) — dateless values have no place on a time
+   * axis — and `categoryDisplayValue` carries that bucket's display text, e.g. 'Female', which
+   * is what the sparkline tooltip names the point by.
    */
-  sparklinePoints?: { x: number; y: number | null }[];
+  sparklinePoints?: { x: number; y: number | null; categoryDisplayValue?: string }[];
 };
 
 /**
@@ -1996,6 +2015,17 @@ export type KpiValueStyleOptions = {
 };
 
 /**
+ * Horizontal alignment of the KPI card title section.
+ *
+ * `'space-between'` pushes the title text and the category caption to opposite edges of the
+ * card; the remaining values align both of them together at one edge or at the center.
+ *
+ * `'left'` and `'right'` are mirrored in right-to-left locales — `'left'` resolves to the
+ * inline start edge and `'right'` to the inline end edge.
+ */
+export type KpiTitleAlign = 'space-between' | 'left' | 'right' | 'center';
+
+/**
  * Configuration that defines styling of the KPI card title.
  */
 export type KpiTitleStyleOptions = {
@@ -2018,11 +2048,18 @@ export type KpiTitleStyleOptions = {
   showValueTitle?: boolean;
   /**
    * Boolean flag that defines whether the current category bucket caption
-   * (e.g. 'DEC 2013') is shown within the title section. Applicable when
+   * (e.g. 'DEC 2013' for a date category, or the bucket's own text — 'FEMALE' — for one that
+   * isn't) is shown within the title section. Applicable when
    * {@link KpiChartDataOptions.category} is set.
    * @default true
    */
   showCategoryTitle?: boolean;
+  /**
+   * Horizontal alignment of the title section's content — the title text and the
+   * category caption.
+   * @default 'space-between'
+   */
+  align?: KpiTitleAlign;
 };
 
 /**

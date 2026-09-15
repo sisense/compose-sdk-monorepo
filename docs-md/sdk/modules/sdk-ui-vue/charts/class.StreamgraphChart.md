@@ -13,37 +13,71 @@ overall patterns and trends.
 
 ## Example
 
-Here's how you can use the StreamgraphChart component in a Vue application:
 ```vue
-<template>
-<StreamgraphChart
-     :dataOptions="streamgraphChartProps.dataOptions"
-     :dataSet="streamgraphChartProps.dataSet"
-     :filters="streamgraphChartProps.filters"
-     :styleOptions="streamgraphChartProps.styleOptions"
-   />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-ecommerce';
-import { StreamgraphChart, type StreamgraphChartProps } from '@sisense/sdk-ui-vue';
+import { StreamgraphChart } from '@sisense/sdk-ui-vue';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
 
-const streamgraphChartProps = ref<StreamgraphChartProps>({
-  dataSet: DM.DataSource,
+const chartProps = ref({
   dataOptions: {
     category: [DM.Commerce.Date.Quarters],
-    value: [measureFactory.sum(DM.Commerce.Revenue, 'Revenue')],
-    breakBy: [DM.Category.Category],
-  },
-  filters: [filterFactory.members(DM.Category.Category, ['Electronics', 'Clothing'])],
-  styleOptions: {
-    width: 1200,
-    height: 500,
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [DM.Commerce.Condition],
   },
 });
+</script>
+
+<template>
+  <StreamgraphChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+  />
+</template>
 ```
+<img src="../../../img/streamgraph-chart-example-1.png" width="700px" />
+
+Additional examples:
+
+Styled with a visible y-axis, thinned-out x-axis labels, and a legend:
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { StreamgraphChart } from '@sisense/sdk-ui-vue';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const chartProps = ref({
+  dataOptions: {
+    category: [DM.Commerce.Date.Quarters],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [DM.Commerce.Condition],
+  },
+  styleOptions: {
+    yAxis: {
+      enabled: true,
+      labels: { enabled: true },
+      gridLines: false,
+    },
+    xAxis: {
+      intervalJumps: 4,
+      isIntervalEnabled: true,
+    },
+    legend: { enabled: true },
+  },
+});
+</script>
+
+<template>
+  <StreamgraphChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+    :styleOptions="chartProps.styleOptions"
+  />
+</template>
+```
+<img src="../../../img/streamgraph-chart-example-2.png" width="700px" />
 
 ## Param
 

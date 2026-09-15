@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { createAttribute, filterFactory, QueryResultData } from '@sisense/sdk-data';
+import { createAttribute, filterFactory, measureFactory, QueryResultData } from '@sisense/sdk-data';
 import { renderHook, waitFor } from '@testing-library/react';
 
 import {
@@ -333,6 +333,48 @@ describe('useTableData', () => {
       await waitFor(() => {
         expect(result.current.rowCount).toBeUndefined();
       });
+    });
+  });
+
+  describe('ungroup', () => {
+    const costAttribute = createAttribute({
+      name: 'Cost',
+      type: 'numeric-attribute',
+      expression: '[Commerce.Cost]',
+    });
+    const plainMeasure = measureFactory.sum(costAttribute, 'Cost');
+    const forecastMeasure = measureFactory.forecast(plainMeasure, '$forecast_Cost');
+
+    it('sends ungroup: true for a plain aggregated measure', async () => {
+      executeQueryMock.mockResolvedValue(dataSet);
+
+      renderHook(useTableData, {
+        initialProps: {
+          ...fetchProps,
+          dataOptions: { columns: [{ column: plainMeasure }] },
+        },
+      });
+
+      await waitFor(() => {
+        expect(executeQueryMock).toHaveBeenCalled();
+      });
+      expect(executeQueryMock.mock.calls[0][0]).toMatchObject({ ungroup: true });
+    });
+
+    it('sends ungroup: false when a trend/forecast measure is present', async () => {
+      executeQueryMock.mockResolvedValue(dataSet);
+
+      renderHook(useTableData, {
+        initialProps: {
+          ...fetchProps,
+          dataOptions: { columns: [{ column: forecastMeasure }] },
+        },
+      });
+
+      await waitFor(() => {
+        expect(executeQueryMock).toHaveBeenCalled();
+      });
+      expect(executeQueryMock.mock.calls[0][0]).toMatchObject({ ungroup: false });
     });
   });
 

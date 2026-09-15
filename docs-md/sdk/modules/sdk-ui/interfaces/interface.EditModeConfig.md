@@ -59,6 +59,33 @@ Configuration for the edit mode user experience
 
 ***
 
+### duplicateWidget
+
+> **duplicateWidget**?: `object`
+
+Configuration for the widget duplication feature.
+
+#### Type declaration
+
+> ##### `duplicateWidget.enabled`
+>
+> **enabled**: `boolean`
+>
+> When `true`, adds a "Duplicate Widget" menu item to each widget header.
+> On click, clones the widget and updates the layout.
+> Only takes effect when:
+> - edit mode is enabled (`editMode.enabled` is `true`).
+> - batch mode is disabled (`editMode.applyChangesAsBatch.enabled` is `false` or unset).
+>
+> ###### Default
+>
+> `false`, or the user's permissions to duplicate and create widgets on a
+> Fusion dashboard (both permissions required)
+>
+>
+
+***
+
 ### enabled
 
 > **enabled**?: `boolean`

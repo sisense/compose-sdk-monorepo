@@ -13,7 +13,7 @@ import type { DashboardPersistenceManager } from '../../persistence/types.js';
  */
 type ChangeEventCapableWidgetProps = Extract<
   WidgetProps,
-  { widgetType: 'chart' | 'pivot' | 'filter' }
+  { widgetType: 'chart' | 'pivot' | 'filter' | 'narrative' }
 >;
 
 /** Identifies widgets that emit {@link WidgetChangeEvent} through `onChange`. */
@@ -21,7 +21,10 @@ function isChangeEventCapableWidgetProps(
   widget: WidgetProps,
 ): widget is ChangeEventCapableWidgetProps {
   return (
-    widget.widgetType === 'chart' || widget.widgetType === 'pivot' || widget.widgetType === 'filter'
+    widget.widgetType === 'chart' ||
+    widget.widgetType === 'pivot' ||
+    widget.widgetType === 'filter' ||
+    widget.widgetType === 'narrative'
   );
 }
 
@@ -74,7 +77,7 @@ export function useWidgetRenaming(params: UseWidgetRenamingParams): WidgetRenami
           },
         },
       };
-      // Only chart/pivot/filter widgets emit WidgetChangeEvent through `onChange`;
+      // Only chart/pivot/filter/narrative widgets emit WidgetChangeEvent through `onChange`;
       // wrapping other variants would clobber unrelated callbacks (e.g. the
       // custom-widget persistence `onChange`, which carries a VisualizationStateUpdate).
       if (persistence && isChangeEventCapableWidgetProps(widget)) {

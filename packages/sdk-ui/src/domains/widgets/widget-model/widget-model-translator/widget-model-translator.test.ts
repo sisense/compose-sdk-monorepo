@@ -1997,6 +1997,52 @@ describe('WidgetModelTranslator', () => {
         const out = toWidgetDto(model);
         expect((out.style.narration as { autoShow?: boolean })?.autoShow).toBe(true);
       });
+
+      it('folds the top-level widget aiContext into config.narrative.aiContext', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        dto.aiContext = 'revenue is in american dollars.';
+        const model = fromWidgetDto(dto);
+        expect(narrativeOf(model)?.aiContext).toBe('revenue is in american dollars.');
+      });
+
+      it('trims surrounding whitespace from the folded aiContext', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        dto.aiContext = '  revenue is in USD  ';
+        const model = fromWidgetDto(dto);
+        expect(narrativeOf(model)?.aiContext).toBe('revenue is in USD');
+      });
+
+      it('round-trips aiContext through DTO/model translators', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        dto.aiContext = 'revenue is in american dollars.';
+        const out = toWidgetDto(fromWidgetDto(dto));
+        expect(out.aiContext).toBe('revenue is in american dollars.');
+      });
+
+      it('toWidgetDto emits the trimmed aiContext', () => {
+        const model = fromWidgetDto(cloneDeep(advancedLineChartWidgetDto));
+        const modelWithWhitespaceAiContext = {
+          ...model,
+          config: { ...model.config, narrative: { aiContext: '  revenue is in USD  ' } },
+        };
+        const out = toWidgetDto(modelWithWhitespaceAiContext);
+        expect(out.aiContext).toBe('revenue is in USD');
+      });
+
+      it('exposes aiContext even when the widget has no style.narration', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        delete dto.style.narration;
+        dto.aiContext = 'cost is in american dollars.';
+        const model = fromWidgetDto(dto);
+        expect(narrativeOf(model)?.aiContext).toBe('cost is in american dollars.');
+      });
+
+      it('does not add aiContext when the widget has none', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        delete dto.aiContext;
+        const model = fromWidgetDto(dto);
+        expect(narrativeOf(model)?.aiContext).toBeUndefined();
+      });
     });
   });
 

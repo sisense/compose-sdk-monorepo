@@ -20,53 +20,26 @@ export interface SunburstChartProps
  * This type of chart can be used instead of a pie chart for comparing a large number of categories and sub-categories.
  *
  * @example
- * ```html
- *    <csdk-sunburst-chart
- *      [dataSet]="chart.dataSet"
- *      [dataOptions]="chart.dataOptions"
- *      [highlights]="filters"
- *      [beforeRender]="onBeforeRender"
- *      (dataPointClick)="logArguments($event)"
- *      (dataPointContextMenu)="logArguments($event)"
- *      (dataPointsSelect)="logArguments($event)"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  DM = DM;
-  filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
-  chart = {
-    chartType: 'column' as ChartType,
-    dataSet: DM.DataSource,
-    dataOptions: {
-      category: [DM.Divisions.Divison_name],
-      value: [measureFactory.sum(DM.Admissions.Cost_of_admission)],
-      breakBy: [],
-    },
-  };
-
-  onBeforeRender(options: any) {
-    console.log('beforeRender');
-    console.log(options);
-    return options;
-  }
-
-  logArguments(...args: any[]) {
-    console.log(args);
-  }
-}
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-sunburst-chart [dataSet]="DM.DataSource" [dataOptions]="dataOptions"></csdk-sunburst-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     category: [DM.Commerce.Condition, DM.Commerce.AgeRange],
+ *     value: [measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity')],
+ *   };
+ * }
  * ```
- * <img src="media://angular-sunburst-chart-example.png" width="800px" />
+ * <img src="media://sunburst-chart-example-1.png" width="700px" />
  * @group Charts
  */
 @Component({

@@ -42,7 +42,9 @@ vi.mock('@/domains/widgets/shared/widget-container/widget-container.js', () => (
       data-header-item-ids={(headerConfig?.items ?? []).map((i: any) => i.id).join(',')}
     >
       {(headerConfig?.items ?? []).map((item: any) => (
-        <div key={item.id} data-testid={`header-item-${item.id}`}>
+        // Mirrors the real cell test id built by `getHeaderItemTestId` (inlined: a `vi.mock` factory
+        // is hoisted above this file's imports).
+        <div key={item.id} data-testid={`csdk-${item.id}`}>
           {item.component({ size: { width: 28, height: 28 } })}
         </div>
       ))}

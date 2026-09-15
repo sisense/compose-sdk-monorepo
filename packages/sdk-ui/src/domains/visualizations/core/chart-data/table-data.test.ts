@@ -141,7 +141,9 @@ describe('Table data processing', () => {
 
     const result = updateInnerDataOptionsSort(dataOptions, column);
 
-    expect((result.columns[0].column as Attribute).getSort()).toBe(Sort.Descending);
+    expect(((result.columns[0] as StyledColumn).column as Attribute).getSort()).toBe(
+      Sort.Descending,
+    );
   });
 
   it('Should update data options with new sort state (simple Column or StyledColumn)', () => {
@@ -152,6 +154,69 @@ describe('Table data processing', () => {
 
     const result = updateInnerDataOptionsSort(dataOptions, column);
 
-    expect(result.columns[0].sortType).toBe('sortAsc');
+    expect((result.columns[0] as StyledColumn).sortType).toBe('sortAsc');
+  });
+
+  describe('DerivedResultColumn handling', () => {
+    it('unifySortToDirection treats a DerivedResultColumn as unsortable', () => {
+      expect(unifySortToDirection({ name: 'Revenue_upper' })).toBe(0);
+    });
+
+    it('tableData selects a DerivedResultColumn by its own name', () => {
+      const mockData: DataTable = {
+        columns: [
+          { name: 'col_1', type: 'number', index: 0, direction: 0 },
+          { name: 'Revenue_upper', type: 'number', index: 1, direction: 0 },
+        ],
+        rows: [[{ displayValue: '7' }, { displayValue: '42' }]],
+      };
+
+      const result = tableData(
+        {
+          columns: [
+            { column: { name: 'col_1', type: 'number' } },
+            { name: 'Revenue_upper', title: 'Revenue Upper Bound' },
+          ],
+        } as TableDataOptionsInternal,
+        mockData,
+      );
+
+      expect(result.columns.map((c) => c.name)).toEqual(['col_1', 'Revenue_upper']);
+      expect(result.rows).toEqual([[{ displayValue: '7' }, { displayValue: '42' }]]);
+    });
+
+    it('updateInnerDataOptionsSort passes a DerivedResultColumn through unchanged', () => {
+      const column: DataTableColumn = { name: 'col_1', type: 'text', direction: 0, index: 0 };
+      const dataOptions: TableDataOptionsInternal = {
+        columns: [
+          { column: { name: 'col_1', type: 'text' }, sortType: 'sortDesc' },
+          { name: 'Revenue_upper', title: 'Revenue Upper Bound' },
+        ],
+      };
+
+      const result = updateInnerDataOptionsSort(dataOptions, column);
+
+      expect(result.columns[1]).toEqual({ name: 'Revenue_upper', title: 'Revenue Upper Bound' });
+    });
+
+    it('syncDataTableWithDataOptionsSort does not crash when a DerivedResultColumn is present', () => {
+      const dataTable: DataTable = {
+        columns: [
+          { name: 'col_1', type: 'text', direction: 0, index: 0 },
+          { name: 'Revenue_upper', type: 'number', direction: 0, index: 1 },
+        ],
+        rows: [[{ displayValue: 'a' }, { displayValue: '1' }]],
+      };
+      const dataOptions: TableDataOptionsInternal = {
+        columns: [
+          { column: { name: 'col_1', type: 'text', getSort: () => Sort.Ascending } as Attribute },
+          { name: 'Revenue_upper', title: 'Revenue Upper Bound' },
+        ],
+      };
+
+      const result = syncDataTableWithDataOptionsSort(dataOptions, dataTable);
+
+      expect(result.columns[0].direction).toBe(1);
+    });
   });
 });

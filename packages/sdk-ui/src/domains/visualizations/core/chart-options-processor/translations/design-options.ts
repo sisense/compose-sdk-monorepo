@@ -6,6 +6,7 @@ import {
   Convolution,
   FunnelSeriesLabels,
   KpiIconCondition,
+  KpiTitleAlign,
   LegendOptions,
   LineOptions,
   PieSeriesLabels,
@@ -136,6 +137,8 @@ export type KpiChartDesignOptions = BaseDesignOptionsType & {
     showValueTitle: boolean;
     /** Whether the current category bucket caption is shown within the title section. */
     showCategoryTitle: boolean;
+    /** Horizontal alignment of the title section's content. */
+    align: KpiTitleAlign;
   };
   card: {
     backgroundColor?: string;

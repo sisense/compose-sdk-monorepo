@@ -19,50 +19,31 @@ export interface ScattermapChartProps
  * An Angular component that allows to visualize geographical data as data points on a map.
  *
  * @example
- * ```html
- *    <csdk-scattermap-chart
- *      [dataSet]="scattermapChart.dataSet"
- *      [dataOptions]="scattermapChart.dataOptions"
- *      [styleOptions]="scattermapChart.styleOptions"
- *      (dataPointClick)="logArguments($event)"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import type { ScattermapStyleOptions,ScattermapChartDataOptions } from '@sisense/sdk-ui-angular';
-import * as DM from '../../assets/sample-ecommerce';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  scattermapChart = {
-    dataSet: DM.DataSource,
-    dataOptions: {
-      geo: [DM.Country.Country],
-      size: measureFactory.sum(DM.Commerce.Cost, 'Size by Cost'),
-      colorBy: {
-        column: measureFactory.sum(DM.Commerce.Revenue, 'Color by Revenue'),
-        color: 'green',
-      },
-      details: DM.Category.Category,
-    } as ScattermapChartDataOptions,
-    styleOptions: {
-      markers: {
-        fill: 'hollow-bold',
-      },
-    } as ScattermapStyleOptions,
-  };
-
-  logArguments(...args: any[]) {
-    console.log(args);
-  }
-}
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-scattermap-chart [dataSet]="DM.DataSource" [dataOptions]="dataOptions"></csdk-scattermap-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     geo: [DM.Country.Country],
+ *     size: measureFactory.sum(DM.Commerce.Cost, 'Size by Cost'),
+ *     colorBy: {
+ *       column: measureFactory.rank(measureFactory.sum(DM.Commerce.Revenue, 'Color by Revenue Rank')),
+ *       color: { type: 'range', steps: 7, minColor: '#cf9270', maxColor: '#3900b3' },
+ *     },
+ *     details: DM.Brand.Brand,
+ *   };
+ * }
  * ```
- * <img src="media://angular-scattermap-chart-example.png" width="800px" />
+ * <img src="media://scattermap-chart-example-1.png" width="700px" />
  * @group Charts
  */
 @Component({

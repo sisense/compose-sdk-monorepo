@@ -2,6 +2,7 @@ import { Measure } from '@sisense/sdk-data';
 
 import { ConditionalDataColorOptions } from '../../../../../types';
 import {
+  getColorConditionMeasures,
   getConditionalColoringFunction,
   withResolvedConditionValues,
 } from './conditional-coloring';
@@ -102,5 +103,41 @@ describe('withResolvedConditionValues', () => {
   it('leaves non-conditional color options unchanged', () => {
     const uniform = { type: 'uniform', color: 'red' } as const;
     expect(withResolvedConditionValues({ Target: 30 })(uniform)).toBe(uniform);
+  });
+});
+
+describe('getColorConditionMeasures', () => {
+  const formulaDriven: ConditionalDataColorOptions = {
+    type: 'conditional',
+    conditions: [
+      { color: 'green', expression: '', operator: '>', valueMeasure: targetMeasure },
+      { color: 'blue', expression: '10', operator: '<' },
+    ],
+    defaultColor: 'gray',
+  };
+
+  it('returns only the measures backing formula-driven conditions', () => {
+    expect(getColorConditionMeasures(formulaDriven)).toEqual([{ column: targetMeasure }]);
+  });
+
+  it('returns nothing for conditions with literal thresholds', () => {
+    expect(
+      getColorConditionMeasures({
+        type: 'conditional',
+        conditions: [{ color: 'blue', expression: '10', operator: '<' }],
+        defaultColor: 'gray',
+      }),
+    ).toEqual([]);
+  });
+
+  it('returns nothing for non-conditional color options', () => {
+    expect(getColorConditionMeasures(undefined)).toEqual([]);
+    expect(getColorConditionMeasures('red')).toEqual([]);
+    expect(getColorConditionMeasures({ type: 'uniform', color: 'red' })).toEqual([]);
+    expect(getColorConditionMeasures({ type: 'range', minColor: 'a', maxColor: 'b' })).toEqual([]);
+  });
+
+  it('tolerates conditional options with no conditions at all', () => {
+    expect(getColorConditionMeasures({ type: 'conditional', defaultColor: 'gray' })).toEqual([]);
   });
 });

@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.36.0] - 2026-09-15
+
+### Added
+- Add Calendar filter type to `FilterWidget` for single and multiple date selection (internal testing)
+- Add title alignment option to `KpiChart`
+- Add formula-driven conditional coloring for the `KpiChart` value
+- Add `config` prop to `WidgetById` for Angular and Vue
+- Add current page row range to the `Table` pagination footer
+- Promote widget duplication to General Availability (GA)
+
+### Changed
+- Fix `KpiChart` captions, tooltips and comparisons when the category is not a date
+- Fix `KpiChart` to drop the comparison label that only repeats its own number
+- Fix charts to react to `dataOptions` and `onDataReady` changes when data is supplied explicitly
+- Fix filter editor date range to stay half-filled until both ends are picked
+- Fix the day-granularity calendar in the filter editor to respect the multiselect toggle
+- Fix `FilterWidget` translations and styles (internal testing)
+- Improve the `FilterWidget` initial state (internal testing)
+
+
 ## [2.35.0] - 2026-09-01
 
 ### Added

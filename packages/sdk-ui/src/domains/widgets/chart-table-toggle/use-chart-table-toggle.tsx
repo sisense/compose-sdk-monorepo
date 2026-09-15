@@ -11,7 +11,6 @@ import {
 import { createChartTableToggleItem } from './chart-table-toggle-header-item';
 import {
   applyChartTableOverride,
-  hasTrendOrForecast,
   shouldShowChartTableToggle,
   toResetIdentity,
 } from './chart-to-table-toggle';
@@ -56,8 +55,7 @@ export function useChartTableToggle(
     }),
     [options.labels],
   );
-  const unavailableForAdvancedAnalytics = hasTrendOrForecast(options.dataOptions);
-  const disabled = Boolean(options.disabled) || unavailableForAdvancedAnalytics;
+  const disabled = Boolean(options.disabled);
   const showToggle = shouldShowChartTableToggle(chartType, options.dataOptions);
   const resetKey = toResetIdentity(options.resetKey);
   const [resetSnapshot, setResetSnapshot] = useState({
@@ -68,7 +66,7 @@ export function useChartTableToggle(
 
   const resetChanged =
     !Object.is(resetSnapshot.chartType, chartType) || !Object.is(resetSnapshot.resetKey, resetKey);
-  const effectiveTableView = resetChanged || unavailableForAdvancedAnalytics ? false : isTableView;
+  const effectiveTableView = resetChanged ? false : isTableView;
 
   if (resetChanged) {
     setResetSnapshot({ chartType, resetKey });
@@ -87,12 +85,9 @@ export function useChartTableToggle(
       pressed: effectiveTableView,
       onPressedChange: setIsTableView,
       disabled,
-      disabledTitle: unavailableForAdvancedAnalytics
-        ? labels.unavailableWithTrendForecast
-        : undefined,
       labels,
     }),
-    [effectiveTableView, disabled, unavailableForAdvancedAnalytics, labels],
+    [effectiveTableView, disabled, labels],
   );
 
   const toggleButton = useMemo(

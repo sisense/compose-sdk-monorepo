@@ -29,7 +29,7 @@ describe('baseQueryParamsToViewModel', () => {
     const first = result[0];
     expect(first).toBeDefined();
     expect(isPillItem(first)).toBe(true);
-    expect(first).toMatchObject({ label: 'Sum of Sales', category: 'measure' });
+    expect(first).toMatchObject({ label: 'Sum of sales', category: 'measure' });
   });
 
   it('orders measures then "by" then dimensions then "where" then filters', () => {
@@ -60,11 +60,11 @@ describe('baseQueryParamsToViewModel', () => {
         isConnectorItem(item) ? `connector:${item.label}` : `${item.category}:${item.label}`,
       ),
     ).toEqual([
-      'measure:Sum of Sales',
+      'measure:Sum of sales',
       'connector:by',
       'dimension:Region',
       'connector:where',
-      'filter:Region is North',
+      'filter:Region: North',
     ]);
   });
 
@@ -84,8 +84,8 @@ describe('baseQueryParamsToViewModel', () => {
       dimensions: [attr],
     });
     const labels = result.filter(isPillItem).map((p) => p.label);
-    expect(labels).toContain('Avg Price');
-    expect(labels).toContain('Product Category');
+    expect(labels).toContain('Avg price');
+    expect(labels).toContain('Product category');
   });
 
   it('assigns ids to pill items', () => {
@@ -138,9 +138,9 @@ describe('baseQueryParamsToViewModel', () => {
       'dimension:Region',
       'connector:where',
       'connector:(',
-      'filter:Region is North',
+      'filter:Region: North',
       'connector:AND',
-      'filter:Region is South',
+      'filter:Region: South',
       'connector:)',
     ]);
   });
@@ -155,7 +155,7 @@ describe('baseQueryParamsToViewModel', () => {
     const params = { filters: filter } as unknown as BaseQueryParams;
     const result = baseQueryParamsToViewModel(params);
     expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({ category: 'filter', label: 'Region is North' });
+    expect(result[0]).toMatchObject({ category: 'filter', label: 'Region: North' });
   });
 
   it('uses attribute name for date-level dimension when t is omitted', () => {
@@ -203,6 +203,107 @@ describe('baseQueryParamsToViewModel', () => {
     const filter = filterFactory.members(dateLevel, ['2024-01-01']);
     const result = baseQueryParamsToViewModel({ filters: [filter] }, stubT);
     const pill = result.find(isPillItem);
-    expect(pill).toMatchObject({ category: 'filter', label: 'Days in Date is 2024-01-01' });
+    expect(pill).toMatchObject({ category: 'filter', label: 'Days in Date: 01/01/2024' });
+  });
+
+  it('omits include-all member filters from the chip row', () => {
+    const attr = createAttribute({
+      name: 'Region',
+      type: 'text-attribute',
+      expression: '[Geography.Region]',
+    });
+    const empty = filterFactory.members(attr, []);
+    const selected = filterFactory.members(attr, ['North']);
+    const result = baseQueryParamsToViewModel({
+      dimensions: [attr],
+      filters: [empty, selected],
+    });
+    expect(
+      result.map((item) =>
+        isConnectorItem(item) ? `connector:${item.label}` : `${item.category}:${item.label}`,
+      ),
+    ).toEqual(['dimension:Region', 'connector:where', 'filter:Region: North']);
+  });
+
+  it('does not prefix AND when skipped empty filters lead a relation array', () => {
+    const attr = createAttribute({
+      name: 'Region',
+      type: 'text-attribute',
+      expression: '[Geography.Region]',
+    });
+    const empty = filterFactory.members(attr, []);
+    const selected = filterFactory.members(attr, ['South']);
+    const other = filterFactory.members(attr, ['West']);
+    const result = baseQueryParamsToViewModel({
+      dimensions: [attr],
+      filters: {
+        left: [empty, selected],
+        right: other,
+        operator: 'OR',
+      } as unknown as BaseQueryParams['filters'],
+    });
+    expect(
+      result.map((item) =>
+        isConnectorItem(item) ? `connector:${item.label}` : `${item.category}:${item.label}`,
+      ),
+    ).toEqual([
+      'dimension:Region',
+      'connector:where',
+      'connector:(',
+      'filter:Region: South',
+      'connector:OR',
+      'filter:Region: West',
+      'connector:)',
+    ]);
+  });
+
+  it('omits empty parentheses when both relation operands produce no pills', () => {
+    const region = createAttribute({
+      name: 'Region',
+      type: 'text-attribute',
+      expression: '[Geography.Region]',
+    });
+    const country = createAttribute({
+      name: 'Country',
+      type: 'text-attribute',
+      expression: '[Country.Country]',
+    });
+    const result = baseQueryParamsToViewModel({
+      dimensions: [region],
+      filters: filterFactory.logic.or(
+        filterFactory.members(region, []),
+        filterFactory.members(country, []),
+      ),
+    });
+    expect(
+      result.map((item) =>
+        isConnectorItem(item) ? `connector:${item.label}` : `${item.category}:${item.label}`,
+      ),
+    ).toEqual(['dimension:Region']);
+  });
+
+  it('drops the operator and parentheses when one relation operand is include-all', () => {
+    const region = createAttribute({
+      name: 'Region',
+      type: 'text-attribute',
+      expression: '[Geography.Region]',
+    });
+    const country = createAttribute({
+      name: 'Country',
+      type: 'text-attribute',
+      expression: '[Country.Country]',
+    });
+    const result = baseQueryParamsToViewModel({
+      dimensions: [region],
+      filters: filterFactory.logic.or(
+        filterFactory.members(region, []),
+        filterFactory.members(country, ['US']),
+      ),
+    });
+    expect(
+      result.map((item) =>
+        isConnectorItem(item) ? `connector:${item.label}` : `${item.category}:${item.label}`,
+      ),
+    ).toEqual(['dimension:Region', 'connector:where', 'filter:Country: US']);
   });
 });

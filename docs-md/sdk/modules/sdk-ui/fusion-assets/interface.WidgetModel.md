@@ -6,6 +6,9 @@ title: WidgetModel
 
 Model of Sisense widget defined in the abstractions of Compose SDK.
 
+This is the return type of [`useGetWidgetModel`](function.useGetWidgetModel.md) —
+see that hook's documentation for a usage example.
+
 ## Properties
 
 ### chartType

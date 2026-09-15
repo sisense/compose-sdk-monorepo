@@ -13,33 +13,6 @@ a central axis. It is particularly effective for displaying volume across
 different categories or over time with a relative scale that emphasizes
 overall patterns and trends.
 
-## Example
-
-Streamgraph displaying revenue by category over time.
-
-```ts
-import { StreamgraphChart } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from './sample-ecommerce';
-
-function RevenueByCategoryStreamgraph() {
-  return (
-    <StreamgraphChart
-      dataSet={DM.DataSource}
-      dataOptions={{
-        category: [DM.Commerce.Date.Quarters],
-        value: [measureFactory.sum(DM.Commerce.Revenue, 'Revenue')],
-        breakBy: [DM.Category.Category],
-      }}
-      styleOptions={{
-        width: 1200,
-        height: 500,
-      }}
-    />
-  );
-}
-```
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -51,3 +24,66 @@ function RevenueByCategoryStreamgraph() {
 `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Streamgraph Chart component
+
+## Example
+
+```ts
+import { StreamgraphChart } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const CodeExample = () => {
+  return (
+    <StreamgraphChart
+      dataSet={DM.DataSource}
+      dataOptions={{
+        category: [DM.Commerce.Date.Quarters],
+        value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+        breakBy: [DM.Commerce.Condition],
+      }}
+    />
+  );
+};
+
+export default CodeExample;
+```
+
+<img src="../../../img/streamgraph-chart-example-1.png" width="700px" />
+
+Additional examples:
+
+Styled with a visible y-axis, thinned-out x-axis labels, and a legend:
+```ts
+import { StreamgraphChart } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+const CodeExample = () => {
+  return (
+    <StreamgraphChart
+      dataSet={DM.DataSource}
+      dataOptions={{
+        category: [DM.Commerce.Date.Quarters],
+        value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+        breakBy: [DM.Commerce.Condition],
+      }}
+      styleOptions={{
+        yAxis: {
+          enabled: true,
+          labels: { enabled: true },
+          gridLines: false,
+        },
+        xAxis: {
+          intervalJumps: 4,
+          isIntervalEnabled: true,
+        },
+        legend: { enabled: true },
+      }}
+    />
+  );
+};
+
+export default CodeExample;
+```
+
+<img src="../../../img/streamgraph-chart-example-2.png" width="700px" />

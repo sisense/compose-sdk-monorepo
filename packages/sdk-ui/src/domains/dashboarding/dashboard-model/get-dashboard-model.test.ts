@@ -329,6 +329,7 @@ describe('getDashboardModel', () => {
       expect(getDashboardMock).toHaveBeenCalledTimes(1);
       expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid, {
         adminAccess: undefined,
+        skipErrorNotification: true,
       });
       expect(result.userAuth).toEqual(dashboardMock.userAuth);
     });

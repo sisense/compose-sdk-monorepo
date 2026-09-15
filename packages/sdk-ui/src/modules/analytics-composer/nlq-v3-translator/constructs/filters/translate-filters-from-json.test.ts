@@ -13,7 +13,11 @@ import {
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../../../__mocks__/mock-data-sources.js';
 import { createSchemaIndex } from '../../shared/utils/schema-index.js';
-import { getErrors, getSuccessData } from '../../shared/utils/translation-helpers.js';
+import {
+  asFilterRelations,
+  getErrors,
+  getSuccessData,
+} from '../../shared/utils/translation-helpers.js';
 import { flattenFilters } from '../../shared/validation/flatten-filters.js';
 import { FunctionCall } from '../../types.js';
 import {
@@ -64,6 +68,62 @@ describe('translateFilters', () => {
     const data = getSuccessData(result);
     expect(isFilterRelations(data)).toBe(true);
     expect(withoutGuids(data)).toMatchSnapshot();
+  });
+
+  it('preserves a relation tree from an earlier element when a later element is a plain filter', () => {
+    const mockFiltersJSON: FunctionCall[] = [
+      {
+        function: 'filterFactory.logic.or',
+        args: [
+          { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
+          { function: 'filterFactory.members', args: ['DM.Brand.Brand', ['Brand A']] },
+        ],
+      },
+      { function: 'filterFactory.members', args: ['DM.Commerce.Date.Years', ['2024']] },
+    ];
+
+    const result = translateFiltersFromJSONFunctionCall({
+      data: mockFiltersJSON,
+      context: {
+        dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+      },
+    });
+    expect(result.success).toBe(true);
+    const relations = asFilterRelations(getSuccessData(result));
+    expect(asFilterRelations(relations.left).operator).toBe('OR');
+  });
+
+  it('combines two consecutive filter relations elements under AND instead of flattening one', () => {
+    const mockFiltersJSON: FunctionCall[] = [
+      {
+        function: 'filterFactory.logic.or',
+        args: [
+          { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
+          { function: 'filterFactory.members', args: ['DM.Brand.Brand', ['Brand A']] },
+        ],
+      },
+      {
+        function: 'filterFactory.logic.or',
+        args: [
+          { function: 'filterFactory.members', args: ['DM.Commerce.Condition', ['New']] },
+          { function: 'filterFactory.members', args: ['DM.Commerce.Date.Years', ['2024']] },
+        ],
+      },
+    ];
+
+    const result = translateFiltersFromJSONFunctionCall({
+      data: mockFiltersJSON,
+      context: {
+        dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+      },
+    });
+    expect(result.success).toBe(true);
+    const relations = asFilterRelations(getSuccessData(result));
+    expect(relations.operator).toBe('AND');
+    expect(asFilterRelations(relations.left).operator).toBe('OR');
+    expect(asFilterRelations(relations.right).operator).toBe('OR');
   });
 
   it('should translate filters', () => {

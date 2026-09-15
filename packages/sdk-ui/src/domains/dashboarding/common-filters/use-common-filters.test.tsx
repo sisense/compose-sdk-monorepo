@@ -678,6 +678,56 @@ describe('useCommonFilters', () => {
       });
     });
 
+    it('defaults an unconfigured filter widget to the dashboard setup button', () => {
+      const emptyFilterWidget = {
+        id: 'fw-empty',
+        widgetType: 'filter',
+        attribute: { name: '', expression: '' },
+      } as unknown as WidgetProps;
+      const { result } = renderHook(() => useCommonFilters());
+
+      const connected = result.current.connectToWidgetProps(emptyFilterWidget);
+      if (!isFilterWidgetProps(connected)) {
+        throw new Error('expected connectToWidgetProps to return FilterWidgetProps');
+      }
+      expect(connected.emptyState).toBe('setupButton');
+      expect(connected.onSetup).toBeUndefined();
+    });
+
+    it('forwards a host onSetup on an unconfigured filter widget', () => {
+      const onSetup = vi.fn();
+      const emptyFilterWidget = {
+        id: 'fw-empty',
+        widgetType: 'filter',
+        attribute: { name: '', expression: '' },
+        onSetup,
+      } as unknown as WidgetProps;
+      const { result } = renderHook(() => useCommonFilters());
+
+      const connected = result.current.connectToWidgetProps(emptyFilterWidget);
+      if (!isFilterWidgetProps(connected)) {
+        throw new Error('expected connectToWidgetProps to return FilterWidgetProps');
+      }
+      expect(connected.emptyState).toBe('setupButton');
+      expect(connected.onSetup).toBe(onSetup);
+    });
+
+    it('keeps an explicit emptyState on an unconfigured filter widget', () => {
+      const emptyFilterWidget = {
+        id: 'fw-empty',
+        widgetType: 'filter',
+        attribute: { name: '', expression: '' },
+        emptyState: 'guide' as const,
+      } as unknown as WidgetProps;
+      const { result } = renderHook(() => useCommonFilters());
+
+      const connected = result.current.connectToWidgetProps(emptyFilterWidget);
+      if (!isFilterWidgetProps(connected)) {
+        throw new Error('expected connectToWidgetProps to return FilterWidgetProps');
+      }
+      expect(connected.emptyState).toBe('guide');
+    });
+
     it('forwards every event to the widget original onChange', () => {
       const originalOnChange = vi.fn();
       const { result } = renderHook(() => useCommonFilters());

@@ -324,6 +324,33 @@ export const SAMPLE_ECOMMERCE_TABLE_CHART: ChartJSON = {
 };
 
 /**
+ * Sample ECommerce table example with trend and forecast on a styled measure column
+ * Shows months, revenue, revenue trend, and revenue forecast (with confidence band) columns
+ */
+export const SAMPLE_ECOMMERCE_TABLE_CHART_WITH_TREND_AND_FORECAST: ChartJSON = {
+  chartType: 'table',
+  dataOptions: {
+    columns: [
+      { column: 'DM.Commerce.Date.Months', dateFormat: 'yy-MM' },
+      {
+        column: {
+          function: 'measureFactory.sum',
+          args: ['DM.Commerce.Revenue', 'Revenue'],
+        },
+        trend: {
+          modelType: 'advancedSmoothing',
+        },
+        forecast: {
+          modelType: 'auto',
+          forecastHorizon: 6,
+        },
+        numberFormatConfig: { name: 'Currency', decimalScale: 2 },
+      },
+    ],
+  },
+};
+
+/**
  * Sample ECommerce indicator chart example
  * Shows revenue with cost as secondary comparison
  */
@@ -399,7 +426,7 @@ export const SAMPLE_ECOMMERCE_SCATTERMAP_CHART: ChartJSON = {
 export const SAMPLE_ECOMMERCE_CALENDAR_HEATMAP_CHART: ChartJSON = {
   chartType: 'calendar-heatmap',
   dataOptions: {
-    date: 'DM.Commerce.Date',
+    date: 'DM.Commerce.Date.Days',
     value: {
       function: 'measureFactory.sum',
       args: ['DM.Commerce.Revenue', 'Revenue'],
@@ -407,5 +434,32 @@ export const SAMPLE_ECOMMERCE_CALENDAR_HEATMAP_CHART: ChartJSON = {
   },
   styleOptions: {
     viewType: 'quarter',
+  },
+};
+
+/**
+ * Sample ECommerce column chart with a calculated dimension
+ * Shows revenue by a CASE WHEN age bucket, broken down by gender
+ */
+export const SAMPLE_ECOMMERCE_COLUMN_CHART_WITH_CALCULATED_DIMENSION: ChartJSON = {
+  chartType: 'column',
+  dataOptions: {
+    category: [
+      {
+        function: 'attributeFactory.customFormula',
+        args: [
+          'Age Group',
+          "CASE WHEN [ageRange] = '0-18' THEN 'Minor' WHEN [ageRange] = '65+' THEN 'Senior' ELSE 'Adult' END",
+          { ageRange: 'DM.Commerce.Age Range' },
+        ],
+      },
+    ],
+    value: [
+      {
+        function: 'measureFactory.sum',
+        args: ['DM.Commerce.Revenue', 'Total Revenue'],
+      },
+    ],
+    breakBy: ['DM.Commerce.Gender'],
   },
 };

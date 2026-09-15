@@ -17,6 +17,7 @@ import isUndefined from 'lodash-es/isUndefined';
 import {
   AnyColumn,
   CategoryStyle,
+  DerivedResultColumn,
   StyledColumn,
   StyledMeasureColumn,
   ValueStyle,
@@ -106,15 +107,35 @@ export function isMeasureColumn(
 }
 
 /**
+ * Checks whether a table column is a {@link DerivedResultColumn} — i.e. addressed directly by a
+ * query-result column name rather than by a dimensional Attribute/Measure.
+ *
+ * @param column - The table column to check.
+ * @returns `true` if the column is a {@link DerivedResultColumn}.
+ * @internal
+ */
+export function isDerivedResultColumn(
+  column: StyledColumn | StyledMeasureColumn | DerivedResultColumn,
+): column is DerivedResultColumn {
+  return !('column' in column);
+}
+
+/**
  * Returns the title of a column (data option).
  *
  * @param column - The column to get the title of.
  * @param name - The name of the column.
  * @returns The title of the column.
  */
-export const getDataOptionTitle = (styledColumn: StyledColumn | StyledMeasureColumn) => {
+export const getDataOptionTitle = (
+  styledColumn: StyledColumn | StyledMeasureColumn | DerivedResultColumn,
+) => {
   if (!styledColumn) {
     return '';
+  }
+
+  if (isDerivedResultColumn(styledColumn)) {
+    return styledColumn.title ?? styledColumn.name;
   }
 
   const { column, name } = styledColumn;

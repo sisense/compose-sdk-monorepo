@@ -8,9 +8,13 @@ import {
 } from '@sisense/sdk-data';
 import { convertSortDirectionToSort } from '@sisense/sdk-data';
 
-import { isMeasureColumn } from '@/domains/visualizations/core/chart-data-options/utils';
+import {
+  isDerivedResultColumn,
+  isMeasureColumn,
+} from '@/domains/visualizations/core/chart-data-options/utils';
 
 import {
+  DerivedResultColumn,
   StyledColumn,
   StyledMeasureColumn,
   TableDataOptionsInternal,
@@ -34,10 +38,14 @@ const flatResults = (dimensions: string[], sourceTable: DataTable): DataTable =>
   return selectColumns(sourceTable, tableColumns);
 };
 
-export const unifySortToDirection = ({
-  column,
-  sortType,
-}: StyledColumn | StyledMeasureColumn): number => {
+export const unifySortToDirection = (
+  styledColumn: StyledColumn | StyledMeasureColumn | DerivedResultColumn,
+): number => {
+  // Not backed by a queryable Attribute/Measure — has no sort identity.
+  if (isDerivedResultColumn(styledColumn)) {
+    return 0;
+  }
+  const { column, sortType } = styledColumn;
   const isAttribute = 'getSort' in column;
   const sort = isAttribute ? (column as Attribute).getSort() : sortType;
   switch (sort) {
@@ -58,7 +66,7 @@ export const syncDataTableWithDataOptionsSort = (
 ) => {
   const sortedColumn = chartDataOptions.columns.find((c) => unifySortToDirection(c) !== 0);
 
-  if (sortedColumn) {
+  if (sortedColumn && !isDerivedResultColumn(sortedColumn)) {
     const tableColumn = getColumnByName(dataTable, sortedColumn.column.name);
     if (tableColumn) {
       tableColumn.direction = unifySortToDirection(sortedColumn);
@@ -138,6 +146,11 @@ export const updateInnerDataOptionsSort = (
 ): TableDataOptionsInternal => {
   return {
     columns: dataOptions.columns.map((styledColumn) => {
+      // Not backed by a queryable Attribute/Measure — not sortable, pass through unchanged.
+      if (isDerivedResultColumn(styledColumn)) {
+        return styledColumn;
+      }
+
       const isNewSortedColumn = styledColumn.column.name === sortColumn.name;
 
       const currentDirection = unifySortToDirection(styledColumn);
@@ -159,7 +172,7 @@ export const tableData = (
   dataTable: DataTable,
 ): DataTable => {
   const tableChartData: DataTable = flatResults(
-    chartDataOptions.columns.map(({ column: { name } }) => name),
+    chartDataOptions.columns.map((c) => (isDerivedResultColumn(c) ? c.name : c.column.name)),
     dataTable,
   );
 

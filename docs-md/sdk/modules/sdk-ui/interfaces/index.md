@@ -124,6 +124,8 @@ TypeScript interfaces for components and hooks listed above
 - [Member](interface.Member.md)
 - [MemberFilterTileProps](interface.MemberFilterTileProps.md)
 - [Module](interface.Module.md) <Badge type="beta" text="Beta" />
+- [NarrativeWidgetConfig](interface.NarrativeWidgetConfig.md) <Badge type="beta" text="Beta" />
+- [NarrativeWidgetProps](interface.NarrativeWidgetProps.md) <Badge type="beta" text="Beta" />
 - [NlqResponseData](interface.NlqResponseData.md)
 - [NumericBarIndicatorStyleOptions](interface.NumericBarIndicatorStyleOptions.md)
 - [NumericSimpleIndicatorStyleOptions](interface.NumericSimpleIndicatorStyleOptions.md)

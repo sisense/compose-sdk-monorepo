@@ -54,4 +54,20 @@ describe('getNarrativeDimensionsAndMeasuresFromTable', () => {
     expect(measures.length).toBe(2);
     expect(measures[1].composeCode?.includes('measureFactory.trend')).toBe(true);
   });
+
+  it('omits the trend companion when includeTrendAndForecast is false', () => {
+    const { measures } = getNarrativeDimensionsAndMeasuresFromTable(
+      {
+        columns: [
+          { column: DM.Commerce.Gender },
+          {
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Revenue'),
+            trend: {},
+          },
+        ],
+      },
+      { includeTrendAndForecast: false },
+    );
+    expect(measures.length).toBe(1);
+  });
 });

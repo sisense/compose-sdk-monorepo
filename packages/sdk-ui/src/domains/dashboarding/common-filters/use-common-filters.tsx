@@ -8,6 +8,7 @@ import type { FilterWidgetChangeEvent } from '@/domains/widgets/change-events.js
 import {
   getInternalWidgetType,
   isFilterWidgetProps,
+  isNarrativeWidgetProps,
   isTextWidgetProps,
   mergeFilters,
   registerDataPointClickHandler,
@@ -57,8 +58,8 @@ export const useCommonFilters = ({
 
   const connectToWidgetProps = useCallback(
     (widgetProps: WidgetProps, options: ConnectToWidgetPropsOptions = {}): WidgetProps => {
-      // Text widgets do not support filters, highlights, and data options
-      if (isTextWidgetProps(widgetProps)) {
+      // Text and narrative widgets do not support filters, highlights, and data options
+      if (isTextWidgetProps(widgetProps) || isNarrativeWidgetProps(widgetProps)) {
         return widgetProps;
       }
 
@@ -89,6 +90,17 @@ export const useCommonFilters = ({
         return {
           ...widgetProps,
           filter,
+          // Dashboard canvas: compact "Set up filter" unless the host already chose.
+          // The editor mounts FilterWidget directly, so it keeps the illustration.
+          emptyState:
+            widgetProps.emptyState ??
+            (widgetProps.attribute?.expression ? undefined : 'setupButton'),
+          // Opening the widget editor is host-owned (Fusion / CSDK
+          // `withFilterWidgetSetup`). This mapper has no editor to open, so it
+          // must not invent onSetup — a missing callback leaves the button
+          // disabled (view-only and public Dashboard). A host-provided handler
+          // is kept via the spread above; restated here so it cannot be dropped.
+          onSetup: widgetProps.onSetup,
           ...(dashboardParentFilters.length
             ? {
                 parentFilters: [...(widgetProps.parentFilters ?? []), ...dashboardParentFilters],

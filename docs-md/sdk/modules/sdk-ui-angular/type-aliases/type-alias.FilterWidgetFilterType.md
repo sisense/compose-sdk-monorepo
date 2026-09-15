@@ -4,11 +4,12 @@ title: FilterWidgetFilterType
 
 # Type alias FilterWidgetFilterType <Badge type="beta" text="Beta" />
 
-> **FilterWidgetFilterType**: `"condition"` \| `"dateRange"` \| `"members"` \| `"numericRange"` \| `"period"`
+> **FilterWidgetFilterType**: `"calendar"` \| `"condition"` \| `"dateRange"` \| `"members"` \| `"numericRange"` \| `"period"`
 
 `FilterWidgetFilterType` selects the rendering type for a filter widget.
 
 - `'members'`      — searchable member-select dropdown. Implemented.
+- `'calendar'`     — calendar taking one date or several, for datetime attributes only. Implemented.
 - `'dateRange'`    — date-range picker. Planned.
 - `'period'`       — relative-period picker. Planned.
 - `'numericRange'` — numeric range slider. Planned.

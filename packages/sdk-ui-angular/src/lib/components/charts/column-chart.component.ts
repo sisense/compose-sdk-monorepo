@@ -20,53 +20,27 @@ export interface ColumnChartProps
  * whose heights are proportional to the values that they represent.
  *
  * @example
- * ```html
- *    <csdk-column-chart
- *      [dataSet]="chart.dataSet"
- *      [dataOptions]="chart.dataOptions"
- *      [highlights]="filters"
- *      [beforeRender]="onBeforeRender"
- *      (dataPointClick)="logArguments($event)"
- *      (dataPointContextMenu)="logArguments($event)"
- *      (dataPointsSelect)="logArguments($event)"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  DM = DM;
-  filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
-  chart = {
-    chartType: 'column' as ChartType,
-    dataSet: DM.DataSource,
-    dataOptions: {
-      category: [DM.Divisions.Divison_name],
-      value: [measureFactory.sum(DM.Admissions.Cost_of_admission)],
-      breakBy: [],
-    },
-  };
-
-  onBeforeRender(options: any) {
-    console.log('beforeRender');
-    console.log(options);
-    return options;
-  }
-
-  logArguments(...args: any[]) {
-    console.log(args);
-  }
-}
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-column-chart [dataSet]="DM.DataSource" [dataOptions]="dataOptions"></csdk-column-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     category: [DM.Commerce.Date.Years],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     breakBy: [DM.Commerce.Condition],
+ *   };
+ * }
  * ```
- * <img src="media://angular-column-chart-example.png" width="800px" />
+ * <img src="media://column-chart-example-1.png" width="700px" />
  * @group Charts
  */
 @Component({

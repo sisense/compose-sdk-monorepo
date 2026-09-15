@@ -828,6 +828,17 @@ export const isDimensionalCalculatedAttribute = (
  *
  * See also functions {@link createDimension} and {@link createDateDimension}.
  *
+ * @example
+ * ```ts
+ * import { createAttribute } from '@sisense/sdk-data';
+ *
+ * const revenue = createAttribute({
+ *   name: 'Revenue',
+ *   type: 'numeric-attribute',
+ *   expression: '[Commerce.Revenue]',
+ * });
+ * ```
+ *
  * @param json - JSON object representing the attribute
  * @returns An Attribute instance
  * @group Data Model Utilities

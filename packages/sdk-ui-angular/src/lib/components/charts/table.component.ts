@@ -35,32 +35,39 @@ export interface TableProps
  * Table with aggregation and pagination.
  *
  * @example
- * ```html
- *  <csdk-table [dataSet]="table.dataSet" [dataOptions]="table.dataOptions" [filters]="filters" />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-healthcare-model';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  DM = DM;
-  filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
-  table = {
-    dataSet: DM.DataSource,
-    dataOptions: {
-      columns: [DM.Admissions.Patient_ID, measureFactory.sum(DM.Admissions.Cost_of_admission)],
-    },
-  };
-
-}
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-table
+ *       [dataSet]="DM.DataSource"
+ *       [dataOptions]="dataOptions"
+ *       [styleOptions]="styleOptions"
+ *     ></csdk-table>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     columns: [
+ *       { column: DM.Commerce.Date.Years, name: 'Year', dateFormat: 'yyyy' },
+ *       DM.Commerce.Condition,
+ *       measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+ *     ],
+ *   };
+ *   styleOptions = {
+ *     rowsPerPage: 12,
+ *     height: 420,
+ *     header: { color: { enabled: true, backgroundColor: '#94F5F0', textColor: '#121A23' } },
+ *     rows: { alternatingColor: { enabled: true, backgroundColor: '#f2f2f2' } },
+ *   };
+ * }
  * ```
- * <img src="media://angular-table-chart-example.png" width="800px" />
+ * <img src="media://table-example-1.png" width="700px" />
  * @group Data Grids
  */
 @Component({

@@ -386,19 +386,16 @@ export interface EditModeConfig {
   };
   /**
    * Configuration for the widget duplication feature.
-   *
-   * @internal
    */
   duplicateWidget?: {
     /**
-     * When `true`, adds a "Duplicate widget" menu item to each widget header.
+     * When `true`, adds a "Duplicate Widget" menu item to each widget header.
      * On click, clones the widget and updates the layout.
-     * Only has effect when edit mode is also enabled (`editMode.enabled`) and batch mode is disabled (`editMode.applyChangesAsBatch.enabled`).
-     * If batch mode is enabled, "Duplicate widget" menu item won't be applied because it would not be possible to undo/redo the duplication.
-     *
+     * Only takes effect when:
+     * - edit mode is enabled (`editMode.enabled` is `true`).
+     * - batch mode is disabled (`editMode.applyChangesAsBatch.enabled` is `false` or unset).
      * @default `false`, or the user's permissions to duplicate and create widgets on a
      * Fusion dashboard (both permissions required)
-     * @internal
      */
     enabled: boolean;
   };

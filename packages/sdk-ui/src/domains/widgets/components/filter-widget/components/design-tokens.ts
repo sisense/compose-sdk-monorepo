@@ -89,6 +89,8 @@ export const panel = {
   gap: '12px',
   rowHeight: '30px',
   hintRowHeight: '18px',
+  /** A calendar day cell, square. Fixed at every Size step — only fields resize. */
+  dayCell: '36px',
 } as const;
 
 /** Control widths — each sized for its own longest value, never full-width. @internal */

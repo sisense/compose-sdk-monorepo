@@ -315,6 +315,22 @@ describe('KpiComparison', () => {
     expect(getByText('250K').parentElement!.style.fontSize.endsWith('px')).toBe(true);
   });
 
+  it("renders no label line for a 'value' comparison whose label was dropped as a bare number", () => {
+    // The data layer empties the label of a fixed-number comparison measure so the card stops
+    // printing the same number twice -- the readout must then be the only line.
+    const { container } = render(
+      <KpiComparison
+        comparison={{ type: 'value', value: 250000, label: '' }}
+        display="percent"
+        showIcon={false}
+        scale="compact"
+        compact={false}
+        onColor={false}
+      />,
+    );
+    expect(container.textContent).toBe('250K');
+  });
+
   describe('native tooltips for clipped text', () => {
     // The readout clips with `text-overflow: ellipsis` at narrow cards, so every line carries its
     // own full text as a `title` -- the only way a user can recover what was cut off. Asserted per

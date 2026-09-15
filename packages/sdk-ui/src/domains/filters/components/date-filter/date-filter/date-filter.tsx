@@ -175,6 +175,10 @@ export function DateFilter(props: DateRangeFilterProps) {
           <CalendarDateSelector
             selectorMode={activeSelectorMode}
             onDateRangeChanged={(newDateRange) => {
+              // Narrowing the type because no value can be undefined for this component
+              if (!newDateRange.from || !newDateRange.to) {
+                return;
+              }
               props.onChange({
                 type: DATE_RANGE,
                 filter: {

@@ -15,34 +15,26 @@ export interface SunburstChartProps extends SunburstChartPropsPreact {}
  * It maintains compatibility with Vue's reactivity system while preserving the functionality of the SunburstChart.
  *
  * @example
- * Here's how you can use the SunburstChart component in a Vue application:
  * ```vue
- * <template>
-    <SunburstChart
-      :dataOptions="sunburstChartProps.dataOptions"
-      :dataSet="sunburstChartProps.dataSet"
-      :filters="sunburstChartProps.filters"
-    />
- * </template>
- *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
- * import * as DM from '../assets/sample-retail-model';
- * import { SunburstChart,type SunburstChartProps } from '@sisense/sdk-ui-vue';
+ * import { SunburstChart } from '@sisense/sdk-ui-vue';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
  *
- * const dimProductName = DM.DimProducts.ProductName;
- * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
- * const sunburstChartProps = ref<SunburstChartProps>({
-    dataSet: DM.DataSource,
-    dataOptions: {
-      category: [dimProductName],
-      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-    },
-    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-  });
+ * const chartProps = ref({
+ *   dataOptions: {
+ *     category: [DM.Commerce.Condition, DM.Commerce.AgeRange],
+ *     value: [measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity')],
+ *   },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <SunburstChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+ * </template>
  * ```
- * <img src="media://vue-sunburst-chart-example.png" width="600px" />
+ * <img src="media://sunburst-chart-example-1.png" width="700px" />
  * @param props - Sunburst Chart properties
  * @returns Sunburst Chart component
  * @group Charts

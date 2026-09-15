@@ -1,16 +1,16 @@
-import { measureFactory, Sort } from '@sisense/sdk-data';
+import {
+  FORECAST_PREFIX,
+  isForecastMeasure,
+  isTrendMeasure,
+  measureFactory,
+  Sort,
+  TREND_PREFIX,
+} from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
-import {
-  adaptDimensionsForQuery,
-  adaptMeasuresForQuery,
-  FORECAST_PREFIX,
-  isForecastMeasure,
-  isTrendMeasure,
-  TREND_PREFIX,
-} from './apply-styled-options-to-query.js';
+import { adaptDimensionsForQuery, adaptMeasuresForQuery } from './apply-styled-options-to-query.js';
 
 describe('adaptMeasuresForQuery', () => {
   it('appends trend and forecast companion measures with prefixed names', () => {

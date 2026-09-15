@@ -1,4 +1,4 @@
-import { DataSource } from '../interfaces.js';
+import { CalculatedMeasureColumn, Column, DataSource, MeasureColumn } from '../interfaces.js';
 import { DateLevel, FilterJaql, JaqlDataSource, JSONObject, Sort } from './types.js';
 
 /**
@@ -654,6 +654,82 @@ export interface PivotMeasure {
  */
 export function isPivotMeasure(arg: Measure | PivotMeasure): arg is PivotMeasure {
   return 'measure' in arg;
+}
+
+/**
+ * Checks whether a column is a live {@link Attribute} instance rather than a plain {@link Column}.
+ * Live instances expose JAQL sort APIs; plain columns do not.
+ *
+ * @param column - Column to check
+ * @returns True when `column` is a live `Attribute` instance
+ * @internal
+ */
+export function isAttributeInstance(column: Column): column is Attribute {
+  return typeof column === 'object' && column !== null && 'sort' in column && 'getSort' in column;
+}
+
+/**
+ * Checks whether a column is a live {@link Measure} instance (e.g. from `measureFactory`) rather
+ * than a plain {@link MeasureColumn}/{@link CalculatedMeasureColumn}. Live instances carry
+ * `composeCode`; plain columns do not.
+ *
+ * @param column - Column to check
+ * @returns True when `column` is a live `Measure` instance
+ * @internal
+ */
+export function isMeasureInstance(
+  column: MeasureColumn | CalculatedMeasureColumn,
+): column is Measure {
+  return (
+    typeof column === 'object' && column !== null && 'composeCode' in column && 'sort' in column
+  );
+}
+
+/**
+ * Name prefix for trend companion measures — the convention a chart consumer uses when minting a
+ * trend measure via {@link measureFactory.trend}, so it can be recognized again later. Not a
+ * default {@link measureFactory.trend} applies itself (its own default name is `"<name> Trend"`).
+ *
+ * @internal
+ */
+export const TREND_PREFIX = '$trend';
+
+/**
+ * Name prefix for forecast companion measures — the convention a chart consumer uses when minting
+ * a forecast measure via {@link measureFactory.forecast}, so it can be recognized again later. Not
+ * a default {@link measureFactory.forecast} applies itself (its own default name is
+ * `"<name> Forecast"`).
+ *
+ * @internal
+ */
+export const FORECAST_PREFIX = '$forecast';
+
+/**
+ * Checks whether a measure is a trend companion measure, by `composeCode` or by name prefix.
+ *
+ * @param measure - Measure to check
+ * @returns True when `measure` is a trend companion measure
+ * @sisenseInternal
+ */
+export function isTrendMeasure(measure: Measure): boolean {
+  return (
+    (measure.composeCode?.includes('measureFactory.trend') ?? false) ||
+    (measure.name?.startsWith(TREND_PREFIX) ?? false)
+  );
+}
+
+/**
+ * Checks whether a measure is a forecast companion measure, by `composeCode` or by name prefix.
+ *
+ * @param measure - Measure to check
+ * @returns True when `measure` is a forecast companion measure
+ * @sisenseInternal
+ */
+export function isForecastMeasure(measure: Measure): boolean {
+  return (
+    (measure.composeCode?.includes('measureFactory.forecast') ?? false) ||
+    (measure.name?.startsWith(FORECAST_PREFIX) ?? false)
+  );
 }
 
 /**

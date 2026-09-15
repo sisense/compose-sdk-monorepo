@@ -11,7 +11,7 @@ describe('HeaderItemCell', () => {
       <HeaderItemCell item={{ id: 'menu', component: () => <button>Menu</button> }} />,
     );
 
-    expect(getByTestId('header-item-menu')).toHaveTextContent('Menu');
+    expect(getByTestId('csdk-menu')).toHaveTextContent('Menu');
   });
 
   describe('pointer events', () => {
@@ -24,13 +24,13 @@ describe('HeaderItemCell', () => {
         <HeaderItemCell item={{ id: 'menu', component: () => <button>Menu</button> }} />,
       );
 
-      expect(getByTestId('header-item-menu').style.pointerEvents).toBe('auto');
+      expect(getByTestId('csdk-menu').style.pointerEvents).toBe('auto');
     });
 
     it('stays transparent for a spacer', () => {
       const { getByTestId } = render(<HeaderItemCell item={createHeaderSpacerItem('spacer')} />);
 
-      expect(getByTestId('header-item-spacer').style.pointerEvents).toBe('none');
+      expect(getByTestId('csdk-spacer').style.pointerEvents).toBe('none');
     });
 
     it.each([
@@ -41,7 +41,7 @@ describe('HeaderItemCell', () => {
     ])('stays transparent for an item rendering %s', (_label, component) => {
       const { getByTestId } = render(<HeaderItemCell item={{ id: 'conditional', component }} />);
 
-      expect(getByTestId('header-item-conditional').style.pointerEvents).toBe('none');
+      expect(getByTestId('csdk-conditional').style.pointerEvents).toBe('none');
     });
   });
 });

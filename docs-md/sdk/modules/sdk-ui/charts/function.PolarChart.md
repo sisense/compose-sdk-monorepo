@@ -8,22 +8,6 @@ title: PolarChart
 
 A React component comparing multiple categories/variables with a spatial perspective in a radial chart.
 
-## Example
-
-Polar chart displaying total revenue per age range from the Sample ECommerce data model.
-
-<iframe
- src='https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart&mode=docs'
- width='100%'
- height='870'
- style='max-width:800px; border:none;'
-/>
-
-Additional Polar Chart examples:
-
-- [Area Polar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpolar-chart-area)
-- [Line Polar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpolar-chart-line)
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -35,3 +19,60 @@ Additional Polar Chart examples:
 `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Polar Chart component
+
+## Example
+
+Polar chart displaying total revenue per age range from the Sample ECommerce data model.
+
+```ts
+import { PolarChart } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
+
+const CodeExample = () => (
+  <PolarChart
+    dataSet={DM.DataSource}
+    dataOptions={{
+      category: [DM.Commerce.AgeRange],
+      value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+      breakBy: [],
+    }}
+  />
+);
+
+export default CodeExample;
+```
+
+<img src="../../../img/polar-chart-example-1.png" width="700px" />
+
+Area polar chart variant, using the same data:
+
+```ts
+<PolarChart
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [],
+  }}
+  styleOptions={{ subtype: 'polar/area' }}
+/>
+```
+
+<img src="../../../img/polar-chart-example-2.png" width="700px" />
+
+Line polar chart variant, using the same data:
+
+```ts
+<PolarChart
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    breakBy: [],
+  }}
+  styleOptions={{ subtype: 'polar/line' }}
+/>
+```
+
+<img src="../../../img/polar-chart-example-3.png" width="700px" />

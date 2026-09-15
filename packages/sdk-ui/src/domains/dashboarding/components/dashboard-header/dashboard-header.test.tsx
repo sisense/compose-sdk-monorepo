@@ -2,7 +2,12 @@ import { useState } from 'react';
 
 import { render, within } from '@testing-library/react';
 
-import { createHeaderSpacerItem, HeaderItem } from '@/domains/shared/header';
+import {
+  createHeaderSpacerItem,
+  getHeaderItemTestId,
+  HEADER_ITEM_TESTID_PREFIX,
+  HeaderItem,
+} from '@/domains/shared/header';
 
 import { DashboardHeaderConfig } from './dashboard-header-config.js';
 import { DashboardHeaderTargets } from './dashboard-header-targets.js';
@@ -17,16 +22,17 @@ const builtIns = (): HeaderItem[] => [
   createHeaderSpacerItem(DashboardHeaderTargets.Spacer),
 ];
 
-/** Item cells expose `data-testid="header-item-<item id>"`. */
-const CELL_TESTID_PREFIX = 'header-item-';
-
+/**
+ * Item cells expose `data-testid="csdk-<item id>"`. Only the row's direct children are cells — an
+ * item's own content may carry a `csdk-` test id too.
+ */
 const renderedIds = (row: HTMLElement) =>
-  Array.from(row.querySelectorAll(`[data-testid^="${CELL_TESTID_PREFIX}"]`)).map((el) =>
-    (el.getAttribute('data-testid') ?? '').slice(CELL_TESTID_PREFIX.length),
+  Array.from(row.querySelectorAll(`:scope > [data-testid^="${HEADER_ITEM_TESTID_PREFIX}"]`)).map(
+    (el) => (el.getAttribute('data-testid') ?? '').slice(HEADER_ITEM_TESTID_PREFIX.length),
   );
 
 const cellOf = (row: HTMLElement, id: string): HTMLElement =>
-  within(row).getByTestId(`${CELL_TESTID_PREFIX}${id}`);
+  within(row).getByTestId(getHeaderItemTestId(id));
 
 const documentStyleText = () =>
   Array.from(document.querySelectorAll('style'))

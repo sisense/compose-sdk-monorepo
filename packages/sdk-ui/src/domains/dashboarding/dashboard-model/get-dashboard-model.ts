@@ -77,7 +77,10 @@ async function getLegacyUserAuth(
   adminAccess?: boolean,
 ): Promise<DashboardUserAuth | undefined> {
   try {
-    const legacyDashboard = await api.getDashboardLegacy(dashboardOid, { adminAccess });
+    const legacyDashboard = await api.getDashboardLegacy(dashboardOid, {
+      adminAccess,
+      skipErrorNotification: true,
+    });
     return legacyDashboard?.userAuth;
   } catch {
     return undefined;

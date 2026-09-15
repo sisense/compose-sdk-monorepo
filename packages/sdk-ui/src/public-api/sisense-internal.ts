@@ -105,6 +105,10 @@ export {
   type QueryDefinitionProps,
 } from '../domains/visualizations/core/query-definition';
 
+// Query params comparison
+export { haveQueryParamsChanged } from '../domains/query-execution/hooks/shared/query-params-comparator.js';
+export type { BaseQueryParams } from '../domains/query-execution/types.js';
+
 // Data browser popover — Fusion uses it as the FilterWidget
 // dimension picker (also re-exported in the UMD bundle for the AngularJS host).
 export { AddFilterPopover } from '../domains/data-browser/add-filter-popover/add-filter-popover.js';

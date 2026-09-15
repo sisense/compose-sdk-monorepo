@@ -1,7 +1,5 @@
 import {
-  AREAMAP_CHART_TYPES,
   KPI_CHART_TYPES,
-  SCATTERMAP_CHART_TYPES,
   TABLE_TYPES,
 } from '@/domains/visualizations/core/chart-options-processor/translations/types';
 
@@ -10,8 +8,6 @@ const CHART_TYPES_WITHOUT_TABLE_TOGGLE = new Set<string>([
   'indicator',
   ...KPI_CHART_TYPES,
   'image',
-  ...AREAMAP_CHART_TYPES,
-  ...SCATTERMAP_CHART_TYPES,
 ]);
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -41,14 +37,13 @@ function columnIdentity(item: Record<string, unknown>): unknown {
   return 'column' in item ? item.column : item;
 }
 
-/** Flattens chart axes into Table `columns`, deduping by column object reference. @internal */
-export function toTableDataOptions(dataOptions: Record<string, unknown> | undefined): {
-  columns: unknown[];
-} {
-  if (dataOptions == null) {
-    return { columns: [] };
-  }
-
+/**
+ * Flattens chart axes into columns, deduping by column object reference.
+ *
+ * @param dataOptions - A chart's `dataOptions`, keyed by axis (`category`, `value`, `breakBy`, etc.).
+ * @returns The axis items flattened into a single array, in axis-key iteration order.
+ */
+function flattenAxisColumns(dataOptions: Record<string, unknown>): unknown[] {
   const columns: unknown[] = [];
   const seen = new Set<unknown>();
 
@@ -63,27 +58,63 @@ export function toTableDataOptions(dataOptions: Record<string, unknown> | undefi
     }
   }
 
-  return { columns };
+  return columns;
 }
 
-/** @internal */
+/**
+ * Minimal shape of `TableDataOptions` produced by flattening a chart's axes.
+ *
+ * @example
+ * ```ts
+ * const tableDataOptions: TableDataOptionsLike = { columns: [{ column: { name: 'Revenue' } }] };
+ * ```
+ * @internal
+ */
+type TableDataOptionsLike = { columns: unknown[] };
+
+const EMPTY_TABLE_DATA_OPTIONS: TableDataOptionsLike = Object.freeze({ columns: [] });
+
+/**
+ * Keeps a `{columns}` result referentially stable per source `dataOptions` object, so
+ * `Table`/`TableComponent` do not re-derive — and reset pagination — on every parent re-render.
+ *
+ * Assumes `dataOptions` is treated as immutable, as it is throughout this codebase.
+ */
+const tableDataOptionsCache = new WeakMap<object, TableDataOptionsLike>();
+
+/**
+ * Flattens chart axes into Table `columns`, deduping by column object reference.
+ *
+ * @param dataOptions - A chart's `dataOptions`, or `undefined`.
+ * @returns Table-shaped `{ columns }`, cached per `dataOptions` object for referential stability.
+ * @internal
+ */
+export function toTableDataOptions(
+  dataOptions: Record<string, unknown> | undefined,
+): TableDataOptionsLike {
+  if (dataOptions == null) {
+    return EMPTY_TABLE_DATA_OPTIONS;
+  }
+
+  const cached = tableDataOptionsCache.get(dataOptions);
+  if (cached) {
+    return cached;
+  }
+
+  const result: TableDataOptionsLike = { columns: flattenAxisColumns(dataOptions) };
+  tableDataOptionsCache.set(dataOptions, result);
+  return result;
+}
+
+/**
+ * Checks whether a chart's `dataOptions` flattens into at least one table column.
+ *
+ * @param dataOptions - A chart's `dataOptions`, of unknown shape.
+ * @returns `true` if flattening `dataOptions` yields at least one column.
+ * @internal
+ */
 export function hasFlattenedTableColumns(dataOptions: unknown): boolean {
-  return isPlainObject(dataOptions) && toTableDataOptions(dataOptions).columns.length > 0;
-}
-
-/** True when a value-axis item has trend or forecast config. @internal */
-export function hasTrendOrForecast(dataOptions: unknown): boolean {
-  if (!isPlainObject(dataOptions)) {
-    return false;
-  }
-  for (const value of Object.values(dataOptions)) {
-    for (const item of axisItems(value)) {
-      if (isPlainObject(item) && (item.trend != null || item.forecast != null)) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return isPlainObject(dataOptions) && flattenAxisColumns(dataOptions).length > 0;
 }
 
 /** @internal */

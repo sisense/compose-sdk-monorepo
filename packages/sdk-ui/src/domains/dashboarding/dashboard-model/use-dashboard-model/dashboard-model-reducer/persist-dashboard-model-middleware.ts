@@ -16,7 +16,10 @@ import type {
   WidgetDto,
   WidgetStyle,
 } from '@/domains/widgets/components/widget-by-id/types';
-import { isTextWidget } from '@/domains/widgets/components/widget-by-id/utils.js';
+import {
+  isNarrativeWidget,
+  isTextWidget,
+} from '@/domains/widgets/components/widget-by-id/utils.js';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { RestApi } from '@/infra/api/rest-api';
 import { AppSettings } from '@/infra/app/settings/settings';
@@ -259,11 +262,13 @@ export async function persistDashboardModelMiddleware({
         tabberConfig,
       } = parseAddWidgetPayload(action.payload);
 
-      // Text widgets don't carry a data source in their widget model.
+      // Text and narrative widgets don't carry a data source in their widget model.
       // Fall back to the dashboard-level data source so the produced DTO
       // still satisfies the server's datasource schema.
+      const hasNoOwnDataSource =
+        isTextWidget(inputWidget.widgetType) || isNarrativeWidget(inputWidget.widgetType);
       const dataSourceForDto =
-        isTextWidget(inputWidget.widgetType) && dashboardDataSource
+        hasNoOwnDataSource && dashboardDataSource
           ? convertJaqlDataSourceForDto(dashboardDataSource)
           : undefined;
 

@@ -42,6 +42,18 @@ export interface ExecuteCustomWidgetQueryParams
 /**
  * Utility function for converting data options to parameters for executing a query.
  *
+ * @example
+ * ```ts
+ * import { extractDimensionsAndMeasures } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const { dimensions, measures } = extractDimensionsAndMeasures({
+ *   category: [DM.Commerce.Condition],
+ *   value: [measureFactory.sum(DM.Commerce.Revenue)],
+ * });
+ * ```
+ *
  * @group Dashboards
  */
 export function extractDimensionsAndMeasures(dataOptions: GenericDataOptions) {
@@ -117,6 +129,42 @@ export function useExecuteCustomWidgetQueryInternal({
 
 /**
  * React hook that takes a custom widget component's props and executes a data query.
+ *
+ * @example
+ * Used inside a {@link CustomWidgetComponent} to fetch the data it needs to render, based on
+ * the `dataSource`/`dataOptions`/`filters` props supplied by the dashboard:
+ *
+ * ```tsx
+ * import { CustomWidgetComponent, useExecuteCustomWidgetQuery } from '@sisense/sdk-ui';
+ *
+ * const MyTableWidget: CustomWidgetComponent = (props) => {
+ *   const { data } = useExecuteCustomWidgetQuery(props);
+ *   if (!data) return null;
+ *
+ *   return (
+ *     <table>
+ *       <thead>
+ *         <tr>
+ *           {data.columns.map((column, i) => (
+ *             <th key={i}>{column.name}</th>
+ *           ))}
+ *         </tr>
+ *       </thead>
+ *       <tbody>
+ *         {data.rows.map((row, i) => (
+ *           <tr key={i}>
+ *             {row.map((cell, j) => (
+ *               <td key={j}>{cell.text}</td>
+ *             ))}
+ *           </tr>
+ *         ))}
+ *       </tbody>
+ *     </table>
+ *   );
+ * };
+ *
+ * export default MyTableWidget;
+ * ```
  *
  * @group Queries
  */

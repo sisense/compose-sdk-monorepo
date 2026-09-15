@@ -4,6 +4,7 @@ import { isDimensionalLevelAttribute } from '@sisense/sdk-data';
 
 import { getTranslatedDataOptions } from '@/domains/visualizations/components/chart/helpers/use-translated-data-options.js';
 import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data.js';
+import { hasAdvancedAnalyticsMeasure } from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query.js';
 import { translateTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import { TableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 import { isTable } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
@@ -69,7 +70,7 @@ export function useChartWidgetCsvDownload(
       measures,
       filters,
       highlights,
-      ungroup: isTableWidget,
+      ungroup: isTableWidget && !hasAdvancedAnalyticsMeasure(measures),
       filename: title ? `${title}.csv` : undefined,
     };
   }, [chartType, dataOptions, dataSource, filters, highlights, title]);

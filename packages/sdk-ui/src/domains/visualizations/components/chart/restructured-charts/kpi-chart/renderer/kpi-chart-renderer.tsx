@@ -10,8 +10,8 @@ import { NoResultsOverlay } from '@/shared/components/no-results-overlay/no-resu
 import { useDateFormatter } from '@/shared/hooks/useDateFormatter.js';
 import type { KpiBeforeRenderHandler, KpiDataPointEventHandler } from '@/types.js';
 
-import { isKpiChartDataOptionsInternal } from '../data-options/index.js';
-import { resolveComparisonColor } from '../data/value-colors.js';
+import { isDateCategory, isKpiChartDataOptionsInternal } from '../data-options/index.js';
+import { resolveComparisonColor, resolveSeriesColor } from '../data/value-colors.js';
 import { isKpiChartData, KpiChartData } from '../types.js';
 import {
   comparisonMeasureNumberFormatConfig,
@@ -237,7 +237,8 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
     }
   });
 
-  const { value, valueTitle, valueColor, valuePeriodMs, sparklinePoints } = finalRenderOptions;
+  const { value, valueTitle, valueColor, valuePeriodMs, categoryDisplayValue, sparklinePoints } =
+    finalRenderOptions;
   const noDataText = designOptions.value.noDataText;
   const isEmpty = !chartData.hasRows || value === undefined;
 
@@ -257,13 +258,17 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   // the period caption here and the sparkline tooltip below. Each site keeps its own fallback,
   // since they need different precision when the consumer specified nothing.
   const categoryDateFormat = dataOptions.category?.dateFormat;
-  const period =
-    designOptions.title.enabled &&
-    designOptions.title.showCategoryTitle &&
-    valuePeriodMs !== undefined &&
-    !isNaN(valuePeriodMs)
-      ? dateFormatter(new Date(valuePeriodMs), categoryDateFormat ?? DEFAULT_PERIOD_DATE_FORMAT)
-      : undefined;
+  // Whether the category holds dates decides both places the card shows a category value. Where a
+  // date category captions the header with its formatted period, a dateless one is captioned by
+  // the bucket's own text ('FEMALE' in 'DEC 2013's place) -- the data layer sets exactly one of
+  // the two, and neither exists for `valueMode: 'total'`, whose headline spans every bucket.
+  const dateCategory = isDateCategory(dataOptions.category);
+  const showCategoryCaption = designOptions.title.enabled && designOptions.title.showCategoryTitle;
+  const period = !showCategoryCaption
+    ? undefined
+    : valuePeriodMs !== undefined && !isNaN(valuePeriodMs)
+    ? dateFormatter(new Date(valuePeriodMs), categoryDateFormat ?? DEFAULT_PERIOD_DATE_FORMAT)
+    : categoryDisplayValue;
 
   // The theme accent (first palette color): the value text's DEFAULT color — indicator parity,
   // measure-level color options override, and deliberately no contrast guard (the legacy
@@ -271,8 +276,13 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   // accent but keeps it only while legible against a custom background (WCAG 1.4.11 graphics
   // contrast), then falls back to the better of the theme text color or white.
   const accentColor = themeSettings.palette?.variantColors?.[0] ?? DEFAULT_ACCENT_COLOR;
+  // The sparkline draws the category series, so it takes the category column's own color when
+  // one is set (`StyledColumn.color`, the Trend panel's color menu in Fusion) and the accent
+  // otherwise. This is the authored color, before the contrast guard below -- what the tooltip,
+  // which sits off the card, should use.
+  const sparklineAccent = resolveSeriesColor(dataOptions.category) ?? accentColor;
   const sparklineColor = resolveSparklineColor({
-    accent: accentColor,
+    accent: sparklineAccent,
     textColor: themeSettings.chart?.textColor ?? '#5b6372',
     backgroundColor: designOptions.card.backgroundColor,
   });
@@ -418,6 +428,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
           showText={showTitleText}
           period={period}
           onColor={onColor}
+          align={designOptions.title.align}
           areaRef={titleRef}
         />
       }
@@ -463,13 +474,17 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
             chartType={designOptions.sparkline.chartType}
             color={sparklineColor}
             numberFormatConfig={chartData.numberFormatConfig}
+            // Without this the tooltip would format a dateless category's ordinal `x` as an
+            // epoch, captioning every point 'Jan 1, 1970'.
+            isDateCategory={dateCategory}
             dateFormat={categoryDateFormat}
             // The measure's own title, not `titleText`: the tooltip's leading label plays the role
             // of a series name, so it names the measure regardless of any card title override.
             valueTitle={valueTitle}
-            // The accent, not `sparklineColor`: the latter is adjusted for contrast against the
-            // card, and the tooltip doesn't sit on the card -- it has the standard white body.
-            tooltipValueColor={accentColor}
+            // The authored color, not `sparklineColor`: the latter is adjusted for contrast
+            // against the card, and the tooltip doesn't sit on the card -- it has the standard
+            // white body.
+            tooltipValueColor={sparklineAccent}
           />
         ) : undefined
       }

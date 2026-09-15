@@ -15,36 +15,32 @@ export interface BoxplotChartProps extends BoxplotChartPropsPreact {}
  * and center of a data set along an axis.
  *
  * @example
- * Here's how you can use the BoxplotChart component in a Vue application:
  * ```vue
- * <template>
-    <BoxplotChart
-        :dataOptions="boxplotChartProps.dataOptions"
-        :dataSet="boxplotChartProps.dataSet"
-        :filters="boxplotChartProps.filters"
-      />
- * </template>
- *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
- * import * as DM from '../assets/sample-retail-model';
- * import { BoxplotChart, type BoxplotChartProps } from '@sisense/sdk-ui-vue';
-
- * const dimProductName = DM.DimProducts.ProductName;
- * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
- * const boxplotChartProps = ref<BoxplotChartProps>({
-    dataSet: DM.DataSource,
-    dataOptions: {
-      category: [dimProductName],
-      value: [DM.Fact_Sale_orders.OrderRevenue],
-      boxType: 'iqr',
-      outliersEnabled: true,
-    },
-    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-  });
+ * import { BoxplotChart, type BoxplotChartDataOptions } from '@sisense/sdk-ui-vue';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const chartProps = ref({
+ *   dataOptions: {
+ *     category: [DM.Commerce.Condition],
+ *     value: [{ column: DM.Commerce.Cost, name: 'Total Cost' }],
+ *     boxType: 'iqr',
+ *     outliersEnabled: true,
+ *   } as BoxplotChartDataOptions,
+ *   styleOptions: { subtype: 'boxplot/full' },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <BoxplotChart
+ *     :dataSet="DM.DataSource"
+ *     :dataOptions="chartProps.dataOptions"
+ *     :styleOptions="chartProps.styleOptions"
+ *   />
+ * </template>
  * ```
- * <img src="media://vue-boxplot-chart-example.png" width="600px" />
+ * <img src="media://boxplot-chart-example-1.png" width="700px" />
  * @param props - Boxplot chart properties
  * @returns Boxplot Chart component
  * @group Charts

@@ -22,37 +22,34 @@ export interface SankeyChartProps
  * between two connected nodes.
  *
  * @example
- * ```html
- *    <csdk-sankey-chart
- *      [dataSet]="chart.dataSet"
- *      [dataOptions]="chart.dataOptions"
- *      [styleOptions]="chart.styleOptions"
- *    />
- * ```
  * ```ts
-import { Component } from '@angular/core';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-ecommerce';
-
-@Component({
-  selector: 'app-analytics',
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss'],
-})
-export class AnalyticsComponent {
-  chart = {
-    dataSet: DM.DataSource,
-    dataOptions: {
-      category: [DM.Commerce.Gender, DM.Commerce.AgeRange],
-      value: measureFactory.sum(DM.Commerce.Revenue, 'Revenue'),
-    },
-    styleOptions: {
-      orientation: 'horizontal',
-      nodeAlignment: 'top',
-    },
-  };
-}
+ * import { Component } from '@angular/core';
+ * import * as DM from './sample-ecommerce';
+ * import { measureFactory } from '@sisense/sdk-data';
+ *
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-sankey-chart
+ *       [dataSet]="DM.DataSource"
+ *       [dataOptions]="dataOptions"
+ *       [styleOptions]="styleOptions"
+ *     ></csdk-sankey-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   dataOptions = {
+ *     category: [DM.Commerce.Gender, DM.Commerce.AgeRange],
+ *     value: measureFactory.sum(DM.Commerce.Revenue),
+ *   };
+ *   styleOptions = {
+ *     orientation: 'horizontal',
+ *     nodeAlignment: 'top',
+ *   };
+ * }
  * ```
+ * <img src="media://sankey-chart-example-1.png" width="700px" />
  * @group Charts
  */
 @Component({

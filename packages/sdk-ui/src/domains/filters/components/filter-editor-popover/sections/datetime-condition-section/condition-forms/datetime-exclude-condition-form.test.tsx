@@ -106,7 +106,7 @@ describe('DatetimeExcludeConditionForm', () => {
     const quartersAttribute = {
       ...DM.Commerce.Date.Years,
       granularity: DateLevels.Quarters,
-    } as any;
+    };
 
     const parentFilters = [
       filterFactory.members(yearsAttribute, ['2023-01-01T00:00:00']),
@@ -162,7 +162,7 @@ describe('DatetimeExcludeConditionForm', () => {
       ...DM.Commerce.Date.Years,
       expression: '[OrderDate]',
       name: 'OrderDate',
-    } as any;
+    };
 
     const parentFilters = [filterFactory.members(differentDateAttribute, ['2023-01-01T00:00:00'])];
 
@@ -354,5 +354,72 @@ describe('DatetimeExcludeConditionForm', () => {
 
     // Should call onChange with updated filter
     expect(filterChangeHandlerMock).toHaveBeenCalled();
+  });
+  describe('at Day granularity', () => {
+    const daysExcludeFilter = filterFactory.members(
+      DM.Commerce.Date.Days,
+      ['2013-11-04T00:00:00'],
+      { excludeMembers: true },
+    );
+
+    const renderDaysForm = (multiSelectEnabled: boolean) => {
+      const { user } = setup(
+        <SisenseContextProvider {...contextProviderProps}>
+          <FilterEditorContextProvider
+            value={{
+              defaultDataSource: null,
+              dataSources: [],
+              parentFilters: [],
+              membersOnlyMode: false,
+              rankingVisible: true,
+            }}
+          >
+            <DatetimeExcludeConditionForm
+              filter={daysExcludeFilter}
+              multiSelectEnabled={multiSelectEnabled}
+              onChange={filterChangeHandlerMock}
+            />
+          </FilterEditorContextProvider>
+        </SisenseContextProvider>,
+      );
+
+      /**
+       * Opens the calendar popover, which starts on the selected member's month. Days 8-30 are
+       * unique within a Nov 2013 grid, unlike the adjacent-month days it also renders.
+       */
+      const openCalendar = async (label: string) => {
+        await user.click(await screen.findByLabelText(label));
+
+        return screen.findByLabelText('date range filter calendar container');
+      };
+
+      return { openCalendar, user };
+    };
+
+    it('should keep a single member when multi-select is disabled', async () => {
+      const { openCalendar, user } = renderDaysForm(false);
+
+      const calendar = await openCalendar('Calendar single-select');
+      await user.click(within(calendar).getByText('8'));
+      await user.click(within(calendar).getByText('12'));
+
+      expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({ members: ['2013-11-12T00:00:00'] }),
+      );
+    });
+
+    it('should accumulate members when multi-select is enabled', async () => {
+      const { openCalendar, user } = renderDaysForm(true);
+
+      const calendar = await openCalendar('Calendar multi-select');
+      await user.click(within(calendar).getByText('8'));
+      await user.click(within(calendar).getByText('12'));
+
+      expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          members: ['2013-11-04T00:00:00', '2013-11-08T00:00:00', '2013-11-12T00:00:00'],
+        }),
+      );
+    });
   });
 });

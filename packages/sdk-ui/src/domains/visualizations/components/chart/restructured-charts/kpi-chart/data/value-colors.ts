@@ -1,8 +1,9 @@
+import { withResolvedConditionValues } from '@/domains/visualizations/core/chart-data-options/coloring/conditional-coloring.js';
 import {
   ColoringService,
   getColoringServiceByColorOptions,
 } from '@/domains/visualizations/core/chart-data-options/coloring/index.js';
-import { DataColorOptions, StyledMeasureColumn } from '@/types';
+import { DataColorOptions, StyledColumn, StyledMeasureColumn } from '@/types';
 
 /** Default color applied to a positive comparison metric when no color options are configured. */
 const DEFAULT_POSITIVE_COLOR = '#4CAF50';
@@ -14,16 +15,32 @@ const DEFAULT_NEGATIVE_COLOR = '#E53935';
  * (`StyledMeasureColumn.color`) — the same mechanism the indicator chart uses.
  * Static (string/uniform) and conditional options are supported; range coloring
  * needs a comparison population and is not applicable to a single KPI value.
+ *
+ * Conditions whose threshold is a measure rather than a literal number
+ * (`DataColorCondition.valueMeasure`, authored in Fusion as a formula-driven color rule) are
+ * resolved against `colorConditionValues`. A condition whose measure is absent from that map
+ * is dropped by {@link withResolvedConditionValues} rather than evaluated: its unresolved
+ * `expression` is the empty string, which `Number('')` would silently read as a threshold of
+ * `0` and color the card against a rule the user never wrote.
+ *
+ * @param styledMeasureColumn - The measure column carrying the color options
+ * @param value - The value being colored
+ * @param colorConditionValues - Resolved values of formula-driven color condition measures,
+ * keyed by their query column name
+ * @returns The resolved color, or `undefined` to leave it to the renderer's default
  */
 export function resolveValueColor(
   styledMeasureColumn: StyledMeasureColumn,
   value: number | undefined,
+  colorConditionValues?: Record<string, number>,
 ): string | undefined {
   const colorOptions = styledMeasureColumn.color;
   if (!colorOptions || value === undefined) {
     return undefined;
   }
-  const coloringService = getColoringServiceByColorOptions(colorOptions);
+  const coloringService = getColoringServiceByColorOptions(
+    withResolvedConditionValues(colorConditionValues)(colorOptions),
+  );
   if (coloringService.type === 'Static') {
     return (coloringService as ColoringService<'Static'>).getColor();
   }
@@ -31,6 +48,30 @@ export function resolveValueColor(
     return (coloringService as ColoringService<'Absolute'>).getColor(value);
   }
   return undefined;
+}
+
+/**
+ * Resolves the display color of a KPI series — the sparkline — from its category column's
+ * color options (`StyledColumn.color`), the same `format.color` slot a measure's color rides.
+ *
+ * Only static (string/uniform) options apply. Conditional and range coloring both evaluate a
+ * *number*, and a series is a set of them: there is no single value to test a condition
+ * against, and nothing to say which point's color should win for the line as a whole.
+ * Both resolve to `undefined`, leaving the caller its own default — the same stance
+ * {@link resolveValueColor} takes on range options.
+ *
+ * @param styledColumn - The category column carrying the color options, when one is set
+ * @returns The resolved color, or `undefined` to fall back to the caller's default
+ */
+export function resolveSeriesColor(styledColumn: StyledColumn | undefined): string | undefined {
+  const colorOptions = styledColumn?.color;
+  if (!colorOptions) {
+    return undefined;
+  }
+  const coloringService = getColoringServiceByColorOptions(colorOptions);
+  return coloringService.type === 'Static'
+    ? (coloringService as ColoringService<'Static'>).getColor()
+    : undefined;
 }
 
 /**
@@ -69,7 +110,11 @@ export function resolveComparisonColor(
     return undefined;
   }
 
-  const coloringService = getColoringServiceByColorOptions(colorOptions);
+  // No query measure backs a style-authored comparison color, so a formula-driven condition
+  // can never resolve here -- drop it rather than let `Number('')` read it as a threshold of 0.
+  const coloringService = getColoringServiceByColorOptions(
+    withResolvedConditionValues(undefined)(colorOptions),
+  );
   switch (coloringService.type) {
     case 'Static':
       return (coloringService as ColoringService<'Static'>).getColor();

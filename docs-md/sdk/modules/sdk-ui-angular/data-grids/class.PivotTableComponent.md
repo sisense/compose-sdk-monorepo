@@ -8,55 +8,274 @@ Pivot Table with and pagination.
 
 ## Example
 
-```html
- <csdk-pivot-table
-   [dataSet]="pivotTable.dataSet"
-   [dataOptions]="pivotTable.dataOptions"
-   [filters]="pivotTable.filters"
-   [styleOptions]="pivotTable.styleOptions"
- />
-```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-ecommerce';
-import type { PivotTableDataOptions } from '@sisense/sdk-ui-angular';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
 
 @Component({
- selector: 'app-analytics',
- templateUrl: './analytics.component.html',
- styleUrls: ['./analytics.component.scss'],
+  selector: 'code-example',
+  template: `
+    `<csdk-pivot-table
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-pivot-table>`
+  `,
 })
-export class AnalyticsComponent {
-
- pivotTableDataOptions: PivotTableDataOptions = {
-   rows: [
-     { column: DM.Category.Category, includeSubTotals: true },
-     { column: DM.Commerce.AgeRange, includeSubTotals: true },
-     DM.Commerce.Condition,
-   ],
-   columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],
-   values: [
-     measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
-     {
-       column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
-       totalsCalculation: 'sum',
-       dataBars: true,
-     },
-   ],
-   grandTotals: { rows: true, columns: true },
- };
-
- pivotTable = {
-   dataSet: DM.DataSource,
-   dataOptions: this.pivotTableDataOptions,
-   filters: [filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])],
-   styleOptions: { width: 1400, height: 600, rowsPerPage: 50 },
- };
-
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    rows: [
+      {
+        column: DM.Commerce.Date.Years,
+        dateFormat: 'yyyy',
+        name: 'Year',
+      },
+      DM.Commerce.Condition,
+    ],
+    columns: [DM.Commerce.AgeRange],
+    values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+  };
+  styleOptions = {
+    rowsPerPage: 10,
+    height: 425,
+    width: 800,
+  };
 }
 ```
-<img src="../../../img/angular-pivot-table-example.png" width="800px" />
+
+<img src="../../../img/pivot-table-example-1.png" width="800px" />
+
+Additional examples:
+
+Highlighting relative magnitude within a column with data bars:
+```ts
+import { Component } from '@angular/core';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+@Component({
+  selector: 'code-example',
+  template: `
+    `<csdk-pivot-table
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-pivot-table>`
+  `,
+})
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    rows: [DM.Commerce.Condition, DM.Commerce.AgeRange],
+    columns: [
+      {
+        column: DM.Commerce.Date.Years,
+        dateFormat: 'yyyy',
+        name: 'Year',
+      },
+    ],
+    values: [
+      {
+        column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+        dataBars: true,
+      },
+    ],
+  };
+  styleOptions = {
+    rowsPerPage: 10,
+    height: 425,
+    width: 850,
+  };
+}
+```
+
+<img src="../../../img/pivot-table-example-2.png" width="800px" />
+
+Sorting rows: `Condition` and `Age Range` rows sorted directly by their own values (equivalent to a user clicking a row heading and choosing Sort Descending):
+```ts
+import { Component } from '@angular/core';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+@Component({
+  selector: 'code-example',
+  template: `
+    `<csdk-pivot-table
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-pivot-table>`
+  `,
+})
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    rows: [
+      {
+        column: DM.Commerce.Condition,
+        sortType: 'sortDesc',
+      },
+      {
+        column: DM.Commerce.AgeRange,
+        sortType: 'sortDesc',
+      },
+    ],
+    columns: [{ column: DM.Commerce.Date.Years }],
+    values: [
+      { column: measureFactory.sum(DM.Commerce.Revenue, 'Revenue') },
+      { column: measureFactory.sum(DM.Commerce.Quantity, 'Units') },
+    ],
+  };
+  styleOptions = {
+    rowsPerPage: 12,
+    height: 425,
+    width: 1200,
+  };
+}
+```
+
+<img src="../../../img/pivot-table-example-3.png" width="800px" />
+
+Sorting rows by a value column: `Age Range` sorted by its `Revenue` values (equivalent to a user clicking the `Revenue` value heading and sorting `Age Range` Descending):
+```ts
+import { Component } from '@angular/core';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+@Component({
+  selector: 'code-example',
+  template: `
+    `<csdk-pivot-table
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-pivot-table>`
+  `,
+})
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    rows: [
+      DM.Commerce.Condition,
+      {
+        column: DM.Commerce.AgeRange,
+        sortType: {
+          direction: 'sortDesc',
+          by: {
+            valuesIndex: 0,
+          },
+        },
+      },
+    ],
+    values: [
+      measureFactory.sum(DM.Commerce.Revenue, 'Revenue'),
+      measureFactory.sum(DM.Commerce.Quantity, 'Units'),
+    ],
+  };
+  styleOptions = {
+    rowsPerPage: 12,
+    height: 425,
+    width: 800,
+  };
+}
+```
+
+<img src="../../../img/pivot-table-example-4.png" width="800px" />
+
+Grand totals across rows and columns:
+```ts
+import { Component } from '@angular/core';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+@Component({
+  selector: 'code-example',
+  template: `
+    `<csdk-pivot-table
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-pivot-table>`
+  `,
+})
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    rows: [
+      {
+        column: DM.Commerce.Date.Years,
+        dateFormat: 'yyyy',
+        name: 'Year',
+      },
+      DM.Commerce.Condition,
+    ],
+    columns: [DM.Commerce.AgeRange],
+    values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    grandTotals: {
+      rows: true,
+      columns: true,
+    },
+  };
+  styleOptions = {
+    rowsPerPage: 15,
+    height: 550,
+    width: 900,
+    totalsColor: true,
+    headersColor: true,
+  };
+}
+```
+
+<img src="../../../img/pivot-table-example-5.png" width="800px" />
+
+Grand totals plus a subtotal row per `Year`, via [PivotTableDataOptions.rows](../interfaces/interface.PivotTableDataOptions.md#rows)' `includeSubTotals`:
+```ts
+import { Component } from '@angular/core';
+import * as DM from './sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
+
+@Component({
+  selector: 'code-example',
+  template: `
+    `<csdk-pivot-table
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-pivot-table>`
+  `,
+})
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    rows: [
+      {
+        column: DM.Commerce.Date.Years,
+        dateFormat: 'yyyy',
+        name: 'Year',
+        includeSubTotals: true,
+      },
+      DM.Commerce.Condition,
+    ],
+    columns: [DM.Commerce.AgeRange],
+    values: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    grandTotals: {
+      rows: true,
+      columns: true,
+    },
+  };
+  styleOptions = {
+    rowsPerPage: 15,
+    height: 550,
+    width: 900,
+    totalsColor: true,
+    headersColor: true,
+  };
+}
+```
+
+<img src="../../../img/pivot-table-example-6.png" width="800px" />
 
 ## Remarks
 

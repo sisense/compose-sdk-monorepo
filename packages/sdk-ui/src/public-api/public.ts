@@ -536,6 +536,7 @@ export type {
   KpiStyleOptions,
   KpiValueStyleOptions,
   KpiTitleStyleOptions,
+  KpiTitleAlign,
   KpiComparisonStyleOptions,
   KpiSparklineStyleOptions,
   KpiSparklineType,

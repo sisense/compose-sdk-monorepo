@@ -12,6 +12,19 @@ Set on a chart or pivot widget via [WidgetConfig](type-alias.WidgetConfig.md).
 
 ## Type declaration
 
+### `aiContext`
+
+**aiContext**?: `string`
+
+Free-text guidance for the narrative summary — context the model can't infer from the data
+alone, e.g. `"amounts are in USD"` or `"ignore the March spike, known data issue"`.
+Forwarded verbatim to the narrative request.
+
+Set this directly in code, or it's populated automatically when the widget is loaded from a
+Fusion dashboard (from the designer's "AI context" widget setting).
+
+***
+
 ### `autoShow`
 
 **autoShow**?: `boolean`

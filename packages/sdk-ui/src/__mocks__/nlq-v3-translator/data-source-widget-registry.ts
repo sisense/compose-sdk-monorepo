@@ -6,9 +6,11 @@ import {
   SAMPLE_ECOMMERCE_DATA_SOURCE,
   SAMPLE_ECOMMERCE_TABLES,
 } from './data-schemas.js';
+import { FILTER_CHIP_CHART_CASES } from './example-filter-chip-charts.js';
 import {
   CERTIFIED_DATA_MODEL_FOR_AI_TOP_10_ACCOUNTS_BY_DEPLOYMENTS_COUNT_BAR_CHART_WIDGET,
   SAMPLE_ECOMMERCE_COLUMN_CHART_WIDGET,
+  SAMPLE_ECOMMERCE_DATA_SOURCE_TITLE,
   SAMPLE_ECOMMERCE_LINE_CHART_WIDGET,
   SAMPLE_ECOMMERCE_PIE_CHART_WIDGET,
   SAMPLE_ECOMMERCE_PIVOT_TABLE_WIDGET,
@@ -68,6 +70,24 @@ export const DATA_SOURCE_WIDGET_REGISTRY: Record<string, Record<string, WidgetIn
         tables: SAMPLE_ECOMMERCE_TABLES,
       },
     },
+    ...Object.fromEntries(
+      Object.entries(FILTER_CHIP_CHART_CASES).map(([name, data], index) => [
+        name,
+        {
+          data: {
+            ...data,
+            widgetType: 'chart' as const,
+            id: `widget-filter-chip-${index}`,
+            title: name,
+            dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE_TITLE,
+          },
+          context: {
+            dataSource: SAMPLE_ECOMMERCE_DATA_SOURCE,
+            tables: SAMPLE_ECOMMERCE_TABLES,
+          },
+        },
+      ]),
+    ),
   },
   certified_data_model_for_ai: {
     'Top 10 Accounts by Deployments Count Bar Chart': {

@@ -2,19 +2,9 @@ import { useMemo } from 'react';
 
 import { Data } from '@sisense/sdk-data';
 
-import {
-  isMeasureColumn,
-  translateColumnToAttribute,
-  translateColumnToMeasure,
-} from '@/domains/visualizations/core/chart-data-options/utils';
-
 import { useSisenseContext } from '../../../../../infra/contexts/sisense-context/sisense-context';
 import { applyDateFormats } from '../../../../query-execution/core/query-result-date-formatting';
-import {
-  StyledColumn,
-  StyledMeasureColumn,
-  TableDataOptionsInternal,
-} from '../../../core/chart-data-options/types';
+import { TableDataOptionsInternal } from '../../../core/chart-data-options/types';
 import {
   DataColumnNamesMapping,
   validateDataOptionsAgainstData,
@@ -22,6 +12,7 @@ import {
 import { createDataTableFromData } from '../../../core/chart-data-processor/table-creators';
 import { filterAndAggregateChartData } from '../../../core/chart-data/filter-and-aggregate-chart-data';
 import { tableData } from '../../../core/chart-data/table-data';
+import { getTableAttributesAndMeasures } from './use-table-data';
 
 type UseTableDataTableProps = {
   data: null | Data;
@@ -43,12 +34,7 @@ export const useTableDataTable = ({
     let table = createDataTableFromData(
       applyDateFormats(data, innerDataOptions, app?.settings.locale, app?.settings.dateConfig),
     );
-    const attributes = innerDataOptions.columns
-      .filter((c): c is StyledColumn => !isMeasureColumn(c))
-      .map(translateColumnToAttribute);
-    const measures = innerDataOptions.columns
-      .filter((c): c is StyledMeasureColumn => isMeasureColumn(c))
-      .map(translateColumnToMeasure);
+    const { attributes, measures } = getTableAttributesAndMeasures(innerDataOptions);
 
     validateDataOptionsAgainstData(table, attributes, measures, dataColumnNamesMapping);
 

@@ -116,6 +116,8 @@ describe('createClientApplication', () => {
       defaultParams.url,
       authMock,
       expect.stringContaining('sdk-ui'),
+      {},
+      expect.objectContaining({ onError: expect.any(Function) }),
     );
     expect(getMock).toHaveBeenCalledWith('api/v1/settings/system');
     expect(getAppSettings).toHaveBeenCalledWith(
@@ -132,6 +134,8 @@ describe('createClientApplication', () => {
     expect(clientApp).toHaveProperty('httpClient');
     expect(clientApp).toHaveProperty('pivotQueryClient');
     expect(clientApp).toHaveProperty('queryClient');
+    expect(clientApp).toHaveProperty('notifications');
+    expect(clientApp.notifications.getSnapshot()).toEqual([]);
   });
 
   it('should pass normalized displayNameConfig into getAppSettings for AppSettings merge', async () => {
@@ -174,5 +178,75 @@ describe('createClientApplication', () => {
     await createClientApplication({ ...defaultParams, url: `${defaultParams.url}${tenantName}/` });
 
     expect(PivotQueryClient).toHaveBeenCalledWith(defaultParams.url, authMock);
+  });
+
+  describe('notifications wiring', () => {
+    const forbiddenEvent = {
+      kind: 'forbidden',
+      status: 403,
+      url: 'http://test-url/api/v1/things',
+      method: 'GET',
+      authType: 'bearer',
+      error: new Error('forbidden'),
+    } as const;
+
+    const setupApp = async (appConfig: ClientApplicationParams['appConfig']) => {
+      (HttpClient as Mock).mockReturnValue({
+        login: vi.fn().mockResolvedValue(true),
+        get: vi.fn().mockResolvedValue({ tracking: { apiTelemetry: false } }),
+      });
+      (getAppSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
+      (getAuthenticator as Mock).mockReturnValue({});
+
+      const clientApp = await createClientApplication({ ...defaultParams, appConfig });
+      const options = (HttpClient as Mock).mock.calls[0][4] as {
+        onError: (event: typeof forbiddenEvent) => void;
+      };
+      return { clientApp, onError: options.onError };
+    };
+
+    it('pushes a notification into app.notifications when HttpClient reports a failure', async () => {
+      const { clientApp, onError } = await setupApp({});
+
+      onError(forbiddenEvent);
+
+      expect(clientApp.notifications.getSnapshot()).toMatchObject([
+        { code: 'permission.forbidden', category: 'permission', severity: 'error' },
+      ]);
+    });
+
+    it('dedupes repeated failures of the same kind', async () => {
+      const { clientApp, onError } = await setupApp({});
+
+      onError(forbiddenEvent);
+      onError(forbiddenEvent);
+
+      expect(clientApp.notifications.getSnapshot()).toHaveLength(1);
+    });
+
+    it('respects notificationsConfig.categories from appConfig', async () => {
+      const { clientApp, onError } = await setupApp({
+        notificationsConfig: { categories: { permission: false } },
+      });
+
+      onError(forbiddenEvent);
+
+      expect(clientApp.notifications.getSnapshot()).toEqual([]);
+    });
+
+    it('passes the same options to the telemetry-enabled HttpClient', async () => {
+      (HttpClient as Mock).mockReturnValue({
+        login: vi.fn().mockResolvedValue(true),
+        get: vi.fn().mockResolvedValue({ tracking: { apiTelemetry: true } }),
+      });
+      (getAppSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
+      (getAuthenticator as Mock).mockReturnValue({});
+
+      await createClientApplication(defaultParams);
+
+      expect(HttpClient).toHaveBeenCalledTimes(2);
+      const [firstOptions, secondOptions] = (HttpClient as Mock).mock.calls.map((call) => call[4]);
+      expect(secondOptions).toBe(firstOptions);
+    });
   });
 });

@@ -23,3 +23,17 @@ See also functions [createDimension](function.createDimension.md) and [createAtt
 [`DateDimension`](../interfaces/interface.DateDimension.md)
 
 A new Date Dimension instance
+
+## Example
+
+```ts
+import { createDateDimension } from '@sisense/sdk-data';
+
+const Date = createDateDimension({
+  name: 'Date',
+  expression: '[Commerce.Date (Calendar)]',
+});
+
+// Access a specific granularity level as a dimension in a query.
+const years = Date.Years;
+```

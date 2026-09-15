@@ -31,6 +31,9 @@ export type WidgetDataOptions = ChartDataOptions | PivotTableDataOptions | Empty
 /**
  * Model of Sisense widget defined in the abstractions of Compose SDK.
  *
+ * This is the return type of {@link @sisense/sdk-ui!useGetWidgetModel | `useGetWidgetModel`} —
+ * see that hook's documentation for a usage example.
+ *
  * @group Fusion Assets
  * @fusionEmbed
  */

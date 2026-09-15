@@ -49,6 +49,12 @@ export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg' | 'pivot' | 'pi
 export type TextWidgetType = 'richtexteditor';
 
 /**
+ * The type of a widget on a dashboard that is the AI dashboard narrative widget.
+ * Maps to the `'narrative'` widget type in Compose SDK.
+ */
+export type NarrativeWidgetType = 'dashboardnarrative';
+
+/**
  * The type of a widget on a dashboard that is a variant of plugin widget.
  * This represents the widget type in Fusion/DTO layer.
  */
@@ -75,6 +81,7 @@ export type FusionWidgetType =
   | 'map/area'
   | 'heatmap'
   | TextWidgetType
+  | NarrativeWidgetType
   | FusionPluginWidgetType
   | 'filter'
   | string;
@@ -145,6 +152,13 @@ export interface WidgetDto {
   style: WidgetStyle;
   title: string;
   desc: string | null;
+  /**
+   * Widget-level designer AI context — authoritative guidance from the widget's designer on how to
+   * narrate this widget. Stored as a top-level widget field (sibling to `style`/`metadata`), not
+   * under `style.narration`. Folded into `config.narrative.aiContext` by the widget-model
+   * translator and forwarded to the narrative request.
+   */
+  aiContext?: string;
   options?: {
     dashboardFiltersMode: `${WidgetDashboardFilterMode}`;
     selector: boolean;

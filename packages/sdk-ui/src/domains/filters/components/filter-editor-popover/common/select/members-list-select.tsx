@@ -41,6 +41,11 @@ export const MembersListSelect = ({
     () => debounce(setSearchValue, SEARCH_VALUE_UPDATE_DELAY),
     [setSearchValue],
   );
+  /* A pending debounce outlives the component otherwise and fires `setSearchValue` into a
+     tree that is gone — a leaked timer in the app, and in tests a state update after the
+     environment is torn down, which surfaces as `ReferenceError: window is not defined`
+     from React's `dispatchSetState`. */
+  useEffect(() => () => debouncedSetSearchValue.cancel(), [debouncedSetSearchValue]);
   const [initialSelectedMembers, setInitialSelectedMembers] = useState<string[]>(selectedMembers);
 
   const {

@@ -14,15 +14,12 @@ const BUTTON_SIZE_PX = 24;
 export type ChartTableToggleLabels = {
   showAsTable: string;
   showAsChart: string;
-  /** Native `title` when the control is disabled because trend/forecast is on. */
-  unavailableWithTrendForecast?: string;
 };
 
 /** @internal */
 export const DEFAULT_CHART_TABLE_TOGGLE_LABELS: ChartTableToggleLabels = {
   showAsTable: 'Show as table',
   showAsChart: 'Show as chart',
-  unavailableWithTrendForecast: 'Table view is not available when trend or forecast is enabled',
 };
 
 type ChartTableToggleButtonProps = {

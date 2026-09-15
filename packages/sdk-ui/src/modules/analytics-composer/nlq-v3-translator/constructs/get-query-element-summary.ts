@@ -12,6 +12,7 @@ import { getMeasureName } from './measures/get-measure-name.js';
 
 const MEASURE_FUNCTION_PREFIX = 'measureFactory.';
 const FILTER_FUNCTION_PREFIX = 'filterFactory.';
+const ATTRIBUTE_FUNCTION_PREFIX = 'attributeFactory.';
 
 /**
  * Options for {@link getQueryElementSummary}.
@@ -33,6 +34,16 @@ const isFilterFunctionCall = (call: FunctionCall): boolean =>
   call.function.startsWith(FILTER_FUNCTION_PREFIX);
 
 /**
+ * Checks whether the call produces an attribute, such as a calculated dimension.
+ *
+ * @param call - The parsed function call to test
+ * @returns True when the call targets `attributeFactory`
+ * @internal
+ */
+const isAttributeFunctionCall = (call: FunctionCall): boolean =>
+  call.function.startsWith(ATTRIBUTE_FUNCTION_PREFIX);
+
+/**
  * Derives a human-readable name and element kind from a query JSON item.
  *
  * @param item - Dimension, measure, filter, or highlight JSON entry
@@ -52,7 +63,14 @@ export function getQueryElementSummary(
   }
 
   if (isStyledColumnJSON(item)) {
-    return { name: getDimensionName(item.column), type: 'dimension' };
+    // A calculated dimension has no name to strip a 'DM.' prefix from — its display name is the
+    // title argument, which getMeasureName resolves from the function's schema.
+    return {
+      name: isFunctionCall(item.column)
+        ? getMeasureName(item.column)
+        : getDimensionName(item.column),
+      type: 'dimension',
+    };
   }
 
   if (isStyledMeasureColumnJSON(item)) {
@@ -61,6 +79,12 @@ export function getQueryElementSummary(
 
   if (!isFunctionCall(item)) {
     return null;
+  }
+
+  // Checked before the measure branch: a calculated dimension is a function call like a measure,
+  // and the fallthrough at the end of this function would otherwise report it as a measure.
+  if (isAttributeFunctionCall(item)) {
+    return { name: getMeasureName(item), type: 'dimension' };
   }
 
   if (isMeasureFunctionCall(item)) {

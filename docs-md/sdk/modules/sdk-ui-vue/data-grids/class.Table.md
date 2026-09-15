@@ -8,36 +8,39 @@ Table with aggregation and pagination.
 
 ## Example
 
-Here's how you can use the Table component in a Vue application:
 ```vue
-<template>
- <Table :dataOptions="tableProps.dataOptions" :dataSet="tableProps.dataSet"
-     :styleOptions="tableProps.styleOptions" :filters="tableProps.filters" />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { Table, type TableProps } from '@sisense/sdk-ui-vue';
+import { Table } from '@sisense/sdk-ui-vue';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce';
 
-const dimProductName = DM.DimProducts.ProductName;
-const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-
- const tableProps = ref<TableProps>({
-     dataSet: DM.DataSource,
-     dataOptions: {
-       columns: [dimProductName, measureTotalRevenue],
-     },
-     styleOptions: {
-       width: 800,
-       height: 500,
-     },
-     filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
- });
+const tableProps = ref({
+  dataOptions: {
+    columns: [
+      { column: DM.Commerce.Date.Years, name: 'Year', dateFormat: 'yyyy' },
+      DM.Commerce.Condition,
+      measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+    ],
+  },
+  styleOptions: {
+    rowsPerPage: 12,
+    height: 420,
+    header: { color: { enabled: true, backgroundColor: '#94F5F0', textColor: '#121A23' } },
+    rows: { alternatingColor: { enabled: true, backgroundColor: '#f2f2f2' } },
+  },
+});
 </script>
+
+<template>
+  <Table
+    :dataSet="DM.DataSource"
+    :dataOptions="tableProps.dataOptions"
+    :styleOptions="tableProps.styleOptions"
+  />
+</template>
 ```
-<img src="../../../img/vue-table-example.png" width="800px" />
+<img src="../../../img/table-example-1.png" width="700px" />
 
 ## Param
 

@@ -152,7 +152,7 @@ describe('translateDimensions', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)).toContain(
-      "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+      "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
     );
   });
 
@@ -173,7 +173,7 @@ describe('translateDimensions', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)).toContain(
-      "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+      "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
     );
   });
 
@@ -194,7 +194,7 @@ describe('translateDimensions', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)).toContain(
-      "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+      "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
     );
   });
 
@@ -215,7 +215,7 @@ describe('translateDimensions', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)).toContain(
-      "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+      "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
     );
   });
 
@@ -273,7 +273,7 @@ describe('translateDimensions', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)).toContain(
-      "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
+      "Invalid dimension item. Expected a string (composeCode), a function call for a calculated dimension, or an object with 'column' and optional 'sortType'.",
     );
   });
 });

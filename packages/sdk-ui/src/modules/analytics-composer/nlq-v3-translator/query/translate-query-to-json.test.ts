@@ -7,7 +7,7 @@ import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../../__mocks__/mock-data-sources.js';
-import { FunctionCall, type QueryJSON } from '../types.js';
+import { FunctionCall, isStyledMeasureColumnJSON, type QueryJSON } from '../types.js';
 import { translateQueryFromJSON } from './translate-query-from-json.js';
 import { translateQueryToJSON } from './translate-query-to-json.js';
 
@@ -530,6 +530,55 @@ describe('translateQueryToJSON', () => {
       expect(styled).toHaveProperty('forecast');
       expect((styled.trend as Record<string, unknown>).modelType).toBe('linear');
       expect((styled.forecast as Record<string, unknown>).forecastHorizon).toBe(6);
+    });
+
+    it('should still collapse [base, trend] into one StyledMeasureColumn with an empty trend tag when no options were given (the default-config path) — regression, previously dropped the trend measure entirely', () => {
+      // measureFactory.trend(measure, name, {}) is exactly what an author call with `trend: {}`
+      // (no modelType) produces — {} is truthy, so it reaches measureFunction, but its composeCode
+      // ends up with no 3rd (options) argument at all, since an empty options object contributes
+      // nothing to the recorded call. getCompanionOptions then correctly finds no options object at
+      // that position — the bug was collapseMeasuresForJSON treating "no options parsed" as "no
+      // companion at all" and silently dropping the trend measure instead of tagging with `trend: {}`.
+      const baseMeasure = measureFactory.sum(Revenue, 'Total Revenue');
+      const trendMeasure = measureFactory.trend(baseMeasure, '$trend_Total Revenue', {});
+      const query: ExecuteQueryParams = {
+        dimensions: [Category],
+        measures: [baseMeasure, trendMeasure],
+        filters: [],
+      };
+
+      const result = translateQueryToJSON(query);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      expect(result.data.measures).toHaveLength(1);
+      const styled = result.data.measures[0];
+      if (!isStyledMeasureColumnJSON(styled)) throw new Error('expected a StyledMeasureColumnJSON');
+      expect(styled.column.function).toBe('measureFactory.sum');
+      expect(styled).toHaveProperty('trend');
+      expect(styled.trend).toEqual({});
+    });
+
+    it('should still collapse [base, trend] into one StyledMeasureColumn when trend was called with no options argument at all', () => {
+      const baseMeasure = measureFactory.sum(Revenue, 'Total Revenue');
+      const trendMeasure = measureFactory.trend(baseMeasure, '$trend_Total Revenue');
+      const query: ExecuteQueryParams = {
+        dimensions: [Category],
+        measures: [baseMeasure, trendMeasure],
+        filters: [],
+      };
+
+      const result = translateQueryToJSON(query);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      expect(result.data.measures).toHaveLength(1);
+      const styled = result.data.measures[0];
+      if (!isStyledMeasureColumnJSON(styled)) throw new Error('expected a StyledMeasureColumnJSON');
+      expect(styled).toHaveProperty('trend');
+      expect(styled.trend).toEqual({});
     });
   });
 

@@ -52,57 +52,37 @@ export interface ChartWidgetProps
  * The Chart Widget component extending {@link ChartComponent} to support widget style options.
  *
  * @example
- * ```html
- * <csdk-chart-widget
- *   [chartType]="chartWidget.chartType"
- *   [dataSource]="chartWidget.dataSource"
- *   [dataOptions]="chartWidget.dataOptions"
- *   [highlights]="filters"
- *   [title]="chartWidget.title"
- *   [description]="chartWidget.description"
- *   [beforeRender]="onBeforeRender"
- *   (dataPointClick)="logArguments($event)"
- *   (dataPointContextMenu)="logArguments($event)"
- *   (dataPointsSelect)="logArguments($event)"
- * />
- * ```
  * ```ts
  * import { Component } from '@angular/core';
- * import { ChartType } from '@sisense/sdk-ui-angular';
- * import { filterFactory } from '@sisense/sdk-data';
- * import * as DM from '../../assets/sample-healthcare-model';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
  *
  * @Component({
- *   selector: 'app-widgets',
- *   templateUrl: './widgets.component.html',
- *   styleUrls: ['./widgets.component.scss'],
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-chart-widget
+ *       [title]="title"
+ *       [description]="description"
+ *       [chartType]="chartType"
+ *       [dataSource]="DM.DataSource"
+ *       [dataOptions]="dataOptions"
+ *     ></csdk-chart-widget>
+ *   `,
  * })
- * export class WidgetsComponent {
- *   filters = [filterFactory.members(DM.Divisions.Divison_name, ['Cardiology', 'Neurology'])];
- *   chartWidget = {
- *     chartType: 'column' as ChartType,
- *     dataSource: DM.DataSource,
- *     dataOptions: {
- *       category: [DM.Divisions.Divison_name],
- *       value: [measureFactory.sum(DM.Admissions.Cost_of_admission)],
- *       breakBy: [],
- *     },
- *     title: 'Chart Title',
- *     description: 'Chart Description',
+ * export class CodeExample {
+ *   DM = DM;
+ *   // Change this to "line" to see a line chart
+ *   chartType = 'column';
+ *   title = 'Revenue by Quarter';
+ *   description = 'This chart shows the total revenue by quarter.';
+ *   dataOptions = {
+ *     category: [DM.Commerce.Date.Quarters],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     breakBy: [],
  *   };
- *  logArguments(...args: any[]) {
- *   console.log(args);
- * }
- *
- * onBeforeRender(options: any) {
- *   console.log('beforeRender');
- *   console.log(options);
- *   return options;
- * }
- *
  * }
  * ```
- * <img src="media://angular-chart-widget-example.png" width="500px" />
+ * <img src="media://chart-widget-example-1.png" width="700px" />
  * @group Dashboards
  */
 @Component({

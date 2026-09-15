@@ -6,6 +6,7 @@ import { getTranslatedDataOptions } from '@/domains/visualizations/components/ch
 import { translateTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import { TableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 import {
+  isDerivedResultColumn,
   isMeasureColumn,
   translateColumnToAttribute,
 } from '@/domains/visualizations/core/chart-data-options/utils.js';
@@ -69,6 +70,9 @@ export function useChartWidgetExcelDownload(
           const tableAttributes: Attribute[] = [];
           const tableMeasureColumns = [];
           for (const column of translated.columns) {
+            if (isDerivedResultColumn(column)) {
+              continue;
+            }
             if (isMeasureColumn(column)) {
               tableMeasureColumns.push(column);
             } else {

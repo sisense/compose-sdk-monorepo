@@ -8,43 +8,31 @@ An Angular component that allows to visualize geographical data as polygons on a
 
 ## Example
 
-```html
-   <csdk-areamap-chart
-     [dataSet]="areamapChart.dataSet"
-     [dataOptions]="areamapChart.dataOptions"
-     [styleOptions]="areamapChart.styleOptions"
-     (dataPointClick)="logArguments($event)"
-   />
-```
-
 ```ts
 import { Component } from '@angular/core';
 import { measureFactory } from '@sisense/sdk-data';
-import * as DM from '../../assets/sample-ecommerce';
+import * as DM from './sample-ecommerce';
 
 @Component({
- selector: 'app-analytics',
- templateUrl: './analytics.component.html',
- styleUrls: ['./analytics.component.scss'],
+  selector: 'code-example',
+  template: `
+    `<csdk-areamap-chart
+      [dataSet]="DM.DataSource"
+      [dataOptions]="dataOptions"
+      [styleOptions]="styleOptions"
+    >` `</csdk-areamap-chart>`
+  `,
 })
-export class AnalyticsComponent {
- areamapChart = {
-   dataSet: DM.DataSource,
-   dataOptions: {
-     geo: [DM.Country.Country],
-     color: [measureFactory.sum(DM.Commerce.Revenue, 'Color by Revenue')],
-   } as AreamapChartDataOptions,
-   styleOptions: {
-     mapType: 'world',
-   } as AreamapStyleOptions,
- };
-
- logArguments(...args: any[]) {
-   console.log(args);
- }
+export class CodeExample {
+  DM = DM;
+  dataOptions = {
+    geo: [DM.Country.Country],
+    color: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+  };
+  styleOptions = { mapType: 'world' };
 }
 ```
-<img src="../../../img/angular-areamap-chart-example.png" width="800px" />
+<img src="../../../img/areamap-chart-example-1.png" width="700px" />
 
 ## Constructors
 

@@ -5,6 +5,19 @@ import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-cont
  *
  * How to enable query cache see in [Query Caching guide](/guides/sdk/guides/client-query-caching.html)
  *
+ * @example
+ * ```tsx
+ * import { useQueryCache } from '@sisense/sdk-ui';
+ *
+ * const CodeExample = () => {
+ *   const queryCache = useQueryCache();
+ *
+ *   return <button onClick={() => queryCache?.clear()}>Clear query cache</button>;
+ * };
+ *
+ * export default CodeExample;
+ * ```
+ *
  * @returns QueryCacheClient instance
  * @group Queries
  *

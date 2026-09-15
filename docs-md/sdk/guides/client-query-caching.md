@@ -1,4 +1,4 @@
-# Client Query Caching (Alpha)
+# Client Query Caching
 
 Compose SDK provides a client-side caching mechanism that enhances chart rendering performance and reduces network requests for data queries.
 
@@ -27,7 +27,7 @@ const cacheClient = useQueryCache();
 cacheClient.clear();
 ```
 
-**Note:** While `queryCacheConfig` is supported in all frameworks (React, Angular, Vue), the ability to clear the cache via `code` is currently only supported in React. This current limitation is the reason the feature is currently in `alpha` status.
+**Note:** While `queryCacheConfig` is supported in all frameworks (React, Angular, Vue), the ability to clear the cache via `code` is currently only supported in React.
 
 Refreshing the page in the browser also refreshes the cache (see below).
 

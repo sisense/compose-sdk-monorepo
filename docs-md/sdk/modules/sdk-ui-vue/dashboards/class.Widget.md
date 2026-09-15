@@ -91,7 +91,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### config
 
-> **`readonly`** **config**?: [`ChartWidgetConfig`](../interfaces/interface.ChartWidgetConfig.md) \| [`CustomWidgetConfig`](../interfaces/interface.CustomWidgetConfig.md) \| [`FilterWidgetConfig`](../interfaces/interface.FilterWidgetConfig.md) \| [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md) \| [`TextWidgetConfig`](../interfaces/interface.TextWidgetConfig.md)
+> **`readonly`** **config**?: [`ChartWidgetConfig`](../interfaces/interface.ChartWidgetConfig.md) \| [`CustomWidgetConfig`](../interfaces/interface.CustomWidgetConfig.md) \| [`FilterWidgetConfig`](../interfaces/interface.FilterWidgetConfig.md) \| [`NarrativeWidgetConfig`](../../sdk-ui/interfaces/interface.NarrativeWidgetConfig.md) \| [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md) \| [`TextWidgetConfig`](../interfaces/interface.TextWidgetConfig.md)
 
 Configuration of the widget
 
@@ -131,7 +131,7 @@ Unique identifier of the widget
 
 #### styleOptions
 
-> **`readonly`** **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`CustomWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.CustomWidgetStyleOptions.md) \| [`FilterWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.FilterWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md)
+> **`readonly`** **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`CustomWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.CustomWidgetStyleOptions.md) \| [`FilterWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.FilterWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md) \| [`WidgetContainerStyleOptions`](../../sdk-ui/interfaces/interface.WidgetContainerStyleOptions.md)
 
 Style options for both the chart and widget including the widget header
 
@@ -147,7 +147,7 @@ Title of the widget
 
 #### widgetType
 
-> **`readonly`** **widgetType**: `"chart"` \| `"custom"` \| `"filter"` \| `"pivot"` \| `"text"`
+> **`readonly`** **widgetType**: `"chart"` \| `"custom"` \| `"filter"` \| `"narrative"` \| `"pivot"` \| `"text"`
 
 Widget type
 

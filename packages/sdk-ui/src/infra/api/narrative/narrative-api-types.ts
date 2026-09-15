@@ -10,6 +10,11 @@ export interface GetNlgInsightsRequest {
    */
   jaql: Partial<JaqlQueryPayload> & Pick<JaqlQueryPayload, 'datasource' | 'metadata'>;
   verbosity?: 'Low' | 'High';
+  /**
+   * Free-text guidance for the narrative summary — context the model can't infer from the data
+   * alone, e.g. `"amounts are in USD"` or `"ignore the March spike, known data issue"`.
+   */
+  aiContext?: string;
 }
 
 /** @internal */

@@ -122,6 +122,32 @@ const translation: TranslationDictionary = {
     },
     tabberInvalidConfiguration: 'Tabber widget yapılandırması geçersiz',
   },
+  notifications: {
+    dismiss: 'Bildirimi kapat',
+    auth: {
+      sessionExpiredTitle: 'Oturum süresi doldu',
+      sessionExpiredMessage: 'Oturumunuzun süresi doldu. Devam etmek için yeniden oturum açın.',
+      authenticationFailedTitle: 'Kimlik doğrulama başarısız',
+      authenticationFailedMessage:
+        'Sağlanan kimlik bilgileri Sisense örneği tarafından reddedildi.',
+    },
+    permission: {
+      forbiddenTitle: 'Erişim reddedildi',
+      forbiddenMessage: 'Bu verilere erişim izniniz yok.',
+    },
+    network: {
+      unreachableTitle: 'Bağlantı sorunu',
+      unreachableMessage: 'Sisense örneğine ulaşılamadı.',
+    },
+    server: {
+      errorTitle: 'Sunucu hatası',
+      errorMessage: 'Sisense örneği bir hata döndürdü. Daha sonra yeniden deneyin.',
+    },
+    general: {
+      requestFailedTitle: 'İstek başarısız',
+      requestFailedMessage: 'Sisense örneğine yapılan bir istek başarısız oldu.',
+    },
+  },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Sonuç yok',
   filters: 'Filtreler',
@@ -231,6 +257,7 @@ const translation: TranslationDictionary = {
     allExceptCount: '{{count}} hariç tümü',
     setupTitle: "Filtre widget'ını ayarlayın",
     setupSubtitle: 'Bir boyut seçin ve filtrenin nasıl çalışacağını yapılandırın',
+    emptySetup: 'Filtreyi ayarla',
     conditionUnsupported: 'Koşul metin ve sayısal alanlar için kullanılabilir',
     conditionNotRepresentable: 'Bu koşul burada düzenlenemez',
     controls: {
@@ -250,6 +277,20 @@ const translation: TranslationDictionary = {
       betweenMax: 'Maksimum',
       selectValues: '{{level}} seçin',
       clear: 'Temizle',
+    },
+    calendar: {
+      selectDates: 'Tarih seçin',
+      multipleDaysHint: 'Birden fazla gün seçebilirsiniz',
+      formatError: '{{- format}} biçimini kullanın',
+      nonexistent: 'Bu tarih mevcut değil',
+      chooseDate: 'Tarih seç',
+      chooseDates: 'Tarihleri seç',
+      previousMonth: 'Önceki ay',
+      nextMonth: 'Sonraki ay',
+      previousYear: 'Önceki yıl',
+      nextYear: 'Sonraki yıl',
+      openCalendar: 'Takvimi aç',
+      clearDate: 'Tarihi temizle',
     },
   },
   unsupportedFilterMessage: 'Desteklenmeyen filtre (veri sorgusuna uygulandı)',
@@ -284,6 +325,7 @@ const translation: TranslationDictionary = {
     },
     menu: {
       deleteWidget: "Widget'ı sil",
+      duplicateWidget: "Widget'ı çoğalt",
       renameWidget: "Widget'ı yeniden adlandır",
       distributeEqualWidth: 'Bu satırda eşit olarak dağıt',
       download: 'İndir',
@@ -296,6 +338,21 @@ const translation: TranslationDictionary = {
   customWidgets: {
     registerPrompt:
       "Bilinmeyen özel widget türü: {{customWidgetType}}. Lütfen bu özel widget'ı kaydedin.",
+  },
+  narrativeWidget: {
+    generate: 'Anlatı Oluştur',
+    regenerate: 'Yeniden Oluştur',
+    retry: 'Oluşturmayı Yeniden Dene',
+    disclaimer: 'İçerik AI tarafından desteklenmektedir, bu nedenle hatalar mümkündür.',
+    updatedAt: 'Güncellendi: {{timestamp}}',
+    copy: 'Panoya kopyala',
+    copied: 'Kopyalandı',
+    creditsUsed: "AI kredilerinin %{{usagePercentage}}'i kullanıldı.",
+    noDataTitle: 'Kullanılabilir pano verisi yok',
+    noDataDescription: 'Pano verileri kullanılabilir olduğunda bir anlatı oluşturabilirsiniz.',
+    failedTitle: 'Anlatı oluşturulamadı',
+    failedDescription:
+      'Lütfen daha sonra tekrar deneyin. Sorun devam ederse yöneticinizle iletişime geçin.',
   },
   ai: {
     analyticsChatbot: 'Analitik sohbet robotu',
@@ -505,6 +562,7 @@ const translation: TranslationDictionary = {
     linkedToWidget: {
       label: "Filtre widget'ına bağlı",
       tooltip: 'Bu filtre filtre panelinden düzenlenemez. Değerleri doğrudan panoda değiştirin.',
+      infoAriaLabel: "Filtre widget'ı bağlantısı bilgisi",
     },
   },
   chart: {
@@ -520,6 +578,7 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Veri tablosu',
       totalRows: 'Toplam: {{formattedCount}} satır',
+      rowsRange: '{{start}}-{{end}}. satırlar',
     },
     sankey: {
       alerts: {

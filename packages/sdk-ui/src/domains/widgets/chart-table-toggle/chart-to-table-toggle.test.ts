@@ -3,25 +3,21 @@ import { describe, expect, it } from 'vitest';
 import {
   applyChartTableOverride,
   hasFlattenedTableColumns,
-  hasTrendOrForecast,
   supportsChartToTableToggle,
   toTableDataOptions,
 } from './chart-to-table-toggle';
 
 describe('supportsChartToTableToggle', () => {
-  it.each(['bar', 'line', 'column', 'pie', 'scatter', 'sankey'] as const)(
+  it.each(['bar', 'line', 'column', 'pie', 'scatter', 'sankey', 'areamap', 'scattermap'] as const)(
     'returns true for %s',
     (chartType) => {
       expect(supportsChartToTableToggle(chartType)).toBe(true);
     },
   );
 
-  it.each(['indicator', 'table', 'kpi', 'image', 'areamap', 'scattermap'] as const)(
-    'returns false for %s',
-    (chartType) => {
-      expect(supportsChartToTableToggle(chartType)).toBe(false);
-    },
-  );
+  it.each(['indicator', 'table', 'kpi', 'image'] as const)('returns false for %s', (chartType) => {
+    expect(supportsChartToTableToggle(chartType)).toBe(false);
+  });
 
   it('returns true for unknown chart types', () => {
     expect(supportsChartToTableToggle('custom-xyz')).toBe(true);
@@ -71,29 +67,39 @@ describe('toTableDataOptions', () => {
 
     expect(result.columns).toEqual([{ column: categoryCol }, { column: valueCol }]);
   });
-});
 
-describe('hasTrendOrForecast', () => {
-  it('returns false when trend and forecast are absent or null', () => {
-    expect(hasTrendOrForecast(undefined)).toBe(false);
-    expect(
-      hasTrendOrForecast({
-        value: [{ column: { name: 'Revenue' }, trend: null, forecast: null }],
-      }),
-    ).toBe(false);
+  it('caches the result per dataOptions object', () => {
+    const dataOptions = {
+      category: [{ column: categoryCol }],
+      value: [{ column: valueCol }],
+      breakBy: [],
+    };
+
+    const first = toTableDataOptions(dataOptions);
+    const second = toTableDataOptions(dataOptions);
+    expect(second).toBe(first);
   });
 
-  it('returns true when a value item has trend or forecast', () => {
-    expect(
-      hasTrendOrForecast({
-        value: [{ column: { name: 'Revenue' }, trend: { modelType: 'linear' } }],
-      }),
-    ).toBe(true);
-    expect(
-      hasTrendOrForecast({
-        value: [{ column: { name: 'Revenue' }, forecast: { forecastHorizon: 3 } }],
-      }),
-    ).toBe(true);
+  it('flattens an areamap-shaped dataOptions into geo + color columns', () => {
+    const geoColumn = { column: { name: 'Country' } };
+    const colorColumn = { column: { name: 'Revenue' } };
+    const result = toTableDataOptions({
+      geo: [geoColumn],
+      color: [colorColumn],
+    });
+    expect(result.columns).toEqual([geoColumn, colorColumn]);
+  });
+
+  it('flattens a scattermap-shaped dataOptions into geo + colorBy + details columns', () => {
+    const geoColumn = { column: { name: 'Country' } };
+    const colorByColumn = { column: { name: 'Revenue' } };
+    const detailsColumn = { column: { name: 'Category' } };
+    const result = toTableDataOptions({
+      geo: [geoColumn],
+      colorBy: colorByColumn,
+      details: detailsColumn,
+    });
+    expect(result.columns).toEqual([geoColumn, colorByColumn, detailsColumn]);
   });
 });
 

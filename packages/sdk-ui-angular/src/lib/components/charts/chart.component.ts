@@ -44,51 +44,28 @@ export interface ChartProps
  * An Angular component used for easily switching chart types or rendering multiple series of different chart types.
  *
  * @example
- * An example of using the `Chart` component to
- * plot a column chart of the Sample Healthcare data source hosted in a Sisense instance:
- *
- * ```html
- * <!--Component HTML template in .component.html-->
- * <csdk-chart
- *   [chartType]="chart.chartType"
- *   [dataSet]="chart.dataSet"
- *   [dataOptions]="chart.dataOptions"
- *   [filters]="chart.filters"
- *   [styleOptions]="chart.styleOptions"
- * />
- * ```
- *
  * ```ts
- * // Component behavior in .component.ts
- * chart = {
- *   chartType: 'column' as ChartType,
- *   dataSet: DM.DataSource,
- *   dataOptions: {
- *     category: [DM.Admissions.Admission_Time.Months],
- *     value: [measureFactory.count(DM.Admissions.Patient_ID, 'Total Patients')],
- *     breakBy: [],
- *   },
- *   filters: [filterFactory.members(DM.Doctors.Specialty, ['Oncology', 'Cardiology'])],
- *   styleOptions: {
- *     width: 800,
- *     height: 500,
- *     xAxis: {
- *       title: {
- *         text: 'Months',
- *         enabled: true,
- *       },
- *     },
- *     yAxis: {
- *       title: {
- *         text: 'Total Patients',
- *         enabled: true,
- *       },
- *     },
- *   },
- * };
- * ```
+ * import { Component } from '@angular/core';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
  *
- * <img src="media://angular-chart-example.png" width="800px" />
+ * @Component({
+ *   selector: 'code-example',
+ *   template: `
+ *     <csdk-chart [chartType]="chartType" [dataSet]="DM.DataSource" [dataOptions]="dataOptions"></csdk-chart>
+ *   `,
+ * })
+ * export class CodeExample {
+ *   DM = DM;
+ *   chartType = 'column'; // Change this to "line" to see a line chart
+ *   dataOptions = {
+ *     category: [DM.Commerce.Date.Quarters],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     breakBy: [],
+ *   };
+ * }
+ * ```
+ * <img src="media://chart-example-1.png" width="700px" />
  * @shortDescription Common component for rendering charts of different types including table
  * @group Charts
  */

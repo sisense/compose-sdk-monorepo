@@ -14,11 +14,15 @@ import {
   translateTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/translate-data-options';
 import type {
+  DerivedResultColumn,
   StyledColumn,
   StyledMeasureColumn,
   TableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
-import { isMeasureColumn } from '@/domains/visualizations/core/chart-data-options/utils.js';
+import {
+  isDerivedResultColumn,
+  isMeasureColumn,
+} from '@/domains/visualizations/core/chart-data-options/utils.js';
 import {
   applyDefaultChartDataOptions,
   validateDataOptions,
@@ -45,14 +49,24 @@ function narrativeQueryFromStyledAxisColumns(
   };
 }
 
-/** Same partition as {@link getTableAttributesAndMeasures}: column order preserved within each group. */
-function partitionTableColumnsByMeasure(columns: readonly (StyledColumn | StyledMeasureColumn)[]): {
+/**
+ * Same partition as {@link getTableAttributesAndMeasures}: column order preserved within each
+ * group. `translateTableDataOptions` (the plain function this reads from) never produces a
+ * `DerivedResultColumn`, but the shared `TableDataOptionsInternal` type allows one, so it's filtered
+ * out defensively here too.
+ */
+function partitionTableColumnsByMeasure(
+  columns: readonly (StyledColumn | StyledMeasureColumn | DerivedResultColumn)[],
+): {
   dimensionColumns: StyledColumn[];
   measureColumns: StyledMeasureColumn[];
 } {
   const dimensionColumns: StyledColumn[] = [];
   const measureColumns: StyledMeasureColumn[] = [];
   for (const col of columns) {
+    if (isDerivedResultColumn(col)) {
+      continue;
+    }
     if (isMeasureColumn(col)) {
       measureColumns.push(col);
     } else {
@@ -89,6 +103,12 @@ export function getNarrativeDimensionsAndMeasures(
 /**
  * Table dimensions and measures for narrative / JAQL, including styled sort, trend, and forecast.
  *
+ * Trend/forecast expansion happens once, up front, via `translateTableDataOptions`'s own
+ * `includeTrendAndForecast` option — the same expansion Table's own rendering uses — rather than
+ * a second time in `narrativeQueryFromStyledAxisColumns`'s `adaptMeasuresForQuery` call, which is
+ * explicitly told `includeTrendAndForecast: false` here since there's nothing left for it to do
+ * (it still validates each column is a real dimensional Attribute/Measure and applies sort).
+ *
  * @internal
  */
 export function getNarrativeDimensionsAndMeasuresFromTable(
@@ -98,9 +118,12 @@ export function getNarrativeDimensionsAndMeasuresFromTable(
   dimensions: Attribute[];
   measures: Measure[];
 } {
-  const translatedDataOptions = translateTableDataOptions(dataOptions);
+  const translatedDataOptions = translateTableDataOptions(dataOptions, adaptMeasureOptions);
   const { dimensionColumns, measureColumns } = partitionTableColumnsByMeasure(
     translatedDataOptions.columns,
   );
-  return narrativeQueryFromStyledAxisColumns(dimensionColumns, measureColumns, adaptMeasureOptions);
+  return narrativeQueryFromStyledAxisColumns(dimensionColumns, measureColumns, {
+    ...adaptMeasureOptions,
+    includeTrendAndForecast: false,
+  });
 }

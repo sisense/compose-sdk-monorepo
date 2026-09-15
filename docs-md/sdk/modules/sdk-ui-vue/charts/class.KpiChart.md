@@ -14,37 +14,35 @@ a second measure, or against a target.
 
 ## Example
 
-Here's how you can use the KpiChart component in a Vue application:
 ```vue
-<template>
-<KpiChart
-     :dataSet="kpiChartProps.dataSet"
-     :dataOptions="kpiChartProps.dataOptions"
-     :filters="kpiChartProps.filters"
-     :styleOptions="kpiChartProps.styleOptions"
-   />
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
+import { KpiChart } from '@sisense/sdk-ui-vue';
+import * as DM from './sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
-import * as DM from '../assets/sample-retail-model';
-import { KpiChart, type KpiChartProps } from '@sisense/sdk-ui-vue';
 
-const kpiChartProps = ref<KpiChartProps>({
-  dataSet: DM.DataSource,
+const chartProps = ref({
   dataOptions: {
-    value: measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue'),
-    category: DM.DimDate.Date.Months,
+    value: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+    category: DM.Commerce.Date.Months,
     comparison: { type: 'previous-period' },
   },
   styleOptions: {
-    title: { text: 'Total Revenue' },
+    sparkline: { chartType: 'area' },
+    height: 250,
   },
-  filters: [],
 });
 </script>
+
+<template>
+  <KpiChart
+    :dataSet="DM.DataSource"
+    :dataOptions="chartProps.dataOptions"
+    :styleOptions="chartProps.styleOptions"
+  />
+</template>
 ```
+<img src="../../../img/kpi-chart-example-1.png" width="400px" />
 
 ## Param
 

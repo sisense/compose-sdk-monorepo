@@ -45,4 +45,6 @@ export type {
   WidgetsOptionsJSON,
   DashboardJSON,
   DashboardInput,
+  DashboardFilterJSON,
+  DashboardFilterWithDataSourceJSON,
 } from './types.js';

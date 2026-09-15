@@ -15,36 +15,27 @@ export interface ColumnChartProps extends ColumnChartPropsPreact {}
  * whose heights are proportional to the values that they represent.
  *
  * @example
- * Here's how you can use the ColumnChart component in a Vue application:
  * ```vue
- * <template>
-      <ColumnChart
-        :dataOptions="columnChartProps.dataOptions"
-        :dataSet="columnChartProps.dataSet"
-        :filters="columnChartProps.filters"
-      />
- * </template>
- *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
- * import * as DM from '../assets/sample-retail-model';
- * import { ColumnChart, type ColumnChartProps } from '@sisense/sdk-ui-vue';
+ * import { ColumnChart } from '@sisense/sdk-ui-vue';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
  *
- * const dimProductName = DM.DimProducts.ProductName;
- * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-
-const columnChartProps = ref<ColumnChartProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    category: [dimProductName],
-    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-    breakBy: [],
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-});
+ * const chartProps = ref({
+ *   dataOptions: {
+ *     category: [DM.Commerce.Date.Years],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     breakBy: [DM.Commerce.Condition],
+ *   },
+ * });
+ * </script>
+ *
+ * <template>
+ *   <ColumnChart :dataSet="DM.DataSource" :dataOptions="chartProps.dataOptions" />
+ * </template>
  * ```
- * <img src="media://vue-column-chart-example.png" width="800"/>
+ * <img src="media://column-chart-example-1.png" width="700px" />
  * @param props - Column chart properties
  * @returns Column Chart component
  * @group Charts

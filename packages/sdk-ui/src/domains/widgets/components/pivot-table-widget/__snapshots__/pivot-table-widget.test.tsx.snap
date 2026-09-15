@@ -36,12 +36,12 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                   >
                     <div
                       class="css-0"
-                      data-testid="header-item-widget-header-title-alignment-spacer"
+                      data-testid="csdk-widget-header-title-alignment-spacer"
                       style="display: flex; align-items: center; flex: 0 0 auto; height: 28px; pointer-events: none;"
                     />
                     <div
                       class="css-0"
-                      data-testid="header-item-widget-header-title"
+                      data-testid="csdk-widget-header-title"
                       style="display: flex; align-items: center; flex: 0 1 auto; min-width: 0; height: 28px; pointer-events: auto;"
                     >
                       <div
@@ -53,12 +53,12 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                     </div>
                     <div
                       class="css-0"
-                      data-testid="header-item-widget-header-spacer"
+                      data-testid="csdk-widget-header-spacer"
                       style="display: flex; align-items: center; flex: 1 1 auto; min-width: 0; height: 28px; pointer-events: none;"
                     />
                     <div
                       class="css-0"
-                      data-testid="header-item-widget-header-info-button"
+                      data-testid="csdk-widget-header-info-button"
                       style="display: flex; align-items: center; flex: 0 0 auto; height: 28px; pointer-events: auto;"
                     >
                       <button

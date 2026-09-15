@@ -128,6 +128,7 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
  * `FilterWidgetFilterType` selects the rendering type for a filter widget.
  *
  * - `'members'`      — searchable member-select dropdown. Implemented.
+ * - `'calendar'`     — calendar taking one date or several, for datetime attributes only. Implemented.
  * - `'dateRange'`    — date-range picker. Planned.
  * - `'period'`       — relative-period picker. Planned.
  * - `'numericRange'` — numeric range slider. Planned.
@@ -143,6 +144,7 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
  */
 export type FilterWidgetFilterType =
   | 'members'
+  | 'calendar'
   | 'dateRange'
   | 'period'
   | 'numericRange'
@@ -162,6 +164,7 @@ export type FilterWidgetFilterType =
  */
 export const filterWidgetFilterTypeLabels: Record<FilterWidgetFilterType, string> = {
   members: 'List',
+  calendar: 'Calendar',
   dateRange: 'Date Range',
   period: 'Period',
   numericRange: 'Numeric Range',
@@ -199,7 +202,8 @@ export interface FilterWidgetProps {
   title?: string;
   /**
    * How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
-   * `'condition'` renders a string condition control for text attributes.
+   * `'condition'` renders a string condition control for text attributes, and `'calendar'`
+   * a calendar for datetime attributes.
    * Additional types will be added as they are implemented.
    *
    * @defaultValue 'members'
@@ -297,4 +301,23 @@ export interface FilterWidgetProps {
    * @sisenseInternal
    */
   excludedDateLevels?: readonly string[];
+  /**
+   * How to render when no dimension has been selected yet.
+   *
+   * - `'guide'` (default) — editor empty state (title, subtitle, illustration).
+   * - `'setupButton'` — compact dashboard "Set up filter" button.
+   *
+   * Hosts that pass {@link FilterWidgetProps.onSetup} get the setup button regardless.
+   *
+   * @internal
+   */
+  emptyState?: 'guide' | 'setupButton';
+  /**
+   * Opens the widget editor to configure a dimension. When set (or when
+   * `emptyState` is `'setupButton'`), an unconfigured widget shows the
+   * "Set up filter" button instead of the editor illustration.
+   *
+   * @internal
+   */
+  onSetup?: () => void;
 }

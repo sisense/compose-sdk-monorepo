@@ -1,4 +1,4 @@
-import { Measure, measureFactory } from '@sisense/sdk-data';
+import { FORECAST_PREFIX, Measure, measureFactory, TREND_PREFIX } from '@sisense/sdk-data';
 
 import {
   isCategoryStyle,
@@ -8,9 +8,6 @@ import {
 import { CartesianChartDataOptions, StyledMeasureColumn } from '../../../..';
 import { SeriesType } from './chart-options-service';
 import { AxisPlotBand, AxisSettings } from './translations/axis-section';
-
-export const FORECAST_PREFIX = '$forecast';
-export const TREND_PREFIX = '$trend';
 
 export const isForecastSeries = (name: string) => name.startsWith(FORECAST_PREFIX);
 export const isTrendSeries = (name: string) => name.startsWith(TREND_PREFIX);

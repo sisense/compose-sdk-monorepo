@@ -11,11 +11,7 @@ import {
 import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
 
 import { SelectableSection } from '../common/index.js';
-import {
-  CalendarRangeValue,
-  CalendarSelect,
-  CalendarSelectTypes,
-} from '../common/select/calendar-select/index.js';
+import { CalendarRangeSelect, CalendarRangeValue } from '../common/select/calendar-select/index.js';
 import { useDatetimeFormatter } from '../hooks/use-datetime-formatter.js';
 import { asUtcDate } from '../utils.js';
 import { DatetimeLimits } from './types.js';
@@ -85,27 +81,12 @@ export const DatetimeRangeSection = (props: DatetimeRangeSectionProps) => {
       onSelect={handleSectionSelect}
       aria-label="Datetime range section"
     >
-      <span id="datetime-range-from" style={{ margin: '0 8px 0 0' }}>
-        {t('filterEditor.labels.from')}
-      </span>
-      <CalendarSelect
-        width={152}
-        type={CalendarSelectTypes.RANGE_FROM_SELECT}
+      <CalendarRangeSelect
+        fieldWidth={152}
         value={rangeValue}
         limits={normalizedLimits}
-        aria-labelledby="datetime-range-from"
-        onChange={handleRangeValueChange}
-        placeholder={t('filterEditor.placeholders.select')}
-      />
-      <span id="datetime-range-to" style={{ margin: '0 8px 0 8px' }}>
-        {t('filterEditor.labels.to')}
-      </span>
-      <CalendarSelect
-        width={152}
-        type={CalendarSelectTypes.RANGE_TO_SELECT}
-        value={rangeValue}
-        limits={normalizedLimits}
-        aria-labelledby="datetime-range-to"
+        fromLabel={t('filterEditor.labels.from')}
+        toLabel={t('filterEditor.labels.to')}
         onChange={handleRangeValueChange}
         placeholder={t('filterEditor.placeholders.select')}
       />

@@ -6,16 +6,33 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
 /**
  * A React component representing data progressively decreasing in size or quantity through a funnel shape.
  *
- * ## Example
- *
+ * @example
  * Funnel chart displaying data from the Sample ECommerce data model.
  *
- * <iframe
- *  src='https://csdk-playground.sisense.com/?example=charts%2Ffunnel-chart&mode=docs'
- *  width='100%'
- *  height='870'
- *  style='max-width:800px; border:none;'
- * />
+ * ```tsx
+ * import { FunnelChart } from '@sisense/sdk-ui';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce';
+ *
+ * const CodeExample = () => (
+ *   <FunnelChart
+ *     dataSet={DM.DataSource}
+ *     dataOptions={{
+ *       category: [DM.Commerce.AgeRange],
+ *       value: [measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
+ *     }}
+ *     styleOptions={{
+ *       funnelType: 'regular',
+ *       funnelSize: 'regular',
+ *       funnelDirection: 'regular',
+ *     }}
+ *   />
+ * );
+ *
+ * export default CodeExample;
+ * ```
+ *
+ * <img src="media://funnel-chart-example-1.png" width="700px" />
  *
  * @param props - Funnel chart properties
  * @returns Funnel Chart component
