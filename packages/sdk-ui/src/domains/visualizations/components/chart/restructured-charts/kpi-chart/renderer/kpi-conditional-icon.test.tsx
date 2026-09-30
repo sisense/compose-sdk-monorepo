@@ -106,4 +106,16 @@ describe('toIconAffix', () => {
       gapPx: CONDITIONAL_ICON_GAP_PX,
     });
   });
+
+  it('transforms a text-icon affix like the host text it sits beside, leaving svg variants unaffected', () => {
+    expect(toIconAffix({ type: 'text', value: 'hot' }, 0, 'uppercase')).toEqual({
+      text: 'HOT',
+      emScale: CONDITIONAL_ICON_EM,
+      gapPx: CONDITIONAL_ICON_GAP_PX,
+    });
+    expect(toIconAffix({ type: 'built-in', name: 'check' }, 0, 'uppercase')).toEqual({
+      widthEm: CONDITIONAL_ICON_EM,
+      gapPx: CONDITIONAL_ICON_GAP_PX,
+    });
+  });
 });

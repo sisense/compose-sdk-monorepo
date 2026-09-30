@@ -26,7 +26,7 @@ measured value is used in.
 | `measure` | [`Measure`](../../../interfaces/interface.Measure.md) | Measure to filter |
 | `filters` | [`Filter`](../../../interfaces/interface.Filter.md)[] | Filters to apply to the measure |
 | `name`? | `string` | Optional name for the new measure |
-| `format`? | `string` | Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc. |
+| `format`? | `string` | Optional formatting to apply. A Numeral.js format string for a numeric result, or a date-fns format string when `measure` is a date measure. A numeric format can only be used for explicit queries, not in charts, tables, etc. A date format is also sent with the query, so a CSV or Excel download uses it; to change what a chart or table shows, set `dateFormat` on the column. |
 
 ## Returns
 

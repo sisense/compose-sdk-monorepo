@@ -52,5 +52,8 @@ export type { FilterWidgetConfig } from '../domains/widgets/components/widget/in
 // NarrativeWidget types — referenced by the public WidgetProps and WidgetConfig
 // unions, so they must be docs-visible. The NarrativeWidget component itself
 // remains @alpha (alpha.ts) until the pro-code interface is settled.
-export type { NarrativeWidgetProps } from '../domains/widgets/components/narrative-widget/index.js';
+export type {
+  NarrativeWidgetProps,
+  NarrativeWidgetStyleOptions,
+} from '../domains/widgets/components/narrative-widget/index.js';
 export type { NarrativeWidgetConfig } from '../domains/widgets/components/widget/index.js';

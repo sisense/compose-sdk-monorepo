@@ -15,6 +15,7 @@
 /* eslint-disable vitest/no-identical-title */
 import { createAttribute, DimensionalAttribute } from '../attributes/attributes.js';
 import { normalizeName } from '../base.js';
+import { createDateDimension } from '../dimensions/dimensions.js';
 import * as filterFactory from '../filters/factory.js';
 import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';
 import { AggregationTypes } from '../types.js';
@@ -1022,5 +1023,125 @@ describe('measureFactory', () => {
         `measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') })`,
       );
     });
+  });
+});
+
+/* The server validates what a date measure can be combined with, so the factory builds every
+   shape and only carries the date type through the wrappers that answer in their operand's unit. */
+describe('date measures', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+  const maxDate = measureFactory.max(dateDimension.Days, 'Max Date');
+  const totalRevenue = measureFactory.sum(revenue, 'Total Revenue');
+
+  it.each([
+    ['arithmetic', () => measureFactory.add(maxDate, 30)],
+    ['a numeric transform', () => measureFactory.growth(maxDate)],
+    ['an aggregation other than min or max', () => measureFactory.sum(dateDimension.Days)],
+    ['min or max at a sub-day level', () => measureFactory.max(dateDimension.Hours)],
+  ])('builds %s and leaves its validation to the server', (_name, build) => {
+    expect(build).not.toThrow();
+  });
+
+  it('stamps a PAST shift over a date measure as a date', () => {
+    expect(measureFactory.pastYear(maxDate).jaql()).toEqual({
+      jaql: {
+        title: 'Max Date  Past Year',
+        formula: 'pastyear([MaxDate])',
+        context: {
+          '[MaxDate]': {
+            title: 'Max Date',
+            dim: '[Commerce.Date (Calendar)]',
+            datatype: 'datetime',
+            level: 'days',
+            agg: 'max',
+          },
+        },
+        datatype: 'datetime',
+        level: 'days',
+      },
+      format: { mask: { days: 'yyyy-MM-dd' } },
+    });
+  });
+
+  it('leaves a PAST shift over a NUMERIC measure exactly as it was', () => {
+    expect(measureFactory.pastYear(totalRevenue).jaql()).toEqual({
+      jaql: {
+        title: 'Total Revenue  Past Year',
+        formula: 'pastyear([TotalRevenue])',
+        context: {
+          '[TotalRevenue]': {
+            title: 'Total Revenue',
+            dim: '[Commerce.Revenue]',
+            datatype: 'numeric',
+            agg: 'sum',
+          },
+        },
+      },
+    });
+  });
+
+  it.each([
+    ['trend', () => measureFactory.trend(maxDate)],
+    ['forecast', () => measureFactory.forecast(maxDate)],
+    ['measuredValue', () => measureFactory.measuredValue(maxDate, [])],
+  ])('stamps %s over a date measure as a date', (_name, build) => {
+    expect(build().jaql().jaql).toMatchObject({ datatype: 'datetime' });
+  });
+
+  it('does not stamp a numeric transform, which answers a number', () => {
+    expect(measureFactory.growth(maxDate).jaql().jaql).not.toHaveProperty('datatype');
+  });
+
+  describe('over a date column with no level', () => {
+    const date = new DimensionalAttribute('Date', '[Commerce.Date]', 'datetime');
+    const maxNoLevel = measureFactory.max(date, 'Max Date');
+
+    it.each([
+      ['pastYear', () => measureFactory.pastYear(maxNoLevel)],
+      ['measuredValue', () => measureFactory.measuredValue(maxNoLevel, [])],
+      ['customFormula', () => measureFactory.customFormula('Max', 'MAX([D])', { D: date })],
+    ])('keeps %s a datetime, like the max it wraps, with no level-keyed mask', (_name, build) => {
+      const result = build().jaql();
+
+      expect(maxNoLevel.jaql().jaql.datatype).toBe('datetime');
+      expect(result.jaql.datatype).toBe('datetime');
+      expect(result.jaql).not.toHaveProperty('level');
+      expect(result).not.toHaveProperty('format');
+    });
+
+    it('keeps a number format set on it, as the max it wraps does', () => {
+      expect(measureFactory.pastYear(maxNoLevel).format('0,0').jaql().format).toEqual({
+        number: '0,0',
+      });
+    });
+  });
+});
+
+/* `name ?? 'QTD ' + name` reads the optional parameter, not the measure, and `??` binds looser than
+   `+`, so the whole concatenation was the fallback and an omitted name produced "QTD undefined". */
+describe('the default title of a to-date sum', () => {
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+  const totalRevenue = measureFactory.sum(revenue, 'Total Revenue');
+
+  it.each([
+    ['yearToDateSum', measureFactory.yearToDateSum, 'YTD Total Revenue'],
+    ['quarterToDateSum', measureFactory.quarterToDateSum, 'QTD Total Revenue'],
+    ['monthToDateSum', measureFactory.monthToDateSum, 'MTD Total Revenue'],
+    ['weekToDateSum', measureFactory.weekToDateSum, 'WTD Total Revenue'],
+  ] as const)('names the measure when %s is given none', (_name, build, expected) => {
+    expect(build(totalRevenue).name).toBe(expected);
+  });
+
+  it.each([
+    ['yearToDateSum', measureFactory.yearToDateSum],
+    ['quarterToDateSum', measureFactory.quarterToDateSum],
+    ['monthToDateSum', measureFactory.monthToDateSum],
+    ['weekToDateSum', measureFactory.weekToDateSum],
+  ] as const)('keeps an explicit name for %s', (_name, build) => {
+    expect(build(totalRevenue, 'Mine').name).toBe('Mine');
   });
 });

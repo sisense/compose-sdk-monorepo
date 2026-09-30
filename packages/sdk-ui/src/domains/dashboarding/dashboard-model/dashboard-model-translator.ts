@@ -1,13 +1,15 @@
-import { convertDataSource, DataSource } from '@sisense/sdk-data';
+import type { DataSource } from '@sisense/sdk-data';
+import { convertDataSource } from '@sisense/sdk-data';
 
-import { DashboardProps } from '@/domains/dashboarding/index.js';
+import type { DashboardProps } from '@/domains/dashboarding/index.js';
+import { withNarrativeDashboardId } from '@/domains/narrative/core/with-narrative-dashboard-id.js';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
-import { DashboardDto } from '@/infra/api/types/dashboard-dto.js';
-import { AppSettings } from '@/infra/app/settings/settings.js';
-import { CompleteThemeSettingsInternal } from '@/types.js';
+import type { DashboardDto } from '@/infra/api/types/dashboard-dto.js';
+import type { AppSettings } from '@/infra/app/settings/settings.js';
+import type { CompleteThemeSettingsInternal } from '@/types.js';
 
 import { asPermissionDerivedConfig } from './as-permission-derived-config.js';
-import { DashboardModel } from './dashboard-model.js';
+import type { DashboardModel } from './dashboard-model.js';
 import {
   extractDashboardFilters,
   translateLayout,
@@ -18,6 +20,10 @@ import {
 /**
  * Translates {@link DashboardModel} to {@link DashboardProps}.
  *
+ * Narrative widgets are handed the dashboard's `oid` as their `dashboardId`.
+ *
+ * @param dashboardModel - The dashboard model to translate.
+ * @returns Props for the `Dashboard` component.
  * @example
  * ```tsx
  * <Dashboard {...dashboardModelTranslator.toDashboardProps(dashboardModel)} />
@@ -40,7 +46,7 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     id: oid,
     title,
     defaultDataSource: dataSource,
-    widgets: widgetModels.map(widgetModelTranslator.toWidgetProps),
+    widgets: withNarrativeDashboardId(oid)(widgetModels.map(widgetModelTranslator.toWidgetProps)),
     layoutOptions,
     config: {
       // Defaults implied by the dashboard's permissions. They sit below the developer's props, which
@@ -57,9 +63,10 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
 /**
  * Creates a new dashboard model from a dashboard DTO.
  *
- * @param dashboardDto - The dashboard DTO to be converted to a dashboard model
- * @param themeSettings - Optional theme settings
- * @param appSettings - Optional application settings
+ * @param dashboardDto - The dashboard DTO to be converted to a dashboard model.
+ * @param themeSettings - Optional theme settings.
+ * @param appSettings - Optional application settings.
+ * @returns The dashboard model.
  * @internal
  */
 export function fromDashboardDto(

@@ -13,6 +13,8 @@ Creates an average aggregation measure over the given attribute.
 
 Both `average()` and `avg()` can be used interchangeably.
 
+Note: Only numeric attributes are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

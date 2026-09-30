@@ -5,6 +5,8 @@ import {
   DEFAULT_PIVOT_GRAND_TOTALS,
   Filter,
   FilterRelationsJaql,
+  getDateMeasureAggregation,
+  isDateMeasure,
   isPivotAttribute,
   isPivotMeasure,
   Measure,
@@ -267,24 +269,85 @@ function jaqlPivotAttribute(
   }
 }
 
+// A date PART is an ordinal, not a date: week-of-year answers 1 to 53. Sub-day levels are not in
+// here: they answer with a real datetime, and sdk-ui already shows them with a day format
+// (`getDefaultDateMeasureFormat`).
+const isDatePartJaql = (jaql: MetadataItem['jaql']): boolean => jaql.dateTimePart !== undefined;
+
+/**
+ * Resolves the datatype of a pivot measure item.
+ *
+ * The pivot backend returns null cells unless the item is sent with datatype `'datetime'`, so a
+ * date measure is sent as `'datetime'`. A date part is sent as `'numeric'` because its answer is a
+ * number.
+ *
+ * @param measure - The measure behind the item.
+ * @param base - The jaql the measure produced.
+ * @returns The datatype to send.
+ */
+function pivotMeasureDatatype(measure: Measure, base: MetadataItem['jaql']): string {
+  const isDateNotDatePart = isDateMeasure(measure) && !isDatePartJaql(base);
+  // `jaql()` is typed `any` and `datatype` is optional, so the datetime is checked rather than
+  // asserted; anything else a measure could carry is a number to the pivot backend
+  return isDateNotDatePart && base.datatype === 'datetime' ? 'datetime' : 'numeric';
+}
+
+/**
+ * Checks whether a pivot measure goes on the wire carrying a date.
+ *
+ * The pivot table hook turns off data bars and the totals calculation for a date measure. It must
+ * agree with the payload builder about which measures are dates, so both call this. It does NOT
+ * narrow to `BaseMeasure`: a Fusion date measure is a formula and has no `aggregation` to read.
+ *
+ * @param measure - The measure behind the item.
+ * @returns True when the item is sent with a datetime datatype.
+ * @internal
+ */
+export function isMeasureSentAsDatetime(measure: Measure): boolean {
+  const { jaql: base } = measure.jaql() as MetadataItem;
+  return pivotMeasureDatatype(measure, base) === 'datetime';
+}
+
+/**
+ * Builds the metadata item for one pivot value column.
+ *
+ * A `PivotMeasure` adds the caller's totals, data bars and range colour on top of the measure's own
+ * jaql. Data bars and range colour are dropped for a datetime item; the totals calculation is
+ * replaced with the measure's own aggregation.
+ *
+ * @param m - The measure, wrapped when the caller set pivot-only options on it.
+ * @param panel - The panel the item belongs to.
+ * @param index - The item's position within that panel.
+ * @returns The metadata item to send.
+ */
 function jaqlPivotMeasure(m: Measure | PivotMeasure, panel: string, index: number): MetadataItem {
   const field = { index: index, id: `${panel}-${index}` };
 
   if (isPivotMeasure(m)) {
     const base = m.measure.jaql();
+    const datatype = pivotMeasureDatatype(m.measure, base.jaql);
+    // decided by what we are about to send, not by the measure, so a granularity that stays numeric
+    // keeps its totals, data bars and range colour
+    const isDate = datatype === 'datetime';
+
     return {
       ...base,
       jaql: {
         ...base.jaql,
-        subtotalAgg: m.totalsCalculation,
-        datatype: 'numeric',
+        // a date subtotal only makes sense as the measure's own min or max, so any other totals
+        // calculation from the caller is dropped. A formula keeps it in its expression, not in `agg`
+        subtotalAgg: isDate ? getDateMeasureAggregation(m.measure) : m.totalsCalculation,
+        datatype,
       },
       format: {
         ...base.format,
-        databars: m.dataBars || false,
-        ...(m.shouldRequestMinMax && {
-          color: { type: 'range' },
-        }),
+        // a date has no numeric scale, so data bars and range colour are turned off here too, for
+        // callers that skip the pivot table hook
+        databars: !isDate && (m.dataBars || false),
+        ...(!isDate &&
+          m.shouldRequestMinMax && {
+            color: { type: 'range' },
+          }),
       },
       panel,
       field,
@@ -296,7 +359,7 @@ function jaqlPivotMeasure(m: Measure | PivotMeasure, panel: string, index: numbe
     ...base,
     jaql: {
       ...base.jaql,
-      datatype: 'numeric',
+      datatype: pivotMeasureDatatype(m, base.jaql),
     },
     panel,
     field,

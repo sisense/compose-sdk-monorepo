@@ -12,6 +12,8 @@ title: add
 
 Creates a calculated measure by adding two given numbers or measures.
 
+Note: Only numbers and numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

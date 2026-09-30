@@ -19,7 +19,7 @@ Registers sdk-data's translation dictionaries (en, uk) under a dedicated i18next
 | Export                    | `i18nextInstance` (module-level singleton) — packages/sdk-data/src/translation/initialize-i18n.ts:13               |
 | Export                    | `PACKAGE_NAMESPACE` — packages/sdk-data/src/translation/resources/index.ts:11                                      |
 | Export                    | `resources` (`{ en, uk }`) — packages/sdk-data/src/translation/resources/index.ts:12                               |
-| Type                      | `TranslationDictionary` — packages/sdk-data/src/translation/resources/en.ts:49                                     |
+| Type                      | `TranslationDictionary` — packages/sdk-data/src/translation/resources/en.ts:50                                     |
 | Export (package-internal) | `TranslatableError` — packages/sdk-data/src/translation/translatable-error.ts:6                                    |
 | Dictionaries              | en — packages/sdk-data/src/translation/resources/en.ts:4; uk — packages/sdk-data/src/translation/resources/uk.ts:6 |
 | Barrel re-export          | `TranslationDictionary`, `PACKAGE_NAMESPACE as translationNamespace` — packages/sdk-data/src/index.ts:122          |
@@ -44,7 +44,7 @@ errors.unsupportedDimensionalElement
 
 Resolution: `new TranslatableError(key, interpolationOptions?)` calls `AbstractTranslatableError` (packages/sdk-common/src/i18n/abstract-translatable-error.ts:5) with `PACKAGE_NAMESPACE` and `i18nextInstance.t`; the constructor translates with `{ ns: 'sdkData', lng: 'en' }` — so `error.message` is always the English text, while `key`, `namespace`, and `interpolationOptions` stay on the instance for consumers to re-translate into the active language.
 
-`TranslationDictionary = typeof translation` (en.ts:49) — the English dictionary is the source of truth; `uk.ts` is typed against it, so adding a key to en.ts forces uk.ts to follow.
+`TranslationDictionary = typeof translation` (en.ts:50) — the English dictionary is the source of truth; `uk.ts` is typed against it, so adding a key to en.ts forces uk.ts to follow.
 
 # How it connects
 

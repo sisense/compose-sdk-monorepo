@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import styled from '@emotion/styled';
 
 import { getHeaderItemStyle, resolveHeaderItemSize } from './header-item-size.js';
-import { ResolvedHeaderItem } from './types.js';
+import type { ResolvedHeaderItem } from './types.js';
 
 /**
  * Prefix of the `data-testid` carried by every header item cell.
@@ -33,7 +33,7 @@ const isEmptyContent = (content: ReactNode): boolean =>
  * Builds the `data-testid` of a header item cell from the item's id.
  *
  * @param id - The header item id.
- * @returns The cell's `data-testid`, i.e. the item id prefixed with `csdk-`.
+ * @returns The cell's `data-testid`: the item id prefixed with `csdk-`.
  * @internal
  */
 export const getHeaderItemTestId = (id: string): string => `${HEADER_ITEM_TESTID_PREFIX}${id}`;

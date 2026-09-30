@@ -1,4 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import {
+  DateLevels,
+  DimensionalAttribute,
+  DimensionalLevelAttribute,
+  measureFactory,
+} from '@sisense/sdk-data';
 import type { Cell, Data, QueryResultData } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
@@ -265,6 +271,168 @@ describe('applyDateFormats', () => {
         expect(dataOut).toBe(dataIn);
         expect(dataOut.rows[0][0].text).toBe('2009');
       });
+    });
+  });
+
+  describe('date measure columns', () => {
+    const dateDays = new DimensionalLevelAttribute(
+      'Days',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.Days,
+      'yyyy-MM-dd',
+    );
+    const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+
+    function newDataWithDateMeasure(): QueryResultData {
+      return {
+        columns: [
+          { name: 'Years', type: 'datelevel' },
+          { name: 'Max Date', type: 'datetime' },
+        ],
+        rows: [
+          [
+            { data: '2010-01-01T00:00:00', text: '2010' },
+            { data: '2010-12-31T00:00:00', text: '31/12/2010 00:00:00 AM' },
+          ],
+        ],
+      };
+    }
+
+    it('mutates `text` on the cells of a date measure column configured with a `dateFormat`', () => {
+      const dataIn = newDataWithDateMeasure();
+
+      const dataOut = applyDateFormats(dataIn, {
+        columns: [
+          { column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yyyy' },
+          { column: measureFactory.max(dateDays, 'Max Date'), dateFormat: 'yyyy-MM-dd' },
+        ],
+      }) as QueryResultData;
+
+      expect(dataOut.rows[0][0].text).toBe('2010');
+      expect(dataOut.rows[0][1].text).toBe('2010-12-31');
+    });
+
+    it('does not mutate `text` on the cells of a numeric measure column configured with a `dateFormat`', () => {
+      const dataIn: QueryResultData = {
+        columns: [{ name: 'Total Revenue', type: 'basemeasure' }],
+        rows: [[{ data: 100, text: '100' }]],
+      };
+
+      const dataOut = applyDateFormats(dataIn, {
+        columns: [
+          { column: measureFactory.sum(revenue, 'Total Revenue'), dateFormat: 'yyyy-MM-dd' },
+        ],
+      }) as QueryResultData;
+
+      expect(dataOut.rows).toStrictEqual([[{ data: 100, text: '100' }]]);
+    });
+
+    it('does not mutate a plain unparseable value on a date measure column, and does not throw', () => {
+      const dataIn: Data = {
+        columns: [{ name: 'Max Date', type: 'datetime' }],
+        rows: [['not-a-date-at-all']],
+      };
+
+      const dataOut = applyDateFormats(dataIn, {
+        columns: [{ column: measureFactory.max(dateDays, 'Max Date'), dateFormat: 'yyyy-MM-dd' }],
+      }) as Data;
+
+      expect(dataOut.rows).toStrictEqual([['not-a-date-at-all']]);
+    });
+
+    it('does not mutate `text` when the `data` of a date measure cell is unparseable, and does not throw', () => {
+      const dataIn: QueryResultData = {
+        columns: [{ name: 'Max Date', type: 'datetime' }],
+        rows: [[{ data: '2010-31-31-31 0:0', text: 'unparseable' }]],
+      };
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementationOnce(() => {});
+
+      const dataOut = applyDateFormats(dataIn, {
+        columns: [{ column: measureFactory.max(dateDays, 'Max Date'), dateFormat: 'yyyy-MM-dd' }],
+      }) as QueryResultData;
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      consoleErrorSpy.mockRestore();
+      expect(dataOut.rows[0][0].text).toBe('unparseable');
+    });
+  });
+
+  describe('indicator date measure options', () => {
+    const dateDays = new DimensionalLevelAttribute(
+      'Days',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.Days,
+      'yyyy-MM-dd',
+    );
+
+    function newIndicatorData(): QueryResultData {
+      return {
+        columns: [
+          { name: 'Max Date', type: 'datetime' },
+          { name: 'Min Date', type: 'datetime' },
+          { name: 'Range Start', type: 'datetime' },
+          { name: 'Range End', type: 'datetime' },
+        ],
+        rows: [
+          [
+            { data: '2013-12-04T00:00:00', text: '04/12/2013 00:00:00 AM' },
+            { data: '2009-01-01T00:00:00', text: '01/01/2009 00:00:00 AM' },
+            { data: '2009-01-01T00:00:00', text: '01/01/2009 00:00:00 AM' },
+            { data: '2013-12-04T00:00:00', text: '04/12/2013 00:00:00 AM' },
+          ],
+        ],
+      };
+    }
+
+    const dateMeasureOption = (name: string) => ({
+      column: measureFactory.max(dateDays, name),
+      dateFormat: 'yyyy-MM-dd',
+    });
+
+    it.each([
+      ['value', 0],
+      ['secondary', 1],
+      ['min', 2],
+      ['max', 3],
+    ])('rewrites the cell text of the %s option', (optionName, columnIndex) => {
+      const names = ['Max Date', 'Min Date', 'Range Start', 'Range End'];
+      const dataIn = newIndicatorData();
+
+      const dataOut = applyDateFormats(dataIn, {
+        [optionName]: [dateMeasureOption(names[columnIndex])],
+      }) as QueryResultData;
+
+      expect((dataOut.rows[0][columnIndex] as Cell).text).toBe(
+        columnIndex === 0 || columnIndex === 3 ? '2013-12-04' : '2009-01-01',
+      );
+    });
+
+    it('rewrites all four indicator options in one pass', () => {
+      const dataIn = newIndicatorData();
+
+      const dataOut = applyDateFormats(dataIn, {
+        value: [dateMeasureOption('Max Date')],
+        secondary: [dateMeasureOption('Min Date')],
+        min: [dateMeasureOption('Range Start')],
+        max: [dateMeasureOption('Range End')],
+      }) as QueryResultData;
+
+      expect(dataOut.rows[0].map((cell) => (cell as Cell).text)).toStrictEqual([
+        '2013-12-04',
+        '2009-01-01',
+        '2009-01-01',
+        '2013-12-04',
+      ]);
+    });
+
+    it('accepts a value option that is a single object rather than an array', () => {
+      const dataIn = newIndicatorData();
+
+      const dataOut = applyDateFormats(dataIn, {
+        value: dateMeasureOption('Max Date'),
+      }) as QueryResultData;
+
+      expect((dataOut.rows[0][0] as Cell).text).toBe('2013-12-04');
     });
   });
 });

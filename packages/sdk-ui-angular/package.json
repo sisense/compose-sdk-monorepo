@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.36.0",
+  "version": "2.37.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "dist",
@@ -60,7 +60,8 @@
     "prebuild": "yarn sync-version && node ./scripts/generate-build-package-config.cjs",
     "postbuild": "rm ./src/package.json",
     "watch": "ng build --watch --configuration development",
-    "lint": "eslint . --quiet",
+    "lint": "run -T eslint .",
+    "lint:prune": "run -T eslint . --prune-suppressions",
     "lint:fix": "run lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

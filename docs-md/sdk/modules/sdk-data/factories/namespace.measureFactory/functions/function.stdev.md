@@ -11,6 +11,8 @@ title: stdev
 
 Calculates the standard deviation of the given numeric attribute based on a sample (a random subset of items).
 
+Note: Only numeric attributes are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

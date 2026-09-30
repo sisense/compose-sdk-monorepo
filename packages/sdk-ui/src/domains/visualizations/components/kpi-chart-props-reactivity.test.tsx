@@ -22,7 +22,7 @@ vi.mock('@/infra/contexts/sisense-context/sisense-context');
 
 // i18n resources are not loaded in a full-component test, so `t` would return raw keys. Resolve
 // interpolated keys against the real en dictionary so the readout assertions see the rendered
-// text (e.g. `+20.00%`, `60% of goal`); plain keys pass through unchanged.
+// text (e.g. `+20.00%`, `60% of goal (200)`); plain keys pass through unchanged.
 vi.mock('react-i18next', async (importOriginal) => {
   const mod = await importOriginal<typeof import('react-i18next')>();
   const t = (key: string, params?: Record<string, unknown>) => {
@@ -204,11 +204,11 @@ describe('KpiChart prop reactivity without remount', () => {
       expect(await findByText('▲')).toBeInTheDocument();
       expect(await findByText('+20.00%')).toBeInTheDocument();
 
-      // target: 120 of 200 is 60% of goal
+      // target: 120 of 200 is 60% of goal, captioned with the goal value
       update({
         dataOptions: { value: revenue, category, comparison: { type: 'target', target: 200 } },
       });
-      expect(await findByText('60% of goal')).toBeInTheDocument();
+      expect(await findByText('60% of goal (200)')).toBeInTheDocument();
       expect(queryByText('▲')).not.toBeInTheDocument();
 
       // value: shows the cost measure beside its label
@@ -217,7 +217,7 @@ describe('KpiChart prop reactivity without remount', () => {
       });
       expect(await findByText(formatKpiValue(LAST_COST))).toBeInTheDocument();
       expect(await findByText('Cost')).toBeInTheDocument();
-      expect(queryByText('60% of goal')).not.toBeInTheDocument();
+      expect(queryByText('60% of goal (200)')).not.toBeInTheDocument();
 
       // delta against cost: (120 - 90) / 90 = +33.33%
       update({

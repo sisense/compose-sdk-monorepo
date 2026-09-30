@@ -4,8 +4,9 @@ import * as DM from './__test-helpers__/sample-ecommerce.js';
 import * as filterFactory from './dimensional-model/filters/factory.js';
 import { MembersFilter } from './dimensional-model/filters/filters.js';
 import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
-import { FilterRelations, SortDirection } from './dimensional-model/interfaces.js';
+import type { FilterRelations, SortDirection } from './dimensional-model/interfaces.js';
 import * as measureFactory from './dimensional-model/measures/factory.js';
+import { DimensionalCalculatedMeasure } from './dimensional-model/measures/measures.js';
 import {
   AggregationTypes,
   CALCULATED_DIMENSION_JAQL_TYPE,
@@ -487,6 +488,22 @@ describe('utils', () => {
         formula: "IF([844DC-5D4] > 1000, 'High', 'Low')",
       });
     });
+
+    test('emits a valid seconds level for a Fusion seconds item stored without a bucket', () => {
+      const jaql = {
+        dim: '[Commerce.Date (Calendar)]',
+        datatype: 'datetime',
+        title: 'Time in Date',
+        table: 'Commerce',
+        column: 'Date',
+        dateTimeLevel: 'seconds',
+      } as const;
+
+      const element = createDimensionalElementFromJaql(jaql);
+
+      expect(element.jaql(true)).toMatchObject({ dateTimeLevel: 'seconds', bucket: '0' });
+      expect(element.jaql(true)).not.toHaveProperty('level');
+    });
   });
 
   describe('createMeasureHelper', () => {
@@ -548,11 +565,14 @@ describe('utils', () => {
         dataType: 'numeric',
         title: 'Revenue',
       });
-      expect(result).toStrictEqual(
-        measureFactory.customFormula('QUARTILE([Revenue], 2)', 'QUARTILE([042C4-365], 2)', {
-          '[042C4-365]': attribute,
-        }),
-      );
+      // ingest now carries the jaql datatype, and `customFormula` has no parameter for it
+      const expected = measureFactory.customFormula(
+        'QUARTILE([Revenue], 2)',
+        'QUARTILE([042C4-365], 2)',
+        { '[042C4-365]': attribute },
+      ) as DimensionalCalculatedMeasure;
+
+      expect(result).toStrictEqual(expected.withDatatype('numeric'));
     });
   });
 

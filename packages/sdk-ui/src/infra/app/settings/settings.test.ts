@@ -76,6 +76,7 @@ describe('getSettings function', () => {
     expect(settings.ai.featureFlags.queryDefinition).toBe(false);
     expect(settings.ai.quotaNotification).toBe(true);
     expect(settings.ai.featureModelType).toBe('sisense_managed');
+    expect(settings.user.id).toBe(mockGlobals.user._id);
     expect(settings.user.firstName).toBe('Test');
     expect(settings.user.lastName).toBe('Test');
     expect(settings.user.email).toBe('admin@sisense.com');

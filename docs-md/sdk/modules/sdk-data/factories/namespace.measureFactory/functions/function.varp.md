@@ -11,6 +11,8 @@ title: varp
 
 Calculates the variance of the given numeric attribute across the entire population (all items).
 
+Note: Only numeric attributes are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

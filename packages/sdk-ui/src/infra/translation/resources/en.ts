@@ -246,12 +246,40 @@ export const translation = {
     placeholders: {
       setFilter: 'Set filter',
     },
+    dateRange: {
+      /** Accessible names for the two end fields — no visible per-field label. */
+      from: 'From',
+      to: 'To',
+      /**
+       * The cross-end order fault, attached to whichever end was just edited.
+       * Parameterless, unlike the per-end format/nonexistent messages.
+       */
+      invertedFrom: 'Must be earlier than end date',
+      invertedTo: 'Must be later than start date',
+    },
     selectedCount: '{{count}} selected',
     allExceptCount: 'All except {{count}}',
     setupTitle: 'Set up a filter widget',
     setupSubtitle: 'Set a dimension and configure how the filter works',
     emptySetup: 'Set up filter',
-    conditionUnsupported: 'Condition is available for text and numeric fields',
+    conditionUnsupported: 'Condition is available for text, numeric, and date fields',
+    dateCondition: {
+      onOrBefore: 'On or before',
+      onOrAfter: 'On or after',
+      includingCurrent: 'including current',
+      includingCurrentLabel: 'Including current',
+      /**
+       * One interpolated key per shape — word order and pluralised {{grain}} both come from
+       * this template, not from concatenating separately-translated words in code.
+       */
+      // The `-` keeps values unescaped — without it, `/` in a typed date renders as `&#x2F;`.
+      summary: {
+        current: '{{- operator}} {{- grain}}',
+        relative: '{{- operator}} {{- count}} {{- grain}}',
+        relativeIncludingCurrent: '{{- operator}} {{- count}} {{- grain}} {{- includingCurrent}}',
+        date: '{{- operator}} {{- date}}',
+      },
+    },
     conditionNotRepresentable: 'This condition cannot be edited here',
     controls: {
       findInList: 'Find in the list',
@@ -274,6 +302,9 @@ export const translation = {
       /** Accessible names for Between min/max inputs (no visible labels). */
       betweenMin: 'Minimum',
       betweenMax: 'Maximum',
+      /** Accessible names for the Last / Next count stepper. */
+      increaseCount: 'Increase',
+      decreaseCount: 'Decrease',
     },
     calendar: {
       /** Multi-select trigger, before anything is chosen. */
@@ -332,6 +363,10 @@ export const translation = {
     info: {
       details: 'Widget Details',
       tooltip: 'Click to view full details',
+    },
+    chartTableToggle: {
+      switchToTable: 'Switch to Table',
+      switchToChart: 'Switch to Chart',
     },
     menu: {
       deleteWidget: 'Delete Widget',
@@ -493,11 +528,33 @@ export const translation = {
       invalidNumericRange: '"To" must be greater than "From"',
     },
     datetimeLevels: {
+      /* `_few`/`_many` only apply to CLDR locales with those plural categories (e.g. Russian);
+       * every locale's dictionary must share this shape, so English mirrors `_other`. */
       year: 'Year',
+      year_one: 'Year',
+      year_few: 'Years',
+      year_many: 'Years',
+      year_other: 'Years',
       quarter: 'Quarter',
+      quarter_one: 'Quarter',
+      quarter_few: 'Quarters',
+      quarter_many: 'Quarters',
+      quarter_other: 'Quarters',
       month: 'Month',
+      month_one: 'Month',
+      month_few: 'Months',
+      month_many: 'Months',
+      month_other: 'Months',
       week: 'Week',
+      week_one: 'Week',
+      week_few: 'Weeks',
+      week_many: 'Weeks',
+      week_other: 'Weeks',
       day: 'Day',
+      day_one: 'Day',
+      day_few: 'Days',
+      day_many: 'Days',
+      day_other: 'Days',
       aggrigatedHour: 'Hour (aggregated)',
       aggrigatedMinutesRoundTo15: '15-min (aggregated)',
     },
@@ -606,9 +663,13 @@ export const translation = {
       vsPriorWeek: 'vs prior week',
       vsPriorDay: 'vs prior day',
       vsPriorPeriod: 'vs prior period',
+      /** Relation of a `'delta'` comparison to its baseline measure; `label` is the measure's title. */
+      vsBaseline: 'vs {{label}}',
+      /** Appends the formatted baseline value to a relation caption, e.g. `'vs prior month (35.34M)'`. */
+      withBaseline: '{{label}} ({{baseline}})',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
+      ofGoal: '{{percent}} of goal ({{goalValue}})',
       toGo: '{{value}} to go',
     },
     /**

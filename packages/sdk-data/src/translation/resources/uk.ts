@@ -28,6 +28,7 @@ export const translation: TranslationDictionary = {
       membersFilterNullMember: 'MembersFilter у {{attributeId}} - member не може бути нульовим',
       unsupportedConditionFilter:
         'Jaql для {{attributeName}} містить непідтримуваний condition фільтр: {{filter}}',
+      invalidDateValue: 'Значення дати фільтра є недійсним Date',
       unexpectedFilterRelationsModelNode: 'Неочікуваний вузол моделі зв’язків фільтрів: {{node}}',
     },
     unsupportedDimensionalElement: 'Непідтримуваний тип елемента',

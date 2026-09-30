@@ -1,3 +1,4 @@
+import { getFiltersArray } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import { toReadableFilterLabel } from '@/domains/visualizations/core/query-definition/filter-to-readable-label';
@@ -23,11 +24,8 @@ describe('FILTER_CHIP_CHART_CASES', () => {
     if (!result.success) {
       return;
     }
-    const filters = result.data.filters;
-    expect(Array.isArray(filters)).toBe(true);
-    if (!Array.isArray(filters)) {
-      return;
-    }
+    // A preset may translate to one FilterRelations tree; its leaf filters get chip labels too.
+    const filters = getFiltersArray(result.data.filters);
     expect(filters.length).toBeGreaterThan(0);
     const chips = filters.map((filter) => toReadableFilterLabel(filter));
     expect(chips.some((chip) => chip.length > 0)).toBe(true);

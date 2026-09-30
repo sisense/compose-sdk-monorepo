@@ -1,6 +1,6 @@
 /** @vitest-environment jsdom */
 import { DateLevels, filterFactory } from '@sisense/sdk-data';
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 
 import * as jaqlDateYears from '@/__mocks__/data/mock-jaql-date-years.json';
@@ -8,7 +8,7 @@ import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '@/props';
+import type { SisenseContextProviderProps } from '@/props';
 
 import { FilterEditorContextProvider } from '../../../filter-editor-context.js';
 import { DatetimeExcludeConditionForm } from './datetime-exclude-condition-form.js';
@@ -21,12 +21,14 @@ const contextProviderProps: SisenseContextProviderProps = {
 
 describe('DatetimeExcludeConditionForm', () => {
   const filterChangeHandlerMock = vi.fn();
+  const silentChangeHandlerMock = vi.fn();
   const excludeFilter = filterFactory.members(DM.Commerce.Date.Years, ['2023-01-01T00:00:00'], {
     excludeMembers: true,
   });
 
   beforeEach(() => {
     filterChangeHandlerMock.mockClear();
+    silentChangeHandlerMock.mockClear();
     server.use(
       http.post('*/api/datasources/Sample%20ECommerce/jaql', () =>
         HttpResponse.json(jaqlDateYears),
@@ -48,8 +50,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -73,8 +77,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -126,8 +132,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -179,8 +187,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -228,8 +238,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={monthsFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -261,8 +273,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={basicFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -289,8 +303,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -314,8 +330,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
+            selected={true}
             multiSelectEnabled={false}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -339,8 +357,10 @@ describe('DatetimeExcludeConditionForm', () => {
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
+            selected={true}
             multiSelectEnabled={true}
             onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
           />
         </FilterEditorContextProvider>
       </SisenseContextProvider>,
@@ -355,6 +375,60 @@ describe('DatetimeExcludeConditionForm', () => {
     // Should call onChange with updated filter
     expect(filterChangeHandlerMock).toHaveBeenCalled();
   });
+  it('should narrow the members query by the parent filters', async () => {
+    const jaqlRequests: unknown[] = [];
+    server.use(
+      http.post('*/api/datasources/Sample%20ECommerce/jaql', async ({ request }) => {
+        jaqlRequests.push(await request.json());
+        return HttpResponse.json(jaqlDateYears);
+      }),
+    );
+    const parentFilters = [filterFactory.members(DM.Commerce.Gender, ['Female'])];
+
+    setup(
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorContextProvider
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters,
+            membersOnlyMode: false,
+            rankingVisible: true,
+          }}
+        >
+          <DatetimeExcludeConditionForm
+            filter={excludeFilter}
+            selected={true}
+            multiSelectEnabled={true}
+            onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
+          />
+        </FilterEditorContextProvider>
+      </SisenseContextProvider>,
+    );
+
+    await waitFor(() => expect(jaqlRequests).toHaveLength(1));
+    expect(jaqlRequests[0]).toEqual(
+      expect.objectContaining({
+        metadata: [
+          expect.objectContaining({
+            jaql: expect.objectContaining({
+              dim: DM.Commerce.Date.Years.expression,
+              level: 'years',
+            }),
+          }),
+          expect.objectContaining({
+            jaql: expect.objectContaining({
+              dim: DM.Commerce.Gender.expression,
+              filter: { members: ['Female'] },
+            }),
+            panel: 'scope',
+          }),
+        ],
+      }),
+    );
+  });
+
   describe('at Day granularity', () => {
     const daysExcludeFilter = filterFactory.members(
       DM.Commerce.Date.Days,
@@ -376,8 +450,10 @@ describe('DatetimeExcludeConditionForm', () => {
           >
             <DatetimeExcludeConditionForm
               filter={daysExcludeFilter}
+              selected={true}
               multiSelectEnabled={multiSelectEnabled}
               onChange={filterChangeHandlerMock}
+              onSilentChange={silentChangeHandlerMock}
             />
           </FilterEditorContextProvider>
         </SisenseContextProvider>,
@@ -420,6 +496,61 @@ describe('DatetimeExcludeConditionForm', () => {
           members: ['2013-11-04T00:00:00', '2013-11-08T00:00:00', '2013-11-12T00:00:00'],
         }),
       );
+    });
+  });
+
+  describe('when the multiselect toggle changes', () => {
+    const multiMemberFilter = filterFactory.members(
+      DM.Commerce.Date.Years,
+      ['2013-01-01T00:00:00', '2012-01-01T00:00:00'],
+      { excludeMembers: true },
+    );
+
+    const formTree = (multiSelectEnabled: boolean, selected: boolean) => (
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorContextProvider
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+            rankingVisible: true,
+          }}
+        >
+          <DatetimeExcludeConditionForm
+            filter={multiMemberFilter}
+            selected={selected}
+            multiSelectEnabled={multiSelectEnabled}
+            onChange={filterChangeHandlerMock}
+            onSilentChange={silentChangeHandlerMock}
+          />
+        </FilterEditorContextProvider>
+      </SisenseContextProvider>
+    );
+
+    const trimmedFilter = expect.objectContaining({
+      members: ['2012-01-01T00:00:00'],
+      config: expect.objectContaining({ enableMultiSelection: false, excludeMembers: true }),
+    });
+
+    it('should report the rebuilt filter silently while its section is not selected', async () => {
+      const { rerender } = setup(formTree(true, false));
+      await screen.findByLabelText('Searchable multi-select');
+
+      rerender(formTree(false, false));
+
+      expect(silentChangeHandlerMock).toHaveBeenLastCalledWith(trimmedFilter);
+      expect(filterChangeHandlerMock).not.toHaveBeenCalled();
+    });
+
+    it('should report the rebuilt filter normally while its section is selected', async () => {
+      const { rerender } = setup(formTree(true, true));
+      await screen.findByLabelText('Searchable multi-select');
+
+      rerender(formTree(false, true));
+
+      expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(trimmedFilter);
+      expect(silentChangeHandlerMock).not.toHaveBeenCalled();
     });
   });
 });

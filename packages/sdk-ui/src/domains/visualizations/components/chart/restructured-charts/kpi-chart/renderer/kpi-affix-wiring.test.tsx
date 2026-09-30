@@ -9,6 +9,10 @@
 import { render } from '@testing-library/react';
 
 import {
+  KPI_COMPARISON_TEXT_STYLE_DEFAULTS,
+  KPI_VALUE_TEXT_STYLE_DEFAULTS,
+} from '../design-options/design-options.js';
+import {
   COMPARISON_ARROW_EM,
   COMPARISON_PRIMARY_GAP_PX,
   CONDITIONAL_ICON_EM,
@@ -17,6 +21,9 @@ import {
 import { KpiComparison } from './kpi-comparison.js';
 import { KpiValue } from './kpi-value.js';
 import type { useAutoFitFontSize } from './use-auto-fit-font-size.js';
+
+const VALUE_TEXT_STYLE = KPI_VALUE_TEXT_STYLE_DEFAULTS;
+const COMPARISON_TEXT_STYLE = KPI_COMPARISON_TEXT_STYLE_DEFAULTS;
 
 type UseAutoFitFontSizeParams = Parameters<typeof useAutoFitFontSize>[0];
 
@@ -37,6 +44,13 @@ function lastAffixes(): unknown {
   return calls[calls.length - 1]?.[0]?.affixes;
 }
 
+/** The most recent mocked hook call's `text` and `font` inputs. */
+function lastFontInputs(): { text?: string; font?: unknown } {
+  const calls = useAutoFitFontSizeMock.mock.calls;
+  const params = calls[calls.length - 1]?.[0];
+  return { text: params?.text, font: params?.font };
+}
+
 describe('auto-fit affix wiring', () => {
   beforeEach(() => {
     useAutoFitFontSizeMock.mockClear();
@@ -46,6 +60,7 @@ describe('auto-fit affix wiring', () => {
     it('budgets the conditional icon as an em-scaled affix with the CSS margin as its gap', () => {
       render(
         <KpiValue
+          textStyle={VALUE_TEXT_STYLE}
           text="170.44K"
           textSize="auto"
           onColor={false}
@@ -61,6 +76,7 @@ describe('auto-fit affix wiring', () => {
     it('budgets a built-in (svg) icon as a fixed-width affix', () => {
       render(
         <KpiValue
+          textStyle={VALUE_TEXT_STYLE}
           text="170.44K"
           textSize="auto"
           onColor={false}
@@ -78,8 +94,63 @@ describe('auto-fit affix wiring', () => {
     });
 
     it('passes no affixes without an icon', () => {
-      render(<KpiValue text="170.44K" textSize="auto" onColor={false} scale="headline" />);
+      render(
+        <KpiValue
+          textStyle={VALUE_TEXT_STYLE}
+          text="170.44K"
+          textSize="auto"
+          onColor={false}
+          scale="headline"
+        />,
+      );
       expect(lastAffixes()).toBeUndefined();
+    });
+
+    it('transforms a text-icon affix like the host text (uppercase)', () => {
+      render(
+        <KpiValue
+          textStyle={{ ...VALUE_TEXT_STYLE, textTransform: 'uppercase' }}
+          text="170.44K"
+          textSize="auto"
+          onColor={false}
+          scale="headline"
+          icon={{ icon: { type: 'text', value: 'hot' }, expression: '0', operator: '>' }}
+        />,
+      );
+      expect(lastAffixes()).toEqual([
+        { text: 'HOT', emScale: CONDITIONAL_ICON_EM, gapPx: CONDITIONAL_ICON_GAP_PX },
+      ]);
+    });
+
+    it('measures with the resolved weight/style and the CSS-transformed text', () => {
+      render(
+        <KpiValue
+          textStyle={{ fontWeight: '400', fontStyle: 'italic', textTransform: 'uppercase' }}
+          text="No data"
+          textSize="auto"
+          onColor={false}
+          scale="headline"
+        />,
+      );
+      expect(lastFontInputs()).toEqual({
+        text: 'NO DATA',
+        font: expect.objectContaining({ weight: '400', style: 'italic' }),
+      });
+    });
+
+    it('measures with an explicit fontFamily when one is configured', () => {
+      render(
+        <KpiValue
+          textStyle={{ ...VALUE_TEXT_STYLE, fontFamily: 'Georgia' }}
+          text="42"
+          textSize="auto"
+          onColor={false}
+          scale="headline"
+        />,
+      );
+      expect(lastFontInputs().font).toEqual(
+        expect.objectContaining({ family: 'Georgia', weight: '700' }),
+      );
     });
   });
 
@@ -95,6 +166,7 @@ describe('auto-fit affix wiring', () => {
     it('budgets the comparison arrow (its actual glyph) as an em-scaled affix with the flex gap', () => {
       render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={deltaComparison}
           display="percent"
           showIcon={true}
@@ -111,6 +183,7 @@ describe('auto-fit affix wiring', () => {
     it('budgets icon + arrow together; the icon gap includes its margin plus the flex gap', () => {
       render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={{ ...deltaComparison, deltaPercent: 12 }}
           display="percent"
           showIcon={true}
@@ -133,6 +206,7 @@ describe('auto-fit affix wiring', () => {
     it('budgets an svg-path icon as a fixed-width affix including the flex gap', () => {
       render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={{ ...deltaComparison, deltaPercent: 12 }}
           display="percent"
           showIcon={true}
@@ -155,6 +229,28 @@ describe('auto-fit affix wiring', () => {
       ]);
     });
 
+    it('transforms a text-icon affix like the host text (uppercase)', () => {
+      render(
+        <KpiComparison
+          textStyle={{ ...COMPARISON_TEXT_STYLE, textTransform: 'uppercase' }}
+          comparison={deltaComparison}
+          display="percent"
+          showIcon={false}
+          scale="headline"
+          compact={false}
+          onColor={false}
+          conditionalIcon={{ icon: { type: 'text', value: 'hot' }, expression: '0', operator: '<' }}
+        />,
+      );
+      expect(lastAffixes()).toEqual([
+        {
+          text: 'HOT',
+          emScale: CONDITIONAL_ICON_EM,
+          gapPx: CONDITIONAL_ICON_GAP_PX + COMPARISON_PRIMARY_GAP_PX,
+        },
+      ]);
+    });
+
     it('measures the target line that display promotes to primary (headline auto-fit budget)', () => {
       const targetComparison = {
         type: 'target' as const,
@@ -170,6 +266,7 @@ describe('auto-fit affix wiring', () => {
 
       const { rerender } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={targetComparison}
           display="percent"
           showIcon={false}
@@ -183,6 +280,7 @@ describe('auto-fit affix wiring', () => {
 
       rerender(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={targetComparison}
           display="value"
           showIcon={false}
@@ -197,6 +295,7 @@ describe('auto-fit affix wiring', () => {
     it('budgets no arrow when showIcon is false, and none at all for a value-type comparison', () => {
       const { rerender } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={deltaComparison}
           display="percent"
           showIcon={false}
@@ -209,6 +308,7 @@ describe('auto-fit affix wiring', () => {
 
       rerender(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={{ type: 'value', value: 250000, label: 'Total Cost' }}
           display="percent"
           showIcon={true}
@@ -218,6 +318,39 @@ describe('auto-fit affix wiring', () => {
         />,
       );
       expect(lastAffixes()).toEqual([]);
+    });
+
+    it('measures the headline primary text with the resolved weight and style', () => {
+      render(
+        <KpiComparison
+          textStyle={{ fontWeight: '800', fontStyle: 'italic', textTransform: 'none' }}
+          comparison={deltaComparison}
+          display="percent"
+          showIcon={false}
+          scale="headline"
+          compact={false}
+          onColor={false}
+        />,
+      );
+      expect(lastFontInputs().font).toEqual(
+        expect.objectContaining({ weight: '800', style: 'italic' }),
+      );
+    });
+
+    it('uppercases the measured target readout when the transform is uppercase', () => {
+      render(
+        <KpiComparison
+          textStyle={{ fontWeight: '600', fontStyle: 'normal', textTransform: 'uppercase' }}
+          comparison={{ type: 'target', target: 100, percentOfTarget: 50, toGo: 50, label: 'goal' }}
+          display="percent"
+          showIcon={false}
+          scale="headline"
+          compact={false}
+          onColor={false}
+        />,
+      );
+      // `t` is stubbed to echo keys in this file, so the primary text is the raw key uppercased.
+      expect(lastFontInputs().text).toBe('KPI.TARGET.OFGOAL');
     });
   });
 });

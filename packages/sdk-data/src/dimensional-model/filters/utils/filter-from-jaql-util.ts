@@ -122,6 +122,19 @@ export const createFilterFromDateRangeFilterJaql = (
   rangeFilterJaql: RangeFilterJaql,
   guid: string,
 ): Filter => {
+  // fromNotEqual/toNotEqual are declared as `number` on ConditionFilterJaqlOptions (numeric
+  // conditions); dates publish them as ISO strings, so read them loosely here rather than
+  // widening the shared numeric type on RangeFilterJaql.
+  const { fromNotEqual, toNotEqual } = rangeFilterJaql as {
+    fromNotEqual?: string;
+    toNotEqual?: string;
+  };
+  if (typeof toNotEqual === 'string') {
+    return filterFactory.dateBefore(attribute, toNotEqual, { guid });
+  }
+  if (typeof fromNotEqual === 'string') {
+    return filterFactory.dateAfter(attribute, fromNotEqual, { guid });
+  }
   return filterFactory.dateRange(
     attribute,
     rangeFilterJaql.from as string,

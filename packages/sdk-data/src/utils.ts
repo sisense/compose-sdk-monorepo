@@ -30,7 +30,10 @@ import {
   SortDirection,
 } from './dimensional-model/interfaces.js';
 import * as measureFactory from './dimensional-model/measures/factory.js';
-import { DimensionalBaseMeasure } from './dimensional-model/measures/measures.js';
+import {
+  DimensionalBaseMeasure,
+  isDimensionalCalculatedMeasure,
+} from './dimensional-model/measures/measures.js';
 import { isDatetime, isNumber } from './dimensional-model/simple-column-types.js';
 import {
   AggregationType,
@@ -601,10 +604,15 @@ export function createMeasureByAggType(
 /**
  * Creates a measure from the provided parameters
  *
+ * @param jaql - The formula jaql to build the measure from.
+ * @param datetimeFormat - Mask the saved widget carried, applied when the formula answers with a date.
  * @returns calculated measure
  * @internal
  */
-export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeasure => {
+export const createCalculatedMeasureHelper = (
+  jaql: FormulaJaql,
+  datetimeFormat?: string,
+): CalculatedMeasure => {
   const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) => {
     if (typeof jaqlContextValue === 'string') {
       return jaqlContextValue;
@@ -612,21 +620,31 @@ export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeas
     return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
   });
 
+  // The saved Fusion mask only makes sense on a date formula. On any other one it would land in
+  // `format.number`, where a date pattern means nothing.
+  const savedMask = jaql.datatype && isDatetime(jaql.datatype) ? datetimeFormat : undefined;
   const measure = measureFactory.customFormula(
     jaql.title,
     jaql.formula,
     context,
-    undefined,
+    savedMask,
     jaql.description,
   );
+
+  // Fusion stamps the datatype at save time. When present it says the formula answers with a
+  // date, so it has to survive ingest; a bare `MIN`/`MAX` formula is read as one without it.
+  const typed =
+    jaql.datatype && isDimensionalCalculatedMeasure(measure)
+      ? measure.withDatatype(jaql.datatype)
+      : measure;
 
   // Apply sort if present in the JAQL
   if (jaql.sort) {
     const sortEnum = convertSort(jaql.sort);
-    return measure.sort(sortEnum) as CalculatedMeasure;
+    return typed.sort(sortEnum) as CalculatedMeasure;
   }
 
-  return measure;
+  return typed;
 };
 
 /**
@@ -680,7 +698,7 @@ export function createDimensionalElementFromJaql(
 
   const isFormulaJaql = 'formula' in jaql;
   if (isFormulaJaql) {
-    return createCalculatedMeasureHelper(jaql);
+    return createCalculatedMeasureHelper(jaql, datetimeFormat);
   }
 
   const dataSource = 'datasource' in jaql ? jaql.datasource : undefined;

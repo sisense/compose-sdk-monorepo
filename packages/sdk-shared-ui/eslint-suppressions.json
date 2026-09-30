@@ -1,0 +1,356 @@
+{
+  "scripts/vite/vite.umd.build.ts": {
+    "@typescript-eslint/naming-convention": {
+      "count": 1
+    },
+    "import/no-extraneous-dependencies": {
+      "count": 2
+    }
+  },
+  "src/lib/Breadcrumbs/Breadcrumbs.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    },
+    "react/display-name": {
+      "count": 2
+    }
+  },
+  "src/lib/Breadcrumbs/themes/breadcrumbsTheme.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Button/Button.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/Button/themes/buttonsTheme.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/CheckableList/CheckableList.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/Checkbox/Checkbox.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/Checkbox/themes/checkboxTheme.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Checkbox/themes/uiCustomization.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/DEPRECATED_Button/DEPRECATED_Button.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/DEPRECATED_Checkbox/DEPRECATED_Checkbox.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/DEPRECATED_Icon/DEPRECATED_Icon.test.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/lib/DEPRECATED_Icon/DEPRECATED_Icon.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/DEPRECATED_Toggle/DEPRECATED_Toggle.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/DEPRECATED_Tooltip/DEPRECATED_Tooltip.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/Dropdown/Dropdown.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/Dropdown/DropdownButton/DropdownButton.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/Dropdown/DropdownButton/DropdownButtonBody/DropdownButtonBody.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/Dropdown/DropdownButton/DropdownButtonSearch/DropdownButtonSearch.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/Dropdown/DropdownButton/hooks/useDropdownButtonSearch.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react-hooks/set-state-in-effect": {
+      "count": 1
+    }
+  },
+  "src/lib/Dropdown/hooks/useDropdown.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Dropdown/types.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/Icon/Icon.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/Icon/themes/iconTheme.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Input/Input.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    },
+    "react-hooks/set-state-in-effect": {
+      "count": 1
+    }
+  },
+  "src/lib/LazyLoader/LazyLoader.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/Menu/Confirmation/Confirmation.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Menu/Menu.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "src/lib/Menu/MenuItem/MenuItem.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  },
+  "src/lib/Menu/utils.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Popover/Popover.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/Popover/align.interface.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/RadioButton/RadioButton.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/lib/TablePagination/PaginationActionsComponent/PaginationActionsComponent.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/TablePagination/PaginationActionsComponent/themes/paginationActionsComponentTheme.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/TablePagination/TablePagination.tsx": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/TablePagination/TablePaginationContext.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/lib/TablePagination/themes/tablePaginationResponsiveDesign.ts": {
+    "@typescript-eslint/no-use-before-define": {
+      "count": 4
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/TablePagination/themes/tablePaginationTheme.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Tooltip/Tooltip.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/Tooltip/themes/tooltipTheme.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/Typography/Typography.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/lib/Typography/themes/typographyTheme.tsx": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/common/emotion-cache-provider.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    }
+  },
+  "src/lib/themes/types/SisenseTheme.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  }
+}

@@ -116,4 +116,32 @@ describe('formatNumbers', () => {
     // revenue has explicit numberFormatConfig → still formatted
     expect(result.rows[0][1].displayValue).toBe('$12.35K');
   });
+
+  it('leaves a datetime column untouched, even when it carries a numberFormatConfig', () => {
+    const table: DataTable = {
+      columns: [
+        { name: 'Max Date', type: 'datetime', index: 0, direction: 0 },
+        { name: 'revenue', type: 'number', index: 1, direction: 0 },
+      ],
+      rows: [[{ displayValue: '2010-12-31' }, { displayValue: '12345.12345' }]],
+    };
+
+    const chartDataOptions: TableDataOptions = {
+      columns: [
+        {
+          name: 'Max Date',
+          type: 'datetime',
+          enabled: true,
+          numberFormatConfig: { name: 'Currency' },
+        },
+        { name: 'revenue', type: 'number', enabled: true },
+      ],
+    };
+
+    const result = formatNumbers(table, chartDataOptions as TableDataOptionsInternal);
+
+    expect(result.rows[0][0]).toStrictEqual({ displayValue: '2010-12-31' });
+    // numeric control: the numeric column in the same table is still formatted
+    expect(result.rows[0][1].displayValue).toBe('12.35K');
+  });
 });

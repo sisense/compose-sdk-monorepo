@@ -154,6 +154,8 @@ TypeScript type aliases for components and hooks listed above
 - [KpiSparklineStyleOptions](type-alias.KpiSparklineStyleOptions.md)
 - [KpiSparklineType](type-alias.KpiSparklineType.md)
 - [KpiTextSize](type-alias.KpiTextSize.md)
+- [KpiTextStyle](type-alias.KpiTextStyle.md)
+- [KpiTextTransform](type-alias.KpiTextTransform.md)
 - [KpiTitleAlign](type-alias.KpiTitleAlign.md)
 - [KpiTitleStyleOptions](type-alias.KpiTitleStyleOptions.md)
 - [KpiValueMode](type-alias.KpiValueMode.md)
@@ -173,6 +175,7 @@ TypeScript type aliases for components and hooks listed above
 - [ModuleRequirement](type-alias.ModuleRequirement.md) <Badge type="beta" text="Beta" />
 - [MonthOfYear](type-alias.MonthOfYear.md)
 - [MultiColumnValueToColorMap](type-alias.MultiColumnValueToColorMap.md)
+- [NarrativeWidgetStyleOptions](type-alias.NarrativeWidgetStyleOptions.md) <Badge type="beta" text="Beta" />
 - [Navigator](type-alias.Navigator.md)
 - [NestedTranslationResources](type-alias.NestedTranslationResources.md)
 - [NlqResult](type-alias.NlqResult.md)

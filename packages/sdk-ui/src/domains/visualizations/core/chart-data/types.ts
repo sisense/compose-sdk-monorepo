@@ -150,6 +150,20 @@ export type IndicatorChartData = {
   min?: number;
   max?: number;
   /**
+   * Display text of the matching numeric field, set only when the query result already carries
+   * one, as it does for a date measure. The numbers stay numbers, so geometry and coloring are
+   * unaffected; a field left undefined is rendered by the number formatter as before.
+   *
+   * @internal
+   */
+  valueText?: string;
+  /** {@inheritDoc IndicatorChartData.valueText} */
+  secondaryText?: string;
+  /** {@inheritDoc IndicatorChartData.valueText} */
+  minText?: string;
+  /** {@inheritDoc IndicatorChartData.valueText} */
+  maxText?: string;
+  /**
    * Resolved values of formula-driven color condition measures, keyed by their query
    * column name (see `DataColorCondition.valueMeasure`).
    *

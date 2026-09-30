@@ -93,6 +93,21 @@ Color options for data bars for this measure in the pivot table
 
 ***
 
+### dateFormat
+
+> **dateFormat**?: `string`
+
+Date format for a measure that produces a date, namely a `min` or `max` aggregation over a date
+column. Uses [date-fns `format` token syntax](https://date-fns.org/v2.29.3/docs/format), the
+same as [StyledColumn.dateFormat](interface.StyledColumn.md#dateformat). When it is not set, such a measure is displayed with
+the same format as a date column of the same granularity. It has no effect on a numeric
+measure.
+
+Applied by the `Table`, `IndicatorChart` and `PivotTable` components. Other charts do not use
+it.
+
+***
+
 ### name
 
 > **name**?: `string`

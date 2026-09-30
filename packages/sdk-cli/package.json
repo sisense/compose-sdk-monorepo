@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.36.0",
+  "version": "2.37.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -39,7 +39,8 @@
     "build": "run prebuild && tsc --build tsconfig.build.json",
     "build:prod": "run prebuild && tsc --project tsconfig.prod.json",
     "clean": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
-    "lint": "eslint . --quiet",
+    "lint": "run -T eslint .",
+    "lint:prune": "run -T eslint . --prune-suppressions",
     "lint:fix": "run lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

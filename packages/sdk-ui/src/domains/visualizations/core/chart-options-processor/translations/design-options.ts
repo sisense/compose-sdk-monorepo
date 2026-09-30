@@ -6,6 +6,7 @@ import {
   Convolution,
   FunnelSeriesLabels,
   KpiIconCondition,
+  KpiTextTransform,
   KpiTitleAlign,
   LegendOptions,
   LineOptions,
@@ -112,6 +113,19 @@ export type CalendarHeatmapChartDesignOptions = BaseDesignOptionsType & {
 };
 
 /**
+ * Fully resolved typography for one KPI card text element -- the translated form of the public
+ * `KpiTextStyle` with every default filled in (see `resolveKpiTextStyle`). `fontFamily` stays
+ * optional: `undefined` means "inherit the card's theme font".
+ * @internal
+ */
+export type KpiTextStyleInternal = {
+  fontFamily?: string;
+  fontWeight: string;
+  fontStyle: string;
+  textTransform: KpiTextTransform;
+};
+
+/**
  * Resolved, internal-use design options for a KPI chart -- the translated form of
  * {@link KpiStyleOptions} (see `translateKpiStyleOptionsToDesignOptions`), consumed directly by
  * `KpiChartRenderer`.
@@ -127,6 +141,8 @@ export type KpiChartDesignOptions = BaseDesignOptionsType & {
     textSize: 'auto' | number;
     noDataText?: string;
     conditionalIcons?: KpiIconCondition[];
+    /** Resolved typography of the headline value. */
+    textStyle: KpiTextStyleInternal;
   };
   title: {
     /** Whether the whole title section (title text and category caption) is shown. */
@@ -139,6 +155,8 @@ export type KpiChartDesignOptions = BaseDesignOptionsType & {
     showCategoryTitle: boolean;
     /** Horizontal alignment of the title section's content. */
     align: KpiTitleAlign;
+    /** Resolved typography of the title text. */
+    textStyle: KpiTextStyleInternal;
   };
   card: {
     backgroundColor?: string;
@@ -160,6 +178,8 @@ export type KpiChartDesignOptions = BaseDesignOptionsType & {
     color?: DataColorOptions;
     showIcon: boolean;
     conditionalIcons?: KpiIconCondition[];
+    /** Resolved typography of the primary readout line. */
+    textStyle: KpiTextStyleInternal;
   };
 };
 

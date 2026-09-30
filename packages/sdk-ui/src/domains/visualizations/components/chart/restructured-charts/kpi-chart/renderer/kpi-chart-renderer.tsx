@@ -318,13 +318,11 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
 
   // The aria summary must voice exactly what the card shows (see `summarizeComparisonForAria`),
   // so it gets the same `designOptions.comparison` text customizations the visible readout
-  // renders with: the label override (also fed to `{{goal}}` interpolation) and the target
-  // string templates.
+  // renders with: the label override (the whole delta caption, or the `{{goal}}` name) and the
+  // target string templates.
   const comparisonSummary = comparisonDisplay
     ? summarizeComparisonForAria(
-        designOptions.comparison.label !== undefined
-          ? { ...comparisonDisplay, label: designOptions.comparison.label }
-          : comparisonDisplay,
+        comparisonDisplay,
         comparisonNumberFormatConfig,
         t,
         designOptions.comparison.display,
@@ -332,6 +330,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
           ofGoalText: designOptions.comparison.ofGoalText,
           toGoText: designOptions.comparison.toGoText,
         },
+        designOptions.comparison.label,
       )
     : undefined;
   const ariaLabel = comparisonSummary
@@ -429,6 +428,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
           period={period}
           onColor={onColor}
           align={designOptions.title.align}
+          textStyle={designOptions.title.textStyle}
           areaRef={titleRef}
         />
       }
@@ -437,6 +437,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
           text={displayedValue}
           color={value !== undefined ? valueColor ?? accentColor : undefined}
           textSize={designOptions.value.textSize}
+          textStyle={designOptions.value.textStyle}
           icon={conditionalIcon}
           onColor={onColor}
           scale={valueScale}
@@ -453,6 +454,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
             display={designOptions.comparison.display}
             showIcon={designOptions.comparison.showIcon}
             conditionalIcon={comparisonConditionalIcon}
+            textStyle={designOptions.comparison.textStyle}
             labelOverride={designOptions.comparison.label}
             targetTextOverrides={{
               ofGoalText: designOptions.comparison.ofGoalText,

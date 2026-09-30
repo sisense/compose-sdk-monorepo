@@ -30,6 +30,10 @@ import type {
 import { isFunctionCall, isRecordStringUnknown } from '../../types.js';
 import { isDimensionAxisType } from './axis-type-detection.js';
 import { getChartTypeMetadata, VALID_DATA_OPTIONS_KEYS } from './chart-type-schemas.js';
+import {
+  translateKpiComparisonFromJSON,
+  translateKpiValueModeFromJSON,
+} from './translate-kpi-data-options.js';
 
 /**
  * Translates a single table column item (dimension or measure) to CSDK format.
@@ -190,6 +194,24 @@ export function translateDataOptionsFromJSON(
     // Skip seriesToColorMap - it's not translated, just passed through
     if (axisKey === 'seriesToColorMap') {
       result[axisKey] = axisValue;
+      continue;
+    }
+
+    if (axisKey === 'valueMode') {
+      const valueModeResult = translateKpiValueModeFromJSON(axisValue);
+      if (valueModeResult.success) {
+        result[axisKey] = valueModeResult.data;
+      } else {
+        translationErrors.push(...valueModeResult.errors);
+      }
+      continue;
+    }
+
+    if (axisKey === 'comparison') {
+      const comparison = translateKpiComparisonFromJSON(axisValue, context, translationErrors);
+      if (comparison) {
+        result[axisKey] = comparison;
+      }
       continue;
     }
 

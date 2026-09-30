@@ -81,6 +81,9 @@ describe('QueryPill', () => {
     await waitFor(() => {
       expect(screen.getByRole('tooltip')).toHaveTextContent('Type: Dimension');
       expect(screen.getByRole('tooltip')).toHaveTextContent('Column: Category.Category');
+      const labels = Array.from(screen.getByRole('tooltip').querySelectorAll('strong'));
+      expect(labels.map((label) => label.textContent)).toEqual(['Type:', 'Column:']);
+      labels.forEach((label) => expect(label).toHaveStyle({ fontWeight: '600' }));
       expect(screen.getByRole('tooltip')).not.toHaveTextContent('Formula:');
     });
   });
@@ -163,6 +166,62 @@ describe('QueryPill', () => {
     };
     renderWithI18n(<QueryPill item={item} maxLength={0} />);
     expect(screen.getByText('abcdefghijklmnopqrstuvwxyz')).toBeInTheDocument();
+  });
+
+  it('shows a relations tooltip as filter rows joined by AND/OR', async () => {
+    const user = userEvent.setup();
+    const item: QueryPillItem = {
+      type: 'pill',
+      label: 'Dashboard Filters',
+      category: 'filter',
+      relationsTooltip: {
+        operator: 'AND',
+        items: [
+          { column: 'Age range', value: '0-18' },
+          {
+            operator: 'OR',
+            items: [
+              { column: 'Country', value: 'ends with "a"' },
+              { column: 'Revenue', value: '< 50' },
+            ],
+          },
+        ],
+      },
+    };
+    renderWithI18n(<QueryPill item={item} showTooltip />);
+    await user.hover(screen.getByText('Dashboard Filters'));
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip');
+      expect(tooltip).toHaveTextContent(
+        'Age range: 0-18AND(Country: ends with "a"ORRevenue: < 50)',
+      );
+      expect(tooltip).not.toHaveTextContent('logic.');
+      expect(tooltip).not.toHaveTextContent('Type:');
+    });
+  });
+
+  it('shows grouped filter labels in the tooltip', async () => {
+    const user = userEvent.setup();
+    const item: QueryPillItem = {
+      type: 'pill',
+      label: 'Dashboard Filters',
+      category: 'filter',
+      groupedTooltipLines: [
+        { column: 'Region', value: 'North' },
+        { column: 'Country', value: 'USA' },
+      ],
+      color: { bg: '#fcf1cc', text: '#131F29' },
+    };
+    renderWithI18n(<QueryPill item={item} showTooltip />);
+    await user.hover(screen.getByText('Dashboard Filters'));
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip');
+      expect(tooltip).toHaveTextContent('Region: North');
+      expect(tooltip).toHaveTextContent('Country: USA');
+      expect(tooltip).not.toHaveTextContent('Type:');
+      expect(tooltip.querySelector('strong')?.textContent).toBe('Region');
+      expect(tooltip.querySelector('strong')).toHaveStyle({ fontWeight: '600' });
+    });
   });
 });
 
@@ -277,6 +336,51 @@ describe('QueryDefinition', () => {
     expect(screen.getByText('Year')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /Show less/i }));
     expect(screen.queryByText('Year')).not.toBeInTheDocument();
+  });
+
+  it('shows all pills when maxVisiblePills covers the full set', () => {
+    const attr = createAttribute({
+      name: 'Region',
+      type: 'text-attribute',
+      expression: '[Geography.Region]',
+    });
+    const measure = createMeasure({
+      name: 'Sum of Sales',
+      aggregation: 'sum',
+      attribute: createAttribute({
+        name: 'Revenue',
+        type: 'numeric',
+        expression: '[Commerce.Revenue]',
+      }),
+    });
+    renderWithI18n(
+      <QueryDefinition
+        query={{
+          measures: [measure],
+          dimensions: [
+            attr,
+            createAttribute({
+              name: 'Category',
+              type: 'text-attribute',
+              expression: '[Category.Category]',
+            }),
+            createAttribute({
+              name: 'Product',
+              type: 'text-attribute',
+              expression: '[Product.Name]',
+            }),
+            createAttribute({
+              name: 'Year',
+              type: 'date',
+              expression: '[Date.Year]',
+            }),
+          ],
+        }}
+        maxVisiblePills={5}
+      />,
+    );
+    expect(screen.getByText('Year')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Show \d+ more/i })).not.toBeInTheDocument();
   });
 
   it('renders filters with "where" connector', () => {
@@ -419,10 +523,92 @@ describe('QueryDefinition', () => {
       />,
     );
     // The table query itself now includes the synthesized Trend/Forecast measures (matching
-    // what actually renders/exports), so the pill summary reflects them too. The pill label
-    // comes from the underlying measure's own (internal) name, not Table's friendly wrapper name.
+    // what actually renders/exports), so the pill summary reflects them too. Their internal
+    // `$trend_` / `$forecast_` names are shown as readable labels.
     expect(screen.getByText('Revenue')).toBeInTheDocument();
-    expect(screen.getByText('$trend_Revenue')).toBeInTheDocument();
-    expect(screen.getByText('$forecast_Revenue')).toBeInTheDocument();
+    expect(screen.getByText('Revenue trend')).toBeInTheDocument();
+    expect(screen.getByText('Revenue forecast')).toBeInTheDocument();
+  });
+
+  it('appends a custom grouped filter pill after query chips', async () => {
+    const user = userEvent.setup();
+    const region = createAttribute({
+      name: 'Region',
+      type: 'text-attribute',
+      expression: '[Geography.Region]',
+    });
+    const country = createAttribute({
+      name: 'Country',
+      type: 'text-attribute',
+      expression: '[Country.Country]',
+    });
+    renderWithI18n(
+      <QueryDefinition
+        query={{
+          dimensions: [region],
+          filters: [filterFactory.members(region, ['North'])],
+        }}
+        customPills={[
+          {
+            category: 'filter',
+            value: [
+              filterFactory.members(country, ['USA']),
+              filterFactory.members(country, ['UK']),
+            ],
+            label: 'Dashboard Filters',
+            color: { bg: '#fcf1cc', text: '#131F29' },
+          },
+        ]}
+        maxPillLength={0}
+      />,
+    );
+    expect(screen.getByText('Region: North')).toBeInTheDocument();
+    expect(screen.getByText('Dashboard Filters')).toBeInTheDocument();
+    await user.hover(screen.getByText('Dashboard Filters'));
+    await waitFor(() => {
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Country: USA');
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Country: UK');
+    });
+  });
+
+  it('keeps a pinned custom pill visible when collapsing', () => {
+    const attr = createAttribute({
+      name: 'Region',
+      type: 'text-attribute',
+      expression: '[Geography.Region]',
+    });
+    const dimensions = [
+      attr,
+      createAttribute({
+        name: 'Category',
+        type: 'text-attribute',
+        expression: '[Category.Category]',
+      }),
+      createAttribute({
+        name: 'Product',
+        type: 'text-attribute',
+        expression: '[Product.Name]',
+      }),
+      createAttribute({
+        name: 'Year',
+        type: 'date',
+        expression: '[Date.Year]',
+      }),
+    ];
+    renderWithI18n(
+      <QueryDefinition
+        query={{ dimensions }}
+        customPills={[
+          {
+            category: 'filter',
+            value: [filterFactory.members(attr, ['North'])],
+            label: 'Dashboard Filters',
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByText('Dashboard Filters')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Show 1 more/i })).toBeInTheDocument();
+    expect(screen.queryByText('Year')).not.toBeInTheDocument();
   });
 });

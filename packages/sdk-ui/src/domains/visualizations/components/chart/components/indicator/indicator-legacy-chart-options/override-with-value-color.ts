@@ -1,4 +1,6 @@
 /* eslint-disable max-params */
+import { isDateMeasure } from '@sisense/sdk-data';
+
 import {
   ConditionalDataColorOptions,
   DataColorOptions,
@@ -38,7 +40,7 @@ export function getValueColorOptions(
   colorConditionValues?: Record<string, number>,
 ) {
   const value = dataOptions.value?.[0];
-  if (value && 'color' in value && value.color) {
+  if (value && 'color' in value && value.color && !isDateMeasure(value.column)) {
     return withResolvedConditionValues(colorConditionValues)(value.color);
   }
   return undefined;

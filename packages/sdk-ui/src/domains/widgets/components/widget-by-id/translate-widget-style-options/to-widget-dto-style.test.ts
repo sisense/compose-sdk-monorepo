@@ -1819,6 +1819,70 @@ describe('to-widget-dto-style', () => {
       );
     });
 
+    it('round-trips textStyle on value, title and comparison without touching it', () => {
+      const styleOptions: KpiStyleOptions = {
+        value: { textStyle: { fontWeight: '400', fontStyle: 'italic' } },
+        title: { textStyle: { textTransform: 'none', fontFamily: 'Georgia' } },
+        comparison: { textStyle: { fontWeight: '800', textTransform: 'uppercase' } },
+      };
+      const widgetDto = {
+        type: 'kpi',
+        subtype: 'kpi/standard' as WidgetSubtype,
+        style: toKpiWidgetStyle(styleOptions),
+        metadata: { panels: [] },
+      } as unknown as WidgetDto;
+
+      const restored = extractStyleOptions('kpi', widgetDto) as KpiStyleOptions;
+      expect(restored.value?.textStyle).toEqual(styleOptions.value?.textStyle);
+      expect(restored.title?.textStyle).toEqual(styleOptions.title?.textStyle);
+      expect(restored.comparison?.textStyle).toEqual(styleOptions.comparison?.textStyle);
+    });
+
+    it('maps textStyle on value, title and comparison to the DTO as literal, unchanged fields', () => {
+      expect(
+        toKpiWidgetStyle({
+          value: { textSize: 24, textStyle: { fontWeight: '400', fontStyle: 'italic' } },
+          title: { text: 'Revenue', textStyle: { textTransform: 'none', fontFamily: 'Georgia' } },
+          comparison: {
+            showIcon: false,
+            textStyle: { fontWeight: '800', textTransform: 'uppercase' },
+          },
+        }),
+      ).toEqual({
+        value: { textSize: 24, textStyle: { fontWeight: '400', fontStyle: 'italic' } },
+        title: { text: 'Revenue', textStyle: { textTransform: 'none', fontFamily: 'Georgia' } },
+        comparison: {
+          showIcon: false,
+          textStyle: { fontWeight: '800', textTransform: 'uppercase' },
+        },
+      });
+    });
+
+    it('extracts textStyle on value, title and comparison from a hand-written DTO as literal fields', () => {
+      const widgetDto = {
+        type: 'kpi',
+        subtype: 'kpi/standard' as WidgetSubtype,
+        style: {
+          value: { textSize: 24, textStyle: { fontWeight: '400', fontStyle: 'italic' } },
+          title: { text: 'Revenue', textStyle: { textTransform: 'none', fontFamily: 'Georgia' } },
+          comparison: {
+            showIcon: false,
+            textStyle: { fontWeight: '800', textTransform: 'uppercase' },
+          },
+        } satisfies KpiWidgetStyle,
+        metadata: { panels: [] },
+      } as unknown as WidgetDto;
+
+      expect(extractStyleOptions('kpi', widgetDto)).toEqual({
+        value: { textSize: 24, textStyle: { fontWeight: '400', fontStyle: 'italic' } },
+        title: { text: 'Revenue', textStyle: { textTransform: 'none', fontFamily: 'Georgia' } },
+        comparison: {
+          showIcon: false,
+          textStyle: { fontWeight: '800', textTransform: 'uppercase' },
+        },
+      } satisfies KpiStyleOptions);
+    });
+
     it('round-trips every style group, controls or not', () => {
       const styleOptions: KpiStyleOptions = {
         layout: 'comparison-first',

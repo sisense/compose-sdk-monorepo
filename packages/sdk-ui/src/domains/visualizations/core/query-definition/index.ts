@@ -1,4 +1,4 @@
-export { QueryDefinition } from './query-definition';
+export { QueryDefinition, DEFAULT_MAX_VISIBLE_PILLS } from './query-definition';
 export type { QueryDefinitionProps } from './query-definition';
 export { QueryPill } from './query-pill';
 export type { QueryPillProps } from './query-pill';
@@ -8,7 +8,9 @@ export { getQueryPillTooltipModel } from './compose-code-to-readable';
 export type { TooltipModel } from './compose-code-to-readable';
 export type {
   QueryPillCategory,
+  QueryPillColor,
   QueryPillItem,
+  QueryDefinitionCustomPill,
   ConnectorItem,
   QueryDefinitionViewModel,
 } from './types';

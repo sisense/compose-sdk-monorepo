@@ -12,6 +12,8 @@ title: subtract
 
 Creates a calculated measure by subtracting two given numbers or measures. Subtracts `value2` from `value1`.
 
+Note: Only numbers and numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

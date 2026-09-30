@@ -11,6 +11,8 @@ and the data from the previous year for the given measure.
 
 The date dimension will be dynamically taken from the query that uses the returned measure.
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

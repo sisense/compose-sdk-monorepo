@@ -88,6 +88,51 @@ describe('createHeaderCellHighlightFormatter', () => {
     expect(cell.state?.isSelected).toBeFalsy();
   });
 
+  it('should not highlight a measure header cell that matches a highlighted row item', () => {
+    // a date measure now sends the same dim, datatype and level as the row it aggregates, so the
+    // panel is the only thing left that separates a measure title from a member
+    const dateMeasureHeaderItem = {
+      jaql: {
+        dim: '[Commerce.Date (Calendar)]',
+        datatype: 'datetime',
+        level: 'days',
+      },
+      panel: 'measures',
+    } as JaqlPanel;
+    const jaqlWithExcludeHighlight = {
+      metadata: [
+        {
+          panel: 'rows',
+          jaql: {
+            dim: '[Commerce.Date (Calendar)]',
+            datatype: 'datetime',
+            level: 'days',
+            in: {
+              selected: {
+                jaql: {
+                  datatype: 'datetime',
+                  filter: {
+                    exclude: { members: ['2013-01-01T00:00:00'] },
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
+    } as JaqlRequest;
+    const cell = {
+      value: 'Max Date',
+      state: {},
+      userType: 'user',
+    } as PivotTreeNode;
+
+    const formatter = createHeaderCellHighlightFormatter();
+    formatter(cell, dateMeasureHeaderItem, jaqlWithExcludeHighlight);
+
+    expect(cell.state?.isSelected).toBeFalsy();
+  });
+
   it('should not highlight subtotal cell', () => {
     const cell = {
       value: 'value1',

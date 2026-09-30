@@ -1,0 +1,29 @@
+{
+  "scripts/copy-templates.mjs": {
+    "no-undef": {
+      "count": 5
+    }
+  },
+  "src/create-plugin-handler.test.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 6
+    },
+    "@typescript-eslint/require-await": {
+      "count": 12
+    }
+  },
+  "src/create-plugin.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  }
+}

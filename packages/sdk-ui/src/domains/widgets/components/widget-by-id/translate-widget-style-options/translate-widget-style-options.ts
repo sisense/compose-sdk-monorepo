@@ -1143,8 +1143,10 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
     case 'richtexteditor':
       return (style as TextWidgetDtoStyle).content;
     case 'dashboardnarrative':
-      // Container design is flattened separately by the pipeline; the widget has no keys of its own.
-      return extractNarrativeWidgetStyleOptions() as ChartStyleOptions;
+      // Container design is flattened separately by the pipeline; the widget's own key is its height.
+      return extractNarrativeWidgetStyleOptions(
+        style as { automaticHeight?: boolean },
+      ) as ChartStyleOptions;
     case 'WidgetsTabber': // DTO type from Fusion (maps to 'tabber-buttons' in CSDK)
       return extractTabberButtonsWidgetStyleOptions(style as TabberWidgetDtoStyle);
     case 'filter':

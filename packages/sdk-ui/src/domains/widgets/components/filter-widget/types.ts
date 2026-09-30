@@ -129,10 +129,10 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
  *
  * - `'members'`      — searchable member-select dropdown. Implemented.
  * - `'calendar'`     — calendar taking one date or several, for datetime attributes only. Implemented.
- * - `'dateRange'`    — date-range picker. Planned.
+ * - `'range'`        — two-field From/To date-range picker, for datetime attributes only. Implemented.
  * - `'period'`       — relative-period picker. Planned.
  * - `'numericRange'` — numeric range slider. Planned.
- * - `'condition'`    — string condition builder with optional AND/OR chaining (text attributes only). Implemented.
+ * - `'condition'`    — condition builder for text (with optional AND/OR chaining), numeric, and date attributes. Implemented.
  *
  * @example
  * The following selects the member-select dropdown rendering:
@@ -145,7 +145,7 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
 export type FilterWidgetFilterType =
   | 'members'
   | 'calendar'
-  | 'dateRange'
+  | 'range'
   | 'period'
   | 'numericRange'
   | 'condition';
@@ -157,7 +157,7 @@ export type FilterWidgetFilterType =
  * @example
  * ```tsx
  * filterWidgetFilterTypeLabels['members'] // → 'List'
- * filterWidgetFilterTypeLabels['dateRange'] // → 'Date Range'
+ * filterWidgetFilterTypeLabels['range'] // → 'Range'
  * ```
  *
  * @alpha
@@ -165,7 +165,7 @@ export type FilterWidgetFilterType =
 export const filterWidgetFilterTypeLabels: Record<FilterWidgetFilterType, string> = {
   members: 'List',
   calendar: 'Calendar',
-  dateRange: 'Date Range',
+  range: 'Range',
   period: 'Period',
   numericRange: 'Numeric Range',
   condition: 'Condition',
@@ -202,8 +202,9 @@ export interface FilterWidgetProps {
   title?: string;
   /**
    * How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
-   * `'condition'` renders a string condition control for text attributes, and `'calendar'`
-   * a calendar for datetime attributes.
+   * `'condition'` renders a condition control for text, numeric, or datetime attributes,
+   * `'calendar'` a calendar for datetime attributes, and `'range'` a two-field From/To
+   * date-range picker for datetime attributes.
    * Additional types will be added as they are implemented.
    *
    * @defaultValue 'members'

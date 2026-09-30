@@ -253,6 +253,48 @@ describe('Create Data Table', () => {
       ]);
     });
 
+    it('shows a datetime measure column as its cell text and sorts it by its data value', () => {
+      const dataWithDateMeasure = {
+        columns: [
+          { name: 'Years', type: 'datetime' },
+          { name: 'Max Date', type: 'datetime' },
+          { name: 'Total Revenue', type: 'number' },
+        ],
+        rows: [
+          [
+            { data: '2010-01-01T00:00:00', text: '2010' },
+            { data: '2010-12-31T00:00:00', text: '2010-12-31' },
+            { data: 6781, text: '6781' },
+          ],
+        ],
+      };
+
+      const dataTable = createDataTableFromData(dataWithDateMeasure);
+
+      // the trailing cell of every row is the generated $rownum column
+      expect(dataTable.rows.map((row) => row.slice(0, 3))).toEqual([
+        [
+          // date dimension control: unchanged
+          {
+            displayValue: '2010',
+            rawValue: '2010-01-01T00:00:00',
+            compareValue: { ...compareBase, value: 1262304000000 },
+          },
+          {
+            displayValue: '2010-12-31',
+            rawValue: '2010-12-31T00:00:00',
+            compareValue: { ...compareBase, value: 1293753600000 },
+          },
+          // numeric measure control: unchanged
+          {
+            displayValue: '6781',
+            rawValue: 6781,
+            compareValue: { ...compareBase, value: 6781 },
+          },
+        ],
+      ]);
+    });
+
     it('works with aggregate datetime', () => {
       const dataAgg15 = {
         columns: [

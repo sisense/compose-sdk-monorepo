@@ -31,6 +31,29 @@ const typescriptEslintPlugin = {
 };
 
 /**
+ * Raises every enabled rule of a preset collection to `error`, preserving each rule's options.
+ * Disabled entries pass through untouched.
+ *
+ * Severity here is binary: a rule is either enforced or off. The middle severity is a finding
+ * nobody has to act on, so it accumulates silently and never gets fixed; pre-existing violations
+ * are frozen in each workspace's `eslint-suppressions.json` instead. Suppressions record a
+ * per-file, per-rule count of pre-existing violations; a file fails once a rule's count exceeds
+ * its recorded value (swapping one violation for another of the same rule in the same file is
+ * not detected — the ratchet is a count, not a fingerprint).
+ *
+ * @param {Record<string, unknown>} rules - Rule collection from a plugin's `recommended` preset.
+ * @returns {Record<string, unknown>} The same collection with every enabled rule set to `error`.
+ */
+const toBinarySeverity = (rules) =>
+  Object.fromEntries(
+    Object.entries(rules).map(([ruleId, entry]) => {
+      const [severity, ...options] = Array.isArray(entry) ? entry : [entry];
+      const disabled = severity === 'off' || severity === 0;
+      return [ruleId, disabled ? entry : ['error', ...options]];
+    }),
+  );
+
+/**
  * Flat ESLint config for the monorepo (ESLint 9).
  *
  * This config is a behaviour-preserving port of the previous eslintrc setup that
@@ -48,9 +71,9 @@ const typescriptEslintPlugin = {
 /** Production source rules — port of the shared config + root-level overrides. */
 const baseRules = {
   '@typescript-eslint/adjacent-overload-signatures': ['error'],
-  // Downgraded to 'warn': typescript-eslint v8 now inspects `for await...of`, flagging
-  // code that was clean under the previous version. Kept visible for later cleanup.
-  '@typescript-eslint/await-thenable': ['warn'],
+  // typescript-eslint v8 inspects `for await...of`, flagging code that was clean under the
+  // previous version; the sites it found are frozen in eslint-suppressions.json.
+  '@typescript-eslint/await-thenable': ['error'],
   '@typescript-eslint/ban-ts-comment': ['error'],
   '@typescript-eslint/default-param-last': ['error'],
   '@typescript-eslint/dot-notation': [
@@ -83,26 +106,25 @@ const baseRules = {
   ],
   '@typescript-eslint/no-unsafe-function-type': ['error'],
   '@typescript-eslint/no-wrapper-object-types': ['error'],
-  '@typescript-eslint/no-explicit-any': ['warn'],
+  '@typescript-eslint/no-explicit-any': ['error'],
   '@typescript-eslint/no-extra-non-null-assertion': ['error'],
   '@typescript-eslint/no-for-in-array': ['error'],
   '@typescript-eslint/no-implied-eval': ['error'],
-  // Downgraded to 'warn': typescript-eslint v8 is stricter here than the prior version.
-  '@typescript-eslint/no-inferrable-types': ['warn'],
+  // typescript-eslint v8 is stricter here than the prior version.
+  '@typescript-eslint/no-inferrable-types': ['error'],
   '@typescript-eslint/no-loop-func': ['error'],
   '@typescript-eslint/no-misused-new': ['error'],
   '@typescript-eslint/no-misused-promises': ['error'],
   '@typescript-eslint/no-namespace': ['error'],
-  // Downgraded to 'warn': typescript-eslint v8 flags cases the prior version did not.
-  '@typescript-eslint/no-non-null-asserted-optional-chain': ['warn'],
-  '@typescript-eslint/no-non-null-assertion': ['warn'],
+  // typescript-eslint v8 flags cases the prior version did not.
+  '@typescript-eslint/no-non-null-asserted-optional-chain': ['error'],
+  '@typescript-eslint/no-non-null-assertion': ['error'],
   '@typescript-eslint/no-redeclare': ['error'],
   '@typescript-eslint/no-require-imports': ['error'],
   '@typescript-eslint/no-this-alias': ['error'],
-  // Downgraded to 'warn': typescript-eslint v8 added the "contextually unnecessary"
-  // check (and fuller type resolution surfaces more cases), flagging ~600 assertions
-  // that were clean under the previous version. Kept visible for incremental cleanup.
-  '@typescript-eslint/no-unnecessary-type-assertion': ['warn'],
+  // typescript-eslint v8 added the "contextually unnecessary" check (and fuller type resolution
+  // surfaces more cases), flagging ~600 assertions that were clean under the previous version.
+  '@typescript-eslint/no-unnecessary-type-assertion': ['error'],
   '@typescript-eslint/no-unnecessary-type-constraint': ['error'],
   '@typescript-eslint/no-unused-expressions': [
     'error',
@@ -114,20 +136,20 @@ const baseRules = {
     },
   ],
   '@typescript-eslint/no-unused-vars': [
-    'warn',
-    { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
+    'error',
+    { vars: 'all', args: 'after-used', ignoreRestSiblings: true, argsIgnorePattern: '^_' },
   ],
-  '@typescript-eslint/no-use-before-define': ['warn', 'nofunc'],
+  '@typescript-eslint/no-use-before-define': ['error', 'nofunc'],
   '@typescript-eslint/no-useless-constructor': ['error'],
   '@typescript-eslint/prefer-as-const': ['error'],
   '@typescript-eslint/prefer-namespace-keyword': ['error'],
-  '@typescript-eslint/require-await': ['warn'],
+  '@typescript-eslint/require-await': ['error'],
   '@typescript-eslint/restrict-plus-operands': ['error'],
-  // Downgraded to 'warn': typescript-eslint v8 changed return-await's default semantics.
-  '@typescript-eslint/return-await': ['warn', 'in-try-catch'],
+  // typescript-eslint v8 changed return-await's default semantics.
+  '@typescript-eslint/return-await': ['error', 'in-try-catch'],
   '@typescript-eslint/triple-slash-reference': ['error'],
-  // Downgraded to 'warn': typescript-eslint v8 flags unbound methods the prior version did not.
-  '@typescript-eslint/unbound-method': ['warn'],
+  // typescript-eslint v8 flags unbound methods the prior version did not.
+  '@typescript-eslint/unbound-method': ['error'],
   'i18next/no-literal-string': ['error', { mode: 'jsx-text-only' }],
   'import/no-extraneous-dependencies': [
     'error',
@@ -150,31 +172,28 @@ const baseRules = {
       optionalDependencies: false,
     },
   ],
-  'jsdoc/check-access': ['warn'],
-  'jsdoc/check-alignment': ['warn'],
-  'jsdoc/check-property-names': ['warn'],
-  'jsdoc/check-types': ['warn'],
-  'jsdoc/check-values': ['warn'],
-  'jsdoc/empty-tags': ['warn'],
-  'jsdoc/implements-on-classes': ['warn'],
-  'jsdoc/multiline-blocks': ['warn'],
-  'jsdoc/no-multi-asterisks': ['warn'],
-  'jsdoc/no-undefined-types': ['warn'],
-  'jsdoc/require-param-description': ['warn'],
-  'jsdoc/require-param-name': ['warn'],
-  'jsdoc/require-property': ['warn'],
-  'jsdoc/require-property-description': ['warn'],
-  'jsdoc/require-property-name': ['warn'],
-  'jsdoc/require-property-type': ['warn'],
-  'jsdoc/require-returns-check': ['warn'],
-  'jsdoc/require-returns-description': ['warn'],
-  'jsdoc/require-yields': ['warn'],
-  'jsdoc/require-yields-check': ['warn'],
-  'jsdoc/tag-lines': ['warn'],
-  'jsdoc/valid-types': ['warn'],
+  'jsdoc/check-access': ['error'],
+  'jsdoc/check-alignment': ['error'],
+  'jsdoc/check-property-names': ['error'],
+  'jsdoc/check-types': ['error'],
+  'jsdoc/check-values': ['error'],
+  'jsdoc/empty-tags': ['error'],
+  'jsdoc/implements-on-classes': ['error'],
+  'jsdoc/multiline-blocks': ['error'],
+  'jsdoc/no-multi-asterisks': ['error'],
+  'jsdoc/no-undefined-types': ['error'],
+  'jsdoc/require-param-description': ['error'],
+  'jsdoc/require-param-name': ['error'],
+  'jsdoc/require-property': ['error'],
+  'jsdoc/require-property-description': ['error'],
+  'jsdoc/require-property-name': ['error'],
+  'jsdoc/require-property-type': ['error'],
+  'jsdoc/require-returns-check': ['error'],
+  'jsdoc/require-returns-description': ['error'],
+  'jsdoc/require-yields': ['error'],
+  'jsdoc/require-yields-check': ['error'],
+  'jsdoc/valid-types': ['error'],
   'max-depth': ['error', 3],
-  'max-lines': ['warn', 1000],
-  'max-lines-per-function': ['warn', 400],
   // Core `no-*` rules that duplicate `js.configs.recommended` at the same severity are
   // inherited from it (applied globally via the `recommended` spread) and are no longer
   // re-listed here. Only rules that are NOT in the recommended set, or that intentionally
@@ -182,9 +201,9 @@ const baseRules = {
   'no-extend-native': ['error'],
   'no-implicit-globals': ['error'],
   'no-inner-declarations': ['error'],
-  // Downgraded to 'warn' (recommended sets 'error'): core no-loss-of-precision (mapped from
-  // the removed TS rule) flags generated mock data that the prior TS rule did not.
-  'no-loss-of-precision': ['warn'],
+  // Core no-loss-of-precision (mapped from the removed TS rule) flags generated mock data that
+  // the prior TS rule did not.
+  'no-loss-of-precision': ['error'],
   'no-var': ['error'],
   // Core no-unused-vars is disabled on TS code per typescript-eslint guidance; the
   // type-aware `@typescript-eslint/no-unused-vars` (above) supersedes it. The previous
@@ -196,7 +215,7 @@ const baseRules = {
   'prefer-spread': ['error'],
   // Full eslint-plugin-promise recommended set — identical to the previous explicit list
   // (its extra `no-native`/`avoid-new` rules are 'off').
-  ...promise.configs.recommended.rules,
+  ...toBinarySeverity(promise.configs.recommended.rules),
   // Recommended sets this without options; keep the frozen `ignoreLastCallback` behaviour.
   'promise/always-return': ['error', { ignoreLastCallback: true }],
   'react-hooks/exhaustive-deps': ['error'],
@@ -206,13 +225,40 @@ const baseRules = {
   'rulesdir/no-mui-barrel-import': ['error'],
   'rulesdir/opacity-zero-needs-focus-visible': ['error'],
   'rulesdir/prefer-custom-popover': ['error'],
-  // Full eslint-plugin-security recommended set — all 14 `detect-*` rules at 'warn',
-  // byte-for-byte identical to the previous explicit list.
-  ...security.configs.recommended.rules,
+  // Full eslint-plugin-security recommended set — all 14 `detect-*` rules, which the plugin ships
+  // at the middle severity and this config raises to `error` (except `detect-object-injection`,
+  // turned off below as noise).
+  ...toBinarySeverity(security.configs.recommended.rules),
   // Full eslint-plugin-sonarjs recommended set. Matches the previous explicit list plus one
   // newly-adopted rule, `no-inverted-boolean-check` (its `cognitive-complexity` and
   // `elseif-without-else` rules are 'off').
-  ...sonarjs.configs.recommended.rules,
+  ...toBinarySeverity(sonarjs.configs.recommended.rules),
+
+  // Added with the review-rules enforcement effort; debt lives in eslint-suppressions.json.
+  // This group and the one below it must stay after the preset spreads above, whose own entries
+  // for `promise/catch-or-return` and `security/detect-object-injection` would otherwise win.
+  '@typescript-eslint/consistent-type-imports': [
+    'error',
+    { prefer: 'type-imports', fixStyle: 'separate-type-imports', disallowTypeAnnotations: false },
+  ],
+  '@typescript-eslint/consistent-type-assertions': [
+    'error',
+    { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' },
+  ],
+  'promise/catch-or-return': [
+    'error',
+    { allowFinally: true, terminationMethod: ['catch', 'finally'] },
+  ],
+  // Rules deliberately kept off.
+  // Noise: flags every `obj[key]` access; findings were never acted on.
+  'security/detect-object-injection': ['off'],
+  // Stylistic (blank lines between tags); Prettier territory.
+  'jsdoc/tag-lines': ['off'],
+  // Deliberately relaxed (size thresholds do not predict review findings); kept off.
+  'max-lines': ['off'],
+  'max-lines-per-function': ['off'],
+  // Stylistic.
+  'func-names': ['off'],
 };
 
 /**
@@ -227,6 +273,8 @@ const baseRules = {
  * and broader (typed linting, sonarjs/security/jsdoc/i18next, the `rulesdir/*` custom rules, …).
  * Converging the real config onto this baseline is the "adopt maintained presets" follow-up; until
  * then `recommended` serves as the target and as the seed for generating a plugin's config.
+ * Severities are normalised to `error` by `toBinarySeverity`, so this baseline is stricter than
+ * the template it was derived from.
  */
 export const recommended = [
   js.configs.recommended,
@@ -248,12 +296,12 @@ export const recommended = [
     },
     settings: { react: { version: 'detect' } },
     rules: {
-      ...typescriptEslintPlugin.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-      ...react.configs['jsx-runtime'].rules,
-      ...reactHooks.configs.recommended.rules,
+      ...toBinarySeverity(typescriptEslintPlugin.configs.recommended.rules),
+      ...toBinarySeverity(react.configs.recommended.rules),
+      ...toBinarySeverity(react.configs['jsx-runtime'].rules),
+      ...toBinarySeverity(reactHooks.configs.recommended.rules),
       'react/prop-types': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-restricted-imports': [
         'error',
         {
@@ -294,7 +342,7 @@ export const recommended = [
 
 /** Vitest rules for unit tests — frozen to the previous effective set. */
 const vitestTestRules = {
-  'vitest/expect-expect': ['warn'],
+  'vitest/expect-expect': ['error'],
   'vitest/no-alias-methods': ['error'],
   'vitest/no-commented-out-tests': ['error'],
   'vitest/no-conditional-expect': ['error'],
@@ -322,39 +370,10 @@ const nonProductionFiles = [
   'e2e/**/*.spec.{ts,tsx,js,jsx}',
 ];
 
-/**
- * Adoption backlog: rules from `recommended` the codebase does not satisfy yet (measured at ~269
- * findings — mostly the `eslint-plugin-react-hooks` v7 "React Compiler" rules and
- * `eslint-plugin-react` recommended). The real config is based on `recommended`, so these are
- * disabled here to keep CI green. **To adopt a rule: fix its sites, then delete its line below** —
- * it then inherits the enabled value from `recommended`. Grouped by source collection.
- */
-const notYetAdopted = {
-  rules: {
-    // eslint:recommended (core)
-    'no-undef': 'off',
-    'no-unreachable': 'off',
-    'no-unused-vars': 'off',
-    'no-constant-binary-expression': 'off',
-    // eslint-plugin-react (recommended)
-    'react/no-unescaped-entities': 'off',
-    'react/display-name': 'off',
-    'react/no-deprecated': 'off',
-    'react/jsx-key': 'off',
-    'react/no-unknown-property': 'off',
-    // eslint-plugin-react-hooks (recommended — React Compiler rules, new in v7)
-    'react-hooks/refs': 'off',
-    'react-hooks/set-state-in-effect': 'off',
-    'react-hooks/immutability': 'off',
-    'react-hooks/preserve-manual-memoization': 'off',
-    'react-hooks/static-components': 'off',
-    'react-hooks/globals': 'off',
-  },
-};
-
 // The real, enforced config = `recommended` (industry-standard baseline) + the monorepo's internal
 // layers below (the frozen rule set, typed linting, rulesdir/i18next/sonarjs/security/jsdoc, and the
-// per-path overrides). `notYetAdopted` is applied last to silence recommended rules not yet met.
+// per-path overrides). Debt from rules the codebase does not yet satisfy is recorded in each
+// workspace's `eslint-suppressions.json` (see `yarn lint:prune`).
 export default [
   ...recommended,
   // Equivalent of the various .eslintignore files plus the old `excludedFiles`
@@ -423,12 +442,50 @@ export default [
     rules: baseRules,
   },
 
+  // Public-surface documentation: exported symbols in package sources must carry TSDoc.
+  // The jsdoc fixers are disabled on purpose: they insert empty `/** */` blocks and bare
+  // `@param root0` stubs, which then fail require-param-description / tsdoc/syntax under --fix
+  // (pre-commit hook, csdk-lint-fix). Missing docs must be written by a human, not scaffolded.
+  {
+    files: ['packages/*/src/**/*.{ts,tsx}'],
+    ignores: [
+      '**/*.test.{ts,tsx}',
+      '**/__demo__/**',
+      '**/__stories__/**',
+      '**/*.stories.tsx',
+      '**/__mocks__/**',
+      '**/__test-helpers__/**',
+      '**/test-helpers/**',
+      '**/*.d.ts',
+    ],
+    rules: {
+      'jsdoc/require-jsdoc': [
+        'error',
+        {
+          enableFixer: false,
+          publicOnly: true,
+          require: {
+            FunctionDeclaration: true,
+            ClassDeclaration: true,
+            ArrowFunctionExpression: true,
+            FunctionExpression: true,
+          },
+          contexts: ['TSInterfaceDeclaration', 'TSTypeAliasDeclaration', 'TSEnumDeclaration'],
+        },
+      ],
+      'jsdoc/require-param': ['error', { enableFixer: false }],
+      'jsdoc/require-returns': ['error'],
+      'tsdoc/syntax': ['error'],
+      'jsdoc/require-description-complete-sentence': ['error'],
+    },
+  },
+
   // `.tsx` use-before-define matches the previous tsx-specific override.
   {
     files: ['**/*.tsx'],
     rules: {
       '@typescript-eslint/no-use-before-define': [
-        'warn',
+        'error',
         { functions: false, classes: true, variables: false, typedefs: false },
       ],
     },
@@ -457,6 +514,26 @@ export default [
     },
   },
 
+  // Root-level Node scripts (ESM/CJS): plain Node globals, no browser globals, no typed linting.
+  // These files aren't part of `tsconfig.eslint.json`'s program, so `parserOptions.project: null`
+  // alone stops a type-checked program from being built but does not stop the `Main layer` block's
+  // `baseRules` from still enabling typed (type-information-requiring) rules for them — those then
+  // throw ("don't have parserOptions set to generate type information") the first time one runs.
+  // `disableTypeChecked` is typescript-eslint's own config for exactly this situation (plain JS/config
+  // files parsed by the TS parser without a type-aware program): it turns every typed rule off.
+  {
+    files: ['scripts/**/*.{mjs,cjs,js}'],
+    languageOptions: {
+      globals: { ...globals.node },
+      parserOptions: { project: null, projectService: false },
+    },
+    rules: {
+      ...tseslint.configs.disableTypeChecked.rules,
+      'import/no-extraneous-dependencies': 'off',
+      'no-console': 'off',
+    },
+  },
+
   // Relaxed rules for all non-production files.
   {
     files: nonProductionFiles,
@@ -468,13 +545,9 @@ export default [
       'no-console': 'off',
       'no-unused-expressions': 'off',
       'max-classes-per-file': 'off',
-      'func-names': ['warn', 'as-needed'],
-      'security/detect-object-injection': 'off',
       'jsdoc/require-returns-description': 'off',
       'no-process-exit': 'off',
       'security/detect-child-process': 'off',
-      'max-lines-per-function': 'off',
-      'max-lines': 'off',
       'no-global-assign': ['error', { exceptions: ['window', 'document'] }],
       'i18next/no-literal-string': 'off',
     },
@@ -485,6 +558,17 @@ export default [
     files: ['**/*.test.{ts,tsx}'],
     plugins: { vitest },
     rules: vitestTestRules,
+  },
+
+  // Tests build fixtures with `{...} as Type`; keep the assertion rule but allow object literals.
+  {
+    files: ['**/*.test.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        { assertionStyle: 'as', objectLiteralTypeAssertions: 'allow' },
+      ],
+    },
   },
 
   // analytics-composer must keep explicit extensions for Node resolution.
@@ -513,9 +597,6 @@ export default [
     plugins: { vitest },
     rules: { 'vitest/valid-expect': 'off' },
   },
-
-  // Adoption backlog — disables `recommended` rules not yet satisfied (see `notYetAdopted` above).
-  notYetAdopted,
 
   // Turn off all stylistic rules handled by Prettier. Must come last.
   prettier,

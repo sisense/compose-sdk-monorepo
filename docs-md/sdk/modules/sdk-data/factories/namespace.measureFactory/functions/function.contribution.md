@@ -17,6 +17,8 @@ total cost contributes to the total cost across all age ranges. So, the total co
 age range is 23.64M, which is 22% of the 107.27M of all age ranges together. Therefore, the
 contribution of the 35-44 age range is `.22`.
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

@@ -83,6 +83,30 @@ export type { PanelNumberInputProps } from './panel-number-input.js';
 export { ConditionFilter } from './condition-filter.js';
 export type { ConditionFilterProps, ConditionKind } from './condition-filter.js';
 
+export { PanelCountInput } from './panel-count-input.js';
+export type { PanelCountInputProps } from './panel-count-input.js';
+
+export {
+  DATE_CONDITION_GRAINS,
+  DATE_CONDITION_OPERATORS,
+  defaultDateConditionDraft,
+  filterToDateConditionDraft,
+  isEditableDateConditionFilter,
+  isDateConditionComplete,
+  dateConditionToFilter,
+  dateOperatorOf,
+  describeDateCondition,
+  summariseDateCondition,
+  summariseDateConditionDraft,
+} from './condition-date.js';
+export type {
+  DateConditionDraft,
+  DateConditionGrain,
+  DateConditionOp,
+  DateConditionOperator,
+  DateConditionShape,
+} from './condition-date.js';
+
 export {
   TEXT_CHAIN_OPERATORS,
   TEXT_CONDITION_OPERATORS,
@@ -130,3 +154,29 @@ export type {
   NumericConditionRow,
   NumericConditionShape,
 } from './condition-numeric.js';
+
+export { DateRangePickerFilter } from './date-range-picker-filter.js';
+export type { DateRangePickerFilterProps } from './date-range-picker-filter.js';
+
+export { DateRangeCalendarGrid } from './date-range-calendar-grid.js';
+export type {
+  DateRangeCalendarGridProps,
+  DateRangePickResult,
+  DateRangeValue,
+  RangeQuickPick,
+} from './date-range-calendar-grid.js';
+
+export {
+  emptyRangeDraft,
+  filterToRangeDraft,
+  isEditableRangeFilter,
+  isInclusiveDateRangeFilter,
+  isInvertedRangeDraft,
+  isRangeDraftEmpty,
+  isRangeDraftUsable,
+  judgeRangeEnd,
+  rangeDraftToFilter,
+  rangeInversionMessageKey,
+  withRangeEnd,
+} from './range-date.js';
+export type { RangeDraft, RangeEnd, RangeEntryProblem } from './range-date.js';

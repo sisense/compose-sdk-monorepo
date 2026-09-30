@@ -412,6 +412,44 @@ describe('filterFactory', () => {
       `filterFactory.dateTo(DM.Table.Date.Years, '2020-02-02T00:00:00Z', { disabled: true, locked: true })`,
     );
   });
+  test('filterFactory.dateBefore() makes the upper bound exclusive', () => {
+    const f = filterFactory.dateBefore(dateDim.Years, '2020-02-02T00:00:00Z');
+    expect(f).toBeInstanceOf(DateRangeFilter);
+    expect(f).toHaveProperty('attribute', dateDim.Years);
+    expect(f).toHaveProperty('operatorB', DateOperators.ToNotEqual);
+    expect(f).toHaveProperty('valueB', '2020-02-02');
+    expect(f.filterJaql()).toStrictEqual({
+      toNotEqual: '2020-02-02',
+      isAdvanced: true,
+      custom: true,
+    });
+
+    const f2 = filterFactory.dateBefore(dateDim.Years, '2020-02-02T00:00:00Z', config);
+    testConfig(
+      f2,
+      `filterFactory.dateBefore(DM.Table.Date.Years, '2020-02-02T00:00:00Z', { disabled: true, locked: true })`,
+    );
+  });
+
+  test('filterFactory.dateAfter() makes the lower bound exclusive', () => {
+    const f = filterFactory.dateAfter(dateDim.Years, '2020-02-02T00:00:00Z');
+    expect(f).toBeInstanceOf(DateRangeFilter);
+    expect(f).toHaveProperty('attribute', dateDim.Years);
+    expect(f).toHaveProperty('operatorA', DateOperators.FromNotEqual);
+    expect(f).toHaveProperty('valueA', '2020-02-02');
+    expect(f.filterJaql()).toStrictEqual({
+      fromNotEqual: '2020-02-02',
+      isAdvanced: true,
+      custom: true,
+    });
+
+    const f2 = filterFactory.dateAfter(dateDim.Years, '2020-02-02T00:00:00Z', config);
+    testConfig(
+      f2,
+      `filterFactory.dateAfter(DM.Table.Date.Years, '2020-02-02T00:00:00Z', { disabled: true, locked: true })`,
+    );
+  });
+
   test('filterFactory.dateRange()', () => {
     const f = filterFactory.dateRange(
       dateDim.Years,
@@ -543,6 +581,48 @@ describe('filterFactory', () => {
       config,
     );
     testConfig(f2, undefined);
+  });
+  test('filterFactory.measureEquals()', () => {
+    const f = filterFactory.measureEquals(measureFactory.sum(numAttr), 5);
+    expect(f).toBeInstanceOf(MeasureFilter);
+    expect(f).toHaveProperty('attribute', numAttr);
+    expect(f).toHaveProperty('measure', measureFactory.sum(numAttr));
+    expect(f).toHaveProperty('operatorA', NumericOperators.Equals);
+    expect(f).toHaveProperty('valueA', 5);
+
+    const f2 = filterFactory.measureEquals(measureFactory.sum(numAttr), 5, config);
+    testConfig(
+      f2,
+      `filterFactory.measureEquals(measureFactory.sum(DM.Table.Num), 5, { disabled: true, locked: true })`,
+    );
+  });
+  test('filterFactory.measureGreaterThan()', () => {
+    const f = filterFactory.measureGreaterThan(measureFactory.sum(numAttr), 5);
+    expect(f).toBeInstanceOf(MeasureFilter);
+    expect(f).toHaveProperty('attribute', numAttr);
+    expect(f).toHaveProperty('measure', measureFactory.sum(numAttr));
+    expect(f).toHaveProperty('operatorA', NumericOperators.FromNotEqual);
+    expect(f).toHaveProperty('valueA', 5);
+
+    const f2 = filterFactory.measureGreaterThan(measureFactory.sum(numAttr), 5, config);
+    testConfig(
+      f2,
+      `filterFactory.measureGreaterThan(measureFactory.sum(DM.Table.Num), 5, { disabled: true, locked: true })`,
+    );
+  });
+  test('filterFactory.measureLessThan()', () => {
+    const f = filterFactory.measureLessThan(measureFactory.sum(numAttr), 5);
+    expect(f).toBeInstanceOf(MeasureFilter);
+    expect(f).toHaveProperty('attribute', numAttr);
+    expect(f).toHaveProperty('measure', measureFactory.sum(numAttr));
+    expect(f).toHaveProperty('operatorA', NumericOperators.ToNotEqual);
+    expect(f).toHaveProperty('valueA', 5);
+
+    const f2 = filterFactory.measureLessThan(measureFactory.sum(numAttr), 5, config);
+    testConfig(
+      f2,
+      `filterFactory.measureLessThan(measureFactory.sum(DM.Table.Num), 5, { disabled: true, locked: true })`,
+    );
   });
   test('filterFactory.measureGreaterThanOrEqual()', () => {
     const f = filterFactory.measureGreaterThanOrEqual(measureFactory.sum(numAttr), 5);
@@ -707,6 +787,267 @@ describe('filterFactory', () => {
     expect(f).toHaveProperty('right', { operator: 'AND', left: filter1, right: filter2 });
     expect(f.composeCode).toBe(
       `filterFactory.logic.or(filterFactory.members(DM.Table.Text, ['text1', 'text2']), [filterFactory.members(DM.Table.Text, ['text1', 'text2']), filterFactory.members(DM.Table.Num, ['1', '2', '3'])])`,
+    );
+  });
+});
+
+/* Every expected string below is written out in full. A test that rebuilds it from a `Date` would
+   pass in any timezone while proving nothing, and these values are what goes on the wire. */
+describe('measure filters with a date value', () => {
+  const dateMeasure = measureFactory.max(dateDim.Days, 'Last order');
+  const numericMeasure = measureFactory.sum(numAttr, 'sum num');
+
+  // no `Z`, so these parse as local time and the expected strings hold in every timezone
+  const from = new Date('2013-12-01T00:00:00');
+  const to = new Date('2013-12-31T23:59:59');
+  const FROM = '2013-12-01T00:00:00';
+  const TO = '2013-12-31T23:59:59';
+
+  /* Shapes our serializer can never emit: it never writes a `Z`, an offset or milliseconds. Assert
+     pass-through with these, or the test cannot tell it from parse-and-re-serialize. */
+  const FOREIGN_FROM = '2013-10-01T00:00:00.123Z';
+  const FOREIGN_TO = '2013-12-31T23:59:59+05:30';
+
+  /** The filter values as the server receives them, without depending on the operator names. */
+  const wireValues = (f: Filter) =>
+    Object.values((f.jaql().jaql as { filter: Record<string, unknown> }).filter);
+
+  describe.each([
+    ['measureEquals', filterFactory.measureEquals],
+    ['measureGreaterThan', filterFactory.measureGreaterThan],
+    ['measureGreaterThanOrEqual', filterFactory.measureGreaterThanOrEqual],
+    ['measureLessThanOrEqual', filterFactory.measureLessThanOrEqual],
+    ['measureLessThan', filterFactory.measureLessThan],
+  ] as const)('filterFactory.%s()', (_name, build) => {
+    test('serializes a Date to a local ISO string with no Z', () => {
+      const f = build(dateMeasure, from);
+      expect(f).toHaveProperty('valueA', FROM);
+      expect(wireValues(f)).toEqual([FROM]);
+    });
+
+    test('passes an ISO string through byte for byte', () => {
+      const f = build(dateMeasure, FOREIGN_FROM);
+      expect(f).toHaveProperty('valueA', FOREIGN_FROM);
+      expect(wireValues(f)).toEqual([FOREIGN_FROM]);
+    });
+
+    test('a number is unchanged', () => {
+      const f = build(numericMeasure, 5);
+      expect(f).toHaveProperty('valueA', 5);
+      expect(wireValues(f)).toEqual([5]);
+    });
+  });
+
+  describe.each([
+    ['measureBetween', filterFactory.measureBetween],
+    ['measureBetweenNotEqual', filterFactory.measureBetweenNotEqual],
+  ] as const)('filterFactory.%s()', (_name, build) => {
+    test('serializes both Dates to local ISO strings with no Z', () => {
+      const f = build(dateMeasure, from, to);
+      expect(f).toHaveProperty('valueA', FROM);
+      expect(f).toHaveProperty('valueB', TO);
+      expect(wireValues(f)).toEqual([FROM, TO]);
+    });
+
+    test('passes both ISO strings through byte for byte', () => {
+      const f = build(dateMeasure, FOREIGN_FROM, FOREIGN_TO);
+      expect(f).toHaveProperty('valueA', FOREIGN_FROM);
+      expect(f).toHaveProperty('valueB', FOREIGN_TO);
+      expect(wireValues(f)).toEqual([FOREIGN_FROM, FOREIGN_TO]);
+    });
+
+    test('two numbers are unchanged', () => {
+      const f = build(numericMeasure, 3, 7);
+      expect(f).toHaveProperty('valueA', 3);
+      expect(f).toHaveProperty('valueB', 7);
+      expect(wireValues(f)).toEqual([3, 7]);
+    });
+  });
+
+  test('a numeric measure filter emits exactly the JAQL it emitted before', () => {
+    expect(filterFactory.measureBetween(numericMeasure, 3, 7).jaql()).toEqual({
+      jaql: {
+        title: 'sum num',
+        dim: '[Table.Num]',
+        datatype: 'numeric',
+        agg: 'sum',
+        filter: { from: 3, to: 7 },
+        datasource: { title: 'Sample Database', live: false },
+      },
+      panel: 'scope',
+    });
+  });
+
+  test('a Date reaches the server as local midnight, not as the UTC instant', () => {
+    const f = filterFactory.measureGreaterThan(dateMeasure, from);
+    expect(wireValues(f)).toEqual([FROM]);
+    expect(JSON.stringify(f.jaql().jaql.filter)).not.toContain('Z');
+  });
+
+  test('rejects an invalid Date instead of serializing NaN onto the wire', () => {
+    expect(() => filterFactory.measureGreaterThan(dateMeasure, new Date('nonsense'))).toThrow(
+      'Filter date value is an invalid Date',
+    );
+
+    // the valid neighbour still builds, so the guard is not rejecting every Date
+    expect(filterFactory.measureGreaterThan(dateMeasure, from)).toHaveProperty('valueA', FROM);
+  });
+
+  test('pads a year below 1000 to four digits', () => {
+    // setFullYear, not a literal: `new Date('0999-06-15')` is parsed as UTC and shifts the day
+    const early = new Date('2013-06-15T00:00:00');
+    early.setFullYear(999);
+
+    expect(filterFactory.measureGreaterThan(dateMeasure, early)).toHaveProperty(
+      'valueA',
+      '0999-06-15T00:00:00',
+    );
+  });
+
+  test('a Date survives serialize and createFilter as the same string', () => {
+    const f = filterFactory.measureGreaterThan(dateMeasure, from);
+    expect(createFilter(f.serialize())).toHaveProperty('valueA', FROM);
+  });
+});
+
+describe('measure filters over a formula measure', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const cost = createAttribute({
+    name: 'Cost',
+    type: 'numeric-attribute',
+    expression: '[Commerce.Cost]',
+  });
+  const category = createAttribute({
+    name: 'Category',
+    type: 'text-attribute',
+    expression: '[Category.Category]',
+  });
+  const bareOnly = measureFactory.customFormula('Inner', '[d]', { d: dateDimension.Days });
+  const visits = measureFactory.count(
+    createAttribute({
+      name: 'VisitID',
+      type: 'numeric-attribute',
+      expression: '[Commerce.VisitID]',
+    }),
+    'Visits',
+  );
+  /* An attribute, not a measure, but it carries a context exactly like a calculated measure. */
+  const margin = attributeFactory.customFormula('Margin', '[r] - [c]', {
+    r: createAttribute({
+      name: 'Revenue',
+      type: 'numeric-attribute',
+      expression: '[Commerce.Revenue]',
+    }),
+    c: cost,
+  });
+
+  it('resolves the attribute from a bare operand, the shape Fusion writes', () => {
+    const formula = measureFactory.customFormula('Last sale', 'MAX([D])', {
+      D: dateDimension.Days,
+    });
+
+    expect(filterFactory.measureEquals(formula, 1).attribute).toBe(dateDimension.Days);
+  });
+
+  it('still resolves the attribute from a nested measure operand', () => {
+    const nested = measureFactory.customFormula('Wrapped', 'SUM([M])', {
+      M: measureFactory.max(dateDimension.Days, 'Max Date'),
+    });
+
+    expect(filterFactory.measureEquals(nested, 1).attribute).toBe(dateDimension.Days);
+  });
+
+  it('prefers a nested measure over a bare operand listed before it', () => {
+    const formula = measureFactory.customFormula('Mixed', '[c] / [v]', { c: cost, v: visits });
+
+    expect(filterFactory.measureEquals(formula, 1).attribute.expression).toBe('[Commerce.VisitID]');
+  });
+
+  it('prefers a filter operand over a bare operand listed before it', () => {
+    const formula = measureFactory.customFormula('Total Cost with Filter', '(SUM([c]), [f])', {
+      c: cost,
+      f: filterFactory.members(category, ['Apple Mac Desktops']),
+    });
+
+    expect(filterFactory.measureEquals(formula, 1).attribute.expression).toBe(
+      '[Category.Category]',
+    );
+  });
+
+  it('prefers a measure two levels down over a nested formula holding only a bare attribute', () => {
+    const deep = measureFactory.customFormula('Middle', 'SUM([m])', {
+      m: measureFactory.sum(cost, 'Total Cost'),
+    });
+    const outer = measureFactory.customFormula('Outer', '[a] / [b]', { a: bareOnly, b: deep });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[Commerce.Cost]');
+  });
+
+  it('prefers a direct measure over a nested formula holding only a bare attribute', () => {
+    const outer = measureFactory.customFormula('Outer', '[a] / [b]', {
+      a: bareOnly,
+      b: measureFactory.sum(cost, 'Total Cost'),
+    });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[Commerce.Cost]');
+  });
+
+  it('prefers a filter operand over a nested formula holding only a bare attribute', () => {
+    const outer = measureFactory.customFormula('Outer', '([a], [f])', {
+      a: bareOnly,
+      f: filterFactory.members(category, ['Apple Mac Desktops']),
+    });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[Category.Category]');
+  });
+
+  it('falls back to a bare attribute nested inside a formula when nothing else carries one', () => {
+    const outer = measureFactory.customFormula('Outer', '[a]', { a: bareOnly });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute).toBe(dateDimension.Days);
+  });
+
+  it('keeps the bare attribute listed first over one nested in a later operand', () => {
+    const outer = measureFactory.customFormula('Outer', '[c] / [a]', { c: cost, a: bareOnly });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[Commerce.Cost]');
+  });
+
+  it('answers with a calculated attribute operand, not with something inside it', () => {
+    const outer = measureFactory.customFormula('Outer', '[a]', { a: margin });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[r] - [c]');
+  });
+
+  it('keeps a calculated attribute over a bare attribute listed after it', () => {
+    const outer = measureFactory.customFormula('Outer', '[a] / [c]', { a: margin, c: cost });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[r] - [c]');
+  });
+
+  it('prefers a measure operand over a calculated attribute listed before it', () => {
+    const outer = measureFactory.customFormula('Outer', '[a] / [v]', { a: margin, v: visits });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[Commerce.VisitID]');
+  });
+
+  it('prefers a filter operand over a calculated attribute listed before it', () => {
+    const outer = measureFactory.customFormula('Outer', '([a], [f])', {
+      a: margin,
+      f: filterFactory.members(category, ['Apple Mac Desktops']),
+    });
+
+    expect(filterFactory.measureEquals(outer, 1).attribute.expression).toBe('[Category.Category]');
+  });
+
+  it('still throws when no operand carries an attribute', () => {
+    const empty = measureFactory.customFormula('Nothing', '1 + 1', {});
+
+    expect(() => filterFactory.measureEquals(empty, 1)).toThrow(
+      'Cannot determine attribute from measure',
     );
   });
 });

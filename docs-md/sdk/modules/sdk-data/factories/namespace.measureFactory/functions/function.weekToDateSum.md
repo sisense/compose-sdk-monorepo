@@ -12,6 +12,8 @@ of the week up to the current day.
 The time resolution is determined by the minimum date level of the date dimension in the query
 that uses the returned measure.
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

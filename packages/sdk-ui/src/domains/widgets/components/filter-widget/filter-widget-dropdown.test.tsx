@@ -1,5 +1,6 @@
 /** @vitest-environment jsdom */
 import {
+  type Attribute,
   createAttribute,
   DateLevels,
   type DimensionalLevelAttribute,
@@ -137,11 +138,12 @@ vi.mock('react-i18next', async (importOriginal) => {
 type ConditionFilterStubPayload = {
   __serializable: string;
   filterType: string;
-  operatorA: string;
-  valueA: string | number;
-  members: undefined;
   filterJaql: () => Record<string, unknown>;
   config: unknown;
+  operatorA?: string;
+  valueA?: string | number;
+  members?: undefined;
+  attribute?: { granularity: string; expression: string };
 };
 
 let conditionFilterStubPayload: ConditionFilterStubPayload | undefined;
@@ -251,21 +253,39 @@ vi.mock('./components', () => ({
     onFilterUpdate,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test stub only reads the props it renders
   any) => {
-    conditionFilterStubPayload = {
-      __serializable: conditionKind === 'numeric' ? 'NumericFilter' : 'TextFilter',
-      filterType: conditionKind === 'numeric' ? 'numeric' : 'text',
-      operatorA: conditionKind === 'numeric' ? 'fromNotEqual' : 'contains',
-      valueA: conditionKind === 'numeric' ? 100 : 'cardio',
-      members: undefined,
-      filterJaql: () =>
-        conditionKind === 'numeric' ? { fromNotEqual: 100 } : { contains: 'cardio' },
-      config: filter?.config,
-    };
+    conditionFilterStubPayload =
+      conditionKind === 'date'
+        ? {
+            __serializable: 'DateRangeFilter',
+            filterType: 'dateRange',
+            attribute: { granularity: 'Days', expression: '[Commerce.Date (Calendar)]' },
+            filterJaql: () => ({ to: '2026-09-14' }),
+            config: filter?.config,
+          }
+        : {
+            __serializable: conditionKind === 'numeric' ? 'NumericFilter' : 'TextFilter',
+            filterType: conditionKind === 'numeric' ? 'numeric' : 'text',
+            operatorA: conditionKind === 'numeric' ? 'fromNotEqual' : 'contains',
+            valueA: conditionKind === 'numeric' ? 100 : 'cardio',
+            members: undefined,
+            filterJaql: () =>
+              conditionKind === 'numeric' ? { fromNotEqual: 100 } : { contains: 'cardio' },
+            config: filter?.config,
+          };
     return (
       <div data-testid="condition-filter-mock" data-condition-kind={conditionKind ?? 'text'}>
         <button
           data-testid="condition-apply"
           onClick={() => onFilterUpdate(conditionFilterStubPayload)}
+        />
+        <button
+          data-testid="condition-apply-same-grain"
+          onClick={() =>
+            onFilterUpdate({
+              ...conditionFilterStubPayload,
+              attribute: { granularity: 'Years', expression: '[Commerce.Date (Calendar)]' },
+            })
+          }
         />
       </div>
     );
@@ -291,6 +311,35 @@ vi.mock('./components', () => ({
         onClick={() => onChange(['09/20/2026', '09/15/2026'])}
       />
       <button data-testid="date-picker-clear" onClick={() => onChange([])} />
+    </div>
+  ),
+  // Range. Stubbed to what it reports back and the bounds it was handed, so the
+  // dropdown's own publish path (level move, isRangeMode overwrite guard) is what the
+  // tests exercise, not the picker's own draft/Apply mechanics (covered separately).
+  DateRangePickerFilter: ({
+    filter,
+    earliestData,
+    latestData,
+    onFilterUpdate,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test stub only reads the props it renders
+  any) => (
+    <div data-testid="date-range-picker-mock">
+      <div data-testid="date-range-picker-filter">{filter ? 'set' : 'none'}</div>
+      <div data-testid="date-range-picker-bounds">
+        {[earliestData, latestData].map((date) => (date ? date.toISOString() : '')).join('|')}
+      </div>
+      <button
+        data-testid="date-range-picker-apply"
+        onClick={() =>
+          onFilterUpdate({
+            __serializable: 'DateRangeFilter',
+            filterType: 'dateRange',
+            attribute: { granularity: 'Days', expression: '[Commerce.Date (Calendar)]' },
+            filterJaql: () => ({ from: '2026-09-01', to: '2026-09-30' }),
+            config: filter?.config,
+          })
+        }
+      />
     </div>
   ),
 }));
@@ -447,12 +496,15 @@ describe('FilterWidgetDropdown', () => {
     );
   });
 
-  it('shows unsupported copy for condition mode on a date attribute', () => {
+  it('renders ConditionFilter when filterType is condition on a date attribute', () => {
     const { getByTestId, queryByTestId } = render(
       <FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="condition" />,
     );
-    expect(getByTestId('filter-widget-condition-unsupported')).toBeInTheDocument();
-    expect(queryByTestId('condition-filter-mock')).toBeNull();
+    const root = getByTestId('filter-widget-condition');
+    expect(root.getAttribute('data-filter-type')).toBe('condition');
+    expect(root.getAttribute('data-filter-attribute-value-type')).toBe('datetime');
+    expect(getByTestId('condition-filter-mock')).toHaveAttribute('data-condition-kind', 'date');
+    expect(queryByTestId('filter-widget-condition-unsupported')).toBeNull();
   });
 
   it('shows unsupported copy when the linked condition filter is not representable', () => {
@@ -562,6 +614,53 @@ describe('FilterWidgetDropdown', () => {
     );
     fireEvent.click(getByTestId('condition-apply'));
     expect(onFilterUpdate).toHaveBeenCalledWith(conditionFilterStubPayload);
+  });
+
+  /* Date Condition Apply publishes the filter first. When the grain differs from the
+     widget attribute, `dateLevel/changed` follows — never precedes — so Angular remount
+     keeps the Apply already stored in common filters. Same-grain Apply stays quiet. */
+  it('publishes a same-grain date Condition filter without a dateLevel event', () => {
+    const onDateLevelChange = vi.fn();
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="condition"
+        onDateLevelChange={onDateLevelChange}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('condition-apply-same-grain'));
+
+    expect(onDateLevelChange).not.toHaveBeenCalled();
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+  });
+
+  it('reports dateLevel after filter when Condition Apply moves grain', () => {
+    const order: string[] = [];
+    const onDateLevelChange = vi.fn<(attribute: Attribute) => void>(() => {
+      order.push('level');
+    });
+    const onFilterUpdate = vi.fn(() => {
+      order.push('filter');
+    });
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="condition"
+        onDateLevelChange={onDateLevelChange}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('condition-apply'));
+
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+    expect(onDateLevelChange).toHaveBeenCalledTimes(1);
+    const leveled = onDateLevelChange.mock.calls[0]![0];
+    expect(isLevelAttribute(leveled) && leveled.granularity).toBe('Days');
+    expect(order).toEqual(['filter', 'level']);
   });
 
   it('keeps the members List UI when filterType is members (default)', () => {
@@ -1008,7 +1107,8 @@ describe('FilterWidgetDropdown', () => {
    * A granularity another FilterWidget or dashboard filter already uses on the same field is
    * "busy": it must not be offered at all. The host derives the list (e.g.
    * `withExcludedDateLevels`) and the panel must honour it — the requirement the
-   * two-dropdown control satisfied before this one.
+   * two-dropdown control satisfied before this one. The widget's current level is still
+   * surfaced even when excluded, so a List parked on a busy grain can name where it is.
    */
   it('does not offer a granularity another filter already claims', () => {
     const { getByTestId } = render(
@@ -1031,6 +1131,22 @@ describe('FilterWidgetDropdown', () => {
       DateLevels.AggHours,
       DateLevels.AggMinutesRoundTo15,
     ]);
+  });
+
+  it('still names the current level when that level is excluded as claimed by another filter', () => {
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Weeks}
+        isMultiselect={true}
+        onFilterUpdate={vi.fn()}
+        excludedDateLevels={[DateLevels.Weeks, DateLevels.Years]}
+      />,
+    );
+
+    expect(getByTestId('granularity-value').textContent).toBe(DateLevels.Weeks);
+    const offered = getByTestId('granularity-options').textContent!.split(',');
+    expect(offered[0]).toBe(DateLevels.Weeks);
+    expect(offered).not.toContain(DateLevels.Years);
   });
 
   it('offers every level the widget supports when nothing is claimed', () => {
@@ -1269,7 +1385,8 @@ describe('FilterWidgetDropdown', () => {
   /* The published attribute's name travels with the filter: it becomes the jaql title, so a
      host that syncs tile titles from the filter reads it as the linked filter tile's name.
      Left as the bare column name, the tile was renamed from `Years in Date` to `Date` the
-     moment a value was picked. */
+     moment a value was picked. List Apply, Calendar Apply, and date Condition Apply all
+     must pass `t` into createLevelAttribute for the same reason. */
   it('names the level attribute it publishes the way every date level is named', () => {
     const onFilterUpdate = vi.fn();
     const { getByTestId } = render(
@@ -2171,5 +2288,219 @@ describe('FilterWidgetDropdown — calendar', () => {
     const published = onFilterUpdate.mock.calls.at(-1)?.[0] as MembersFilter | undefined;
     expect(published?.members).toEqual(['2026-09-15T00:00:00', '2026-09-20T00:00:00']);
     expect(published?.config.enableMultiSelection).toBe(true);
+  });
+});
+
+describe('FilterWidgetDropdown — range', () => {
+  beforeEach(() => {
+    mockMembersData = {
+      selectedMembers: [],
+      allMembers: [],
+      excludeMembers: false,
+      enableMultiSelection: false,
+    };
+    mockDayStats = { count: 365, min: '2026-01-01T00:00:00', max: '2026-12-31T00:00:00' };
+  });
+
+  afterEach(() => {
+    mockDayStats = undefined;
+    vi.clearAllMocks();
+  });
+
+  /* Range renders in place of the list for a datetime dimension. */
+  it('renders the Range picker for a datetime dimension', () => {
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="range" />,
+    );
+
+    expect(getByTestId('filter-widget-date-range-picker')).toBeInTheDocument();
+    expect(queryByTestId('date-range-picker-mock')).toBeInTheDocument();
+    expect(queryByTestId('filter-widget-date-select')).toBeNull();
+  });
+
+  /* Not offered for a non-datetime dimension — falls back to the member list. */
+  it('falls back to the member list for a non-datetime dimension', () => {
+    const { queryByTestId, getByTestId } = render(
+      <FilterWidgetDropdown attribute={textAttribute} filterType="range" />,
+    );
+
+    expect(queryByTestId('filter-widget-date-range-picker')).toBeNull();
+    expect(getByTestId('filter-widget-members-select')).toBeInTheDocument();
+  });
+
+  it('asks for the dimension bounds at Day granularity, and only for Range', () => {
+    render(<FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="range" />);
+
+    const enabled = mockUseGetAttributeStats.mock.calls.filter(([{ enabled }]) => enabled);
+    expect(enabled).toHaveLength(1);
+    expect(enabled[0][0].attribute.granularity).toBe(DateLevels.Days);
+  });
+
+  it('hands the reported bounds to the Range picker', () => {
+    const { getByTestId } = render(
+      <FilterWidgetDropdown attribute={DM.Commerce.Date.Years} filterType="range" />,
+    );
+
+    expect(getByTestId('date-range-picker-bounds').textContent).toBe(
+      `${new Date('2026-01-01T00:00:00').toISOString()}|${new Date(
+        '2026-12-31T00:00:00',
+      ).toISOString()}`,
+    );
+  });
+
+  it('passes an editable inclusive DateRangeFilter through unchanged', () => {
+    const filter = filterFactory.dateRange(DM.Commerce.Date.Years, '2026-01-14', '2026-04-10');
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        filter={filter}
+      />,
+    );
+
+    expect(getByTestId('date-range-picker-filter')).toHaveTextContent('set');
+    expect(getByTestId('date-range-picker-mock')).toBeInTheDocument();
+  });
+
+  /* CodeRabbit review finding: a linked filter Range cannot read must not silently render
+     as two empty fields, which looks like include-all while the dashboard is actually
+     filtered — Range now shows the same "cannot be edited here" stub Condition already
+     has for its own unrepresentable shapes. */
+  it('shows unsupported copy instead of empty fields for a relative filter it cannot read', () => {
+    const relative = filterFactory.dateRelativeTo(DM.Commerce.Date.Years, 0, 3);
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        filter={relative}
+      />,
+    );
+
+    expect(getByTestId('filter-widget-range-unsupported')).toBeInTheDocument();
+    expect(queryByTestId('date-range-picker-mock')).toBeNull();
+  });
+
+  it('shows unsupported copy for an exclusive Before anchor it cannot read', () => {
+    const before = filterFactory.dateBefore(DM.Commerce.Date.Years, '2026-04-10');
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        filter={before}
+      />,
+    );
+
+    expect(getByTestId('filter-widget-range-unsupported')).toBeInTheDocument();
+    expect(queryByTestId('date-range-picker-mock')).toBeNull();
+  });
+
+  it('treats include-all members as an empty Range seed, not unsupported', () => {
+    const includeAll = filterFactory.members(DM.Commerce.Date.Years, []);
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        filter={includeAll}
+      />,
+    );
+
+    expect(queryByTestId('filter-widget-range-unsupported')).toBeNull();
+    expect(getByTestId('date-range-picker-mock')).toBeInTheDocument();
+    expect(getByTestId('date-range-picker-filter')).toHaveTextContent('none');
+  });
+
+  it('treats leftover List/Calendar members as an empty Range seed, not unsupported', () => {
+    const listMembers = filterFactory.members(DM.Commerce.Date.Years, ['2026']);
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        filter={listMembers}
+      />,
+    );
+
+    expect(queryByTestId('filter-widget-range-unsupported')).toBeNull();
+    expect(getByTestId('date-range-picker-mock')).toBeInTheDocument();
+    expect(getByTestId('date-range-picker-filter')).toHaveTextContent('none');
+  });
+
+  /* `publishRangeFilter`: a DateRangeFilter is always built at Days, so a widget still on
+     a coarser level (Years, here) is realigned to Days on Apply, level move first — the
+     same List/Calendar ordering so a host that discards a stale-level selection on
+     `dateLevel/changed` sees the level move before the filter. */
+  it('realigns the widget to Days and publishes the filter, level move first', () => {
+    const onDateLevelChange = vi.fn();
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        onDateLevelChange={onDateLevelChange}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-range-picker-apply'));
+
+    expect(onDateLevelChange).toHaveBeenCalledTimes(1);
+    expect((onDateLevelChange.mock.calls[0][0] as DimensionalLevelAttribute).granularity).toBe(
+      DateLevels.Days,
+    );
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+    const levelChangeOrder = onDateLevelChange.mock.invocationCallOrder[0];
+    const filterUpdateOrder = onFilterUpdate.mock.invocationCallOrder[0];
+    expect(levelChangeOrder).toBeLessThan(filterUpdateOrder);
+  });
+
+  it('does not fire a level change when the widget is already at Days', () => {
+    const onDateLevelChange = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Days}
+        filterType="range"
+        onDateLevelChange={onDateLevelChange}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-range-picker-apply'));
+
+    expect(onDateLevelChange).not.toHaveBeenCalled();
+  });
+
+  /* The isRangeMode guard (filter-widget-dropdown.tsx, the members-rebuild effect): Apply
+     off-Days moves the grain via `setDateGranularity`, which — without the guard — fires
+     the effect that rebuilds a MembersFilter for the new grain and republishes it,
+     clobbering the DateRangeFilter Apply just published with an empty members filter. */
+  it('does not let the grain move clobber the just-published DateRangeFilter with an empty members filter', () => {
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-range-picker-apply'));
+
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+    expect(onFilterUpdate.mock.calls[0][0]).toMatchObject({ __serializable: 'DateRangeFilter' });
+  });
+
+  it('wires onFilterUpdate through to the Range picker', () => {
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="range"
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    fireEvent.click(getByTestId('date-range-picker-apply'));
+
+    expect(onFilterUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ __serializable: 'DateRangeFilter' }),
+    );
   });
 });

@@ -131,6 +131,36 @@ describe('computeAutoFitFontSize', () => {
     expect(cssFont).toContain('700');
   });
 
+  it('prefixes the probe css font with a non-normal font style', () => {
+    const measure = vi.fn<(text: string, cssFont: string) => number>(() => 30);
+    computeAutoFitFontSize({
+      text: 'abc',
+      font: { family: 'Open Sans', weight: '700', style: 'italic' },
+      maxWidthPx: 300,
+      maxHeightPx: 1000,
+      minPx: 8,
+      maxPx: 96,
+      measure,
+    });
+    const [, cssFont] = measure.mock.calls[0];
+    expect(cssFont).toBe('italic 700 100px Open Sans');
+  });
+
+  it('omits a normal font style from the probe css font, keeping the weight-first shorthand', () => {
+    const measure = vi.fn<(text: string, cssFont: string) => number>(() => 30);
+    computeAutoFitFontSize({
+      text: 'abc',
+      font: { family: 'Open Sans', weight: '700', style: 'normal' },
+      maxWidthPx: 300,
+      maxHeightPx: 1000,
+      minPx: 8,
+      maxPx: 96,
+      measure,
+    });
+    const [, cssFont] = measure.mock.calls[0];
+    expect(cssFont).toBe('700 100px Open Sans');
+  });
+
   describe('affixes', () => {
     it('budgets an em-scaled affix and its fixed gap into the width bound', () => {
       // Text 'abc': widthPerPx = 30. Affix 'xy' at 0.5em: measured at the em-scaled probe

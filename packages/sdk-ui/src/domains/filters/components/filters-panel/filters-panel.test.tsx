@@ -1,8 +1,9 @@
-import { Attribute, Filter, filterFactory } from '@sisense/sdk-data';
+import type { Attribute, CascadingFilter, Filter } from '@sisense/sdk-data';
+import { filterFactory, isMembersFilter } from '@sisense/sdk-data';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { MockedSisenseContextProvider } from '@/__test-helpers__';
+import { MockedSisenseContextProvider, setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 import { FiltersPanel } from './filters-panel.js';
@@ -15,14 +16,15 @@ vi.mock('@/domains/filters/components/filter-tile', () => {
   }: {
     filter: Filter;
     onChange: (filter: Filter) => void;
-    onEdit: (filter: Filter) => void;
+    onEdit: (levelIndex?: number) => void;
   }) => {
     return (
       <div data-testid="filter-tile">
         FilterTile
         {/* Button to trigger inline editing */}
         <button data-testid="inline-edit-filter-tile-button" onClick={() => onChange(filter)} />
-        <button data-testid="edit-filter-button" onClick={() => onEdit(filter)} />
+        <button data-testid="edit-filter-button" onClick={() => onEdit()} />
+        <button data-testid="edit-filter-level-button" onClick={() => onEdit(1)} />
       </div>
     );
   };
@@ -59,7 +61,7 @@ vi.mock('@/domains/filters/components/filter-editor-popover/filter-editor-popove
     onChange?: (filter: Filter) => void;
   }) => {
     return (
-      <div data-testid="filter-editor-popover">
+      <div data-testid="filter-editor-popover" data-edited-attribute={filter?.attribute.name}>
         FilterEditorPopover
         <button
           data-testid="apply-button"
@@ -264,6 +266,51 @@ describe('FiltersPanel', () => {
         expect(onFiltersChange).toHaveBeenCalledOnce();
         expect(onFiltersChange.mock.calls[0][0]).toMatchSnapshot();
       });
+    });
+
+    it('edits a single cascading filter level and writes back the whole cascading filter', async () => {
+      const cascadingFilter = filterFactory.cascading(
+        [
+          filterFactory.members(DM.Commerce.Gender, ['Female'], { guid: 'gender' }),
+          filterFactory.members(DM.Commerce.AgeRange, ['0-18'], { guid: 'age' }),
+          filterFactory.members(DM.Commerce.Condition, ['New'], { guid: 'condition' }),
+        ],
+        { guid: 'cascading' },
+      );
+      const onFiltersChange = vi.fn();
+      const { user } = setup(
+        <MockedSisenseContextProvider>
+          <FiltersPanel
+            filters={[cascadingFilter]}
+            onFiltersChange={onFiltersChange}
+            config={{
+              actions: {
+                editFilter: {
+                  enabled: true,
+                },
+              },
+            }}
+          />
+        </MockedSisenseContextProvider>,
+      );
+
+      await user.click(await screen.findByTestId('edit-filter-level-button'));
+
+      const popover = await screen.findByTestId('filter-editor-popover');
+      expect(popover).toHaveAttribute('data-edited-attribute', DM.Commerce.AgeRange.name);
+
+      await user.click(screen.getByTestId('apply-button'));
+
+      await waitFor(() => expect(onFiltersChange).toHaveBeenCalledOnce());
+      const [newFilter] = onFiltersChange.mock.calls[0][0] as CascadingFilter[];
+      expect(newFilter.config.guid).toBe('cascading');
+      expect(newFilter.filters.map((filter) => filter.config.guid)).toEqual([
+        'gender',
+        'age',
+        'condition',
+      ]);
+      const [, , bottom] = newFilter.filters;
+      expect(isMembersFilter(bottom) && bottom.members).toEqual([]);
     });
   });
 });

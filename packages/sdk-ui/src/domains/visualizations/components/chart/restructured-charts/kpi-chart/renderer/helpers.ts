@@ -17,6 +17,7 @@ import type {
   KpiDataPoint,
   KpiIconCondition,
   KpiRenderOptions,
+  KpiTextTransform,
   NumberFormatConfig,
 } from '@/types.js';
 
@@ -47,6 +48,33 @@ export type KpiTranslateFn = (key: string, options?: Record<string, unknown>) =>
  */
 export function interpolateTemplate(template: string, vars: Record<string, string>): string {
   return template.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, name: string) => vars[name] ?? match);
+}
+
+/**
+ * Mirrors a CSS `text-transform` on a plain string, so the auto-fit measurement sees the same
+ * glyphs the browser will paint (an uppercased string is wider than its source). `capitalize`
+ * approximates the CSS rule: it uppercases the first letter of each word, where a word starts at
+ * the beginning of the string or after any character that is neither a letter, a digit, nor an
+ * apostrophe -- so `(prior)` becomes `(Prior)`, `it's` stays `It's`, and `1.2k` is unchanged
+ * (its first unit is a digit, not a letter), matching what CSS paints. CSS's Unicode word
+ * boundaries differ in rare edge cases; that gap only affects measurement, never rendering, since
+ * the painted `capitalize` always comes from CSS, not from this function's output.
+ * @internal
+ */
+export function applyTextTransform(text: string, transform: KpiTextTransform): string {
+  switch (transform) {
+    case 'uppercase':
+      return text.toLocaleUpperCase();
+    case 'lowercase':
+      return text.toLocaleLowerCase();
+    case 'capitalize':
+      return text.replace(
+        /(^|[^\p{L}\p{N}'\u2019])(\p{L})/gu,
+        (_, boundary: string, letter: string) => `${boundary}${letter.toLocaleUpperCase()}`,
+      );
+    default:
+      return text;
+  }
 }
 
 /**
@@ -253,6 +281,43 @@ export function formatDelta(
     default:
       return valueText;
   }
+}
+
+/**
+ * Builds the caption line of a delta-shaped comparison (`'previous-period'` / `'delta'`): the
+ * relation to the baseline plus the baseline's own formatted value, e.g.
+ * `'vs prior month (35.34M)'` or `'vs Total Cost (107.27M)'`.
+ *
+ * - `labelOverride` (`KpiComparisonStyleOptions.label`) replaces the whole caption verbatim --
+ *   the consumer owns the text, so no baseline is appended.
+ * - A `'delta'` label arrives as the bare measure title (`'Total Cost'`) and gets the localized
+ *   `vs` relation; a `'previous-period'` label is already a localized relation (`'vs prior month'`).
+ * - An empty label (a measure titled with a bare number, dropped by the data layer, or cleared in
+ *   `onBeforeRender`) falls back to the relation against the value alone (`'vs 107.27M'`), so the
+ *   delta never renders with nothing to anchor it to.
+ *
+ * Shared by the visible readout (`kpi-comparison.tsx`) and the aria summary
+ * ({@link summarizeComparisonForAria}) so assistive tech hears exactly the displayed caption.
+ * @internal
+ */
+export function buildDeltaCaption(
+  comparison: { type: 'previous-period' | 'delta'; baseline: number; label: string },
+  numberFormatConfig: NumberFormatConfig | undefined,
+  t: KpiTranslateFn,
+  labelOverride?: string,
+): string {
+  if (labelOverride !== undefined) {
+    return labelOverride;
+  }
+  const baselineText = formatKpiValue(comparison.baseline, numberFormatConfig);
+  if (!comparison.label) {
+    return t('kpi.comparison.vsBaseline', { label: baselineText });
+  }
+  const relation =
+    comparison.type === 'delta'
+      ? t('kpi.comparison.vsBaseline', { label: comparison.label })
+      : comparison.label;
+  return t('kpi.comparison.withBaseline', { label: relation, baseline: baselineText });
 }
 
 /**
@@ -557,27 +622,32 @@ export type KpiTargetTextOverrides = {
 
 /**
  * Builds the two display strings of a `'target'` comparison -- the percent-of-goal line (e.g.
- * `'82% of goal'`, absent when the percent isn't computable) and the amount-to-go line (e.g.
+ * `'82% of goal ($1M)'`, absent when the percent isn't computable) and the amount-to-go line (e.g.
  * `'$250K to go'`) -- from the localized `kpi.target.*` templates, or the consumer's per-instance
- * override templates when set. Shared by the visible readout (`kpi-comparison.tsx`) and the aria
- * summary ({@link summarizeComparisonForAria}) so assistive tech always hears exactly the
- * displayed wording.
+ * override templates when set. Template variables: `{{percent}}`, `{{goal}}` (the target's display
+ * label), `{{goalValue}}` (the target formatted with `numberFormatConfig`) and `{{value}}` (the
+ * amount to go). Shared by the visible readout (`kpi-comparison.tsx`) and the aria summary
+ * ({@link summarizeComparisonForAria}) so assistive tech always hears exactly the displayed wording.
  * @internal
  */
 export function buildTargetReadout(
-  comparison: { percentOfTarget?: number; toGo: number; label: string },
+  comparison: { target: number; percentOfTarget?: number; toGo: number; label: string },
   numberFormatConfig: NumberFormatConfig | undefined,
   t: KpiTranslateFn,
   overrides?: KpiTargetTextOverrides,
 ): { ofGoalText?: string; toGoText: string } {
   // The '{{percent}} of goal' template carries no unit of its own, so the percent sign must be
-  // baked into the interpolated value; `{{goal}}` (the target's display label) is offered to
-  // templates that want to name the goal.
+  // baked into the interpolated value; `{{goal}}` (the target's display label) and `{{goalValue}}`
+  // (its formatted number) are offered to templates that want to name or quantify the goal.
   const percentText =
     comparison.percentOfTarget !== undefined
       ? formatPercentOfTarget(comparison.percentOfTarget, t)
       : undefined;
-  const ofGoalVars = { percent: percentText ?? '', goal: comparison.label };
+  const ofGoalVars = {
+    percent: percentText ?? '',
+    goal: comparison.label,
+    goalValue: formatKpiValue(comparison.target, numberFormatConfig),
+  };
   const ofGoalText =
     percentText !== undefined
       ? overrides?.ofGoalText !== undefined
@@ -595,13 +665,16 @@ export function buildTargetReadout(
 }
 
 /**
- * Builds the comparison segment of the card's `aria-label`, e.g. `'+20.00% vs prior month'`.
+ * Builds the comparison segment of the card's `aria-label`, e.g.
+ * `'+20.00% vs prior month (35.34M)'` -- always exactly the text the visible readout shows.
  *
- * For `'target'` comparisons the summary reads the same localized (or consumer-overridden)
- * strings as the visible readout ({@link buildTargetReadout}) and follows the same `display`
- * semantics (see `kpi-comparison.tsx`), so assistive tech never hears content that isn't shown:
- * `'percent'` reads the percent-of-goal line, `'value'` the amount-to-go line, `'both'` reads
- * both; an unavailable percent falls back to the amount-to-go line.
+ * Delta-shaped comparisons voice the delta text plus the caption from {@link buildDeltaCaption}.
+ * `'target'` comparisons read the same localized (or consumer-overridden) strings as the visible
+ * readout ({@link buildTargetReadout}) and follow the same `display` semantics (see
+ * `kpi-comparison.tsx`): `'percent'` reads the percent-of-goal line, `'value'` the amount-to-go
+ * line, `'both'` reads both; an unavailable percent falls back to the amount-to-go line.
+ * `labelOverride` (`KpiComparisonStyleOptions.label`) applies exactly as in the readout: it is the
+ * whole delta caption, the `{{goal}}` name of a target, or the label of a `'value'` comparison.
  * @internal
  */
 export function summarizeComparisonForAria(
@@ -610,16 +683,19 @@ export function summarizeComparisonForAria(
   t: KpiTranslateFn,
   display: 'percent' | 'value' | 'both' = 'percent',
   targetTextOverrides?: KpiTargetTextOverrides,
+  labelOverride?: string,
 ): string {
+  const label = labelOverride ?? comparison.label;
   switch (comparison.type) {
     case PREVIOUS_PERIOD:
     case 'delta': {
-      const deltaText = formatDelta(comparison, display, t, numberFormatConfig);
-      return comparison.label ? `${deltaText} ${comparison.label}` : deltaText ?? '';
+      const deltaText = formatDelta(comparison, display, t, numberFormatConfig) ?? '';
+      const caption = buildDeltaCaption(comparison, numberFormatConfig, t, labelOverride);
+      return caption ? `${deltaText} ${caption}` : deltaText;
     }
     case 'target': {
       const { ofGoalText, toGoText } = buildTargetReadout(
-        comparison,
+        { ...comparison, label },
         numberFormatConfig,
         t,
         targetTextOverrides,
@@ -631,9 +707,9 @@ export function summarizeComparisonForAria(
     }
     case 'value': {
       const valueText = formatKpiValue(comparison.value, comparison.numberFormatConfig);
-      // Same guard as the delta branch: a comparison measure that is just a fixed number has no
-      // label of its own, and prefixing an empty one would leave a stray space in the summary.
-      return comparison.label ? `${comparison.label} ${valueText}` : valueText;
+      // A comparison measure that is just a fixed number has no label of its own, and prefixing
+      // an empty one would leave a stray space in the summary.
+      return label ? `${label} ${valueText}` : valueText;
     }
   }
 }

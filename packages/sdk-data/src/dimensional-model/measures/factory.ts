@@ -21,7 +21,7 @@ import {
   MeasureTemplate,
 } from '../interfaces.js';
 import { AggregationTypes, MetadataTypes } from '../types.js';
-import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
+import { DimensionalBaseMeasure, DimensionalCalculatedMeasure, isDateMeasure } from './measures.js';
 
 /**
  * Defines the different numeric operators that can be used with numeric filters
@@ -90,6 +90,8 @@ function measureFunction(
   name: string,
   func: string,
   options?: string,
+  // a shift such as PAST or a projection such as trend answers in the unit of its operand
+  keepsDatatype = false,
 ): DimensionalCalculatedMeasure {
   const context = <MeasureContext>{};
 
@@ -100,7 +102,10 @@ function measureFunction(
   }
   builder.push(')');
 
-  return new DimensionalCalculatedMeasure(name, builder.join(''), context);
+  const wrapped = new DimensionalCalculatedMeasure(name, builder.join(''), context);
+
+  // say it answers with a date, so a date measure one hop away still renders as a date
+  return keepsDatatype && isDateMeasure(measure) ? wrapped.withDatatype('datetime') : wrapped;
 }
 
 /**
@@ -113,6 +118,8 @@ function measureFunction(
  *
  * Note: To use [shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm)
  * from a Fusion instance, you must fetch them first using {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}.
+ *
+ * Note: Date measures, such as `MAX([date])`, cannot be combined with numeric values.
  *
  * @example
  * An example of constructing a custom formulas using dimensions, measures, and nested custom formulas
@@ -211,6 +218,9 @@ function arithmetic(
  * This is a base function to build other aggregation functions (e.g., `sum`, `average`, etc.)
  * as listed in {@link AggregationTypes}.
  *
+ * Note: For date attributes, only `count`, `countDistinct`, `min`, and `max` are supported, and
+ * `min` and `max` only at levels from years to days.
+ *
  * @example
  * Calculate the total cost across all items in a category from the Sample Ecommerce data model.
  * ```ts
@@ -219,7 +229,7 @@ function arithmetic(
  * @param attribute - Attribute to aggregate
  * @param aggregationType - Aggregation type. See {@link AggregationTypes}
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @param format - Optional formatting to apply. A Numeral.js format string for a numeric result, or a date-fns format string when the result is a date, as a `min` or `max` over a date column is. A numeric format can only be used for explicit queries, not in charts, tables, etc. A date format is also sent with the query, so a CSV or Excel download uses it; to change what a chart or table shows, set `dateFormat` on the column.
  * @returns A measure instance
  * @group Aggregation
  */
@@ -261,6 +271,8 @@ export const constant: (value: number) => CalculatedMeasure = withComposeCodeFor
  *
  * To create a running sum, use {@link runningSum}.
  *
+ * Note: Only numeric attributes are supported.
+ *
  * @example
  * Calculate the total cost across all items in a category from the Sample Ecommerce data model.
  * ```ts
@@ -282,6 +294,8 @@ export const sum: (attribute: Attribute, name?: string, format?: string) => Base
  * Creates an average aggregation measure over the given attribute.
  *
  * Both `average()` and `avg()` can be used interchangeably.
+ *
+ * Note: Only numeric attributes are supported.
  *
  * @example
  * Calculate the average cost across all items in a category from the Sample Ecommerce data model.
@@ -323,6 +337,9 @@ export const avg: (attribute: Attribute, name?: string, format?: string) => Base
 /**
  * Creates a min aggregation measure over the given attribute.
  *
+ * Note: Numeric and date attributes are supported. For date attributes, only levels from years to
+ * days are supported.
+ *
  * @example
  * Calculate the minimum cost across all items in a category from the Sample Ecommerce data model.
  * ```ts
@@ -330,7 +347,7 @@ export const avg: (attribute: Attribute, name?: string, format?: string) => Base
  * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @param format - Optional formatting to apply. A Numeral.js format string for a numeric result, or a date-fns format string when the result is a date, as a `min` or `max` over a date column is. A numeric format can only be used for explicit queries, not in charts, tables, etc. A date format is also sent with the query, so a CSV or Excel download uses it; to change what a chart or table shows, set `dateFormat` on the column.
  * @returns A measure instance
  * @group Aggregation
  */
@@ -343,6 +360,9 @@ export const min: (attribute: Attribute, name?: string, format?: string) => Base
 /**
  * Creates a max aggregation measure over the given attribute.
  *
+ * Note: Numeric and date attributes are supported. For date attributes, only levels from years to
+ * days are supported.
+ *
  * @example
  * Calculate the maximum cost across all items in a category from the Sample Ecommerce data model.
  * ```ts
@@ -350,7 +370,7 @@ export const min: (attribute: Attribute, name?: string, format?: string) => Base
  * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @param format - Optional formatting to apply. A Numeral.js format string for a numeric result, or a date-fns format string when the result is a date, as a `min` or `max` over a date column is. A numeric format can only be used for explicit queries, not in charts, tables, etc. A date format is also sent with the query, so a CSV or Excel download uses it; to change what a chart or table shows, set `dateFormat` on the column.
  * @returns A measure instance
  * @group Aggregation
  */
@@ -362,6 +382,8 @@ export const max: (attribute: Attribute, name?: string, format?: string) => Base
 
 /**
  * Creates a median aggregation measure over the given attribute.
+ *
+ * Note: Only numeric attributes are supported.
  *
  * @example
  * Calculate the median cost across all items in a category from the Sample Ecommerce data model.
@@ -382,6 +404,8 @@ export const median: (attribute: Attribute, name?: string, format?: string) => B
 
 /**
  * Calculates the standard deviation of the given numeric attribute based on a sample (a random subset of items).
+ *
+ * Note: Only numeric attributes are supported.
  *
  * @example
  * Calculate the standard deviation (sample) of the cost attribute.
@@ -404,6 +428,8 @@ export const stdev: (attribute: Attribute, name?: string, format?: string) => Ba
 /**
  * Calculates the standard deviation of the given numeric attribute based on the entire population (all items).
  *
+ * Note: Only numeric attributes are supported.
+ *
  * @example
  * Calculate the standard deviation (population) of the cost attribute.
  * ```ts
@@ -425,6 +451,8 @@ export const stdevp: (attribute: Attribute, name?: string, format?: string) => B
 /**
  * Calculates the variance of the given numeric attribute based on a sample (a random subset of items).
  *
+ * Note: Only numeric attributes are supported.
+ *
  * @example
  * Calculate the variance (sample) of the cost attribute.
  * ```ts
@@ -445,6 +473,8 @@ export const variance: (attribute: Attribute, name?: string, format?: string) =>
 /**
  * Calculates the variance of the given numeric attribute across the entire population (all items).
  *
+ * Note: Only numeric attributes are supported.
+ *
  * @example
  * Calculate the variance (population) of the cost attribute.
  * ```ts
@@ -464,6 +494,8 @@ export const varp: (attribute: Attribute, name?: string, format?: string) => Bas
 
 /**
  * Calculates the mode (most frequent value) of the given attribute.
+ *
+ * Note: Only numeric attributes are supported.
  *
  * @example
  * Calculate the most frequent cost.
@@ -744,7 +776,7 @@ export const countDistinct: (attribute: Attribute, name?: string, format?: strin
  * @param measure - Measure to filter
  * @param filters - Filters to apply to the measure
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @param format - Optional formatting to apply. A Numeral.js format string for a numeric result, or a date-fns format string when `measure` is a date measure. A numeric format can only be used for explicit queries, not in charts, tables, etc. A date format is also sent with the query, so a CSV or Excel download uses it; to change what a chart or table shows, set `dateFormat` on the column.
  * @returns A calculated measure instance
  * @group Advanced Analytics
  */
@@ -771,11 +803,16 @@ export const measuredValue: (
 
   const exp = builder.join('');
 
-  return new DimensionalCalculatedMeasure(name ?? exp, exp, context, format);
+  const wrapped = new DimensionalCalculatedMeasure(name ?? exp, exp, context, format);
+
+  // like the PAST shifts: a filtered date measure still answers with a date
+  return isDateMeasure(measure) ? wrapped.withDatatype('datetime') : wrapped;
 }, 'measuredValue');
 
 /**
  * Creates a calculated measure by adding two given numbers or measures.
+ *
+ * Note: Only numbers and numeric measures are supported.
  *
  * @example
  * ```ts
@@ -803,6 +840,8 @@ export const add: (
 /**
  * Creates a calculated measure by subtracting two given numbers or measures. Subtracts `value2` from `value1`.
  *
+ * Note: Only numbers and numeric measures are supported.
+ *
  * @example
  * ```ts
  * const measure1 = measureFactory.sum(DM.Dimension.Attribute1);
@@ -829,6 +868,8 @@ export const subtract: (
 /**
  * Creates a calculated measure by multiplying two given numbers or measures.
  *
+ * Note: Only numbers and numeric measures are supported.
+ *
  * @example
  * ```ts
  * const measure1 = measureFactory.sum(DM.Dimension.Attribute1);
@@ -854,6 +895,8 @@ export const multiply: (
 
 /**
  * Creates a calculated measure by dividing two given numbers or measures. Divides `value1` by `value2`.
+ *
+ * Note: Only numbers and numeric measures are supported.
  *
  * @example
  * ```ts
@@ -885,6 +928,8 @@ export const divide: (
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
  * beginning of the year up to the current day, week, month, or quarter.
@@ -909,6 +954,8 @@ export const yearToDateSum: (measure: Measure, name?: string) => CalculatedMeasu
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
  * beginning of the quarter up to the current day, week, or month.
@@ -922,7 +969,7 @@ export const yearToDateSum: (measure: Measure, name?: string) => CalculatedMeasu
  */
 export const quarterToDateSum: (measure: Measure, name?: string) => CalculatedMeasure =
   withComposeCodeForMeasure(
-    (measure, name) => measureFunction(measure, name ?? 'QTD ' + name, 'QTDSum'),
+    (measure, name) => measureFunction(measure, name ?? 'QTD ' + measure.name, 'QTDSum'),
     'quarterToDateSum',
   );
 
@@ -932,6 +979,8 @@ export const quarterToDateSum: (measure: Measure, name?: string) => CalculatedMe
  *
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
+ *
+ * Note: Only numeric measures are supported.
  *
  * @example
  * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
@@ -957,6 +1006,8 @@ export const monthToDateSum: (measure: Measure, name?: string) => CalculatedMeas
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
  * beginning of the week up to the current day.
@@ -970,7 +1021,7 @@ export const monthToDateSum: (measure: Measure, name?: string) => CalculatedMeas
  */
 export const weekToDateSum: (measure: Measure, name?: string) => CalculatedMeasure =
   withComposeCodeForMeasure(
-    (measure, name) => measureFunction(measure, name ?? 'MTD ' + measure.name, 'WTDSum'),
+    (measure, name) => measureFunction(measure, name ?? 'WTD ' + measure.name, 'WTDSum'),
     'weekToDateSum',
   );
 
@@ -978,6 +1029,8 @@ export const weekToDateSum: (measure: Measure, name?: string) => CalculatedMeasu
  * Creates a calculated measure that calculates the running total of a given measure.
  *
  * The running sum is calculated using the current sort order of the query it's used in.
+ *
+ * Note: Only numeric measures are supported.
  *
  * @example
  * Calculate the running sum of the total cost from the Sample Ecommerce data model across all categories.
@@ -1028,6 +1081,8 @@ export const runningSum: (
  * For example, if this period the value is 80, and the previous period's was 100, the growth for
  * this period is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the growth in total cost this period in comparison to the previous period from the
  * Sample Ecommerce data model.
@@ -1061,6 +1116,8 @@ export const growth: (measure: Measure, name?: string) => CalculatedMeasure =
  * For example, if this period the value is 80, and the previous period's was 100, the growth for
  * this period is 80%, returned as `0.8` (calculation: `80 / 100 = .8`).
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the growth rate in total cost this period in comparison to the previous period from the
  * Sample Ecommerce data model.
@@ -1092,6 +1149,8 @@ export const growthRate: (measure: Measure, name?: string) => CalculatedMeasure 
  *
  * For example, if this week the value is 80, and the previous week's was 100, the growth for
  * this week is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
+ *
+ * Note: Only numeric measures are supported.
  *
  * @example
  * Calculate the growth in total cost this week in comparison to the previous week from the Sample
@@ -1126,6 +1185,8 @@ export const growthPastWeek: (measure: Measure, name?: string) => CalculatedMeas
  * For example, if this month the value is 80, and the previous month's was 100, the growth for
  * this month is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the growth in total cost this month in comparison to the previous month from the Sample
  * Ecommerce data model.
@@ -1158,6 +1219,8 @@ export const growthPastMonth: (measure: Measure, name?: string) => CalculatedMea
  *
  * For example, if this quarter the value is 80, and the previous quarter's was 100, the growth for
  * this quarter is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
+ *
+ * Note: Only numeric measures are supported.
  *
  * @example
  * Calculate the growth in total cost this quarter in comparison to the previous quarter from the
@@ -1192,6 +1255,8 @@ export const growthPastQuarter: (measure: Measure, name?: string) => CalculatedM
  * For example, if this year the value is 80, and the previous year's was 100, the growth for
  * this year is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the growth in total cost this year in comparison to the previous year from the Sample
  * Ecommerce data model.
@@ -1217,6 +1282,8 @@ export const growthPastYear: (measure: Measure, name?: string) => CalculatedMeas
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the difference between this period's total cost and the previous period's total cost
  * from the Sample Ecommerce data model.
@@ -1240,6 +1307,8 @@ export const difference: (measure: Measure, name?: string) => CalculatedMeasure 
  * and the data from the previous week for the given measure.
  *
  * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * Note: Only numeric measures are supported.
  *
  * @example
  * Calculate the difference between this week's total cost and the previous week's total cost from
@@ -1265,6 +1334,8 @@ export const diffPastWeek: (measure: Measure, name?: string) => CalculatedMeasur
  *
  * The date dimension will be dynamically taken from the query that uses the returned measure.
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the difference between this month's total cost and the previous month's total cost from
  * the Sample Ecommerce data model.
@@ -1288,6 +1359,8 @@ export const diffPastMonth: (measure: Measure, name?: string) => CalculatedMeasu
  * and the data from the previous quarter for the given measure.
  *
  * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * Note: Only numeric measures are supported.
  *
  * @example
  * Calculate the difference between this quarter's total cost and the previous quarter's total cost
@@ -1313,6 +1386,8 @@ export const diffPastQuarter: (measure: Measure, name?: string) => CalculatedMea
  *
  * The date dimension will be dynamically taken from the query that uses the returned measure.
  *
+ * Note: Only numeric measures are supported.
+ *
  * @example
  * Calculate the difference between this year's total cost and the previous year's total cost from
  * the Sample Ecommerce data model.
@@ -1334,6 +1409,8 @@ export const diffPastYear: (measure: Measure, name?: string) => CalculatedMeasur
 /**
  * Creates a calculated measure that calculates the value for the previous day.
  *
+ * Note: Both numeric and date measures are supported.
+ *
  * @example
  * Calculate total cost for the previous day from the Sample Ecommerce data model.
  * ```ts
@@ -1346,7 +1423,8 @@ export const diffPastYear: (measure: Measure, name?: string) => CalculatedMeasur
  */
 export const pastDay: (measure: Measure, name?: string) => CalculatedMeasure =
   withComposeCodeForMeasure(
-    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Day', 'pastday'),
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Past Day', 'pastday', undefined, true),
     'pastDay',
   );
 
@@ -1355,6 +1433,8 @@ export const pastDay: (measure: Measure, name?: string) => CalculatedMeasure =
  *
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
+ *
+ * Note: Both numeric and date measures are supported.
  *
  * @example
  * Calculate total cost for the corresponding day one week ago from the Sample Ecommerce data model.
@@ -1368,7 +1448,8 @@ export const pastDay: (measure: Measure, name?: string) => CalculatedMeasure =
  */
 export const pastWeek: (measure: Measure, name?: string) => CalculatedMeasure =
   withComposeCodeForMeasure(
-    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Week', 'pastweek'),
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Past Week', 'pastweek', undefined, true),
     'pastWeek',
   );
 
@@ -1377,6 +1458,8 @@ export const pastWeek: (measure: Measure, name?: string) => CalculatedMeasure =
  *
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
+ *
+ * Note: Both numeric and date measures are supported.
  *
  * @example
  * Calculate total cost for the corresponding day or week one month ago from the Sample Ecommerce
@@ -1391,7 +1474,8 @@ export const pastWeek: (measure: Measure, name?: string) => CalculatedMeasure =
  */
 export const pastMonth: (measure: Measure, name?: string) => CalculatedMeasure =
   withComposeCodeForMeasure(
-    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Month', 'pastmonth'),
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Past Month', 'pastmonth', undefined, true),
     'pastMonth',
   );
 
@@ -1400,6 +1484,8 @@ export const pastMonth: (measure: Measure, name?: string) => CalculatedMeasure =
  *
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
+ *
+ * Note: Both numeric and date measures are supported.
  *
  * @example
  * Calculate total cost for the corresponding day, week, or month one quarter ago from the Sample
@@ -1415,7 +1501,13 @@ export const pastMonth: (measure: Measure, name?: string) => CalculatedMeasure =
 export const pastQuarter: (measure: Measure, name?: string) => CalculatedMeasure =
   withComposeCodeForMeasure(
     (measure, name) =>
-      measureFunction(measure, name ?? measure.name + '  Past Quarter', 'pastquarter'),
+      measureFunction(
+        measure,
+        name ?? measure.name + '  Past Quarter',
+        'pastquarter',
+        undefined,
+        true,
+      ),
     'pastQuarter',
   );
 
@@ -1424,6 +1516,8 @@ export const pastQuarter: (measure: Measure, name?: string) => CalculatedMeasure
  *
  * The time resolution is determined by the minimum date level of the date dimension in the query
  * that uses the returned measure.
+ *
+ * Note: Both numeric and date measures are supported.
  *
  * @example
  * Calculate total cost for the corresponding day, week, month, or quarter one year ago from the
@@ -1438,7 +1532,8 @@ export const pastQuarter: (measure: Measure, name?: string) => CalculatedMeasure
  */
 export const pastYear: (measure: Measure, name?: string) => CalculatedMeasure =
   withComposeCodeForMeasure(
-    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Year', 'pastyear'),
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Past Year', 'pastyear', undefined, true),
     'pastYear',
   );
 
@@ -1453,6 +1548,8 @@ export const pastYear: (measure: Measure, name?: string) => CalculatedMeasure =
  * total cost contributes to the total cost across all age ranges. So, the total cost for the 35-44
  * age range is 23.64M, which is 22% of the 107.27M of all age ranges together. Therefore, the
  * contribution of the 35-44 age range is `.22`.
+ *
+ * Note: Only numeric measures are supported.
  *
  * @example
  * Calculates the percentage of the total cost across all categories for items in a category from the
@@ -1524,7 +1621,7 @@ export const trend: (
       .map((e) => adjustValues(`"${e[0]}=${e[1]}"`))
       .join(',');
   }
-  return measureFunction(measure, name ?? measure.name + ' Trend', 'trend', params);
+  return measureFunction(measure, name ?? measure.name + ' Trend', 'trend', params, true);
 }, 'trend');
 
 /**
@@ -1588,7 +1685,7 @@ export const forecast: (
   } else {
     params = '"forecastHorizon=3"';
   }
-  return measureFunction(measure, name ?? measure.name + ' Forecast', 'forecast', params);
+  return measureFunction(measure, name ?? measure.name + ' Forecast', 'forecast', params, true);
 }, 'forecast');
 
 /**

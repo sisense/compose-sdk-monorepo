@@ -9,7 +9,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 /* eslint-disable sonarjs/no-nested-switch */
-import { parseExpression } from '../../utils.js';
+import { createDimensionalElementFromJaql, parseExpression } from '../../utils.js';
 import {
   DimensionalElement,
   normalizeName,
@@ -483,6 +483,11 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
         return returnUnsupported(json.dateTimeLevel);
       }
 
+      // Fusion stores the seconds level with no bucket; seconds has only one bucket ('0').
+      if (json.dateTimeLevel === 'seconds' && json.bucket === undefined) {
+        return DateLevels.Seconds;
+      }
+
       switch (json.bucket) {
         case '60':
           return DateLevels.Hours;
@@ -912,7 +917,13 @@ export function createCalculatedAttribute(json: any): Attribute {
 
   const context: Record<string, any> = {};
   Object.getOwnPropertyNames(json.context || {}).forEach((key) => {
-    context[key] = create(json.context[key]);
+    const entry = json.context[key];
+    // A raw JAQL context entry (e.g. from a filter created in Fusion) has no `type`, so the generic
+    // factory would turn it into a text dimension; translate it like widget rows instead to keep the
+    // column's real data type.
+    const isRawJaqlEntry =
+      entry && typeof entry === 'object' && !entry.type && !entry.__serializable;
+    context[key] = isRawJaqlEntry ? createDimensionalElementFromJaql(entry) : create(entry);
   });
 
   return new DimensionalCalculatedAttribute(

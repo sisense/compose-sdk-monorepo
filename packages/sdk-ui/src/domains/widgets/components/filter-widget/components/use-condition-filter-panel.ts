@@ -36,6 +36,11 @@ type UseConditionFilterPanelArgs<Draft> = {
   defaultDraft: () => Draft;
   operatorItems: DropdownItem[];
   chainOperatorItems: DropdownItem[];
+  /**
+   * When the host has no committed filter, keep an incomplete panel draft
+   * (e.g. Before with an empty date) across Apply + remount.
+   */
+  resolveOpenDraft?: (fromFilter: Draft) => Draft;
 };
 
 /**
@@ -57,6 +62,7 @@ export function useConditionFilterPanel<
   defaultDraft,
   operatorItems,
   chainOperatorItems,
+  resolveOpenDraft,
 }: UseConditionFilterPanelArgs<Draft>) {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
@@ -102,14 +108,15 @@ export function useConditionFilterPanel<
   }, []);
 
   const open = useCallback(() => {
-    const next = toDraft(filter);
+    const fromFilter = toDraft(filter);
+    const next = resolveOpenDraft ? resolveOpenDraft(fromFilter) : fromFilter;
     setDraft(next);
     setOpenedWith(next);
     setScreen({ kind: 'value' });
     setQuery('');
     setTriedApply(false);
     setOpen(true);
-  }, [filter, toDraft]);
+  }, [filter, toDraft, resolveOpenDraft]);
 
   const abandon = useCallback(() => {
     setDraft(openedWith);

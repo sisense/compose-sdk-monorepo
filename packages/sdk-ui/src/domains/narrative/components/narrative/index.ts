@@ -1,4 +1,4 @@
-export { NarrativeCopyButton } from './copy-button.js';
+export { NarrativeCopyButton, type NarrativeCopyButtonProps } from './copy-button.js';
 export { Narrative } from './narrative.js';
 export type {
   NarrativeData,

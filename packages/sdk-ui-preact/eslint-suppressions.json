@@ -1,0 +1,125 @@
+{
+  "scripts/prepare-publish.cjs": {
+    "no-undef": {
+      "count": 7
+    },
+    "no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/__demo__/app.tsx": {
+    "react/no-unknown-property": {
+      "count": 3
+    }
+  },
+  "src/component-adapter/component-adapter.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    }
+  },
+  "src/component-adapter/context-connector.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    }
+  },
+  "src/component-adapter/custom-element.tsx": {
+    "jsdoc/require-param": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/component-adapter/external-component-adapter-element.test.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/component-adapter/external-component-adapter-element.tsx": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-param": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/component-adapter/hook-adapter.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    }
+  },
+  "src/component-adapter/hook-wrapper-component.tsx": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "react-hooks/immutability": {
+      "count": 2
+    }
+  },
+  "src/component-adapter/types.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 5
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "src/component-adapter/utils/create-hook-api-facade.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    }
+  },
+  "src/component-adapter/utils/data-observer.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/component-adapter/utils/observable.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  },
+  "src/preact-compat.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "react/no-deprecated": {
+      "count": 3
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/render.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 10
+    },
+    "jsdoc/require-returns": {
+      "count": 4
+    }
+  }
+}

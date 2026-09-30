@@ -50,7 +50,10 @@ import { CommonWidgetProps } from '@/domains/widgets/components/common-widget/ty
 import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 import { extractFilterWidgetControlStyle } from '@/domains/widgets/components/filter-widget/filter-widget-design';
 import { FilterWidgetFilterType } from '@/domains/widgets/components/filter-widget/types';
-import { NarrativeWidgetProps } from '@/domains/widgets/components/narrative-widget/types';
+import {
+  NarrativeWidgetProps,
+  NarrativeWidgetStyleOptions,
+} from '@/domains/widgets/components/narrative-widget/types';
 import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
 import { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
 import {
@@ -528,7 +531,7 @@ function normalizeFilterWidgetType(
   const known: FilterWidgetFilterType[] = [
     'members',
     'calendar',
-    'dateRange',
+    'range',
     'period',
     'numericRange',
     'condition',
@@ -585,9 +588,16 @@ function extractFilterWidgetData(
       })
     : createAttribute({ name: '', expression: '', type: MetadataTypes.TextAttribute });
 
+  const normalizedFilterType = normalizeFilterWidgetType(style?.filterType ?? style?.subtype);
+  // 'range' is datetime-only, same as 'calendar' — a non-datetime attribute paired with a
+  // stale/API-provided 'range' DTO falls back to 'members', the same way the legacy 'list'
+  // value normalises regardless of the string alone.
+  const filterType: FilterWidgetFilterType =
+    normalizedFilterType === 'range' && !isDatetime ? 'members' : normalizedFilterType;
+
   return {
     attribute,
-    filterType: normalizeFilterWidgetType(style?.filterType ?? style?.subtype),
+    filterType,
     // allowMultiselect: legacy Fusion DTO field; multiSelection: current Fusion filter field
     isMultiselect: style?.allowMultiselect !== false && style?.multiSelection !== false,
     // `style.filterDesign` is the host's persisted key for the control's styling.
@@ -1233,10 +1243,10 @@ export function toWidgetDto(
       },
     };
   } else if (isNarrativeWidget(widgetModel.widgetType)) {
-    // The widget runs no query and persists no style keys of its own; the generated narrative
-    // never survives a reload, so only the container design (appended below) round-trips.
+    // The widget runs no query; its one style key is the automatic height, and the container
+    // design is appended below. The generated narrative never survives a reload.
     subtype = 'dashboardnarrative';
-    style = toNarrativeWidgetStyle();
+    style = toNarrativeWidgetStyle(widgetModel.styleOptions as NarrativeWidgetStyleOptions);
   } else if (isCustomWidget(widgetModel.widgetType)) {
     panels.push(...toCustomWidgetPanels(widgetModel.dataOptions as GenericDataOptions));
     if (widgetModel.customWidgetType && isSupportedPluginCsdkWidget(widgetModel.customWidgetType)) {

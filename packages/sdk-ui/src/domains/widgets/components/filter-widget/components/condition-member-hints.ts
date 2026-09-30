@@ -27,6 +27,11 @@ export type ConditionMemberHint = {
  * @param members - Column members (already scoped by search, if the query did)
  * @param needle - What is currently in the field
  * @param limit - Max rows to return
+ * @param matches - How a member's title relates to the needle. Defaults to
+ * `contains` — the row's own operator (`starts-with`, `not-ends-with`, …) passes
+ * its own shape here so a row whose query returns members that DON'T contain the
+ * needle (any `not-…` operator) isn't re-filtered back down to nothing by a
+ * `contains` check that no longer matches what the server was asked for.
  * @returns Matching members, or an empty list
  * @internal
  */
@@ -34,9 +39,10 @@ export function memberHintsForNeedle(
   members: readonly ConditionMemberHint[],
   needle: string,
   limit = CONDITION_TEXT_HINT_LIMIT,
+  matches: (title: string, needle: string) => boolean = (title, n) => title.includes(n),
 ): ConditionMemberHint[] {
   const n = needle.trim().toLowerCase();
   if (!n) return [];
   if (members.some((member) => member.title.toLowerCase() === n)) return [];
-  return members.filter((member) => member.title.toLowerCase().includes(n)).slice(0, limit);
+  return members.filter((member) => matches(member.title.toLowerCase(), n)).slice(0, limit);
 }

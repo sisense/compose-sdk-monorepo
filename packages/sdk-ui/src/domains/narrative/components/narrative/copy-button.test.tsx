@@ -19,6 +19,42 @@ describe('NarrativeCopyButton', () => {
     expect(await navigator.clipboard.readText()).toBe('**bold** narrative');
   });
 
+  it('calls onCopied once the text is on the clipboard', async () => {
+    const onCopied = vi.fn();
+    const { user } = setup(<NarrativeCopyButton copyText="text" onCopied={onCopied} />);
+
+    await user.click(await screen.findByTestId('csdk-narrative-copy-button'));
+
+    expect(onCopied).toHaveBeenCalledTimes(1);
+  });
+
+  it('still confirms the copy when onCopied throws, and logs the failure', async () => {
+    const error = new Error('tracking failed');
+    const onCopied = vi.fn(() => {
+      throw error;
+    });
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { user } = setup(<NarrativeCopyButton copyText="text" onCopied={onCopied} />);
+    const button = await screen.findByTestId('csdk-narrative-copy-button');
+
+    await user.click(button);
+
+    expect(await navigator.clipboard.readText()).toBe('text');
+    expect(button).toBeDisabled();
+    expect(button).toHaveAccessibleName(translation.narrativeWidget.copied);
+    expect(consoleError).toHaveBeenCalledWith('The narrative copy callback failed', error);
+  });
+
+  it('does not call onCopied when the clipboard rejects', async () => {
+    const onCopied = vi.fn();
+    const { user } = setup(<NarrativeCopyButton copyText="text" onCopied={onCopied} />);
+    vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('denied'));
+
+    await user.click(await screen.findByTestId('csdk-narrative-copy-button'));
+
+    expect(onCopied).not.toHaveBeenCalled();
+  });
+
   it('shows the copied confirmation for four seconds and is inert meanwhile', async () => {
     vi.useFakeTimers();
     try {

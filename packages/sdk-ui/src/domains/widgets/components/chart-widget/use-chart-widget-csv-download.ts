@@ -8,6 +8,7 @@ import { hasAdvancedAnalyticsMeasure } from '@/domains/visualizations/core/chart
 import { translateTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import { TableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 import { isTable } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
+import { mapMeasuresForCsvExport } from '@/domains/widgets/helpers/export-map-dimensions-measures.js';
 import { useCsvQueryFileLoader } from '@/domains/widgets/hooks/use-csv-query-file-loader.js';
 import { useWithCsvDownloadMenuItem } from '@/domains/widgets/hooks/use-with-csv-download-menu-item.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
@@ -67,7 +68,7 @@ export function useChartWidgetCsvDownload(
     return {
       dataSource,
       dimensions: attributesWithUnformattedDates,
-      measures,
+      measures: mapMeasuresForCsvExport(measures),
       filters,
       highlights,
       ungroup: isTableWidget && !hasAdvancedAnalyticsMeasure(measures),

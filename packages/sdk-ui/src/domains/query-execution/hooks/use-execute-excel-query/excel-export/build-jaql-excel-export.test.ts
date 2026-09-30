@@ -1,4 +1,10 @@
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import {
+  DateLevels,
+  DimensionalLevelAttribute,
+  filterFactory,
+  type Measure,
+  measureFactory,
+} from '@sisense/sdk-data';
 import { describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
@@ -177,6 +183,82 @@ describe('createPanelsMetadataForXlsx', () => {
     expect(metadata).toHaveLength(2);
     expect(metadata[0]).toMatchObject({ panel: 'rows' });
     expect(metadata[1]).toMatchObject({ panel: 'columns' });
+  });
+
+  it('forwards the datatype and the level of a date measure', () => {
+    const metadata = createPanelsMetadataForXlsx(
+      [],
+      [measureFactory.max(DM.Commerce.Date.Years)],
+      true,
+    );
+
+    expect(metadata[0]).toMatchObject({
+      panel: 'measures',
+      jaql: expect.objectContaining({ datatype: 'datetime', level: 'years', agg: 'max' }),
+    });
+  });
+
+  // `extraJaql` is typed `Record<string, unknown>`, so the keys it spreads are not in the
+  // inferred item type
+  const jaqlOf = (measure: Measure) =>
+    createPanelsMetadataForXlsx([], [measure], true)[0].jaql as Record<string, unknown>;
+
+  it('forwards the formula and its operands for a date measure written as a formula', () => {
+    const jaql = jaqlOf(
+      measureFactory.customFormula('Last sale', 'MAX([D])', { D: DM.Commerce.Date.Days }),
+    );
+
+    expect(jaql.formula).toBe('MAX([D])');
+    expect(jaql.datatype).toBe('datetime');
+    expect(jaql.level).toBe('days');
+    expect(jaql.context).toBeDefined();
+  });
+
+  it('sends a numeric formula as it did before, with no datatype or level', () => {
+    const jaql = jaqlOf(
+      measureFactory.customFormula('Lifetime', 'SUM([R])', { R: DM.Commerce.Revenue }),
+    );
+
+    expect(jaql.formula).toBe('SUM([R])');
+    expect(jaql.datatype).toBeUndefined();
+    expect(jaql.level).toBeUndefined();
+  });
+
+  it('carries the date mask through to the export item', () => {
+    const metadata = createPanelsMetadataForXlsx(
+      [],
+      [measureFactory.max(DM.Commerce.Date.Days)],
+      true,
+    );
+
+    expect(metadata[0]).toMatchObject({ format: { mask: { days: 'yyyy-MM-dd' } } });
+  });
+
+  it('sends agg alone for a numeric measure, with no datatype, exactly as before', () => {
+    const metadata = createPanelsMetadataForXlsx(
+      [],
+      [measureFactory.sum(DM.Commerce.Revenue)],
+      true,
+    );
+
+    // the measure jaql carries datatype 'numeric'; forwarding it would change every existing
+    // export request, so only a date measure with a level adds anything beyond agg
+    expect(metadata[0].jaql).not.toHaveProperty('datatype');
+    expect(metadata[0].jaql).not.toHaveProperty('level');
+    expect(metadata[0]).toMatchObject({ jaql: expect.objectContaining({ agg: 'sum' }) });
+  });
+
+  it('sends agg alone for a date part, which has no level to resolve', () => {
+    const weekOfYear = new DimensionalLevelAttribute(
+      'Week of year',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.WeekOfYear,
+    );
+    const metadata = createPanelsMetadataForXlsx([], [measureFactory.max(weekOfYear)], true);
+
+    expect(metadata[0].jaql).not.toHaveProperty('datatype');
+    expect(metadata[0].jaql).not.toHaveProperty('dateTimePart');
+    expect(metadata[0]).toMatchObject({ jaql: expect.objectContaining({ agg: 'max' }) });
   });
 
   it('assigns sequential jaql.field.index across dimensions then measures', () => {

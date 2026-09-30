@@ -8,7 +8,6 @@ import isDate from 'lodash-es/isDate';
 
 import { formatDateValue } from '@/domains/query-execution/core/date-formats/index.js';
 import { SisenseChartDataPoint } from '@/domains/visualizations/components/chart/components/sisense-chart/types';
-import { formatDatetimeString } from '@/domains/visualizations/components/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
 import {
   BoxplotChartDataOptionsInternal,
   CalendarHeatmapChartDataOptionsInternal,
@@ -20,6 +19,7 @@ import {
   ScatterChartDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types';
 import { getDataOptionGranularity } from '@/domains/visualizations/core/chart-data-options/utils';
+import { formatDatetimeString } from '@/shared/formatters/format-datetime-string';
 import {
   BoxplotDataPoint,
   CalendarHeatmapDataPoint,

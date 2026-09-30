@@ -64,7 +64,7 @@ export type FilterRelationsRuleIdNode = { instanceid: string };
 
 # How it connects
 
-- Built by `filterFactory.logic.and`/`or` ([filters](./filters.md), factory.ts:1520/:1547); `logic.and` flattens a `Filter[]` node into a right-leaning AND chain (factory.ts:1489).
+- Built by `filterFactory.logic.and`/`or` ([filters](./filters.md), factory.ts:1694/:1721); `logic.and` flattens a `Filter[]` node into a right-leaning AND chain through `relate` (factory.ts:1663).
 - `helpers.ts` transformers (`withAddedFilter`, `withoutFilter`, `withReplacedFilter`) are the intended mutation API: they `splitFiltersAndRelations` → edit the flat array → `calculateNewRelations` → `combineFiltersAndRelations`.
 - `combineFiltersAndRelations` reconstructs the tree by calling `filterFactory.logic.and/or` (filter-relations.ts:175), so rebuilt relations regain `composeCode`.
 - sdk-ui consumes this heavily: dashboard-model reducers, widget-by-id utils, drilldown hooks, and packages/sdk-ui/src/shared/utils/filter-relations.ts; the dashboard-model ↔ rules converters bridge to persisted dashboard DTOs, `getFilterRelationsFromJaql` bridges from fetched query metadata.

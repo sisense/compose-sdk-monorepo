@@ -1,17 +1,70 @@
 import { type ReactElement } from 'react';
 
+import { measureFactory } from '@sisense/sdk-data';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { NarrativeTestWrapper } from '@/domains/narrative/__test-helpers__/narrative-test-wrapper';
-import { mockNarrativeStandard } from '@/domains/narrative/components/narrative/__mocks__/narrative-mocks.js';
+import type { WidgetProps } from '@/domains/widgets/components/widget/types';
+import {
+  DASHBOARD_NARRATIVE_QUERIES_ENDPOINT,
+  type DashboardNarrativeResponseDto,
+} from '@/infra/api/narrative/dashboard-narrative-endpoints.js';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 
 import { NarrativeWidget } from './narrative-widget.js';
+
+const chart: WidgetProps = {
+  widgetType: 'chart',
+  id: 'c1',
+  title: 'Revenue by month',
+  chartType: 'line',
+  dataSource: DM.DataSource,
+  dataOptions: {
+    category: [DM.Commerce.Date.Months],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  },
+};
+
+const narrativeBody: DashboardNarrativeResponseDto = {
+  overview: 'Revenue grew **12%**.',
+  insights: [
+    { text: 'Q4 led with **$1.2M**.', status: 'positive' },
+    { text: 'Returns rose to **4%**.', status: 'negative' },
+  ],
+  density: 'standard',
+  sourceType: 'queries',
+  sourceId: null,
+  model: 'test-model',
+  usage: { inputTokens: 1, outputTokens: 2 },
+  traceId: null,
+  generatedAt: '2026-09-10T08:00:00.000Z',
+  excludedWidgetIds: [],
+};
+
+const cacheMissBody: DashboardNarrativeResponseDto = {
+  ...narrativeBody,
+  overview: '',
+  insights: [],
+  density: 'none',
+  generatedAt: '',
+  cached: false,
+};
+
+/** Generates on request; a cache-only lookup misses. */
+function respondWithNarrative() {
+  server.use(
+    http.post(`*/${DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}`, async ({ request }) => {
+      const { cacheOnly } = (await request.json()) as { cacheOnly?: boolean };
+      return HttpResponse.json(cacheOnly ? cacheMissBody : narrativeBody);
+    }),
+  );
+}
 
 describe('NarrativeWidget', () => {
   // The widget reads the credit balance through useQuotaNotification, which needs a query
@@ -26,42 +79,56 @@ describe('NarrativeWidget', () => {
     <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
   );
 
-  it('starts idle, and generating without a narrative lands in the retryable failed state', async () => {
+  it('starts idle, and generating with no widgets to describe reports no data', async () => {
     const { user } = setup(withQueryClient(<NarrativeWidget title="Dashboard Narrative" />));
 
     await user.click(await screen.findByTestId('csdk-narrative-generate'));
 
     expect(await screen.findByTestId('csdk-narrative-error')).toHaveAttribute(
       'data-error-kind',
-      'failed',
+      'no-data',
     );
-    expect(screen.getByTestId('csdk-narrative-generate')).toBeEnabled();
   });
 
-  it('starts ready when a narrative is pre-supplied, with the copy action in the header', async () => {
+  it('shows a generated narrative, with the copy action in the header', async () => {
+    respondWithNarrative();
     setup(
-      withQueryClient(
-        <NarrativeWidget title="Dashboard Narrative" narrative={mockNarrativeStandard} />,
-      ),
+      <NarrativeTestWrapper>
+        <NarrativeWidget title="Dashboard Narrative" widgets={[chart]} generateOnMount />
+      </NarrativeTestWrapper>,
     );
 
     expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
     expect(screen.getAllByTestId('csdk-narrative-insight')).toHaveLength(
-      mockNarrativeStandard.insights.length,
+      narrativeBody.insights.length,
     );
     expect(screen.getByText('Dashboard Narrative')).toBeTruthy();
     expect(screen.getByTestId('csdk-narrative-copy-button')).toBeTruthy();
   });
 
-  it('renders only the content when the host provides the chrome (containerless)', async () => {
+  it('draws no regenerate action when it generates on mount, as in an export', async () => {
+    respondWithNarrative();
     setup(
-      withQueryClient(
+      <NarrativeTestWrapper>
+        <NarrativeWidget widgets={[chart]} generateOnMount />
+      </NarrativeTestWrapper>,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-generate')).toBeNull();
+  });
+
+  it('renders only the content when the host provides the chrome (containerless)', async () => {
+    respondWithNarrative();
+    setup(
+      <NarrativeTestWrapper>
         <NarrativeWidget
           title="Dashboard Narrative"
-          narrative={mockNarrativeStandard}
+          widgets={[chart]}
+          generateOnMount
           containerless
-        />,
-      ),
+        />
+      </NarrativeTestWrapper>,
     );
 
     expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
@@ -122,7 +189,7 @@ describe('NarrativeWidget', () => {
       'data-error-kind',
       'quota-exceeded',
     );
-    expect(screen.queryByTestId('csdk-narrative-generate')).toBeNull();
+    expect(screen.queryByTestId('csdk-narrative-idle')).toBeNull();
   });
 
   it('keeps a generated narrative on screen and disables regenerate once the allowance is spent', async () => {
@@ -137,9 +204,14 @@ describe('NarrativeWidget', () => {
       ),
     );
 
+    server.use(
+      http.post(`*/${DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}`, () =>
+        HttpResponse.json({ ...narrativeBody, cached: true }),
+      ),
+    );
     setup(
       <NarrativeTestWrapper>
-        <NarrativeWidget narrative={mockNarrativeStandard} />
+        <NarrativeWidget widgets={[chart]} />
       </NarrativeTestWrapper>,
     );
 
@@ -170,23 +242,102 @@ describe('NarrativeWidget', () => {
     expect(screen.queryByTestId('csdk-narrative-quota-warning')).toBeNull();
   });
 
-  it('reports every state to the host: idle on mount, ready once a narrative arrives', async () => {
+  it('shows a cached narrative on mount without a click', async () => {
+    server.use(
+      http.post(`*/${DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}`, () =>
+        HttpResponse.json({ ...narrativeBody, cached: true }),
+      ),
+    );
+    setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget widgets={[chart]} />
+      </NarrativeTestWrapper>,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-idle')).toBeNull();
+  });
+
+  it('reports every state to the host: idle after a cache miss, ready once a narrative arrives', async () => {
+    respondWithNarrative();
     const onStateChange = vi.fn();
-    const { rerender } = setup(withQueryClient(<NarrativeWidget onStateChange={onStateChange} />));
+    const { user } = setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget widgets={[chart]} onStateChange={onStateChange} />
+      </NarrativeTestWrapper>,
+    );
 
     expect(await screen.findByTestId('csdk-narrative-idle')).toBeTruthy();
     expect(onStateChange).toHaveBeenLastCalledWith({ status: 'idle' });
 
-    rerender(
-      withQueryClient(
-        <NarrativeWidget onStateChange={onStateChange} narrative={mockNarrativeStandard} />,
-      ),
-    );
+    await user.click(screen.getByTestId('csdk-narrative-generate'));
 
     expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
-    expect(onStateChange).toHaveBeenLastCalledWith({
-      status: 'ready',
-      data: mockNarrativeStandard,
+    expect(onStateChange).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        status: 'ready',
+        data: expect.objectContaining({ overview: narrativeBody.overview }),
+      }),
+    );
+  });
+
+  describe('automatic height', () => {
+    const MEASURED = 40;
+    /** The outer box the widget sizes; everything inside it measures `MEASURED`. */
+    const OUTER = 100;
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    const renderIdle = (styleOptions?: { isAutoHeight?: boolean }, containerless = false) => {
+      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(function (
+        this: HTMLElement,
+      ) {
+        return this.parentElement?.parentElement === document.body ? OUTER : MEASURED;
+      });
+      const onContentHeightChange = vi.fn();
+      const view = setup(
+        withQueryClient(
+          <NarrativeWidget
+            styleOptions={styleOptions}
+            containerless={containerless}
+            onContentHeightChange={onContentHeightChange}
+          />,
+        ),
+      );
+      return { ...view, onContentHeightChange };
+    };
+
+    const sizedWrapper = (container: HTMLElement) =>
+      (container.firstElementChild as HTMLElement | null)?.style.height;
+
+    it('sizes itself to the content plus what its container measures around it', async () => {
+      const { container, onContentHeightChange } = renderIdle({ isAutoHeight: true });
+
+      await screen.findByTestId('csdk-narrative-idle');
+
+      const natural = 16 + MEASURED + 16;
+      expect(onContentHeightChange).toHaveBeenLastCalledWith(natural);
+      // The container's chrome is the outer box minus its content area: OUTER - MEASURED.
+      expect(sizedWrapper(container)).toBe(`${natural + OUTER - MEASURED}px`);
+    });
+
+    it('leaves its size to the container when isAutoHeight is off', async () => {
+      const { container } = renderIdle({ isAutoHeight: false });
+
+      await screen.findByTestId('csdk-narrative-idle');
+
+      expect(sizedWrapper(container)).toBe('');
+    });
+
+    it('only reports the height when the host draws the chrome', async () => {
+      const { container, onContentHeightChange } = renderIdle({ isAutoHeight: true }, true);
+
+      await screen.findByTestId('csdk-narrative-idle');
+
+      expect(onContentHeightChange).toHaveBeenCalled();
+      expect(sizedWrapper(container)).toBe('');
     });
   });
 
@@ -199,6 +350,26 @@ describe('NarrativeWidget', () => {
     expect(onReady).toHaveBeenCalledTimes(1);
   });
 
+  it('with generateOnMount, generates without a click and fires onReady once it has settled', async () => {
+    const onScreenAtReady: (string | null)[] = [];
+    const onReady = vi.fn(() => {
+      const error = screen.queryByTestId('csdk-narrative-error');
+      onScreenAtReady.push(error?.getAttribute('data-error-kind') ?? null);
+    });
+    setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget generateOnMount onReady={onReady} />
+      </NarrativeTestWrapper>,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-error')).toHaveAttribute(
+      'data-error-kind',
+      'no-data',
+    );
+    expect(onReady).toHaveBeenCalledTimes(1);
+    expect(onScreenAtReady).toEqual(['no-data']);
+  });
+
   it('renames inline from the header menu and emits title/changed', async () => {
     const onChange = vi.fn();
     const { user } = setup(
@@ -206,7 +377,6 @@ describe('NarrativeWidget', () => {
         <MenuProvider>
           <NarrativeWidget
             title="Dashboard Narrative"
-            narrative={mockNarrativeStandard}
             config={{ header: { title: { editing: { enabled: true } } } }}
             onChange={onChange}
           />
@@ -230,12 +400,12 @@ describe('NarrativeWidget', () => {
     setup(
       withQueryClient(
         <MenuProvider>
-          <NarrativeWidget title="Dashboard Narrative" narrative={mockNarrativeStandard} />
+          <NarrativeWidget title="Dashboard Narrative" />
         </MenuProvider>,
       ),
     );
 
-    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    expect(await screen.findByTestId('csdk-narrative-idle')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'widget header menu' })).toBeNull();
   });
 });

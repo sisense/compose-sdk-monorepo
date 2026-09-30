@@ -291,6 +291,31 @@ export const customTypography = template(
 );
 
 /**
+ * `textStyle` overrides on all three stylable elements: a sentence-case regular-weight title
+ * (no uppercase, so no tracking), a regular-weight headline value, and an italic comparison.
+ */
+export const customTextStyle = template(
+  {
+    chartType: 'kpi',
+    dataSet: kpiData,
+    dataOptions: {
+      value: revenue,
+      category: months,
+      comparison: { type: 'previous-period' },
+    } satisfies KpiChartDataOptions,
+    styleOptions: {
+      title: {
+        text: 'Monthly revenue',
+        textStyle: { textTransform: 'none', fontWeight: '400' },
+      },
+      value: { textStyle: { fontWeight: '400' } },
+      comparison: { textStyle: { fontStyle: 'italic' } },
+    } satisfies KpiStyleOptions,
+  },
+  [withCardSize],
+);
+
+/**
  * The sparkline draws the category series, so it takes that column's color. The headline keeps
  * its own measure-driven color independently -- two slots, two colors.
  */

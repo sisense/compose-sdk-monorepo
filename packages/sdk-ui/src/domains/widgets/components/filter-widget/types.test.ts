@@ -7,7 +7,7 @@ describe('filterWidgetFilterTypeLabels', () => {
     expect(filterWidgetFilterTypeLabels).toEqual({
       members: 'List',
       calendar: 'Calendar',
-      dateRange: 'Date Range',
+      range: 'Range',
       period: 'Period',
       numericRange: 'Numeric Range',
       condition: 'Condition',

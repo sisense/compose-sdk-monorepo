@@ -21,6 +21,7 @@ import {
   CountRowsResponse,
   JaqlQueryPayload,
   JaqlResponse,
+  QueryDescription,
 } from '../types.js';
 import { PivotQueryTaskPassport, QueryTaskPassport } from './query-task-passport.js';
 
@@ -108,16 +109,10 @@ export class QueryTaskManager extends AbstractTaskManager {
 
     validateJaqlResponse(jaqlResponse);
 
-    const metadata = [...queryDescription.attributes, ...queryDescription.measures];
-
-    // extra columns are assumed to have been added by advanced analytics functions.
-    // They have no model element behind them, so the response header doubles as both
-    // identity and display label.
-    const extraColumns: ResultColumnMetadata[] = (jaqlResponse.headers || [])
-      .slice(metadata.length)
-      .map((c) => ({ name: c, title: c, type: 'number' }));
-
-    return getDataFromQueryResult(jaqlResponse, [...metadata, ...extraColumns]);
+    return getDataFromQueryResult(
+      jaqlResponse,
+      buildResultColumnsMetadata(queryDescription, jaqlResponse.headers),
+    );
   }
 
   /**
@@ -289,6 +284,30 @@ export class QueryTaskManager extends AbstractTaskManager {
       this.cancelPivotJaqlQuery.bind(this),
     ),
   ]);
+}
+
+/**
+ * Describes every column of a query result, in response column order: one entry per queried
+ * element, followed by one per column the response added on top of them.
+ *
+ * @param queryDescription - The attributes and measures the query asked for.
+ * @param responseHeaders - The column headers of the JAQL response.
+ * @returns The metadata of every result column.
+ */
+export function buildResultColumnsMetadata(
+  queryDescription: Pick<QueryDescription, 'attributes' | 'measures'>,
+  responseHeaders: string[] | undefined,
+): ResultColumnMetadata[] {
+  const queriedColumns = [...queryDescription.attributes, ...queryDescription.measures];
+
+  // extra columns are assumed to have been added by advanced analytics functions.
+  // They have no model element behind them, so the response header doubles as both
+  // identity and display label.
+  const extraColumns: ResultColumnMetadata[] = (responseHeaders || [])
+    .slice(queriedColumns.length)
+    .map((c) => ({ name: c, title: c, type: 'number' }));
+
+  return [...queriedColumns, ...extraColumns];
 }
 
 export function validateJaqlResponse(

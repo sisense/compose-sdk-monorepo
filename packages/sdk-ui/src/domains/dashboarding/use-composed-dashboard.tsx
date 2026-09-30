@@ -21,6 +21,7 @@ import {
   withResolvedWidgetDataSource,
   withWidgetAppendedToPanelLayout,
 } from '@/domains/dashboarding/utils.js';
+import { withNarrativeSiblings } from '@/domains/narrative/core/with-narrative-siblings.js';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import { isFilterWidgetProps } from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
@@ -367,6 +368,13 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
       layoutManagers: [tabberLayoutManager],
     });
 
+  // Narrative widgets describe the other widgets: the connected props, restricted to what the
+  // final layout shows, so hidden tabs stay out and the queries carry the current filters.
+  const widgetsWithNarrativeSiblings = useMemo(
+    () => withNarrativeSiblings(finalWidgetsLayout)(finalWidgets),
+    [finalWidgets, finalWidgetsLayout],
+  );
+
   const finalLayoutOptions = useMemo(() => {
     return { ...initialDashboard.layoutOptions, widgetsPanel: finalWidgetsLayout };
   }, [finalWidgetsLayout, initialDashboard.layoutOptions]);
@@ -385,6 +393,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
           allFilters,
           w.attribute,
           innerWidgetsOptions?.[w.id]?.filterWidgetOptions,
+          { filterType: w.filterType },
         );
         return filter ? [filter.config.guid] : [];
       });
@@ -432,6 +441,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
         allFilters,
         widget.attribute,
         options?.[id]?.filterWidgetOptions,
+        { filterType: widget.filterType },
       );
       if (filter) removedGuids.add(filter.config.guid);
     });
@@ -506,7 +516,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   const composedDashboard: DashboardProps = {
     ...initialDashboard,
     filters: commonFilters,
-    widgets: finalWidgets,
+    widgets: widgetsWithNarrativeSiblings,
     layoutOptions: finalLayoutOptions,
     widgetsOptions: innerWidgetsOptions,
     ...(innerConfig ? { config: innerConfig } : {}),

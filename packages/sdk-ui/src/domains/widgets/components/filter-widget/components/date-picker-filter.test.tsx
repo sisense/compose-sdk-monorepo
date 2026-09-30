@@ -131,6 +131,21 @@ describe('DatePickerFilter — single select', () => {
     expect(onChange).toHaveBeenCalledWith(['9/5/2026']);
   });
 
+  /* A full part already hops the caret over the separator, so the `/` typed after it must not
+     jump again: `03/06/2026` used to come out `03/DD/0620`. */
+  it('keeps a padded date typed with separators after full parts', async () => {
+    const user = userEvent.setup();
+    const { onChange } = setup();
+    await openPanel(user);
+
+    await user.keyboard('03/06/2026');
+
+    expect(screen.getByTestId('filter-widget-date-input')).toHaveValue('03/06/2026');
+    await user.click(screen.getByTestId('filter-widget-panel-apply'));
+
+    expect(onChange).toHaveBeenCalledWith(['03/06/2026']);
+  });
+
   /* The same jump on a day-first mask, so the behaviour is the mask's and not the slash's. */
   it('publishes an unpadded date on a dot-separated mask', async () => {
     language = 'de-DE';

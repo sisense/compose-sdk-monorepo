@@ -202,6 +202,7 @@ const deserializeDimensionalCalculatedMeasure = (v: any) => {
     v.dataSource,
     v.composeCode,
     resolveSerializedTitle(v),
+    v.datatype,
   );
 };
 

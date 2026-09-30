@@ -1,6 +1,8 @@
+import { measureFactory } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { getTranslatedDataOptions } from '@/domains/visualizations/components/chart/helpers/use-translated-data-options.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
 import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
@@ -88,5 +90,26 @@ describe('useChartWidgetCsvDownload', () => {
         filename: 'Revenue.csv',
       }),
     );
+  });
+
+  it('gives a date measure its display format, so the CSV reads as a date', async () => {
+    const dateMeasure = measureFactory.max(DM.Commerce.Date.Days, 'Max Date');
+    const numeric = measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue');
+    vi.mocked(getTranslatedDataOptions).mockReturnValue({
+      dataOptions: {},
+      attributes: [],
+      measures: [dateMeasure, numeric],
+      dataColumnNamesMapping: {},
+    });
+
+    const { result } = renderHook(() => useChartWidgetCsvDownload(baseParams));
+    await act(async () => {
+      findCsvOnClick(result.current.headerConfig)?.();
+    });
+
+    const { measures } = mockExecute.mock.calls[0][0];
+    expect(measures[0].getFormat()).toBe('yyyy-MM-dd');
+    // the numeric measure goes through by identity, so its CSV output cannot move
+    expect(measures[1]).toBe(numeric);
   });
 });

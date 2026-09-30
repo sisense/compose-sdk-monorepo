@@ -9,6 +9,7 @@ import type { PivotTableDataOptionsInternal } from '@/domains/visualizations/cor
 import type { ClientApplication } from '@/infra/app/types';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
 
+import { createDataCellValueFormatter } from '../formatters/data-cell-formatters';
 import type { CustomDataCellFormatter, CustomHeaderCellFormatter } from '../formatters/types';
 import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
 
@@ -66,6 +67,16 @@ describe('useApplyPivotTableFormatting', () => {
     handler(cell, {}, {});
 
     expect(dataCellFormatterMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('gives the data cell formatter a working date formatter, not only the header one', () => {
+    renderHook(() => useApplyPivotTableFormatting({ dataService, dataOptions }));
+
+    const [, dateFormatter] = vi.mocked(createDataCellValueFormatter).mock.calls[0];
+
+    expect(typeof dateFormatter).toBe('function');
+    // proves it is the real closure rather than any function that happened to be passed
+    expect(dateFormatter!(new Date('2012-07-11T00:00:00.000Z'), 'yyyy-MM-dd')).toBe('2012-07-11');
   });
 
   it('should run header cell value formatter', () => {

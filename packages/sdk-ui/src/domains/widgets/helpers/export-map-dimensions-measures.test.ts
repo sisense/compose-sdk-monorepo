@@ -3,6 +3,7 @@ import {
   createAttribute,
   createMeasure,
   DateLevels,
+  DimensionalLevelAttribute,
   isDimensionalLevelAttribute,
   type Measure,
   measureFactory,
@@ -15,8 +16,9 @@ import type { StyledMeasureColumn } from '@/domains/visualizations/core/chart-da
 import {
   mapAttributesForExcelExport,
   mapMeasureColumnForExcelExport,
+  mapMeasuresForCsvExport,
   mapMeasuresForExcelExport,
-} from './excel-export-map-dimensions-measures.js';
+} from './export-map-dimensions-measures.js';
 
 describe('mapAttributesForExcelExport', () => {
   it('returns a new empty array when input is empty', () => {
@@ -169,6 +171,133 @@ describe('mapMeasuresForExcelExport', () => {
     const result = mapMeasuresForExcelExport([jaqlLike]);
     expect(result).toHaveLength(1);
     expect(result[0]).toBe(jaqlLike);
+  });
+
+  it('leaves a date measure alone, because its jaql already carries a date mask', () => {
+    const dateMeasure = measureFactory.max(DM.Commerce.Date.Days, 'Max Date');
+
+    const [mapped] = mapMeasuresForExcelExport([dateMeasure]);
+
+    expect(mapped).toBe(dateMeasure);
+    expect(mapped.jaql().format).toEqual({ mask: { days: 'yyyy-MM-dd' } });
+  });
+
+  it('still applies the default number format to a numeric measure, the control', () => {
+    const numeric = measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue');
+
+    const [mapped] = mapMeasuresForExcelExport([numeric]);
+
+    expect(mapped.jaql().format).toEqual({ number: '0,0' });
+  });
+});
+
+describe('mapMeasuresForCsvExport', () => {
+  it('gives a date measure the format its level implies', () => {
+    const [mapped] = mapMeasuresForCsvExport([
+      measureFactory.max(DM.Commerce.Date.Days, 'Max Date'),
+    ]);
+
+    expect(mapped.getFormat?.()).toBe('yyyy-MM-dd');
+  });
+
+  it('uses the level default, so Years is not masked as a day', () => {
+    const [mapped] = mapMeasuresForCsvExport([
+      measureFactory.max(DM.Commerce.Date.Years, 'Max Year'),
+    ]);
+
+    expect(mapped.getFormat?.()).toBe('yyyy');
+  });
+
+  it('keeps an explicit format rather than overwriting it', () => {
+    const explicit = measureFactory.max(DM.Commerce.Date.Days, 'Max Date').format('MM/yyyy');
+
+    expect(mapMeasuresForCsvExport([explicit])[0]).toBe(explicit);
+  });
+
+  it('returns a numeric measure BY IDENTITY, so an existing CSV cannot change', () => {
+    const numeric = measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue');
+
+    expect(mapMeasuresForCsvExport([numeric])[0]).toBe(numeric);
+  });
+
+  it('returns a non-date aggregation over a date by identity too', () => {
+    const counted = measureFactory.count(DM.Commerce.Date.Days, 'Days counted');
+
+    expect(mapMeasuresForCsvExport([counted])[0]).toBe(counted);
+  });
+
+  it('returns anything without a format function unchanged', () => {
+    const jaqlLike = { name: 'm', title: 'm' } as unknown as Measure;
+
+    expect(mapMeasuresForCsvExport([jaqlLike])[0]).toBe(jaqlLike);
+  });
+});
+
+describe('measures with no granularity level', () => {
+  const weekOfYear = new DimensionalLevelAttribute(
+    'Week of year',
+    '[Commerce.Date (Calendar)]',
+    DateLevels.WeekOfYear,
+  );
+  const bareDatetime = createAttribute({
+    name: 'Signup',
+    type: 'datetime',
+    expression: '[Commerce.Signup]',
+  });
+
+  it.each([
+    ['a date part, which answers an ordinal', () => measureFactory.max(weekOfYear, 'Max Week')],
+    ['a datetime attribute with no level', () => measureFactory.max(bareDatetime, 'Max Signup')],
+  ])('leaves %s out of the CSV date mapping', (_case, build) => {
+    const measure = build();
+
+    expect(mapMeasuresForCsvExport([measure])[0]).toBe(measure);
+  });
+
+  it.each([
+    ['a date part, which answers an ordinal', () => measureFactory.max(weekOfYear, 'Max Week')],
+    ['a datetime attribute with no level', () => measureFactory.max(bareDatetime, 'Max Signup')],
+  ])('still gives %s the default number format for Excel', (_case, build) => {
+    const [mapped] = mapMeasuresForExcelExport([build()]);
+
+    expect(mapped.jaql().format).toEqual({ number: '0,0' });
+  });
+});
+
+describe('a date measure written as a formula', () => {
+  const maxDate = () =>
+    measureFactory.customFormula('Max Date', 'MAX([D])', { D: DM.Commerce.Date.Days });
+  const numericFormula = () =>
+    measureFactory.customFormula('Total Revenue', 'SUM([R])', { R: DM.Commerce.Revenue });
+
+  it('gives it the same display format the aggregation shape gets', () => {
+    const [mapped] = mapMeasuresForCsvExport([maxDate()]);
+
+    expect(mapped.getFormat?.()).toBe('yyyy-MM-dd');
+  });
+
+  it('carries the mask into the jaql the CSV request sends', () => {
+    const [mapped] = mapMeasuresForCsvExport([maxDate()]);
+
+    expect(mapped.jaql().format).toEqual({ mask: { days: 'yyyy-MM-dd' } });
+  });
+
+  it('is left alone by the Excel mapper, so its mask is not overwritten by a number format', () => {
+    const measure = maxDate();
+
+    expect(mapMeasuresForExcelExport([measure])[0]).toBe(measure);
+  });
+
+  it('leaves a numeric formula on the default number format, the control', () => {
+    const [mapped] = mapMeasuresForExcelExport([numericFormula()]);
+
+    expect(mapped.jaql().format).toEqual({ number: '0,0' });
+  });
+
+  it('returns a numeric formula by identity from the CSV mapper, the other control', () => {
+    const measure = numericFormula();
+
+    expect(mapMeasuresForCsvExport([measure])[0]).toBe(measure);
   });
 });
 

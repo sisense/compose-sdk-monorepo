@@ -20,6 +20,8 @@ If the previous month's value is greater than the current month, the growth will
 For example, if this month the value is 80, and the previous month's was 100, the growth for
 this month is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

@@ -7,7 +7,7 @@ import type { NarrativeData } from '../types.js';
 const GENERATED_AT = '2026-06-02T14:53:00Z';
 
 /**
- * Standard-density narrative: an overview plus the maximum of three insights, one per status. Wording
+ * Standard-density narrative: an overview plus the default three insights, one per status. Wording
  * mirrors the reference design over the Sample Healthcare data.
  * @internal
  */
@@ -39,7 +39,7 @@ export const mockNarrativeStandard: NarrativeData = {
 };
 
 /**
- * Standard-density narrative with two insights, covering the "up to three" case.
+ * Standard-density narrative with two insights, covering the fewer-than-three case.
  * @internal
  */
 export const mockNarrativeTwoInsights: NarrativeData = {
@@ -62,6 +62,27 @@ export const mockNarrativeTwoInsights: NarrativeData = {
     'across the same period.\n\n' +
     '🔴 Total cost climbed **301%**, reaching **$5.9M** by period end.\n' +
     '⚪ Admissions split evenly across **5** divisions.',
+};
+
+/**
+ * Standard-density narrative with six insights, as when a dashboard's AI context asks for more than
+ * the default three.
+ * @internal
+ */
+export const mockNarrativeSixInsights: NarrativeData = {
+  overview: mockNarrativeStandard.overview,
+  insights: [
+    ...mockNarrativeStandard.insights,
+    { status: 'positive', text: 'Cardiology admissions grew **+14%** quarter over quarter.' },
+    { status: 'negative', text: 'Readmissions within 30 days rose to **8.2%**.' },
+    { status: 'neutral', text: 'Weekend admissions held steady at **22%** of the total.' },
+  ],
+  generatedAt: GENERATED_AT,
+  copyText:
+    mockNarrativeStandard.copyText +
+    '\n🟢 Cardiology admissions grew **+14%** quarter over quarter.' +
+    '\n🔴 Readmissions within 30 days rose to **8.2%**.' +
+    '\n⚪ Weekend admissions held steady at **22%** of the total.',
 };
 
 /**

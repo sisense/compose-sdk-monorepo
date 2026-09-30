@@ -24,8 +24,16 @@ const MAX_VERIFY_ITERATIONS = 2;
 const FONT_POLL_INTERVAL_MS = 500;
 const FONT_POLL_MAX_ATTEMPTS = 20;
 
-function toCssFont(font: { family: string; weight: string | number }, sizePx: number): string {
-  return `${font.weight} ${sizePx}px ${font.family}`;
+/**
+ * Font the auto-fit probe measures with. `style` is the CSS `font-style` (`'italic'`,
+ * `'oblique'`); omitted or `'normal'` leaves the shorthand weight-first.
+ * @internal
+ */
+export type AutoFitFont = { family: string; weight: string | number; style?: string };
+
+function toCssFont(font: AutoFitFont, sizePx: number): string {
+  const stylePrefix = font.style && font.style !== 'normal' ? `${font.style} ` : '';
+  return `${stylePrefix}${font.weight} ${sizePx}px ${font.family}`;
 }
 
 /** Extracts the first family of a CSS font-family list, unquoted and lowercased, for comparison. */
@@ -196,7 +204,7 @@ export type AutoFitAffix =
 /** Sums the widths of `affixes` at `fontSizePx` of the HOST text (measured or fixed per shape). */
 function measureAffixesWidth(
   affixes: readonly AutoFitAffix[],
-  font: { family: string; weight: string | number },
+  font: AutoFitFont,
   fontSizePx: number,
   measure: (text: string, cssFont: string) => number,
 ): number {
@@ -226,7 +234,7 @@ function measureAffixesWidth(
  * fractional-pixel safety margin against that same sub-pixel clipping.
  * @param opts - Fit parameters.
  * @param opts.text - The text to fit.
- * @param opts.font - Font family and weight used to build the probe CSS font string.
+ * @param opts.font - Font family, weight and optional style used to build the probe CSS font string.
  * @param opts.maxWidthPx - Available width, in CSS pixels.
  * @param opts.maxHeightPx - Available height, in CSS pixels.
  * @param opts.minPx - Lower bound for the returned font size.
@@ -239,7 +247,7 @@ function measureAffixesWidth(
  */
 export function computeAutoFitFontSize(opts: {
   text: string;
-  font: { family: string; weight: string | number };
+  font: AutoFitFont;
   maxWidthPx: number;
   maxHeightPx: number;
   minPx: number;
@@ -312,6 +320,7 @@ type FitInputs = {
   text: string;
   fontFamily: string;
   fontWeight: string | number;
+  fontStyle: string | undefined;
   maxWidthPx: number;
   maxHeightPx: number;
   minPx: number;
@@ -343,6 +352,7 @@ function areSameFitInputs(a: FitInputs, b: FitInputs): boolean {
     a.text === b.text &&
     a.fontFamily === b.fontFamily &&
     a.fontWeight === b.fontWeight &&
+    a.fontStyle === b.fontStyle &&
     a.maxWidthPx === b.maxWidthPx &&
     a.maxHeightPx === b.maxHeightPx &&
     a.minPx === b.minPx &&
@@ -359,7 +369,7 @@ function areSameFitInputs(a: FitInputs, b: FitInputs): boolean {
  * @param params - Fit parameters.
  * @param params.containerRef - Ref to the element whose box the text must fit inside.
  * @param params.text - The text to fit.
- * @param params.font - Font family and weight used for measurement.
+ * @param params.font - Font family, weight and optional style used for measurement.
  * @param params.minPx - Lower bound for the returned font size.
  * @param params.maxPx - Upper bound for the returned font size.
  * @param params.measure - Forwarded to {@link computeAutoFitFontSize}; injectable for tests.
@@ -382,7 +392,7 @@ function areSameFitInputs(a: FitInputs, b: FitInputs): boolean {
 export function useAutoFitFontSize(params: {
   containerRef: RefObject<HTMLElement | null>;
   text: string;
-  font: { family: string; weight: string | number };
+  font: AutoFitFont;
   minPx: number;
   maxPx: number;
   measure?: (text: string, cssFont: string) => number;
@@ -446,6 +456,7 @@ export function useAutoFitFontSize(params: {
         text: latest.text,
         fontFamily: latest.font.family,
         fontWeight: latest.font.weight,
+        fontStyle: latest.font.style,
         maxWidthPx: current.clientWidth,
         maxHeightPx: latest.maxHeightPxOverride ?? current.clientHeight,
         minPx: latest.minPx,

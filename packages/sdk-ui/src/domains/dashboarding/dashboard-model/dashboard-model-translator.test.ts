@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { DashboardUserAuth } from '@/infra/app/settings/types/role-manifest.js';
+import { narrativeWidgetDto } from '@/domains/widgets/components/widget-by-id/__mocks__/narrative-widget-dto.js';
+import type { DashboardUserAuth } from '@/infra/app/settings/types/role-manifest.js';
 
 import { fromDashboardDto, toDashboardProps } from './dashboard-model-translator.js';
 
@@ -16,6 +17,21 @@ describe('toDashboardProps', () => {
 
     // The OID must flow through to the props so dashboard customizations can access it.
     expect(props.id).toBe('dashboard-oid-123');
+  });
+
+  it('hands narrative widgets the dashboard oid as their dashboardId', () => {
+    const model = fromDashboardDto({
+      oid: 'dashboard-oid-123',
+      title: 'My Dashboard',
+      datasource: { title: 'Sample ECommerce', id: 'localhost_aSampleIAAaECommerce' },
+      widgets: [narrativeWidgetDto],
+    });
+
+    const props = toDashboardProps(model);
+
+    expect(props.widgets).toEqual([
+      expect.objectContaining({ widgetType: 'narrative', dashboardId: 'dashboard-oid-123' }),
+    ]);
   });
 
   describe('permission-derived config', () => {

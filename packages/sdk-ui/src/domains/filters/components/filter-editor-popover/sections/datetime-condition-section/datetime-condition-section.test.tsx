@@ -170,3 +170,62 @@ describe('DatetimeConditionSection ranking', () => {
     expect(within(conditionSelectContent).getByText('Bottom')).toBeInTheDocument();
   });
 });
+
+describe('DatetimeConditionSection multiselect toggle', () => {
+  const excludeFilter = filterFactory.members(
+    DM.Commerce.Date.Years,
+    ['2013-01-01T00:00:00', '2012-01-01T00:00:00'],
+    { excludeMembers: true },
+  );
+
+  const sectionTree = (multiSelectEnabled: boolean, onChange: () => void) => (
+    <SisenseContextProvider {...contextProviderProps}>
+      <FilterEditorContextProvider
+        value={{
+          defaultDataSource: DM.DataSource,
+          dataSources: [DM.DataSource],
+          parentFilters: [],
+          membersOnlyMode: false,
+          rankingVisible: true,
+        }}
+      >
+        <DatetimeConditionSection
+          filter={excludeFilter}
+          selected={false}
+          multiSelectEnabled={multiSelectEnabled}
+          onChange={onChange}
+        />
+      </FilterEditorContextProvider>
+    </SisenseContextProvider>
+  );
+
+  it('stays silent when the toggle changes while the section is not selected', async () => {
+    const onChange = vi.fn();
+    const { rerender } = setup(sectionTree(true, onChange));
+    await screen.findByLabelText('Datetime condition section');
+
+    rerender(sectionTree(false, onChange));
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('emits a filter matching the current selection mode when selected after a toggle change', async () => {
+    // The section replays a cached filter on select, so a toggle change it stayed silent about must
+    // still refresh that cache - otherwise selecting it would commit the previous selection mode.
+    const onChange = vi.fn();
+    const { user, rerender } = setup(sectionTree(true, onChange));
+    await screen.findByLabelText('Datetime condition section');
+
+    rerender(sectionTree(false, onChange));
+
+    const conditionSection = await screen.findByLabelText('Datetime condition section');
+    await user.click(within(conditionSection).getByLabelText('Select button'));
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        members: ['2012-01-01T00:00:00'],
+        config: expect.objectContaining({ enableMultiSelection: false, excludeMembers: true }),
+      }),
+    );
+  });
+});

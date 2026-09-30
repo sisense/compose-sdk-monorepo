@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Cell, DataCell, Element, QueryResultData } from '@sisense/sdk-data';
-import { simpleColumnType } from '@sisense/sdk-data';
+import { BaseMeasure, Cell, DataCell, Element, QueryResultData } from '@sisense/sdk-data';
+import { isDateMeasure, simpleColumnType, SimpleColumnType } from '@sisense/sdk-data';
 import numeral from 'numeral';
 
 import { JaqlResponse } from '../types.js';
@@ -10,8 +10,23 @@ import { JaqlResponse } from '../types.js';
  *
  * Query metadata is normally made of full model elements, but columns appended by advanced
  * analytics have no element behind them, so only these three fields are ever available.
+ * A measure element additionally carries the aggregation it applies and the attribute it
+ * aggregates, which is what tells a date measure apart from a numeric one.
  */
-export type ResultColumnMetadata = Pick<Element, 'name' | 'title' | 'type'>;
+export type ResultColumnMetadata = Pick<Element, 'name' | 'title' | 'type'> &
+  Partial<Pick<BaseMeasure, 'attribute' | 'aggregation'>>;
+
+/**
+ * Resolves the type of a result column from the element that was queried.
+ *
+ * @param column - The metadata of the result column.
+ * @returns The simple type the column values should be read as.
+ */
+function resolveResultColumnType(column: ResultColumnMetadata): SimpleColumnType {
+  // A min/max over a datetime attribute answers with a date, while every measure type maps to a
+  // number. Keyed on the measure shape: the response datatype only echoes back what was sent.
+  return isDateMeasure(column) ? 'datetime' : simpleColumnType(column.type);
+}
 
 export const getDataFromQueryResult = (
   result: JaqlResponse,
@@ -32,7 +47,7 @@ export function prepareResultAsColsAndRows(
       // be surfaced separately for consumers rendering result headers. Model elements always
       // resolve `title`, defaulting to `name`.
       title: d.title,
-      type: simpleColumnType(d.type),
+      type: resolveResultColumnType(d),
     })),
     rows: setCellsBlur(data),
   };

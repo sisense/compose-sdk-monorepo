@@ -17,7 +17,7 @@ Implements the attribute side of the dimensional model: columns (`DimensionalAtt
 | Class            | `DimensionalAttribute` — packages/sdk-data/src/dimensional-model/attributes/attributes.ts:43                                                                               |
 | Class            | `DimensionalLevelAttribute` — packages/sdk-data/src/dimensional-model/attributes/attributes.ts:187                                                                         |
 | Class            | `DimensionalCalculatedAttribute` — packages/sdk-data/src/dimensional-model/attributes/attributes.ts:594                                                                    |
-| Factory (public) | `createAttribute` — attributes/attributes.ts:835; `createLevel` — attributes.ts:866; `createCalculatedAttribute` — attributes.ts:896                                       |
+| Factory (public) | `createAttribute` — attributes/attributes.ts:846; `createLevel` — attributes.ts:877; `createCalculatedAttribute` — attributes.ts:907                                       |
 | Factory (public) | `attributeFactory.customFormula` — packages/sdk-data/src/dimensional-model/attributes/factory.ts:50 (exported as `attributeFactory` in packages/sdk-data/src/index.ts:110) |
 | Class            | `DimensionalDimension` — packages/sdk-data/src/dimensional-model/dimensions/dimensions.ts:52                                                                               |
 | Class            | `DimensionalDateDimension` — dimensions/dimensions.ts:294                                                                                                                  |
@@ -49,7 +49,7 @@ Date granularities (`DateLevels`, types.ts:390) verbatim: `Years, Quarters, Mont
 
 Reverse mapping: `DimensionalLevelAttribute.translateJaqlToGranularity` (attributes.ts:469); default display formats per granularity: `getDefaultFormatForGranularity` (attributes.ts:531). A level's `format` is emitted as `format.mask[<levelName>]` (attributes.ts:387).
 
-`attributeFactory.customFormula(title, formula, context)` builds a `DimensionalCalculatedAttribute`; context keys are auto-wrapped in `[...]` (factory.ts:56). Its JAQL carries `type: 'calculated_dimension'` with `formula` + `context` (attributes.ts:787). Only `text` data type is supported.
+`attributeFactory.customFormula(title, formula, context)` builds a `DimensionalCalculatedAttribute`; context keys are auto-wrapped in `[...]` (factory.ts:56). Its JAQL carries `type: 'calculated_dimension'` with `formula` + `context` (attributes.ts:787) and, when known, the formula's result `datatype` (attributes.ts:799).
 
 # How it connects
 
@@ -66,8 +66,9 @@ Reverse mapping: `DimensionalLevelAttribute.translateJaqlToGranularity` (attribu
 2. An attribute's `id` is its `expression`; a level attribute's `id` appends the lowercased level/bucket (attributes.ts:249) — two levels of the same column differ only by that suffix.
 3. `composeCode` is derived from `expression` when not supplied, wrapping names needing normalization in `[[...]]` (attributes.ts:83) — do not bypass this when adding constructors.
 4. `DimensionalCalculatedAttribute.jaql()` strips date granularity (`level`/`dateTimeLevel`/`bucket`) from context entries and adds raw `table`/`column` for calendar dims (attributes.ts:739-785) — a date in a calculated-dimension formula must operate on the raw column value, matching the Fusion UI. Preserve `datatype` on the JAQL when present (attributes.ts:798).
-5. Dimension child names that collide with reserved members (`id`, `name`, prototype getters) fall back to the attribute's expression as property name (dimensions.ts:121, utils.ts:100 `RESERVED_DIMENSION_CONFIG_KEYS`) — never assume `dim[columnName]` exists for every column.
+5. Dimension child names that collide with reserved members (`id`, `name`, prototype getters) fall back to the attribute's expression as property name (dimensions.ts:121, utils.ts:103 `RESERVED_DIMENSION_CONFIG_KEYS`) — never assume `dim[columnName]` exists for every column.
 6. `WeekOfYear` groups by week ordinal 1–53 across years and is rejected by engines without date-part support; it is not interchangeable with `Weeks` (types.ts:407-422).
+7. `createCalculatedAttribute` (attributes.ts:907) routes a raw JAQL context entry (no `type`/`__serializable`, e.g. a Fusion filter's `context` value) through `createDimensionalElementFromJaql` (utils.ts:682); only CSDK elements/serialized forms go through the generic `create()`. Feeding raw JAQL to `create()` yields a text `DimensionalDimension` that emits `datatype: 'text'` for every column and crashes when rebuilt (`setDimensions`).
 
 # Related
 

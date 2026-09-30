@@ -45,22 +45,22 @@ export const useApplyPivotTableFormatting = ({
   const defaultNumberFormattingEnabled =
     app?.settings?.chartConfig?.defaultNumberFormatting?.enabled ?? true;
 
+  const dateFormatter = useCallback(
+    (date: Date, format: string) =>
+      formatDateValue(date, format, app?.settings.locale, app?.settings.dateConfig),
+    [app],
+  );
+
   const onDataCellFormatCombined = useMemo(
     () =>
       over([
-        createDataCellValueFormatter(dataOptions, defaultNumberFormattingEnabled),
+        createDataCellValueFormatter(dataOptions, dateFormatter, defaultNumberFormattingEnabled),
         createDataCellColorFormatter(dataOptions, themeSettings),
         ...(onDataCellFormat
           ? [createUnifiedDataCellFormatter(onDataCellFormat, dataOptions)]
           : []),
       ]),
-    [dataOptions, onDataCellFormat, themeSettings, defaultNumberFormattingEnabled],
-  );
-
-  const dateFormatter = useCallback(
-    (date: Date, format: string) =>
-      formatDateValue(date, format, app?.settings.locale, app?.settings.dateConfig),
-    [app],
+    [dataOptions, onDataCellFormat, themeSettings, dateFormatter, defaultNumberFormattingEnabled],
   );
 
   const onHeaderCellFormatCombined = useMemo(

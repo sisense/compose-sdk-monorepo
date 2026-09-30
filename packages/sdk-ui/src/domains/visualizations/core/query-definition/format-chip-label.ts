@@ -2,7 +2,8 @@
  * Chip **Label** rules. The Value side lives in `toReadableFilterLabel`.
  *
  * 1. A distinct Friendly Name (`title !== name`) is used verbatim — no casing or separator changes.
- * 2. Otherwise the technical name is cleaned: `_`/`-`/`.` → space, camelCase split, then sentence case.
+ * 2. Otherwise the technical name is cleaned: `_`/`-`/`.` → space, camelCase split, a standalone
+ *    `#` → "number", then sentence case.
  * 3. System-generated names (no distinct title) take the same clean path; they are not matched
  *    against data-model fields. Internal `$…` names are left untouched so synthesized trend/forecast
  *    measures keep their identity.
@@ -39,7 +40,10 @@ function cleanTechnicalName(value: string): string {
   const withCamelCase = withSeparators
     .replace(/([a-z\d])([A-Z])/g, '$1 $2')
     .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
-  const collapsed = withCamelCase.replace(/\s+/g, ' ').trim();
+  const collapsed = withCamelCase
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/(^|\s)#(?=\s|$)/g, '$1number');
   if (collapsed === '') {
     return '';
   }

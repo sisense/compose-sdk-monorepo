@@ -6,12 +6,13 @@ import {
   type FilterRelations,
   type FilterRelationsJaql,
   getFilterListAndRelationsJaql,
+  hasDateMeasureLevel,
   type Measure,
   type MetadataItem,
 } from '@sisense/sdk-data';
 import { v4 as uuid } from 'uuid';
 
-import type { MeasureWithExcelExportFormat } from '@/domains/widgets/helpers/excel-export-map-dimensions-measures.js';
+import type { MeasureWithExcelExportFormat } from '@/domains/widgets/helpers/export-map-dimensions-measures.js';
 import { numberFormatConfigToNumericMask } from '@/domains/widgets/helpers/number-format-config-to-numeric-mask.js';
 import type { NumberFormatConfig } from '@/types';
 
@@ -223,12 +224,32 @@ export function createPanelsMetadataForXlsx(
       const metadataItem = measure.jaql();
       const jaqlItem = metadataItem.jaql;
       const numberFormatConfig = (measure as MeasureWithExcelExportFormat).excelNumberFormatConfig;
+      // a min or max over a date answers with a date, so the exporter needs its datatype and its
+      // granularity (level, dateTimeLevel and bucket) to resolve the column. Every other measure
+      // sends `agg`; a formula sends its expression and operands instead, having neither.
+      const { datatype, level, dateTimeLevel, bucket, formula, context } = jaqlItem;
+      const dateJaql = hasDateMeasureLevel(measure)
+        ? {
+            ...(datatype !== undefined && { datatype }),
+            ...(level !== undefined && { level }),
+            ...(dateTimeLevel !== undefined && { dateTimeLevel }),
+            ...(bucket !== undefined && { bucket }),
+          }
+        : {};
+      // a formula measure has no `agg` and no `dim`, so the expression and its operands are the
+      // only things that identify it
+      const formulaJaql =
+        formula === undefined ? {} : { formula, ...(context !== undefined && { context }) };
       return createPanelMetadataItem({
         jaqlItem,
         formatItem: metadataItem,
         panel: 'measures',
         merged: !!jaqlItem.agg,
-        extraJaql: { agg: jaqlItem.agg },
+        extraJaql: {
+          ...(jaqlItem.agg !== undefined && { agg: jaqlItem.agg }),
+          ...formulaJaql,
+          ...dateJaql,
+        },
         id: measure.id,
         index: dimensionCount + index,
         numberFormatConfig,

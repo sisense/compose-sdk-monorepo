@@ -13,6 +13,8 @@ Creates a sum aggregation measure over the given attribute.
 
 To create a running sum, use [runningSum](function.runningSum.md).
 
+Note: Only numeric attributes are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

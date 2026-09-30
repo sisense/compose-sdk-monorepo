@@ -1,10 +1,16 @@
 import type { TFunction } from '@sisense/sdk-common';
-import { createAttribute, createMeasure, DateLevels, filterFactory } from '@sisense/sdk-data';
+import {
+  createAttribute,
+  createMeasure,
+  DateLevels,
+  filterFactory,
+  measureFactory,
+} from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import type { BaseQueryParams } from '@/domains/query-execution/types';
 
-import { baseQueryParamsToViewModel } from './query-params-to-view-model';
+import { baseQueryParamsToViewModel, getMeasureLabel } from './query-params-to-view-model';
 import { isConnectorItem, isPillItem } from './types';
 
 describe('baseQueryParamsToViewModel', () => {
@@ -305,5 +311,53 @@ describe('baseQueryParamsToViewModel', () => {
         isConnectorItem(item) ? `connector:${item.label}` : `${item.category}:${item.label}`,
       ),
     ).toEqual(['dimension:Region', 'connector:where', 'filter:Country: US']);
+  });
+});
+
+describe('getMeasureLabel', () => {
+  const admissionId = createAttribute({
+    name: 'ID',
+    type: 'numeric-attribute',
+    expression: '[Admissions.ID]',
+  });
+  const hai = createAttribute({
+    name: 'HAI',
+    type: 'text-attribute',
+    expression: '[Admissions.HAI]',
+  });
+  const admissions = measureFactory.count(admissionId, '# of Admissions');
+
+  it.each([
+    ['$forecast_Total Order Revenue', 'Total order revenue forecast'],
+    ['$trend_Revenue', 'Revenue trend'],
+  ] as const)('labels companion measure %s as %s', (name, expected) => {
+    expect(getMeasureLabel(measureFactory.sum(admissionId, name))).toBe(expected);
+  });
+
+  it('keeps a distinct Friendly Name of a companion measure', () => {
+    const measure = createMeasure({
+      name: '$trend_Revenue',
+      title: 'Revenue (YoY)',
+      aggregation: 'sum',
+      attribute: admissionId,
+    });
+    expect(getMeasureLabel(measure)).toBe('Revenue (YoY)');
+  });
+
+  it('labels a custom formula named after its formula with its context labels', () => {
+    const formula = '([ofAdmissionswithHAI],[afddaf018b0])';
+    const measure = measureFactory.customFormula(formula, formula, {
+      ofAdmissionswithHAI: admissions,
+      afddaf018b0: filterFactory.members(hai, ['Yes']),
+    });
+    expect(getMeasureLabel(measure)).toBe('(Number of admissions, Hai: Yes)');
+  });
+
+  it('keeps the title of a custom formula that has one', () => {
+    const measure = measureFactory.customFormula('Admissions with HAI', '([a],[b])', {
+      a: admissions,
+      b: filterFactory.members(hai, ['Yes']),
+    });
+    expect(getMeasureLabel(measure)).toBe('Admissions with hai');
   });
 });

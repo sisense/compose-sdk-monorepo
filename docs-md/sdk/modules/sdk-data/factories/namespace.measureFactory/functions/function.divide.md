@@ -12,6 +12,8 @@ title: divide
 
 Creates a calculated measure by dividing two given numbers or measures. Divides `value1` by `value2`.
 
+Note: Only numbers and numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

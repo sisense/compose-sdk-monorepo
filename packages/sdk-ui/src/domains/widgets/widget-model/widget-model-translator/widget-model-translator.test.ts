@@ -2277,6 +2277,23 @@ describe('WidgetModelTranslator', () => {
       ).toBe('members');
     });
 
+    it('preserves "range" for a datetime dimension', () => {
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          jaql: { dim: '[Commerce.Date (Calendar)]', datatype: 'datetime', title: 'Date' },
+          style: { filterType: 'range' },
+        }),
+      );
+      expect(props.filterType).toBe('range');
+    });
+
+    // A stale/API-provided 'range' DTO paired with a non-datetime attribute must
+    // never reach a CSDK host as 'range' — the same fallback the legacy 'list' value gets.
+    it('normalizes "range" to "members" for a non-datetime dimension', () => {
+      const props = toFilterProps(makeFilterWidgetDto({ style: { filterType: 'range' } }));
+      expect(props.filterType).toBe('members');
+    });
+
     it('builds a LevelAttribute with granularity for a datetime dimension', () => {
       const props = toFilterProps(
         makeFilterWidgetDto({

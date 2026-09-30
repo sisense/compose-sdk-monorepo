@@ -13,6 +13,7 @@ import {
   stripDelimitersFromJson,
 } from '../shared/utils/translation-helpers.js';
 import { ChartJSON, DataOptionsJSON, isRecordStringUnknown } from '../types.js';
+import { translateKpiComparisonToJSON } from './helpers/translate-kpi-data-options.js';
 
 /**
  * Translates CSDK chart props to NLQ ChartJSON format.
@@ -145,7 +146,13 @@ function translateDataOptionsToJSON(dataOptions: object): NlqTranslationResult<D
   const translationErrors: NlqTranslationError[] = [];
 
   /** Keys that are primitive metadata, passed through as-is (not dimension/measure arrays) */
-  const passthroughKeys = new Set(['seriesToColorMap', 'boxType', 'outliersEnabled', 'valueTitle']);
+  const passthroughKeys = new Set([
+    'seriesToColorMap',
+    'boxType',
+    'outliersEnabled',
+    'valueTitle',
+    'valueMode',
+  ]);
 
   for (const [axisKey, axisValue] of Object.entries(dataOptions)) {
     if (axisKey === 'seriesToColorMap' && axisValue) {
@@ -155,6 +162,17 @@ function translateDataOptionsToJSON(dataOptions: object): NlqTranslationResult<D
     if (passthroughKeys.has(axisKey) || axisValue == null) {
       if (axisValue != null) {
         result[axisKey] = axisValue;
+      }
+      continue;
+    }
+
+    // KPI comparison: an object with a type and an optional measure/number baseline
+    if (axisKey === 'comparison') {
+      const comparisonResult = translateKpiComparisonToJSON(axisValue);
+      if (comparisonResult.success) {
+        result[axisKey] = comparisonResult.data;
+      } else {
+        translationErrors.push(...comparisonResult.errors);
       }
       continue;
     }

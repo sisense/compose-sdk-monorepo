@@ -69,11 +69,13 @@ the percent line with the amount-to-go beneath it.
 
 **label**?: `string`
 
-Caption next to the delta, e.g. 'vs last year'.
+Caption under a delta-shaped comparison ('delta' / 'previous-period'), replacing the default
+verbatim — no baseline value is appended, e.g. 'vs last year'. For a 'target' comparison it
+renames the goal in `{{goal}}` templates; for a 'value' comparison it replaces the label.
 
 #### Default
 
-a localized label inferred from the `comparison` type and `category` granularity
+localized relation to the baseline plus its value, e.g. `'vs Total Cost (107.27M)'`
 
 ***
 
@@ -82,13 +84,13 @@ a localized label inferred from the `comparison` type and `category` granularity
 **ofGoalText**?: `string`
 
 Template for the 'target' comparison's percent-of-goal readout, replacing the localized
-default. `{{percent}}` interpolates the formatted percent (e.g. '82%') and `{{goal}}` the
-target's display label (the target measure's title, or the formatted number for a fixed
-target).
+default. `{{percent}}` interpolates the formatted percent (e.g. '82%'), `{{goalValue}}` the
+target formatted with the comparison's number format (e.g. '$1M'), and `{{goal}}` the
+target's display label (the target measure's title, or the plain number for a fixed target).
 
 #### Default
 
-localized `'{{percent}} of goal'`
+localized `'{{percent}} of goal ({{goalValue}})'`
 
 #### Example
 
@@ -108,6 +110,21 @@ Whether the up/down arrow is shown next to the delta.
 
 ```ts
 true
+```
+
+***
+
+### `textStyle`
+
+**textStyle**?: [`KpiTextStyle`](type-alias.KpiTextStyle.md)
+
+Typography of the comparison's primary readout line (the delta, percent-of-goal, or
+comparison value). Does not apply to the label line beneath it.
+
+#### Default
+
+```ts
+{ fontWeight: '600', fontStyle: 'normal', textTransform: 'none' } with the theme font
 ```
 
 ***

@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.36.0",
+  "version": "2.37.0",
   "type": "module",
   "exports": {
     ".": {
@@ -78,7 +78,8 @@
     "build": "tsc --noEmit && vite build --mode development",
     "build:prod": "tsc --noEmit && vite build",
     "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
-    "lint": "eslint . --quiet",
+    "lint": "run -T eslint .",
+    "lint:prune": "run -T eslint . --prune-suppressions",
     "lint:fix": "run lint --fix",
     "test": "TZ=utc run -T vitest run",
     "test:watch": "TZ=utc run -T vitest watch",

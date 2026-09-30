@@ -205,4 +205,51 @@ describe('RelativeDateFilterTile tests', () => {
     );
     expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
   });
+
+  it('renders linked indicator and disables controls when linked to a FilterWidget', async () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'vertical' as FilterVariant,
+      onUpdate: vi.fn(),
+      onDelete: vi.fn(),
+    };
+    render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} linked />
+      </MockedSisenseContextProvider>,
+    );
+
+    expect(await screen.findByTestId('filter-tile-linked-indicator')).toBeInTheDocument();
+    expect(screen.getByTestId('filter-delete-button')).toBeDisabled();
+    expect(screen.getByRole('switch', { name: 'Enable/disable filter' })).toBeDisabled();
+    // The expand toggle is disabled too — a linked VERTICAL tile can never reach its own
+    // editable controls through the collapsed display (gated by `FilterTileContainer`'s own
+    // `disabled={linked}` on the arrow). Horizontal arrangement has no such gate — the
+    // editable controls render unconditionally — which is what the next test exercises.
+    expect(screen.getByRole('button', { name: 'arrow-down' })).toBeDisabled();
+  });
+
+  it('disables the editable count/level/anchor-date controls when linked to a FilterWidget (horizontal — no collapse gate)', async () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'horizontal' as FilterVariant,
+      onUpdate: vi.fn(),
+      onDelete: vi.fn(),
+    };
+    render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} linked />
+      </MockedSisenseContextProvider>,
+    );
+
+    // CodeRabbit review finding: `renderContent` always shows the editable
+    // `RelativeDateFilter` for horizontal arrangement (nothing to collapse), so this was the
+    // one place a linked filter's count/level/anchor-date controls stayed genuinely
+    // reachable and editable — they were wired to `filter.config.disabled` alone, ignoring
+    // `linked`.
+    expect(await screen.findByDisplayValue('2')).toBeDisabled();
+    expect(screen.getByLabelText('DateRangeFieldButton')).toBeDisabled();
+  });
 });

@@ -14,6 +14,7 @@ export const eventRegistry = {
   sdkCliExec: { internal: true, external: false },
   sdkAngularServiceMethodExecuted: { internal: true, external: true },
   sdkWidgetInit: { internal: true, external: true },
+  copyDashboardNarrative: { internal: true, external: true },
 };
 
 /**

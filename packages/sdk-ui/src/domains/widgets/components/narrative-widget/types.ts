@@ -1,9 +1,23 @@
-import type { NarrativeData, NarrativeState } from '@/domains/narrative/components/narrative';
+import type { NarrativeState } from '@/domains/narrative/components/narrative';
 import type { WidgetContainerStyleOptions } from '@/types';
 
 import type { NarrativeWidgetChangeEvent } from '../../change-events';
 import type { WidgetProps } from '../widget/types';
 import type { NarrativeWidgetConfig } from '../widget/widget-config';
+
+/**
+ * Style options of the dashboard narrative widget: its container and header, and whether its height
+ * follows the content.
+ * @beta
+ */
+export type NarrativeWidgetStyleOptions = WidgetContainerStyleOptions & {
+  /**
+   * Sizes the widget to its content — no scrolling, no empty space — instead of the size its
+   * container gives it. Inside a dashboard it applies to a row whose widgets all have it on.
+   * @default false
+   */
+  isAutoHeight?: boolean;
+};
 
 /**
  * Props for the dashboard narrative widget — an AI-generated, natural-language summary of the
@@ -12,19 +26,19 @@ import type { NarrativeWidgetConfig } from '../widget/widget-config';
  */
 export interface NarrativeWidgetProps {
   /**
-   * Title of the widget
+   * Title of the widget.
    * @category Widget
    */
   title?: string;
 
   /**
-   * Style options for the widget container and header
+   * Style options for the widget container and header.
    * @category Widget
    */
-  styleOptions?: WidgetContainerStyleOptions;
+  styleOptions?: NarrativeWidgetStyleOptions;
 
   /**
-   * Widget configuration (e.g. the header menu)
+   * Widget configuration, such as the header menu.
    * @category Widget
    * @internal
    */
@@ -32,21 +46,38 @@ export interface NarrativeWidgetProps {
 
   /**
    * The widgets the narrative describes. Inside a dashboard the dashboard supplies them; for
-   * standalone use pass them explicitly. Widgets that run no query are skipped.
+   * standalone use pass them explicitly. Widgets that run no query are skipped. Not sent when
+   * `dashboardId` is set.
    * @category Data
    * @internal
    */
   widgets?: readonly WidgetProps[];
 
   /**
-   * Pre-supplied narrative. When present, the widget starts in the ready state and the
-   * generate action resolves back to it.
-   * @remarks
-   * Until the narrative API is wired up, a widget without it reaches the failed state on generate.
+   * Id of the saved dashboard the widget sits on. When set, the narrative is requested for that
+   * dashboard by id — the service reads its widgets, number formats and AI context — instead of
+   * from `widgets`.
    * @category Data
    * @internal
    */
-  narrative?: NarrativeData;
+  dashboardId?: string;
+
+  /**
+   * Whether the dashboard of `dashboardId` is open in shared mode (co-authoring), so that the
+   * narrative is requested for its shared copy. Has no effect without `dashboardId`.
+   * @category Data
+   * @internal
+   */
+  sharedMode?: boolean;
+
+  /**
+   * Whether the dashboard of `dashboardId` is open through Admin Access (an admin viewing a
+   * dashboard not shared with them), so that the narrative is requested with admin rights. Has no
+   * effect without `dashboardId`.
+   * @category Data
+   * @internal
+   */
+  adminAccess?: boolean;
 
   /**
    * When true, renders only the narrative content without the WidgetContainer chrome.
@@ -58,12 +89,30 @@ export interface NarrativeWidgetProps {
   containerless?: boolean;
 
   /**
-   * Fires once after mount. Fusion's render pipeline waits on it before PDF/image export —
-   * without the callback the export of a dashboard holding this widget would hang.
+   * Generates the narrative once on mount, without waiting for the generate action — for
+   * rendering that has no user to click, such as a server-side export.
+   * @category Data
+   * @internal
+   */
+  generateOnMount?: boolean;
+
+  /**
+   * Fires once after mount — with `generateOnMount`, once the generation has settled (ready or
+   * error). Fusion's render pipeline waits on it before PDF/image export — without the callback
+   * the export of a dashboard holding this widget would hang.
    * @category Callbacks
    * @internal
    */
   onReady?: () => void;
+
+  /**
+   * Called with the height the narrative content needs to show without scrolling, in pixels —
+   * the design's paddings included, the widget header excluded — whenever it changes. Not called
+   * while loading. A host that sizes the widget to its content (Fusion's automatic height) reads it.
+   * @category Callbacks
+   * @internal
+   */
+  onContentHeightChange?: (height: number) => void;
 
   /**
    * Fires with the current narrative state on mount and whenever it changes. A host that
@@ -77,7 +126,7 @@ export interface NarrativeWidgetProps {
   /**
    * Fires on widget change events:
    *
-   * - `'title/changed'` — the widget title was renamed inline
+   * - `'title/changed'` — the widget title was renamed inline.
    *
    * Injected automatically when placed inside a Dashboard.
    * @category Callbacks

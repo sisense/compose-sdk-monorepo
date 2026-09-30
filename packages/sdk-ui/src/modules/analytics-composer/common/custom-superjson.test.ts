@@ -330,6 +330,42 @@ describe('CustomSuperJSON', () => {
         calculatedMeasure,
       );
     });
+    /* Narrowed rather than cast: a cast is compile-time only, so a plain object carrying the
+       right keys would read as a measure and pass. */
+    const roundTrip = (measure: DimensionalCalculatedMeasure) => {
+      const parsed = CustomSuperJSON.parse(CustomSuperJSON.stringify(measure));
+
+      if (!(parsed instanceof DimensionalCalculatedMeasure)) {
+        throw new Error('expected parse to rebuild a DimensionalCalculatedMeasure');
+      }
+
+      return parsed;
+    };
+
+    /* A date measure whose formula is not a bare MIN or MAX has nothing to re-derive the datatype
+       from, so losing it here turns it back into a number: no mask, and the leading digits of the
+       date rendered as a value. */
+    it('should keep the stamped datatype of a date measure through a round trip', () => {
+      const dateMeasure = new DimensionalCalculatedMeasure(
+        'Last sale',
+        'MAX([D], [F])',
+        measureContext,
+        undefined,
+        undefined,
+        undefined,
+        jaqlDataSource,
+        undefined,
+        undefined,
+        'datetime',
+      );
+
+      expect(roundTrip(dateMeasure).datatype).toBe('datetime');
+    });
+
+    it('should leave a measure that never carried a datatype without one', () => {
+      expect(roundTrip(calculatedMeasure).datatype).toBeUndefined();
+    });
+
     it('should stringify and parse back DimensionalMeasureTemplate', () => {
       expect(CustomSuperJSON.parse(CustomSuperJSON.stringify(measureTemplate))).toStrictEqual(
         measureTemplate,

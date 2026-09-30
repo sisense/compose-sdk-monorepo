@@ -4,6 +4,7 @@ import {
   DimensionalAttribute,
   DimensionalCalculatedMeasure,
   getSortType,
+  isDateMeasure,
   isSortDirection,
   JaqlDataSource,
   MetadataTypes,
@@ -146,12 +147,35 @@ function sortDirectionToJaqlSort(sortType: SortDirection): 'asc' | 'desc' | unde
   }
 }
 
+type LeveledJaql = { level?: string; dateTimeLevel?: string; datatype?: string };
+
+/**
+ * Returns the mask key an item's dates are stored under. A formula has no level of its own, so it
+ * takes the level of its single datetime operand, the same one the date measure helpers read.
+ *
+ * @param jaql - The panel item's jaql.
+ * @returns The level the mask is keyed by, or `undefined` when the item carries none.
+ */
+const datetimeLevelKey = (jaql: PanelItem['jaql']): string | undefined => {
+  const direct = jaql as LeveledJaql;
+  if (direct.dateTimeLevel || direct.level) {
+    return direct.dateTimeLevel || direct.level;
+  }
+  const operands = Object.values(('context' in jaql && jaql.context) || {}) as LeveledJaql[];
+  // the filter operand in `max([Date], [DateFilter])` is a filter on a date, not the date the
+  // result carries
+  const dates = operands.filter(
+    (operand) => operand?.datatype === 'datetime' && !('filter' in operand),
+  );
+
+  return dates.length === 1 ? dates[0].dateTimeLevel || dates[0].level : undefined;
+};
+
 const extractDatetimeFormat = (item: PanelItem) => {
   const mask = item.format?.mask as DatetimeMask | undefined;
   // Mirror the write path in `createPanelItem`: prefer `dateTimeLevel` over `level`
   // so masks stored under either key round-trip cleanly.
-  const jl = item.jaql as { level?: string; dateTimeLevel?: string } | undefined;
-  const levelKey = jl?.dateTimeLevel || jl?.level;
+  const levelKey = datetimeLevelKey(item.jaql);
   return (
     (levelKey && (mask as Record<string, string> | undefined)?.[levelKey]) || mask?.dateAndTime
   );
@@ -164,7 +188,13 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     item.panel,
   );
   const sortType = getSortType(item.jaql.sort ?? item.categoriesSorting);
-  const numberFormatConfig = extractNumberFormat(item);
+  // One predicate for both the number format and the date format. Two guards drifted apart here:
+  // a formula with no stamped datatype was numeric AND dated, and both masks reached the save.
+  const isDateMeasureItem =
+    isDateMeasure(element) ||
+    ('context' in item.jaql && (item.jaql as LeveledJaql).datatype === 'datetime');
+  // a measure that answers with a date carries a date mask here, not a numeric one
+  const numberFormatConfig = isDateMeasureItem ? null : extractNumberFormat(item);
   const width = item.format?.width;
   // panel is needed only to support break-by columns functionality
   const panel = item.panel === 'columns' && item.panel;
@@ -181,9 +211,13 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   if (MetadataTypes.isMeasure(element)) {
     const dataBarsColor = createValueColorOptions(item.format?.colorSecond, customPaletteColors);
     const totalsCalculation = 'subtotalAgg' in item.jaql && item.jaql.subtotalAgg;
+    // a date measure is displayed with the mask the widget saved, so it reads the same as a date
+    // dimension in that widget, which takes its mask from the same place
+    const dateFormat = isDateMeasureItem ? extractDatetimeFormat(item) : undefined;
 
     const dataOption = {
       column: element,
+      ...(dateFormat && { dateFormat }),
       ...(color && { color }),
       ...(dataBarsColor && { dataBarsColor }),
       ...(item.y2 && { showOnRightAxis: item.y2 }),
@@ -266,17 +300,17 @@ export function createPanelItem(column: StyledColumn | StyledMeasureColumn): Pan
     if (geoLevel) baseItem.geoLevel = geoLevel;
     if (attribute.includeSubTotals !== undefined) formatPatch.subtotal = attribute.includeSubTotals;
     if (attribute.continuous !== undefined) formatPatch.continuous = attribute.continuous;
+  }
 
-    // Datetime mask uses the jaql level (or `dateTimeLevel`) as the key, matching how
-    // `DimensionalLevelAttribute.jaql()` writes `format.mask[level] = <format>`.
-    const jaql = baseItem.jaql as { level?: string; dateTimeLevel?: string };
-    const datetimeLevelKey = jaql.dateTimeLevel || jaql.level;
-    if (attribute.dateFormat && datetimeLevelKey) {
-      formatPatch.mask = {
-        ...(formatPatch.mask as Partial<DatetimeMask> | undefined),
-        [datetimeLevelKey]: attribute.dateFormat,
-      } as DatetimeMask;
-    }
+  // Datetime mask uses the jaql level (or `dateTimeLevel`) as the key, matching how
+  // `DimensionalLevelAttribute.jaql()` writes `format.mask[level] = <format>`. A measure needs it
+  // too, or reading a widget and saving it back loses the mask the user had.
+  const levelKey = datetimeLevelKey(baseItem.jaql);
+  if (column.dateFormat && levelKey) {
+    formatPatch.mask = {
+      ...(formatPatch.mask as Partial<DatetimeMask> | undefined),
+      [levelKey]: column.dateFormat,
+    } as DatetimeMask;
   }
 
   if (Object.keys(formatPatch).length > 0) {

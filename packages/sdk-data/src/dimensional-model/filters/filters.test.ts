@@ -178,6 +178,55 @@ describe('Filters jaql preparations', () => {
     expect(jaqlTo.jaql.filter?.to).toBe('2012-01-01');
   });
 
+  it('publishes fromNotEqual / toNotEqual instead of from / to when exclusive operators are passed', () => {
+    const level = new DimensionalLevelAttribute(
+      'Days',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.Days,
+    );
+    const before = new DateRangeFilter(
+      level,
+      undefined,
+      '2026-09-11',
+      undefined,
+      undefined,
+      DateOperators.From,
+      DateOperators.ToNotEqual,
+    );
+    const after = new DateRangeFilter(
+      level,
+      '2026-09-11',
+      undefined,
+      undefined,
+      undefined,
+      DateOperators.FromNotEqual,
+      DateOperators.To,
+    );
+
+    expect(isDateRangeFilter(before)).toBe(true);
+    expect(before.filterJaql()).toStrictEqual({
+      toNotEqual: '2026-09-11',
+      isAdvanced: true,
+      custom: true,
+    });
+    expect(after.filterJaql()).toStrictEqual({
+      fromNotEqual: '2026-09-11',
+      isAdvanced: true,
+      custom: true,
+    });
+  });
+
+  it('defaults to from / to when no operator override is passed (backwards compatible)', () => {
+    const level = new DimensionalLevelAttribute(
+      'Days',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.Days,
+    );
+    const filter = new DateRangeFilter(level, undefined, '2026-09-11');
+
+    expect(filter.filterJaql()).toStrictEqual({ to: '2026-09-11' });
+  });
+
   it('must prepare logical attribute filter jaql', () => {
     const result = {
       jaql: {

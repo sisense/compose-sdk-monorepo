@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 
-import { KpiChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
+import {
+  KpiChartDesignOptions,
+  KpiTextStyleInternal,
+} from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
 import { KpiTitleAlign } from '@/types';
 
@@ -226,12 +229,35 @@ export const SparklineArea = styled.div`
   line-height: 0;
 `;
 
-/** The card's title text, uppercased. @internal */
-export const TitleText = styled.span<Themable & { $onColor: boolean }>`
+/**
+ * Generates the CSS declarations shared by the three user-stylable text elements (title text,
+ * headline value, comparison primary line) from a resolved {@link KpiTextStyleInternal}.
+ * `font-family` falls back to `inherit`, which resolves to the theme font set on {@link CardRoot}.
+ *
+ * @param props - Styled-component props carrying the resolved typography as `$textStyle`
+ * @returns The `font-family` / `font-weight` / `font-style` / `text-transform` declarations
+ */
+function textStyleRules({ $textStyle }: { $textStyle: KpiTextStyleInternal }): string {
+  return `
+    font-family: ${$textStyle.fontFamily ?? 'inherit'};
+    font-weight: ${$textStyle.fontWeight};
+    font-style: ${$textStyle.fontStyle};
+    text-transform: ${$textStyle.textTransform};
+  `;
+}
+
+/**
+ * The card's title text. Typography comes from the resolved title text style (semibold uppercase
+ * by default); the 0.06em tracking is a companion of the uppercase transform only.
+ * @internal
+ */
+export const TitleText = styled.span<
+  Themable & { $onColor: boolean; $textStyle: KpiTextStyleInternal }
+>`
   font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  ${textStyleRules}
+  letter-spacing: ${({ $textStyle }) =>
+    $textStyle.textTransform === 'uppercase' ? '0.06em' : 'normal'};
   color: ${({ $onColor, theme }) => ($onColor ? '#ffffff' : theme.chart.textColor)};
   opacity: ${({ $onColor }) => ($onColor ? 0.85 : 0.55)};
   white-space: nowrap;
@@ -249,9 +275,11 @@ export const PeriodText = styled.span<Themable & { $onColor: boolean }>`
   flex-shrink: 0;
 `;
 
-/** The card's headline value text. @internal */
-export const ValueText = styled.div<Themable & { $onColor: boolean; $color?: string }>`
-  font-weight: 700;
+/** The card's headline value text; typography from the resolved value text style (bold by default). @internal */
+export const ValueText = styled.div<
+  Themable & { $onColor: boolean; $color?: string; $textStyle: KpiTextStyleInternal }
+>`
+  ${textStyleRules}
   line-height: 1.1;
   color: ${({ $color, $onColor, theme }) =>
     $color ?? ($onColor ? '#ffffff' : theme.chart.textColor)};
@@ -305,14 +333,17 @@ export const ComparisonRoot = styled.div<{ $compact: boolean; $align: CardTextAl
   min-width: 0;
 `;
 
-/** The comparison readout's primary line (e.g. the delta/percent-of-goal text). @internal */
+/**
+ * The comparison readout's primary line (e.g. the delta/percent-of-goal text); typography from the
+ * resolved comparison text style (semibold by default). @internal
+ */
 export const ComparisonPrimaryText = styled.div<
-  Themable & { $color?: string; $scale: 'compact' | 'headline' }
+  Themable & { $color?: string; $scale: 'compact' | 'headline'; $textStyle: KpiTextStyleInternal }
 >`
   /* 'headline' scale's font-size is auto-fit and set inline (see kpi-comparison.tsx), matching
      how ValueText's headline scale is applied -- this rule only ever fires for 'compact'. */
   font-size: ${({ $scale }) => ($scale === 'compact' ? '0.9rem' : undefined)};
-  font-weight: 600;
+  ${textStyleRules}
   color: ${({ $color, theme }) => $color ?? theme.chart.textColor};
   display: flex;
   align-items: center;

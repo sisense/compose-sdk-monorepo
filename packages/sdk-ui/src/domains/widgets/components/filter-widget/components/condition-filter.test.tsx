@@ -279,6 +279,50 @@ describe('ConditionFilter (text)', () => {
     await user.type(screen.getByTestId('filter-widget-condition-value'), 'Cardiology');
     expect(screen.queryByTestId('filter-widget-condition-hints')).not.toBeInTheDocument();
   });
+
+  const pickOperator = async (user: ReturnType<typeof userEvent.setup>, labelKey: string) => {
+    await user.click(screen.getByTestId('filter-widget-condition-operator'));
+    const option = screen
+      .getAllByTestId('filter-widget-select-option')
+      .find((node) => node.textContent?.includes(labelKey));
+    if (!option) {
+      throw new Error(`Condition operator not found: ${labelKey}`);
+    }
+    await user.click(option);
+  };
+
+  it('hints Starts with by prefix, not by contains', async () => {
+    const user = userEvent.setup();
+    renderConditionFilter();
+    await openPanel(user);
+    await pickOperator(user, 'filterEditor.conditions.startsWith');
+
+    // 'Neurology' contains 'u' but doesn't start with it — a `contains`-based hint
+    // query (the pre-fix behaviour) would have offered it here too.
+    await user.type(screen.getByTestId('filter-widget-condition-value'), 'u');
+
+    const hints = screen.getByTestId('filter-widget-condition-hints');
+    expect(hints).toHaveTextContent('Ukraine');
+    expect(hints).not.toHaveTextContent('Neurology');
+  });
+
+  it('hints Does not end with by the same negated shape, not by contains', async () => {
+    const user = userEvent.setup();
+    renderConditionFilter();
+    await openPanel(user);
+    await pickOperator(user, 'filterEditor.conditions.notEndsWith');
+
+    // Cardiology / Radiology / Neurology all end with 'y' and should be excluded;
+    // Ukraine doesn't end with 'y' and should be offered. A `contains`-based hint
+    // query (the pre-fix behaviour) inverted this exactly.
+    await user.type(screen.getByTestId('filter-widget-condition-value'), 'y');
+
+    const hints = screen.getByTestId('filter-widget-condition-hints');
+    expect(hints).toHaveTextContent('Ukraine');
+    expect(hints).not.toHaveTextContent('Cardiology');
+    expect(hints).not.toHaveTextContent('Radiology');
+    expect(hints).not.toHaveTextContent('Neurology');
+  });
 });
 
 describe('ConditionFilter (numeric)', () => {

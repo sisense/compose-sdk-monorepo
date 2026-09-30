@@ -20,6 +20,7 @@ import {
   Measure,
   MembersFilterConfig,
 } from '../interfaces.js';
+import { MetadataTypes } from '../types.js';
 import {
   CascadingFilter,
   CustomFilter,
@@ -691,6 +692,68 @@ export const dateTo: (
 );
 
 /**
+ * Creates a filter that keeps rows strictly before a given date at the given level (exclusive
+ * upper bound), with no lower limit.
+ *
+ * @remarks
+ * Unlike {@link dateTo}, the bound is published as `toNotEqual` rather than a day-shifted `to`, so
+ * the filter round-trips through JAQL without losing the distinction from "on or before".
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param to - `Date` or ISO-format string, exclusive
+ * @param config - Optional configuration for the filter
+ * @returns A filter instance
+ * @internal
+ */
+export const dateBefore: (
+  level: LevelAttribute,
+  to: Date | string,
+  config?: BaseFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (level, to, config) =>
+    new DateRangeFilter(
+      level,
+      undefined,
+      to,
+      config,
+      undefined,
+      DateOperators.From,
+      DateOperators.ToNotEqual,
+    ),
+  'dateBefore',
+);
+
+/**
+ * Creates a filter that keeps rows strictly after a given date at the given level (exclusive
+ * lower bound), with no upper limit.
+ *
+ * @remarks
+ * Unlike {@link dateFrom}, the bound is published as `fromNotEqual` rather than a day-shifted
+ * `from`, so the filter round-trips through JAQL without losing the distinction from "on or after".
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param from - `Date` or ISO-format string, exclusive
+ * @param config - Optional configuration for the filter
+ * @returns A filter instance
+ * @internal
+ */
+export const dateAfter: (
+  level: LevelAttribute,
+  from: Date | string,
+  config?: BaseFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (level, from, config) =>
+    new DateRangeFilter(
+      level,
+      from,
+      undefined,
+      config,
+      undefined,
+      DateOperators.FromNotEqual,
+      DateOperators.To,
+    ),
+  'dateAfter',
+);
+
+/**
  * Creates a filter that keeps rows between a start and an end at the given date level.
  *
  * @remarks
@@ -903,30 +966,70 @@ export const today: (dimension: DateDimension, config?: BaseFilterConfig) => Fil
 
 // MEASURE-RELATED FILTERS
 
+/** An attribute found in a measure tree, and whether it is only the last-resort bare one. */
+type AttributeMatch = { attribute: Attribute; isBareFallback: boolean };
+
 /**
- * Gets the attribute from a measure, resolving through nested CalculatedMeasures.
- * @param measure - Measure to get the attribute from
- * @returns Attribute from the first BaseMeasure found in the measure tree
+ * Searches a measure tree for an attribute to filter on.
+ * @param measure - Measure to search.
+ * @returns The attribute and how it was found, or undefined when no operand carries one.
  */
-function getMeasureAttribute(measure: BaseMeasure | CalculatedMeasure): Attribute {
+function findMeasureAttribute(
+  measure: BaseMeasure | CalculatedMeasure,
+): AttributeMatch | undefined {
   if ('attribute' in measure) {
-    return measure.attribute;
+    return { attribute: measure.attribute, isBareFallback: false };
   }
-  for (const contextMeasure of Object.values(measure.context)) {
-    if (typeof contextMeasure !== 'object' || contextMeasure === null) {
+  // Fusion writes a date measure as a formula over a bare attribute, so there may be nothing to
+  // unwrap. Reported rather than returned, so a measure operand at any depth still wins.
+  let fallback: AttributeMatch | undefined;
+
+  for (const operand of Object.values(measure.context)) {
+    if (typeof operand !== 'object' || operand === null) {
       continue;
     }
-    if ('attribute' in contextMeasure) {
-      return (contextMeasure as BaseMeasure).attribute;
+    if ('attribute' in operand) {
+      return { attribute: (operand as BaseMeasure).attribute, isBareFallback: false };
     }
+    // by type, not by shape: a calculated ATTRIBUTE carries a context too, and descending into one
+    // would answer with an operand inside it instead of the attribute the caller actually named
     if (
-      'context' in contextMeasure &&
-      typeof (contextMeasure as CalculatedMeasure).context === 'object'
+      MetadataTypes.isCalculatedMeasure(operand) &&
+      typeof (operand as CalculatedMeasure).context === 'object'
     ) {
-      return getMeasureAttribute(contextMeasure as CalculatedMeasure);
+      const match = findMeasureAttribute(operand as CalculatedMeasure);
+
+      if (match && !match.isBareFallback) {
+        return match;
+      }
+      if (!fallback) {
+        fallback = match;
+      }
+      continue;
+    }
+    if (!fallback && MetadataTypes.isAttribute(operand)) {
+      fallback = { attribute: operand, isBareFallback: true };
     }
   }
-  throw new Error('Cannot determine attribute from measure');
+
+  return fallback;
+}
+
+/**
+ * Gets the attribute from a measure, resolving through nested CalculatedMeasures.
+ * @param measure - Measure to get the attribute from.
+ * @returns The attribute of the first measure or filter operand in the tree, or, when there is
+ * none, the first bare attribute in the tree.
+ * @throws Error when no attribute can be found.
+ */
+function getMeasureAttribute(measure: BaseMeasure | CalculatedMeasure): Attribute {
+  const match = findMeasureAttribute(measure);
+
+  if (!match) {
+    throw new Error('Cannot determine attribute from measure');
+  }
+
+  return match.attribute;
 }
 
 /**
@@ -946,16 +1049,16 @@ export function measureBase(
   attribute: Attribute,
   measure: Measure,
   operatorA?: string,
-  valueA?: number,
+  valueA?: number | string | Date,
   operatorB?: string,
-  valueB?: number,
+  valueB?: number | string | Date,
   config?: BaseFilterConfig,
 ): Filter {
   return new MeasureFilter(attribute, measure, operatorA, valueA, operatorB, valueB, config);
 }
 
 /**
- * Creates a filter to isolate a measure value equal to a given number.
+ * Creates a filter to isolate a measure value equal to a given number or date.
  *
  * @example
  * Filter for categories that have an average revenue equal 50 in the Sample ECommerce data model.
@@ -965,14 +1068,23 @@ export function measureBase(
  *   50
  * )
  * ```
+ * @example
+ * Filter for categories whose last order was on 4 December 2013 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureEquals(
+ *   measureFactory.max(DM.Commerce.Date.Days),
+ *   new Date('2013-12-04T00:00:00')
+ * )
+ * ```
  * @param measure - Measure to filter by
- * @param value - Value
+ * @param value - Value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
 export const measureEquals: (
   measure: BaseMeasure | CalculatedMeasure,
-  value: number,
+  value: number | string | Date,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
@@ -989,25 +1101,34 @@ export const measureEquals: (
 );
 
 /**
- * Creates a filter to isolate a measure value greater than to a given number.
+ * Creates a filter to isolate a measure value greater than a given number or date.
  *
  * @example
- * Filter for categories that have an average revenue greater than
- * to 50 in the Sample ECommerce data model.
+ * Filter for categories that have an average revenue greater than 50 in the Sample ECommerce data
+ * model.
  * ```ts
  * filterFactory.measureGreaterThan(
  *   measureFactory.average(DM.Commerce.Revenue),
  *   50
  * )
  * ```
+ * @example
+ * Filter for categories whose last order was after 1 December 2013 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureGreaterThan(
+ *   measureFactory.max(DM.Commerce.Date.Days),
+ *   new Date('2013-12-01T00:00:00')
+ * )
+ * ```
  * @param measure - Measure to filter by
- * @param value - Min value
+ * @param value - Min value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
 export const measureGreaterThan: (
   measure: BaseMeasure | CalculatedMeasure,
-  value: number,
+  value: number | string | Date,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
@@ -1024,7 +1145,7 @@ export const measureGreaterThan: (
 );
 
 /**
- * Creates a filter to isolate a measure value greater than or equal to a given number.
+ * Creates a filter to isolate a measure value greater than or equal to a given number or date.
  *
  * @example
  * Filter for categories that have an average revenue greater than
@@ -1035,14 +1156,24 @@ export const measureGreaterThan: (
  *   50
  * )
  * ```
+ * @example
+ * Filter for categories whose last order was on or after 1 December 2013 in the Sample ECommerce
+ * data model.
+ * ```ts
+ * filterFactory.measureGreaterThanOrEqual(
+ *   measureFactory.max(DM.Commerce.Date.Days),
+ *   new Date('2013-12-01T00:00:00')
+ * )
+ * ```
  * @param measure - Measure to filter by
- * @param value - Min value
+ * @param value - Min value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
 export const measureGreaterThanOrEqual: (
   measure: BaseMeasure | CalculatedMeasure,
-  value: number,
+  value: number | string | Date,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
@@ -1059,7 +1190,7 @@ export const measureGreaterThanOrEqual: (
 );
 
 /**
- * Creates a filter to isolate a measure value less than or equal to a given number.
+ * Creates a filter to isolate a measure value less than or equal to a given number or date.
  *
  * @example
  * Filter for categories that have an average revenue less than
@@ -1070,14 +1201,24 @@ export const measureGreaterThanOrEqual: (
  *   100
  * )
  * ```
+ * @example
+ * Filter for categories whose last order was on or before 1 December 2013 in the Sample ECommerce
+ * data model.
+ * ```ts
+ * filterFactory.measureLessThanOrEqual(
+ *   measureFactory.max(DM.Commerce.Date.Days),
+ *   new Date('2013-12-01T00:00:00')
+ * )
+ * ```
  * @param measure - Measure to filter by
- * @param value - Max value
+ * @param value - Max value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
 export const measureLessThanOrEqual: (
   measure: BaseMeasure | CalculatedMeasure,
-  value: number,
+  value: number | string | Date,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
@@ -1094,7 +1235,7 @@ export const measureLessThanOrEqual: (
 );
 
 /**
- * Creates a filter to isolate a measure value less than a given number.
+ * Creates a filter to isolate a measure value less than a given number or date.
  *
  * @example
  * Filter for categories that have an average revenue less than 100 in the Sample ECommerce data model.
@@ -1104,14 +1245,23 @@ export const measureLessThanOrEqual: (
  *   100
  * )
  * ```
+ * @example
+ * Filter for categories whose last order was before 1 December 2013 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureLessThan(
+ *   measureFactory.max(DM.Commerce.Date.Days),
+ *   new Date('2013-12-01T00:00:00')
+ * )
+ * ```
  * @param measure - Measure to filter by
- * @param value - Value
+ * @param value - Value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
 export const measureLessThan: (
   measure: BaseMeasure | CalculatedMeasure,
-  value: number,
+  value: number | string | Date,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
@@ -1128,7 +1278,7 @@ export const measureLessThan: (
 );
 
 /**
- * Creates a filter to isolate a measure value between or equal to two given numbers.
+ * Creates a filter to isolate a measure value between or equal to two given numbers or dates.
  *
  * @example
  * Filter for categories that have an average revenue greater than or equal to 50 and less than
@@ -1140,16 +1290,28 @@ export const measureLessThan: (
  *   100
  * )
  * ```
+ * @example
+ * Filter for categories whose last order falls in the fourth quarter of 2013 in the Sample
+ * ECommerce data model.
+ * ```ts
+ * filterFactory.measureBetween(
+ *   measureFactory.max(DM.Commerce.Date.Days),
+ *   new Date('2013-10-01T00:00:00'),
+ *   new Date('2013-12-31T23:59:59')
+ * )
+ * ```
  * @param measure - Measure to filter by
- * @param valueA - Min value
- * @param valueB - Max value
+ * @param valueA - Min value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
+ * @param valueB - Max value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
 export const measureBetween: (
   measure: BaseMeasure | CalculatedMeasure,
-  valueA: number,
-  valueB: number,
+  valueA: number | string | Date,
+  valueB: number | string | Date,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, valueA, valueB, config) =>
@@ -1166,7 +1328,7 @@ export const measureBetween: (
 );
 
 /**
- * Creates a filter to isolate a measure value between but not equal to two given numbers.
+ * Creates a filter to isolate a measure value between but not equal to two given numbers or dates.
  *
  * @example
  * Filter for categories that have an average revenue greater than 50 and less than
@@ -1178,16 +1340,28 @@ export const measureBetween: (
  *   100
  * )
  * ```
+ * @example
+ * Filter for categories whose last order falls strictly inside the fourth quarter of 2013 in the
+ * Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureBetweenNotEqual(
+ *   measureFactory.max(DM.Commerce.Date.Days),
+ *   new Date('2013-10-01T00:00:00'),
+ *   new Date('2013-12-31T23:59:59')
+ * )
+ * ```
  * @param measure - Measure to filter by
- * @param valueA - Min value
- * @param valueB - Max value
+ * @param valueA - Min value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
+ * @param valueB - Max value. For a date measure pass a `Date` or an ISO 8601 string.
+ * A number is only valid for a numeric measure.
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
 export const measureBetweenNotEqual: (
   measure: BaseMeasure | CalculatedMeasure,
-  valueA: number,
-  valueB: number,
+  valueA: number | string | Date,
+  valueB: number | string | Date,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, valueA, valueB, config) =>

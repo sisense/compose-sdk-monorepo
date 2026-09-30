@@ -60,7 +60,9 @@ export const NumericOperators = {
  */
 export const DateOperators = {
   From: 'from',
+  FromNotEqual: 'fromNotEqual',
   To: 'to',
+  ToNotEqual: 'toNotEqual',
   Last: 'last',
   Next: 'next',
   Anchor: 'Anchor',
@@ -618,7 +620,7 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
 /**
  * @internal
  */
-export class MeasureFilter extends DoubleOperatorFilter<number> {
+export class MeasureFilter extends DoubleOperatorFilter<number | string | Date> {
   /**
    * @internal
    */
@@ -630,13 +632,22 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
     att: Attribute,
     measure: Measure,
     operatorA?: string,
-    valueA?: number,
+    valueA?: number | string | Date,
     operatorB?: string,
-    valueB?: number,
+    valueB?: number | string | Date,
     config?: BaseFilterConfig,
     composeCode?: string,
   ) {
     super(att, FilterTypes.measure, operatorA, valueA, operatorB, valueB, config, composeCode);
+
+    // use this.valueA, not the argument: DoubleOperatorFilter leaves it unset when the operator is missing
+    if (this.valueA instanceof Date) {
+      this.valueA = toLocalIsoDateTime(this.valueA);
+    }
+
+    if (this.valueB instanceof Date) {
+      this.valueB = toLocalIsoDateTime(this.valueB);
+    }
 
     this.measure = measure;
   }
@@ -943,6 +954,33 @@ function stripClockTimeFromIsoDateTime(bound: string): string {
 }
 
 /**
+ * Serializes a date as `yyyy-MM-ddTHH:mm:ss` from its local calendar fields.
+ *
+ * Exported, unlike its neighbour, so the upcoming member and relative-period filters on a date
+ * measure emit the same wire format instead of writing a fourth serializer.
+ *
+ * @param value - Date to serialize
+ * @returns Local date and clock time, with no timezone suffix
+ * @throws TranslatableError when `value` is an invalid `Date`
+ * @internal
+ */
+export function toLocalIsoDateTime(value: Date): string {
+  // an invalid Date would format as `0NaN-NaN-NaN...` and reach the server; `toISOString` throws
+  // here, and this serializer stands in for it
+  if (Number.isNaN(value.getTime())) {
+    throw new TranslatableError('errors.filter.invalidDateValue');
+  }
+
+  const pad = (part: number, width = 2) => `${part}`.padStart(width, '0');
+
+  // not `toISOString`: its `Z` tells the server the value is UTC, which shifts the day
+  return (
+    `${pad(value.getFullYear(), 4)}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}` +
+    `T${pad(value.getHours())}:${pad(value.getMinutes())}:${pad(value.getSeconds())}`
+  );
+}
+
+/**
  * Closed or open-ended range filter on a date {@link LevelAttribute}.
  *
  * @remarks
@@ -965,13 +1003,17 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
     valueTo?: Date | string,
     config?: BaseFilterConfig,
     composeCode?: string,
+    // Exclusive bounds (Before / After) pass `fromNotEqual` / `toNotEqual` here instead of the
+    // default `from` / `to`, so the JAQL round-trips without shifting the calendar date.
+    operatorFrom: string = DateOperators.From,
+    operatorTo: string = DateOperators.To,
   ) {
     super(
       levelAttribute,
       FilterTypes.dateRange,
-      DateOperators.From,
+      operatorFrom,
       valueFrom,
-      DateOperators.To,
+      operatorTo,
       valueTo,
       config,
       composeCode,
@@ -1009,9 +1051,21 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
 
   /**
    * Gets JAQL representing this Filter instance
+   *
+   * @remarks
+   * Exclusive bounds (`fromNotEqual` / `toNotEqual`) publish `isAdvanced: true` and
+   * `custom: true` alongside — the backend requires this envelope to persist the clause,
+   * same as Fusion's own custom-filter JAQL for the equivalent condition.
    */
   filterJaql(): any {
-    return super.filterJaql();
+    const base = super.filterJaql();
+    if (
+      this.operatorA === DateOperators.FromNotEqual ||
+      this.operatorB === DateOperators.ToNotEqual
+    ) {
+      return { ...base, isAdvanced: true, custom: true };
+    }
+    return base;
   }
 
   /**

@@ -317,12 +317,19 @@ export function firstEmptyCaret(mask: DateMask, masked: string): number {
  * Resolves the caret at the start of the part after the one it sits in — where a typed
  * separator jumps, so a single-digit month can be closed and the day begun without the month
  * padding out.
+ *
+ * A caret already at the start of a later part stays put: filling a part hops the caret over
+ * the separator on its own, so the separator a reader types next (`03` then `/`) closes
+ * nothing. Jumping from there skipped the part just entered — `03/06/2012` came out
+ * `03/DD/0620`.
  * @param mask - The active date mask
  * @param caret - The current caret index
- * @returns The caret index at the start of the next part, or the very end
+ * @returns The caret index at the start of the next part, the unchanged caret when it already
+ *   starts one, or the very end
  * @internal
  */
 export function nextSegmentCaret(mask: DateMask, caret: number): number {
+  if (caret === mask.starts[1] || caret === mask.starts[2]) return caret;
   if (caret < segmentEnd(mask, 0)) return mask.starts[1];
   if (caret < segmentEnd(mask, 1)) return mask.starts[2];
   return mask.length;

@@ -142,3 +142,177 @@ describe('translateChartToJSON', () => {
     expect(dataOptions.outliersEnabled).toBe(true);
   });
 });
+
+const context = {
+  dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+  tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+};
+
+const REVENUE = { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] };
+const COST = { function: 'measureFactory.sum', args: ['DM.Commerce.Cost', 'Total Cost'] };
+
+/** JSON → props → JSON; returns the props and the regenerated JSON */
+const roundTripFromJSON = (chartJSON: ChartJSON) => {
+  const chartProps = getSuccessData(translateChartFromJSON({ data: chartJSON, context }));
+  const reverseJSON = getSuccessData(translateChartToJSON(chartProps));
+  return { chartProps, reverseJSON };
+};
+
+describe('translateChartToJSON — KPI', () => {
+  const kpiCases: { name: string; dataOptions: ChartJSON['dataOptions'] }[] = [
+    { name: 'value only', dataOptions: { value: REVENUE } },
+    {
+      name: "valueMode 'last'",
+      dataOptions: { value: REVENUE, category: 'DM.Commerce.Date.Months', valueMode: 'last' },
+    },
+    {
+      name: "valueMode 'total'",
+      dataOptions: { value: REVENUE, category: 'DM.Commerce.Date.Months', valueMode: 'total' },
+    },
+    {
+      name: "comparison 'previous-period'",
+      dataOptions: {
+        value: REVENUE,
+        category: 'DM.Commerce.Date.Months',
+        comparison: { type: 'previous-period' },
+      },
+    },
+    {
+      name: "comparison 'delta'",
+      dataOptions: { value: REVENUE, comparison: { type: 'delta', value: COST } },
+    },
+    {
+      name: "comparison 'delta' with a styled measure",
+      dataOptions: {
+        value: REVENUE,
+        comparison: {
+          type: 'delta',
+          value: { column: COST, numberFormatConfig: { name: 'Currency', symbol: '$' } },
+        },
+      },
+    },
+    {
+      name: "comparison 'value'",
+      dataOptions: { value: REVENUE, comparison: { type: 'value', value: COST } },
+    },
+    {
+      name: "comparison 'target' with a measure",
+      dataOptions: { value: REVENUE, comparison: { type: 'target', target: COST } },
+    },
+    {
+      name: "comparison 'target' with a number",
+      dataOptions: { value: REVENUE, comparison: { type: 'target', target: 250000 } },
+    },
+    {
+      name: 'valueMode and comparison combined',
+      dataOptions: {
+        value: REVENUE,
+        category: 'DM.Commerce.Date.Months',
+        valueMode: 'total',
+        comparison: { type: 'target', target: COST },
+      },
+    },
+  ];
+
+  it.each(kpiCases)('round-trips JSON → props → JSON: $name', ({ dataOptions }) => {
+    const { reverseJSON } = roundTripFromJSON({ chartType: 'kpi', dataOptions });
+
+    expect(reverseJSON.chartType).toBe('kpi');
+    expect(reverseJSON.dataOptions).toEqual(dataOptions);
+  });
+
+  it.each(kpiCases)('round-trips props → JSON → props: $name', ({ dataOptions }) => {
+    const { chartProps, reverseJSON } = roundTripFromJSON({ chartType: 'kpi', dataOptions });
+
+    const reverseProps = getSuccessData(translateChartFromJSON({ data: reverseJSON, context }));
+    expect(reverseProps.dataOptions).toEqual(chartProps.dataOptions);
+  });
+
+  it('translates comparison baselines to measures and keeps a numeric target as is', () => {
+    const measureTarget = roundTripFromJSON({
+      chartType: 'kpi',
+      dataOptions: { value: REVENUE, comparison: { type: 'target', target: COST } },
+    }).chartProps.dataOptions as { comparison: { type: string; target: unknown } };
+    expect(measureTarget.comparison.type).toBe('target');
+    expect(measureTarget.comparison.target).toHaveProperty(
+      'composeCode',
+      "measureFactory.sum(DM.Commerce.Cost, 'Total Cost')",
+    );
+
+    const numericTarget = roundTripFromJSON({
+      chartType: 'kpi',
+      dataOptions: { value: REVENUE, comparison: { type: 'target', target: 250000 } },
+    }).chartProps.dataOptions as { comparison: unknown };
+    expect(numericTarget.comparison).toEqual({ type: 'target', target: 250000 });
+  });
+
+  it('reports a comparison measure missing composeCode at dataOptions.comparison.value', () => {
+    const { chartProps } = roundTripFromJSON({
+      chartType: 'kpi',
+      dataOptions: { value: REVENUE, comparison: { type: 'delta', value: COST } },
+    });
+    const dataOptions = chartProps.dataOptions as {
+      value: unknown;
+      comparison: { type: 'delta'; value: object };
+    };
+
+    const result = translateChartToJSON({
+      ...chartProps,
+      dataOptions: {
+        ...dataOptions,
+        comparison: {
+          type: 'delta',
+          value: { ...dataOptions.comparison.value, composeCode: undefined },
+        },
+      },
+    } as typeof chartProps);
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0].path).toBe('dataOptions.comparison.value');
+  });
+
+  it('rejects a comparison with an unknown type', () => {
+    const { chartProps } = roundTripFromJSON({ chartType: 'kpi', dataOptions: { value: REVENUE } });
+
+    const result = translateChartToJSON({
+      ...chartProps,
+      dataOptions: {
+        ...chartProps.dataOptions,
+        // @ts-expect-error -- deliberately invalid comparison type
+        comparison: { type: 'forecast' },
+      },
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.errors[0].path).toBe('dataOptions.comparison');
+  });
+});
+
+describe('translateChartToJSON — Sankey', () => {
+  const sankeyDataOptions: ChartJSON['dataOptions'] = {
+    category: ['DM.Commerce.Gender', 'DM.Category.Category'],
+    value: REVENUE,
+  };
+
+  it('round-trips JSON → props → JSON', () => {
+    const { reverseJSON } = roundTripFromJSON({
+      chartType: 'sankey',
+      dataOptions: sankeyDataOptions,
+    });
+
+    expect(reverseJSON.chartType).toBe('sankey');
+    expect(reverseJSON.dataOptions).toEqual(sankeyDataOptions);
+  });
+
+  it('round-trips props → JSON → props with seriesToColorMap', () => {
+    const dataOptions = { ...sankeyDataOptions, seriesToColorMap: { Male: '#00cee6' } };
+    const { chartProps, reverseJSON } = roundTripFromJSON({ chartType: 'sankey', dataOptions });
+
+    expect(reverseJSON.dataOptions).toEqual(dataOptions);
+    const reverseProps = getSuccessData(translateChartFromJSON({ data: reverseJSON, context }));
+    expect(reverseProps.dataOptions).toEqual(chartProps.dataOptions);
+  });
+});

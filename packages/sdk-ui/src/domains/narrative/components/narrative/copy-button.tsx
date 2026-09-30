@@ -51,16 +51,27 @@ function CopiedIcon() {
 }
 
 /**
+ * Props of {@link NarrativeCopyButton}.
+ * @internal
+ */
+export type NarrativeCopyButtonProps = {
+  /** The narrative as plain text with formatting preserved. */
+  copyText: string;
+  /** Called once the text is on the clipboard. */
+  onCopied?: () => void;
+};
+
+/**
  * Renders the header action that copies the generated narrative to the clipboard, formatting preserved.
  * @remarks
  * Presentational: it receives the ready-made copy text and knows nothing about the narrative
  * state. Injection into the widget header is wired separately.
- * @param props - Component props.
- * @param props.copyText - The narrative as plain text with formatting preserved.
+ * @param props - Copy text and the callback fired after a copy.
  * @returns The copy button.
  * @internal
  */
-export function NarrativeCopyButton({ copyText }: { copyText: string }) {
+export function NarrativeCopyButton(props: NarrativeCopyButtonProps) {
+  const { copyText, onCopied } = props;
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
   const [copied, setCopied] = useState(false);
@@ -70,13 +81,19 @@ export function NarrativeCopyButton({ copyText }: { copyText: string }) {
   const copy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(copyText);
-      setCopied(true);
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
     } catch {
       // Clipboard access denied or unavailable (non-secure context); the action stays inert.
+      return;
     }
-  }, [copyText]);
+    setCopied(true);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
+    try {
+      onCopied?.();
+    } catch (error) {
+      console.error('The narrative copy callback failed', error);
+    }
+  }, [copyText, onCopied]);
 
   const color = themeSettings.widget.header.titleTextColor;
 

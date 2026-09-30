@@ -12,6 +12,8 @@ title: multiply
 
 Creates a calculated measure by multiplying two given numbers or measures.
 
+Note: Only numbers and numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

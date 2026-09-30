@@ -6,7 +6,7 @@
  * is shared so shell bugs are fixed once.
  * @internal
  */
-import type { ReactNode } from 'react';
+import type { MouseEvent as ReactMouseEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RemoveButton } from './condition-filter-layout.js';
@@ -34,7 +34,8 @@ export type ConditionFilterScreen =
   | { kind: 'value' }
   | { kind: 'operator' }
   | { kind: 'connector' }
-  | { kind: 'chainOp'; rowId: string };
+  | { kind: 'chainOp'; rowId: string }
+  | { kind: 'grain' };
 
 /** Operator / connector rows inside the panel use a compact field size. @internal */
 export const CONDITION_PANEL_SIZE: FieldSize = 's';
@@ -49,6 +50,11 @@ export function ConditionRemoveControl({ onClick }: { onClick: () => void }) {
       type="button"
       data-testid="filter-widget-condition-remove"
       aria-label={t('filterWidget.controls.clearSelection')}
+      /* Without this, a mousedown here blurs whichever field currently has focus
+         first (even a different row's), collapsing that field's hint list and
+         reflowing this button out from under the click — so removal needed a
+         second click. Keeping focus put lets the click reach onClick undisturbed. */
+      onMouseDown={(event) => event.preventDefault()}
       onClick={onClick}
     >
       <Icon name="closeSmall" />
@@ -89,6 +95,13 @@ export type ConditionFilterShellProps = FieldOwnProps & {
    * already fits is not repeated in a popover.
    */
   tooltipLines?: readonly string[];
+  /**
+   * Hover copy the closed trigger never shows in the box — date Condition's
+   * resolved range. Unlike `tooltipLines`, it does not wait for truncation.
+   */
+  hint?: ReactNode;
+  /** Overrides the panel's 260px English minimum (date Condition is 276px). */
+  panelMinWidth?: string;
 };
 
 /**
@@ -124,11 +137,22 @@ export function ConditionFilterShell({
   valueBody,
   drill,
   tooltipLines,
+  hint,
+  panelMinWidth,
 }: ConditionFilterShellProps) {
   const { t } = useTranslation();
   const fieldId = useFieldId(id);
   const panelRadius: FieldRadius = radius ?? 's';
   const findInListPlaceholder = t('filterWidget.controls.findInList');
+
+  /* Text Condition's member-hint list sits in normal flow right above this footer.
+     Without this, a mousedown here blurs the focused value field first, collapsing
+     that list and reflowing these buttons out from under the click — so the click
+     landed on whatever took its place, and a second click was needed to actually
+     act. Keeping focus put lets the click reach each button's own onClick
+     undisturbed (numeric / date Condition have no hint list, so this is a no-op
+     there). */
+  const keepFocus = (event: ReactMouseEvent) => event.preventDefault();
 
   const footer = (
     <Foot>
@@ -136,6 +160,7 @@ export function ConditionFilterShell({
         type="button"
         data-testid="filter-widget-panel-clear"
         $radius={panelRadius}
+        onMouseDown={keepFocus}
         onClick={onClearDraft}
       >
         {t('filterWidget.controls.clear')}
@@ -145,6 +170,7 @@ export function ConditionFilterShell({
           type="button"
           data-testid="filter-widget-panel-cancel"
           $radius={panelRadius}
+          onMouseDown={keepFocus}
           onClick={onAbandon}
         >
           {t('filterEditor.buttons.cancel')}
@@ -153,6 +179,7 @@ export function ConditionFilterShell({
           type="button"
           data-testid="filter-widget-panel-apply"
           $radius={panelRadius}
+          onMouseDown={keepFocus}
           onClick={onApply}
         >
           {t('filterEditor.buttons.apply')}
@@ -197,7 +224,11 @@ export function ConditionFilterShell({
   ) : null;
 
   const panel = (
-    <Panel $radius={panelRadius} data-testid="filter-widget-condition-panel">
+    <Panel
+      $radius={panelRadius}
+      $minWidth={panelMinWidth}
+      data-testid="filter-widget-condition-panel"
+    >
       {screen.kind === 'value' ? (
         <>
           {valueBody}
@@ -208,6 +239,12 @@ export function ConditionFilterShell({
       )}
     </Panel>
   );
+
+  const setFilterLabel = placeholder ?? t('filterWidget.placeholders.setFilter');
+  /* Empty closed Condition must paint "Set filter" as a real value (primary ink). An HTML
+     placeholder alone lands on secondary via `::placeholder`, while List/Period empty
+     triggers read as primary because `-webkit-text-fill-color` on the input wins there. */
+  const closedTriggerValue = showPlaceholder ? setFilterLabel : triggerValue;
 
   return (
     <Selector
@@ -222,8 +259,9 @@ export function ConditionFilterShell({
       width={width}
       controlStyle={controlStyle}
       className={className}
-      value={triggerValue}
-      placeholder={placeholder ?? t('filterWidget.placeholders.setFilter')}
+      value={isOpen ? triggerValue : closedTriggerValue}
+      placeholder={setFilterLabel}
+      hint={hint}
       tooltip={
         tooltipLines && tooltipLines.length > 1
           ? tooltipLines.map((line, index) => <span key={`${index}:${line}`}>{line}</span>)

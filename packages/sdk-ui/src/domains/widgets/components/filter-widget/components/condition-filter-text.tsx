@@ -83,6 +83,41 @@ const NO_PARENT_FILTERS: Filter[] = [];
 const PRIMARY_ENTRY = 'primary';
 
 /**
+ * Which member-search shape backs the hint list for each operator — matches the
+ * row's own comparison, negation included: a `not-…` row hints members that would
+ * actually pass it. `equals` / `not-equals` stay on `contains` while typing: an
+ * exact-match (or doesn't-equal) query would show nothing (or almost everything)
+ * until the full value is typed, defeating the point of a hint.
+ */
+const HINT_FILTER_BY_OP: Partial<
+  Record<TextConditionOp, (attribute: Attribute, value: string) => Filter>
+> = {
+  'not-contains': filterFactory.doesntContain,
+  'starts-with': filterFactory.startsWith,
+  'not-starts-with': filterFactory.doesntStartWith,
+  'ends-with': filterFactory.endsWith,
+  'not-ends-with': filterFactory.doesntEndWith,
+};
+
+/**
+ * Same shapes as {@link HINT_FILTER_BY_OP}, as a plain string check — the
+ * client-side re-filter `memberHintsForNeedle` applies on top of whatever the
+ * query above already returned. Without this it always re-checked `contains`,
+ * which silently emptied the list for any `not-…` operator: the server had
+ * already returned members that don't contain the needle, and a `contains`
+ * re-check threw them straight back out.
+ */
+const HINT_MATCH_BY_OP: Partial<
+  Record<TextConditionOp, (title: string, needle: string) => boolean>
+> = {
+  'not-contains': (title, needle) => !title.includes(needle),
+  'starts-with': (title, needle) => title.startsWith(needle),
+  'not-starts-with': (title, needle) => !title.startsWith(needle),
+  'ends-with': (title, needle) => title.endsWith(needle),
+  'not-ends-with': (title, needle) => !title.endsWith(needle),
+};
+
+/**
  * Renders a free-text condition value with inline member suggestions.
  *
  * Uses `Dropdown`'s `hint` mode under the field while typing. Suggestions are
@@ -94,6 +129,7 @@ const PRIMARY_ENTRY = 'primary';
  */
 function ConditionTextEntry({
   entryKey,
+  op,
   text,
   onChange,
   error,
@@ -106,6 +142,8 @@ function ConditionTextEntry({
   dataTestId,
 }: {
   entryKey: string;
+  /** Drives which shape the hint list matches against — see {@link HINT_MATCH_BY_OP}. */
+  op: TextConditionOp;
   text: string;
   onChange: (next: string) => void;
   error?: FieldOwnProps['error'];
@@ -119,8 +157,11 @@ function ConditionTextEntry({
 }) {
   const listboxId = `filter-widget-condition-hints-${entryKey}`;
   const hints = useMemo(
-    () => (typingIn === entryKey ? memberHintsForNeedle(members, text) : []),
-    [typingIn, entryKey, members, text],
+    () =>
+      typingIn === entryKey
+        ? memberHintsForNeedle(members, text, CONDITION_TEXT_HINT_LIMIT, HINT_MATCH_BY_OP[op])
+        : [],
+    [typingIn, entryKey, members, text, op],
   );
   const hintItems = useMemo(
     () => hints.map((member) => ({ id: member.key, label: member.title })),
@@ -200,8 +241,7 @@ function ConditionTextEntry({
         activeOptionId={activeId ? `${listboxId}-${activeId}` : undefined}
       />
       {hints.length > 0 && (
-        /* The caret would leave the field on the way to a row and unmount the list
-           before the click landed. Keeping focus put is also what the reader means. */
+        /* preventDefault keeps focus (and the list) through a click on a row. */
         <div
           data-testid="filter-widget-condition-hints"
           onMouseDown={(event) => event.preventDefault()}
@@ -307,13 +347,22 @@ export function ConditionFilterText({
       ? draft.text
       : draft.extra.find((row) => row.id === typingIn)?.text ?? '';
 
+  /* The operator of whichever row is currently being typed in — Starts with /
+     Ends with (and their negations) search the hint list by that same shape
+     (AC: hints must match the row's own operator, not always `contains`). */
+  const liveOp: TextConditionOp =
+    typingIn === PRIMARY_ENTRY
+      ? draft.op
+      : draft.extra.find((row) => row.id === typingIn)?.op ?? draft.op;
+
   const membersQueryFilter = useMemo(() => filterFactory.members(attribute, []), [attribute]);
 
   const hintParentFilters = useMemo(() => {
     const needle = liveNeedle.trim();
     if (!needle || !attribute.expression) return parentFilters;
-    return [...parentFilters, filterFactory.contains(attribute, needle)];
-  }, [attribute, liveNeedle, parentFilters]);
+    const buildHintFilter = HINT_FILTER_BY_OP[liveOp] ?? filterFactory.contains;
+    return [...parentFilters, buildHintFilter(attribute, needle)];
+  }, [attribute, liveNeedle, liveOp, parentFilters]);
 
   const { data: membersData } = useGetFilterMembersInternal({
     filter: membersQueryFilter,
@@ -410,6 +459,9 @@ export function ConditionFilterText({
       ],
     }));
     setTriedApply(false);
+    /* Add-condition doesn't close the panel, so the hint list (if any was open)
+       must be dropped explicitly rather than by the isOpen effect. */
+    setTypingIn(null);
   };
 
   const drill = buildDrill({
@@ -440,6 +492,7 @@ export function ConditionFilterText({
     shape === 'text' ? (
       <ConditionTextEntry
         entryKey={PRIMARY_ENTRY}
+        op={draft.op}
         text={draft.text}
         onChange={(text) => {
           setDraft((prev) => ({ ...prev, text }));
@@ -528,6 +581,7 @@ export function ConditionFilterText({
                     <RowGrow>
                       <ConditionTextEntry
                         entryKey={row.id}
+                        op={row.op}
                         text={row.text}
                         onChange={(text) => {
                           updateRow(row.id, { text });
@@ -551,7 +605,17 @@ export function ConditionFilterText({
           })}
 
           {allowChaining && (
-            <AddCondition type="button" data-testid="filter-widget-condition-add" onClick={addRow}>
+            <AddCondition
+              type="button"
+              data-testid="filter-widget-condition-add"
+              /* Without this, a mousedown here blurs the focused value field first,
+                 collapsing the hint list (in normal flow) and reflowing this very
+                 button out from under the click — so the click landed on whatever
+                 took its place, and a second click was needed to actually add a
+                 row. Keeping focus put lets the click reach onClick undisturbed. */
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={addRow}
+            >
               {t('filterWidget.controls.addCondition', '+ Add condition')}
             </AddCondition>
           )}

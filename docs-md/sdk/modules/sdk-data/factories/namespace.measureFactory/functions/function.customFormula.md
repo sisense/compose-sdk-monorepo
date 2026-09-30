@@ -21,6 +21,8 @@ You can nest custom formulas by placing one inside the `formula` parameter of an
 Note: To use [shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm)
 from a Fusion instance, you must fetch them first using [useGetSharedFormula](../../../../sdk-ui/fusion-assets/function.useGetSharedFormula.md).
 
+Note: Date measures, such as `MAX([date])`, cannot be combined with numeric values.
+
 ## Parameters
 
 | Parameter | Type | Description |

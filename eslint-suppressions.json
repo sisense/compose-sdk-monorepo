@@ -1,0 +1,25 @@
+{
+  "scripts/demo-features/back-nav.js": {
+    "no-var": {
+      "count": 5
+    }
+  },
+  "scripts/demo-features/env-switcher/env-switcher.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    },
+    "no-var": {
+      "count": 40
+    }
+  },
+  "scripts/demo-features/source-link.js": {
+    "no-var": {
+      "count": 14
+    }
+  },
+  "scripts/get-mrs.cjs": {
+    "no-unused-vars": {
+      "count": 1
+    }
+  }
+}

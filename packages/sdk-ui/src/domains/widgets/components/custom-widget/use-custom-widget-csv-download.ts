@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { mapMeasuresForCsvExport } from '@/domains/widgets/helpers/export-map-dimensions-measures.js';
 import { useCsvQueryFileLoader } from '@/domains/widgets/hooks/use-csv-query-file-loader.js';
 import { useWithCsvDownloadMenuItem } from '@/domains/widgets/hooks/use-with-csv-download-menu-item.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
@@ -37,7 +38,7 @@ export function useCustomWidgetCsvDownload(
     return {
       dataSource,
       dimensions,
-      measures,
+      measures: mapMeasuresForCsvExport(measures),
       filters,
       highlights,
       filename: title ? `${title}.csv` : undefined,

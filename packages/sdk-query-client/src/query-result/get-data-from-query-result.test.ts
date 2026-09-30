@@ -1,8 +1,10 @@
 import {
   createAttribute,
   DataCell,
+  DateLevels,
   DimensionalAttribute,
   DimensionalBaseMeasure,
+  DimensionalLevelAttribute,
   measureFactory,
 } from '@sisense/sdk-data';
 
@@ -488,6 +490,95 @@ describe('Handle query service response', () => {
     expect(outputRows[2]).toMatchObject([
       { data: 'C', text: 'C', blur: true },
       { data: '3', text: '3', blur: true },
+    ]);
+  });
+});
+
+describe('column type of a date measure', () => {
+  const dateDays = new DimensionalLevelAttribute(
+    'Days',
+    '[Commerce.Date (Calendar)]',
+    DateLevels.Days,
+    'yyyy-MM-dd',
+  );
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+
+  /** One response row per column, shaped like the live engine answer for the given cell. */
+  function newResponse(title: string, jaql: Record<string, unknown>, cell: DataCell) {
+    return {
+      headers: [title],
+      metadata: [{ jaql: { ...jaql, title } }],
+      values: [[cell]],
+    };
+  }
+
+  it('resolves a max over a datetime attribute as datetime', () => {
+    const response = newResponse(
+      'Max Date',
+      { agg: 'max', datatype: 'datetime', level: 'days', dim: '[Commerce.Date (Calendar)]' },
+      { data: '2010-12-31T00:00:00', text: '31/12/2010 00:00:00 AM' },
+    );
+
+    const data = getDataFromQueryResult(response, [measureFactory.max(dateDays, 'Max Date')]);
+
+    expect(data.columns).toStrictEqual([{ name: 'Max Date', title: 'Max Date', type: 'datetime' }]);
+    // the server text is kept as sent: a plain date measure carries no `format.number`
+    expect(data.rows).toStrictEqual([
+      [{ data: '2010-12-31T00:00:00', text: '31/12/2010 00:00:00 AM' }],
+    ]);
+  });
+
+  it('resolves a min over a datetime attribute as datetime', () => {
+    const response = newResponse(
+      'Min Date',
+      { agg: 'min', datatype: 'datetime', level: 'days', dim: '[Commerce.Date (Calendar)]' },
+      { data: '2009-01-01T00:00:00', text: '01/01/2009 00:00:00 AM' },
+    );
+
+    const data = getDataFromQueryResult(response, [measureFactory.min(dateDays, 'Min Date')]);
+
+    expect(data.columns).toStrictEqual([{ name: 'Min Date', title: 'Min Date', type: 'datetime' }]);
+  });
+
+  it('resolves a count over a datetime attribute as number, even when the response echoes datatype datetime', () => {
+    const response = newResponse(
+      '# of Dates',
+      { agg: 'count', datatype: 'datetime', level: 'days', dim: '[Commerce.Date (Calendar)]' },
+      { data: 1468, text: '1468' },
+    );
+
+    const data = getDataFromQueryResult(response, [measureFactory.count(dateDays, '# of Dates')]);
+
+    expect(data.columns).toStrictEqual([
+      { name: '# of Dates', title: '# of Dates', type: 'number' },
+    ]);
+  });
+
+  it('resolves a formula measure over a numeric attribute as number', () => {
+    const response = newResponse(
+      'Total',
+      { formula: 'SUM([Revenue])', context: {} },
+      { data: 100, text: '100' },
+    );
+
+    const data = getDataFromQueryResult(response, [
+      measureFactory.customFormula('Total', 'SUM([Revenue])', { Revenue: revenue }),
+    ]);
+
+    expect(data.columns).toStrictEqual([{ name: 'Total', title: 'Total', type: 'number' }]);
+  });
+
+  it('resolves a sum over a numeric attribute as number', () => {
+    const response = newResponse(
+      'Total Revenue',
+      { agg: 'sum', datatype: 'numeric', dim: '[Commerce.Revenue]' },
+      { data: 100, text: '100' },
+    );
+
+    const data = getDataFromQueryResult(response, [measureFactory.sum(revenue, 'Total Revenue')]);
+
+    expect(data.columns).toStrictEqual([
+      { name: 'Total Revenue', title: 'Total Revenue', type: 'number' },
     ]);
   });
 });

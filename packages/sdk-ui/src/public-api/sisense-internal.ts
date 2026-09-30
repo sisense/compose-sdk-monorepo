@@ -103,6 +103,8 @@ export {
 export {
   QueryDefinition,
   type QueryDefinitionProps,
+  type QueryDefinitionCustomPill,
+  type QueryPillColor,
 } from '../domains/visualizations/core/query-definition';
 
 // Query params comparison

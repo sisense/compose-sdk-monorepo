@@ -421,4 +421,12 @@ describe('caret homing', () => {
     // Year first: from inside the year to the month at 5.
     expect(nextSegmentCaret(japanese, 2)).toBe(5);
   });
+
+  it('stays at the start of a part the caret has already hopped to', () => {
+    // `03` fills the month and hops the caret to the day at 3: the `/` typed next is a no-op.
+    expect(nextSegmentCaret(us, 3)).toBe(3);
+    expect(nextSegmentCaret(us, 6)).toBe(6);
+    expect(nextSegmentCaret(japanese, 5)).toBe(5);
+    expect(nextSegmentCaret(japanese, 8)).toBe(8);
+  });
 });

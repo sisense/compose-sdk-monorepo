@@ -1,0 +1,273 @@
+{
+  "src/__test-helpers__/execute-jaql-test-dataset-loader.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    }
+  },
+  "src/__test-helpers__/execute-pivot-jaql-test-dataset-loader.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    }
+  },
+  "src/__test-helpers__/get-datasource-fields-test-dataset-loader.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dispatcher.ts": {
+    "jsdoc/no-undefined-types": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/helpers/utility-types.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/interfaces.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/jaql/__mocks__/mock-metadata.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/jaql/calculated-dimension-datatype-cache.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    }
+  },
+  "src/jaql/calculated-dimension-datatype-cache.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/jaql/enrich-calculated-dimension-datatypes.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/jaql/enrich-calculated-dimension-datatypes.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    }
+  },
+  "src/jaql/get-jaql-query-payload.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    }
+  },
+  "src/jaql/get-jaql-query-payload.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 5
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-param-description": {
+      "count": 8
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 11
+    }
+  },
+  "src/jaql/metadata/highlights.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/jaql/pivot/pivot-query-utils.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/jaql/pivot/pivot-query-utils.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 3
+    },
+    "jsdoc/require-param": {
+      "count": 9
+    },
+    "jsdoc/require-returns": {
+      "count": 3
+    }
+  },
+  "src/query-api-dispatcher/query-api-dispatcher.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    }
+  },
+  "src/query-api-dispatcher/query-api-dispatcher.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 10
+    }
+  },
+  "src/query-api-dispatcher/types.ts": {
+    "jsdoc/no-undefined-types": {
+      "count": 2
+    }
+  },
+  "src/query-client.calculated-dimension.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    }
+  },
+  "src/query-client.test.ts": {
+    "@typescript-eslint/await-thenable": {
+      "count": 4
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 7
+    }
+  },
+  "src/query-client.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 4
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 9
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    }
+  },
+  "src/query-result/get-data-from-query-result.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/query-result/get-data-from-query-result.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  },
+  "src/query-task-manager/query-task-manager.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/query-task-manager/query-task-manager.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 9
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    },
+    "jsdoc/require-param-description": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/query-task-manager/query-task-passport.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/translation/initialize-i18n.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/translation/resources/index.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/translation/resources/uk.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/translation/translatable-error.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/types.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 11
+    }
+  }
+}

@@ -1,10 +1,13 @@
 import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { KpiTextStyleInternal } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
 import { useThemeContext } from '@/infra/contexts/theme-provider/index.js';
 import type { KpiIconCondition, NumberFormatConfig } from '@/types.js';
 
 import {
+  applyTextTransform,
+  buildDeltaCaption,
   buildTargetReadout,
   formatDelta,
   formatKpiValue,
@@ -46,7 +49,13 @@ export type KpiComparisonProps = {
    * `percentOfTarget`); mirrors the headline's `KpiValueProps.icon`.
    */
   conditionalIcon?: KpiIconCondition;
-  /** `designOptions.comparison.label` -- overrides the data-driven label when set. */
+  /** Resolved typography of the primary readout line (`designOptions.comparison.textStyle`). */
+  textStyle: KpiTextStyleInternal;
+  /**
+   * `designOptions.comparison.label` -- when set, replaces the data-driven text verbatim: the whole
+   * caption of a delta-shaped comparison (no baseline appended), the `{{goal}}` name of a
+   * `'target'`, or the label of a `'value'` comparison.
+   */
   labelOverride?: string;
   /**
    * `designOptions.comparison.{ofGoalText,toGoText}` -- consumer templates replacing the
@@ -89,7 +98,9 @@ export type KpiComparisonProps = {
 
 /**
  * Renders the KPI card's comparison readout. Switches on {@link KpiComparisonDisplay}'s `type`:
- * - `'previous-period'` / `'delta'`: an arrow plus the delta/percent (per `display`).
+ * - `'previous-period'` / `'delta'`: an arrow plus the delta/percent (per `display`), captioned by
+ *   the relation to the baseline and its value (`'vs Total Cost (107.27M)'`, see
+ *   {@link buildDeltaCaption}).
  * - `'target'`: `'82% of goal'` + `'$250K to go'` (percent sign baked into the interpolation).
  * - `'value'`: the label plus the comparison's own formatted number.
  * @internal
@@ -101,6 +112,7 @@ export function KpiComparison({
   display,
   showIcon,
   conditionalIcon,
+  textStyle,
   labelOverride,
   targetTextOverrides,
   scale,
@@ -135,7 +147,12 @@ export function KpiComparison({
   const targetReadout =
     comparison.type === 'target'
       ? buildTargetReadout(
-          { percentOfTarget: comparison.percentOfTarget, toGo: comparison.toGo, label },
+          {
+            target: comparison.target,
+            percentOfTarget: comparison.percentOfTarget,
+            toGo: comparison.toGo,
+            label,
+          },
           numberFormatConfig,
           t,
           targetTextOverrides,
@@ -143,10 +160,15 @@ export function KpiComparison({
       : undefined;
   const ofGoalText = targetReadout?.ofGoalText;
   const toGoText = targetReadout?.toGoText;
-  const deltaText =
-    comparison.type === 'previous-period' || comparison.type === 'delta'
-      ? formatDelta(comparison, display, t, numberFormatConfig)
-      : undefined;
+  const isDeltaShaped = comparison.type === 'previous-period' || comparison.type === 'delta';
+  const deltaText = isDeltaShaped
+    ? formatDelta(comparison, display, t, numberFormatConfig)
+    : undefined;
+  // The caption under a delta-shaped readout names what the delta is measured against and that
+  // baseline's own value; a bare measure title there reads as the *subject* of the change.
+  const deltaCaption = isDeltaShaped
+    ? buildDeltaCaption(comparison, numberFormatConfig, t, labelOverride)
+    : undefined;
 
   // `display` semantics for a 'target' comparison: 'percent' renders only the percent-of-goal
   // line, 'value' only the amount-to-go line (as the primary), 'both' renders percent primary +
@@ -177,13 +199,12 @@ export function KpiComparison({
   // only, when enabled) and the conditional icon ('value'-type comparisons render neither).
   // Gaps mirror the CSS: every extra flex item adds the primary text's flex gap; the icon also
   // carries its own margin-inline-end.
-  const isDeltaShaped = comparison.type === 'previous-period' || comparison.type === 'delta';
   const showArrow = isDeltaShaped && showIcon;
   const increased = isDeltaShaped && (comparison.deltaPercent ?? comparison.deltaValue) >= 0;
   const arrowGlyph = increased ? '▲' : '▼';
   const affixes: AutoFitAffix[] = [
     ...(conditionalIcon && comparison.type !== 'value'
-      ? [toIconAffix(conditionalIcon.icon, COMPARISON_PRIMARY_GAP_PX)]
+      ? [toIconAffix(conditionalIcon.icon, COMPARISON_PRIMARY_GAP_PX, textStyle.textTransform)]
       : []),
     ...(showArrow
       ? [{ text: arrowGlyph, emScale: COMPARISON_ARROW_EM, gapPx: COMPARISON_PRIMARY_GAP_PX }]
@@ -197,8 +218,13 @@ export function KpiComparison({
       : maxHeightPx;
   const autoFitFontSizePx = useAutoFitFontSize({
     containerRef,
-    text: primaryText,
-    font: { family: themeSettings.typography.fontFamily, weight: 600 },
+    // Measured as painted: see KpiValue for why the CSS transform is mirrored here.
+    text: applyTextTransform(primaryText, textStyle.textTransform),
+    font: {
+      family: textStyle.fontFamily ?? themeSettings.typography.fontFamily,
+      weight: textStyle.fontWeight,
+      style: textStyle.fontStyle,
+    },
     minPx: AUTO_FIT_MIN_PX,
     maxPx: AUTO_FIT_MAX_PX,
     maxHeightPxOverride: headlineHeightBudget,
@@ -223,6 +249,7 @@ export function KpiComparison({
             theme={themeSettings}
             $color={color}
             $scale={scale}
+            $textStyle={textStyle}
             style={primaryStyle}
           >
             {iconElement}
@@ -251,6 +278,7 @@ export function KpiComparison({
             theme={themeSettings}
             $color={color}
             $scale={scale}
+            $textStyle={textStyle}
             style={primaryStyle}
           >
             <ComparisonClipText title={primaryText}>{primaryText}</ComparisonClipText>
@@ -278,20 +306,21 @@ export function KpiComparison({
           theme={themeSettings}
           $color={color}
           $scale={scale}
+          $textStyle={textStyle}
           style={primaryStyle}
         >
           {iconElement}
           {showArrow && <ComparisonArrow aria-hidden="true">{arrowGlyph}</ComparisonArrow>}
           <ComparisonClipText title={deltaText ?? undefined}>{deltaText}</ComparisonClipText>
         </ComparisonPrimaryText>
-        {label && (
+        {deltaCaption && (
           <ComparisonSecondaryText
             ref={secondaryRef}
             theme={themeSettings}
             $onColor={onColor}
-            title={label ?? undefined}
+            title={deltaCaption}
           >
-            {label}
+            {deltaCaption}
           </ComparisonSecondaryText>
         )}
       </ComparisonRoot>

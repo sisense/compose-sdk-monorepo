@@ -451,3 +451,83 @@ describe('translateChartFromJSON', () => {
     expect(dataOptions.value).toHaveLength(1);
   });
 });
+
+describe('translateChartFromJSON — KPI validation', () => {
+  const context = {
+    dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+    tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+  };
+  const REVENUE = {
+    function: 'measureFactory.sum',
+    args: ['DM.Commerce.Revenue', 'Total Revenue'],
+  };
+
+  const translateKpi = (
+    dataOptions: Record<string, unknown>,
+    chartType = 'kpi',
+  ): NlqTranslationError[] => {
+    const result = translateChartFromJSON({
+      data: { chartType, dataOptions },
+      context,
+    });
+    if (result.success) throw new Error('Expected error result');
+    return result.errors;
+  };
+
+  it('rejects an invalid valueMode', () => {
+    const errors = translateKpi({ value: REVENUE, valueMode: 'average' });
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('dataOptions.valueMode');
+    expect(errors[0].message).toContain('last, total');
+  });
+
+  it('rejects a comparison with an unknown type', () => {
+    const errors = translateKpi({ value: REVENUE, comparison: { type: 'forecast' } });
+    expect(errors[0].path).toBe('dataOptions.comparison');
+  });
+
+  it.each([
+    ['delta', 'value'],
+    ['value', 'value'],
+    ['target', 'target'],
+  ])("rejects a '%s' comparison without '%s'", (type, baselineKey) => {
+    const errors = translateKpi({ value: REVENUE, comparison: { type } });
+    expect(errors[0].path).toBe(`dataOptions.comparison.${baselineKey}`);
+  });
+
+  it.each([
+    ['delta', 'value', 0],
+    ['value', 'value', ''],
+    ['target', 'target', false],
+  ])("rejects a '%s' comparison with a falsy '%s' baseline", (type, baselineKey, baseline) => {
+    const errors = translateKpi({ value: REVENUE, comparison: { type, [baselineKey]: baseline } });
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe(`dataOptions.comparison.${baselineKey}`);
+  });
+
+  it('reports an unresolvable comparison measure at dataOptions.comparison.value', () => {
+    const errors = translateKpi({
+      value: REVENUE,
+      comparison: {
+        type: 'delta',
+        value: { function: 'measureFactory.sum', args: ['DM.Commerce.NoSuchColumn'] },
+      },
+    });
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors.every((e) => e.path === 'dataOptions.comparison.value')).toBe(true);
+  });
+
+  it('requires value for a KPI chart', () => {
+    const errors = translateKpi({ category: 'DM.Commerce.Date.Months' });
+    expect(errors[0].path).toBe('dataOptions.value');
+  });
+
+  it('rejects KPI-only keys on other chart types', () => {
+    const errors = translateKpi(
+      { category: ['DM.Commerce.Date.Years'], value: [REVENUE], valueMode: 'total' },
+      'column',
+    );
+    expect(errors[0].path).toBe('dataOptions.valueMode');
+    expect(errors[0].message).toContain("not valid for chart type 'column'");
+  });
+});

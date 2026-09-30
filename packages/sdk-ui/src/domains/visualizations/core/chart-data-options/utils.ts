@@ -5,6 +5,8 @@ import {
   Column,
   DateLevels,
   DimensionalLevelAttribute,
+  getDefaultDateMeasureFormat,
+  isDateMeasure,
   isDatetime,
   JaqlElement,
   LevelAttribute,
@@ -22,6 +24,9 @@ import {
   StyledMeasureColumn,
   ValueStyle,
 } from './types.js';
+
+// re-exported so existing sdk-ui imports keep working; the function moved to sdk-data
+export { getDefaultDateMeasureFormat };
 
 type AnyObject = Record<string, any>;
 
@@ -224,7 +229,7 @@ export function normalizeMeasureColumn(
     style: ValueStyle;
   };
 
-  return {
+  const nMeasureColumn: StyledMeasureColumn = {
     ...defaultStyle,
     ...style,
     column: safeMerge(column, {
@@ -233,6 +238,12 @@ export function normalizeMeasureColumn(
     }) as MeasureColumn,
     enabled: true,
   };
+
+  if (isUndefined(nMeasureColumn.dateFormat) && isDateMeasure(column)) {
+    nMeasureColumn.dateFormat = getDefaultDateMeasureFormat(column);
+  }
+
+  return nMeasureColumn;
 }
 
 export function normalizeAnyColumn(

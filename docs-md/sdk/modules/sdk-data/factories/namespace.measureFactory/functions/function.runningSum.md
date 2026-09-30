@@ -13,6 +13,8 @@ Creates a calculated measure that calculates the running total of a given measur
 
 The running sum is calculated using the current sort order of the query it's used in.
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

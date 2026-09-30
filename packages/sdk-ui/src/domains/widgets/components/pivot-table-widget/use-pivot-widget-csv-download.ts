@@ -5,6 +5,7 @@ import {
   translateColumnToAttribute,
   translateColumnToMeasure,
 } from '@/domains/visualizations/core/chart-data-options/utils.js';
+import { mapMeasuresForCsvExport } from '@/domains/widgets/helpers/export-map-dimensions-measures.js';
 import { useCsvQueryFileLoader } from '@/domains/widgets/hooks/use-csv-query-file-loader.js';
 import { useWithCsvDownloadMenuItem } from '@/domains/widgets/hooks/use-with-csv-download-menu-item.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
@@ -43,7 +44,7 @@ export function usePivotWidgetCsvDownload(
       ...(internal.rows ?? []).map(translateColumnToAttribute),
       ...(internal.columns ?? []).map(translateColumnToAttribute),
     ];
-    const measures = (internal.values ?? []).map(translateColumnToMeasure);
+    const measures = mapMeasuresForCsvExport((internal.values ?? []).map(translateColumnToMeasure));
     return {
       dataSource,
       dimensions,

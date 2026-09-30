@@ -20,6 +20,8 @@ If the previous year's value is greater than the current year, the growth will b
 For example, if this year the value is 80, and the previous year's was 100, the growth for
 this year is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

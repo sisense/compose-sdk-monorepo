@@ -1722,7 +1722,11 @@ export type KpiComparisonInfo =
        * relative change is not defined.
        */
       deltaPercent?: number;
-      /** Localized caption shown next to the delta, inferred from the category granularity, e.g. `'vs prior month'`. */
+      /**
+       * Localized relation to the prior bucket, inferred from the category granularity, e.g.
+       * `'vs prior month'`. The card captions the delta with it plus the baseline's formatted value
+       * (`'vs prior month (35.34M)'`).
+       */
       label: string;
     }
   | {
@@ -1737,7 +1741,11 @@ export type KpiComparisonInfo =
        * Undefined when `baseline` is `0`.
        */
       deltaPercent?: number;
-      /** Caption shown next to the delta. Defaults to the comparison measure's title. */
+      /**
+       * Name of the baseline the delta is measured against. Defaults to the comparison measure's
+       * title. The card captions the delta with the localized relation to it plus its formatted
+       * value (`'vs Total Cost (107.27M)'`).
+       */
       label: string;
     }
   | {
@@ -1989,6 +1997,44 @@ export type KpiIconCondition = {
 export type KpiTextSize = 'auto' | number;
 
 /**
+ * Text case transformation applied to a KPI card text element.
+ *
+ * @example
+ * Render the card title in sentence case instead of the default uppercase:
+ * ```ts
+ * styleOptions: { title: { textStyle: { textTransform: 'none' } } }
+ * ```
+ */
+export type KpiTextTransform = 'none' | 'uppercase' | 'lowercase' | 'capitalize';
+
+/**
+ * Typography of a KPI card text element.
+ *
+ * Sizing is not part of it: the headline value is sized by `textSize` on
+ * {@link KpiValueStyleOptions}, and the other elements have fixed sizes relative to the card.
+ * Color is not part of it either: the value is colored through its measure (see
+ * {@link KpiChartDataOptions.value}) and the comparison through `color` on
+ * {@link KpiComparisonStyleOptions}.
+ *
+ * `fontFamily` defaults to the theme's `typography.fontFamily`.
+ *
+ * @example
+ * Turn off the default uppercase title and lighten the headline value:
+ * ```ts
+ * styleOptions: {
+ *   title: { textStyle: { textTransform: 'none' } },
+ *   value: { textStyle: { fontWeight: '400' } },
+ * }
+ * ```
+ */
+export type KpiTextStyle = Pick<TextStyle, 'fontFamily' | 'fontWeight' | 'fontStyle'> & {
+  /**
+   * Text case transformation.
+   */
+  textTransform?: KpiTextTransform;
+};
+
+/**
  * Configuration that defines styling of the KPI headline value.
  *
  * To color the headline value, set a color (uniform or conditional) on the value measure in
@@ -2001,6 +2047,11 @@ export type KpiValueStyleOptions = {
    * @default 'auto'
    */
   textSize?: KpiTextSize;
+  /**
+   * Typography of the headline value.
+   * @default { fontWeight: '700', fontStyle: 'normal', textTransform: 'none' } with the theme font
+   */
+  textStyle?: KpiTextStyle;
   /**
    * Text shown in place of the headline when the value is null,
    * keeping the card title and styling. When omitted, the standard
@@ -2060,6 +2111,14 @@ export type KpiTitleStyleOptions = {
    * @default 'space-between'
    */
   align?: KpiTitleAlign;
+  /**
+   * Typography of the title text (not the category caption).
+   *
+   * The default uppercase rendering comes with a 0.06em letter-spacing; any other
+   * `textTransform` renders with normal letter-spacing.
+   * @default { fontWeight: '600', fontStyle: 'normal', textTransform: 'uppercase' } with the theme font
+   */
+  textStyle?: KpiTextStyle;
 };
 
 /**
@@ -2079,16 +2138,18 @@ export type KpiComparisonStyleOptions = {
    */
   display?: 'percent' | 'value' | 'both';
   /**
-   * Caption next to the delta, e.g. 'vs last year'.
-   * @default a localized label inferred from the `comparison` type and `category` granularity
+   * Caption under a delta-shaped comparison ('delta' / 'previous-period'), replacing the default
+   * verbatim — no baseline value is appended, e.g. 'vs last year'. For a 'target' comparison it
+   * renames the goal in `{{goal}}` templates; for a 'value' comparison it replaces the label.
+   * @default localized relation to the baseline plus its value, e.g. `'vs Total Cost (107.27M)'`
    */
   label?: string;
   /**
    * Template for the 'target' comparison's percent-of-goal readout, replacing the localized
-   * default. `{{percent}}` interpolates the formatted percent (e.g. '82%') and `{{goal}}` the
-   * target's display label (the target measure's title, or the formatted number for a fixed
-   * target).
-   * @default localized `'{{percent}} of goal'`
+   * default. `{{percent}}` interpolates the formatted percent (e.g. '82%'), `{{goalValue}}` the
+   * target formatted with the comparison's number format (e.g. '$1M'), and `{{goal}}` the
+   * target's display label (the target measure's title, or the plain number for a fixed target).
+   * @default localized `'{{percent}} of goal ({{goalValue}})'`
    *
    * @example
    * ```ts
@@ -2132,6 +2193,12 @@ export type KpiComparisonStyleOptions = {
   showIcon?: boolean;
   /** Condition-driven icons next to the comparison readout; first match wins. */
   conditionalIcons?: KpiIconCondition[];
+  /**
+   * Typography of the comparison's primary readout line (the delta, percent-of-goal, or
+   * comparison value). Does not apply to the label line beneath it.
+   * @default { fontWeight: '600', fontStyle: 'normal', textTransform: 'none' } with the theme font
+   */
+  textStyle?: KpiTextStyle;
 };
 
 /**

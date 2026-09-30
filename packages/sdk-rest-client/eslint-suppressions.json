@@ -1,0 +1,177 @@
+{
+  "src/authenticator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/base-authenticator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/bearer-authenticator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/fusion-authenticator.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/fusion-authenticator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/helpers.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/http-client.test.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    }
+  },
+  "src/http-client.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/http-error-event.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    }
+  },
+  "src/interceptors.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/interfaces.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/password-authenticator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/sso-authenticator.test.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    }
+  },
+  "src/sso-authenticator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/translation/initialize-i18n.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/translation/resources/index.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/translation/resources/uk.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/translation/translatable-error.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/wat-authenticator.test.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    }
+  },
+  "src/wat-authenticator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  }
+}

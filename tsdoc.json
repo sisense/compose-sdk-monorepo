@@ -1,7 +1,186 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
-  "extends": ["typedoc/tsdoc.json"],
+  // This file deliberately does NOT extend "typedoc/tsdoc.json". TSDoc 0.16 promoted `@jsx` to a
+  // standard tag, while TypeDoc still declares it in its own `tsdoc.json`; merging the two defines
+  // `@jsx` twice, which makes the TSDoc parser throw "A tag is already defined using the name @jsx"
+  // and silently discard this whole configuration. The tag definitions TypeDoc ships are therefore
+  // inlined below (minus `@jsx`, which the standard set now provides). Keep them in sync when
+  // upgrading TypeDoc.
+  "extends": [],
+  "noStandardTags": false,
   "tagDefinitions": [
+    // --- Inlined from typedoc/tsdoc.json (TypeDoc's JSDoc-compatibility tags). ---
+    {
+      "tagName": "@author",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@module",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@type",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@typedef",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@callback",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@prop",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@property",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@group",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@groupDescription",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@category",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@categoryDescription",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@hidden",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@ignore",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@class",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@abstract",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@document",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@default",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@extends",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@augments",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@return",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@yields",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@enum",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@event",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@template",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@linkcode",
+      "syntaxKind": "inline",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@linkplain",
+      "syntaxKind": "inline",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@private",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@protected",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@satisfies",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@since",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@license",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@import",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@overload",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@namespace",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@interface",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@showCategories",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@hideCategories",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@showGroups",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@hideGroups",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@hideconstructor",
+      "syntaxKind": "modifier"
+    },
+
+    // --- Repo-specific tags. ---
     {
       "tagName": "@expandType",
       "syntaxKind": "block",
@@ -22,5 +201,7 @@
       "syntaxKind": "modifier",
       "allowMultiple": false
     }
+    // `@vitest-environment` (a Vitest file pragma) cannot be declared here: TSDoc tag names may
+    // contain only letters and numbers, and a hyphenated name makes the whole file fail to load.
   ]
 }

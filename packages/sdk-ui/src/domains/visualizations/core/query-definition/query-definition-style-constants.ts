@@ -16,3 +16,12 @@ export const QUERY_PILL_LABEL_STYLE = {
   ...QUERY_DEFINITION_TEXT_STYLE,
   lineHeight: '16px',
 } as const;
+
+/**
+ * Tooltip label weight per design spec, such as grouped-filter column names.
+ *
+ * @internal
+ */
+export const QUERY_TOOLTIP_LABEL_STYLE = {
+  fontWeight: 600,
+} as const;

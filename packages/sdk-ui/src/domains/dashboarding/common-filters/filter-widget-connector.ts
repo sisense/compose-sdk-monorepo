@@ -1,10 +1,68 @@
-import { Attribute, Filter, filterFactory } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Filter,
+  filterFactory,
+  isIncludeAllMembersFilter,
+  isMembersFilter,
+} from '@sisense/sdk-data';
 
-import { FilterWidgetProps } from '@/domains/widgets/components/filter-widget/types';
+import { isInclusiveDateRangeFilter } from '@/domains/widgets/components/filter-widget/components/range-date.js';
+import type {
+  FilterWidgetFilterType,
+  FilterWidgetProps,
+} from '@/domains/widgets/components/filter-widget/types';
 import { cloneFilter, isSameAttribute } from '@/shared/utils/filters.js';
+
+/**
+ * Whether a first selection may claim `existing` under its guid.
+ *
+ * Include-all members are a blank seed (List ↔ Condition type switch) and are always
+ * claimable. Members may only claim members; Condition / relative / range may only claim
+ * non-members. Without this, a List Apply at the same date level as a Condition filter
+ * stole the Condition guid, replaced the relative JAQL with members, and left the
+ * Condition widget on Set filter while wiping the Condition expression.
+ */
+function canAdoptFilter(existing: Filter, incoming: Filter): boolean {
+  if (isIncludeAllMembersFilter(existing)) return true;
+  const existingMembers = isMembersFilter(existing);
+  const incomingMembers = isMembersFilter(incoming);
+  return existingMembers === incomingMembers;
+}
+
+/**
+ * Whether a same-attribute filter may be handed to this widget on the read path.
+ *
+ * List / Calendar only adopt members (or include-all). Condition only adopts a non-members
+ * expression (or include-all). Without the split, a new List on Weeks adopted "This Week"
+ * from Condition, then empty Apply / clear reset that guid to include-all and both widgets
+ * showed Set filter against one panel tile.
+ *
+ * Range is narrower than Condition's catch-all "any non-members": it only ever renders an
+ * inclusive `DateRangeFilter` (see `isInclusiveDateRangeFilter`), so a candidate that is
+ * merely non-members but not that exact shape — a text/numeric Condition expression, or a
+ * date Condition's exclusive Before/After anchor (`fromNotEqual`/`toNotEqual`) — is not
+ * something Range can display and must not be adopted. An exclusive anchor is a real
+ * `DateRangeFilter` too, and its `.from`/`.to` getters read the same regardless of operator;
+ * adopting it and republishing through Range's inclusive `filterFactory.dateRange` would
+ * silently change what the filter excludes.
+ */
+function isReadableAdoption(
+  candidate: Filter,
+  filterType: FilterWidgetFilterType | undefined,
+): boolean {
+  if (isIncludeAllMembersFilter(candidate)) return true;
+  if (filterType === 'range') return isInclusiveDateRangeFilter(candidate);
+  if (filterType === 'condition') return !isMembersFilter(candidate);
+  return isMembersFilter(candidate);
+}
 
 /** Link stored in `widgetsOptions[id].filterWidgetOptions`. */
 type FilterWidgetLink = { filterId: string };
+
+type ResolveFilterWidgetFilterOptions = {
+  /** Widget render mode — gates which same-attribute filters may be adopted. */
+  filterType?: FilterWidgetFilterType;
+};
 
 /**
  * Resolves the dashboard filter backing a FilterWidget.
@@ -24,6 +82,7 @@ export function resolveFilterWidgetFilter(
   filters: readonly Filter[],
   attribute: Attribute,
   link: FilterWidgetLink | undefined,
+  options?: ResolveFilterWidgetFilterOptions,
 ): {
   filter: Filter | null;
   validLinkGuid: string | undefined;
@@ -44,7 +103,10 @@ export function resolveFilterWidgetFilter(
   const validLinkGuid = isLinkStale ? undefined : link?.filterId;
 
   const adoptionCandidate: Filter | null = !validLinkGuid
-    ? filters.find((f) => isSameAttribute(f.attribute, attribute)) ?? null
+    ? filters.find(
+        (f) =>
+          isSameAttribute(f.attribute, attribute) && isReadableAdoption(f, options?.filterType),
+      ) ?? null
     : null;
 
   // Same dimension, so the same widget's filter — only its level moved. A stale link on
@@ -156,9 +218,9 @@ type FilterWidgetConnection = {
  */
 export function connectFilterWidgetToProps(
   input: ConnectorInput,
-): (widgetProps: Pick<FilterWidgetProps, 'attribute'>) => FilterWidgetConnection {
+): (widgetProps: Pick<FilterWidgetProps, 'attribute' | 'filterType'>) => FilterWidgetConnection {
   return (widgetProps) => {
-    const { attribute } = widgetProps;
+    const { attribute, filterType } = widgetProps;
     const { filters, setFilters, link, setLink } = input;
 
     // --- Read path (pure — no mutations, no setter calls) ---
@@ -166,6 +228,7 @@ export function connectFilterWidgetToProps(
       filters,
       attribute,
       link,
+      { filterType },
     );
 
     /* What a selection replaces, in order of how strongly the filter is this widget's own:
@@ -181,23 +244,25 @@ export function connectFilterWidgetToProps(
     // --- Write path ---
     const onChange = (newFilter: Filter | null): void => {
       if (newFilter === null) {
-        /* Reset expression to include-all under the stable linked guid — never drop the tile. */
+        /* Reset the filter this widget owns (valid link or its own at another level), and
+           failing that the adoption candidate — the filter the widget is showing. The link is
+           runtime state only and is gone after a reload, so a widget's own filter is found by
+           attribute match from then on; refusing the candidate left Clear doing nothing
+           after every reload. A foreign expression (e.g. Condition "This Week" under a List
+           at Weeks) is never a candidate: `isReadableAdoption` already drops it on read. */
         const guidToReset =
-          validLinkGuid ??
-          ownFilterElsewhere?.config.guid ??
-          adoptionCandidate?.config.guid ??
-          filter?.config.guid;
+          validLinkGuid ?? ownFilterElsewhere?.config.guid ?? adoptionCandidate?.config.guid;
         if (!guidToReset) return;
 
         const existing =
           filters.find((f) => f.config.guid === guidToReset) ??
           ownFilterElsewhere ??
           adoptionCandidate ??
-          filter;
+          null;
         if (!existing) return;
 
         const cleared = resetLinkedFilterToIncludeAll(existing, guidToReset);
-        if (!validLinkGuid && guidToReset) {
+        if (!validLinkGuid) {
           setLink({ filterId: guidToReset });
         }
         setFilters(replaceFilterUnderGuid(filters, guidToReset, cleared));
@@ -209,7 +274,10 @@ export function connectFilterWidgetToProps(
       if (existingGuid) {
         // Stable-guid update: reuse the linked guid so filterRelations refs stay valid.
         setFilters(replaceFilterUnderGuid(filters, existingGuid, newFilter));
-      } else if (ownFilterElsewhere || adoptionCandidate) {
+      } else if (
+        (ownFilterElsewhere || adoptionCandidate) &&
+        canAdoptFilter((ownFilterElsewhere ?? adoptionCandidate)!, newFilter)
+      ) {
         /* Replace under the claimed filter's guid — the widget's own at the level it came from,
            or the one it is adopting. Keeping that guid is what holds a widget to ONE filter
            through a level change and keeps filterRelations references pointing at it. */

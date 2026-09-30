@@ -173,6 +173,19 @@ describe('checkForAutoHeight', () => {
     expect(checkForAutoHeight([tableWidget()])).toBe(false);
   });
 
+  it('accepts a dashboard narrative that opted in, alone or beside a pivot', () => {
+    const narrative = (isAutoHeight?: boolean): WidgetProps => ({
+      id: 'narrative-1',
+      widgetType: 'narrative',
+      ...(isAutoHeight === undefined ? {} : { styleOptions: { isAutoHeight } }),
+    });
+
+    expect(checkForAutoHeight([narrative(true)])).toBe(true);
+    expect(checkForAutoHeight([narrative(true), pivotWidget(true)])).toBe(true);
+    expect(checkForAutoHeight([narrative(false)])).toBe(false);
+    expect(checkForAutoHeight([narrative()])).toBe(false);
+  });
+
   it('rejects a row where any widget does not support auto height', () => {
     expect(checkForAutoHeight([tableWidget(true), chartWidget()])).toBe(false);
   });

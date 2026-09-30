@@ -1,0 +1,20 @@
+{
+  "src/registry.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/tracking.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/tracking.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 5
+    }
+  }
+}

@@ -1,7 +1,64 @@
 import { KpiChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { BaseDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/base-design-options.js';
-import { KpiChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
-import { ChartStyleOptions, KpiStyleOptions } from '@/types';
+import {
+  KpiChartDesignOptions,
+  KpiTextStyleInternal,
+} from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
+import { ChartStyleOptions, KpiStyleOptions, KpiTextStyle } from '@/types';
+
+/**
+ * Default typography of the headline value: bold, upright, no case transform.
+ * @internal
+ */
+export const KPI_VALUE_TEXT_STYLE_DEFAULTS: KpiTextStyleInternal = {
+  fontWeight: '700',
+  fontStyle: 'normal',
+  textTransform: 'none',
+};
+
+/**
+ * Default typography of the title text: semibold, upright, uppercased (the CSS adds a matching
+ * letter-spacing only under `uppercase`).
+ * @internal
+ */
+export const KPI_TITLE_TEXT_STYLE_DEFAULTS: KpiTextStyleInternal = {
+  fontWeight: '600',
+  fontStyle: 'normal',
+  textTransform: 'uppercase',
+};
+
+/**
+ * Default typography of the comparison's primary readout line: semibold, upright, no transform.
+ * @internal
+ */
+export const KPI_COMPARISON_TEXT_STYLE_DEFAULTS: KpiTextStyleInternal = {
+  fontWeight: '600',
+  fontStyle: 'normal',
+  textTransform: 'none',
+};
+
+/**
+ * Resolves a user-facing {@link KpiTextStyle} against a section's defaults, field by field.
+ * `undefined` user fields never erase a default, and `fontFamily` is only present when the user
+ * supplied one (absent means "inherit the theme font").
+ *
+ * @param textStyle - User-provided text style, if any
+ * @param defaults - The section's default typography
+ * @returns Fully resolved typography for the renderer
+ * @internal
+ */
+export function resolveKpiTextStyle(
+  textStyle: KpiTextStyle | undefined,
+  defaults: KpiTextStyleInternal,
+): KpiTextStyleInternal {
+  return {
+    ...defaults,
+    ...(textStyle?.fontFamily !== undefined && { fontFamily: textStyle.fontFamily }),
+    ...(textStyle?.fontWeight !== undefined && { fontWeight: textStyle.fontWeight }),
+    ...(textStyle?.fontStyle !== undefined && { fontStyle: textStyle.fontStyle }),
+    ...(textStyle?.textTransform !== undefined && { textTransform: textStyle.textTransform }),
+  };
+}
 
 /**
  * Translates KPI style options to design options.
@@ -24,6 +81,7 @@ export function translateKpiStyleOptionsToDesignOptions(
       textSize: styleOptions.value?.textSize ?? 'auto',
       noDataText: styleOptions.value?.noDataText,
       conditionalIcons: styleOptions.value?.conditionalIcons,
+      textStyle: resolveKpiTextStyle(styleOptions.value?.textStyle, KPI_VALUE_TEXT_STYLE_DEFAULTS),
     },
     title: {
       enabled: styleOptions.title?.enabled ?? true,
@@ -31,6 +89,7 @@ export function translateKpiStyleOptionsToDesignOptions(
       showValueTitle: styleOptions.title?.showValueTitle ?? true,
       showCategoryTitle: styleOptions.title?.showCategoryTitle ?? true,
       align: styleOptions.title?.align ?? 'space-between',
+      textStyle: resolveKpiTextStyle(styleOptions.title?.textStyle, KPI_TITLE_TEXT_STYLE_DEFAULTS),
     },
     card: {
       backgroundColor: styleOptions.card?.backgroundColor,
@@ -54,6 +113,10 @@ export function translateKpiStyleOptionsToDesignOptions(
       color: styleOptions.comparison?.color,
       showIcon: styleOptions.comparison?.showIcon ?? true,
       conditionalIcons: styleOptions.comparison?.conditionalIcons,
+      textStyle: resolveKpiTextStyle(
+        styleOptions.comparison?.textStyle,
+        KPI_COMPARISON_TEXT_STYLE_DEFAULTS,
+      ),
     },
   };
 }
@@ -89,13 +152,18 @@ export function getDefaultKpiStyleOptions(): KpiStyleOptions {
       showValueTitle: true,
       showCategoryTitle: true,
       align: 'space-between',
+      // Spread a copy -- callers get their own object to mutate, so a consumer mutation can
+      // never poison the shared module constant for every other caller.
+      textStyle: { ...KPI_TITLE_TEXT_STYLE_DEFAULTS },
     },
     value: {
       textSize: 'auto',
+      textStyle: { ...KPI_VALUE_TEXT_STYLE_DEFAULTS },
     },
     comparison: {
       display: 'percent',
       showIcon: true,
+      textStyle: { ...KPI_COMPARISON_TEXT_STYLE_DEFAULTS },
     },
     sparkline: {
       chartType: 'area',

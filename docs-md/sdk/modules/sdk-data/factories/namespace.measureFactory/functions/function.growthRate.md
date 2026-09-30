@@ -21,6 +21,8 @@ If the previous period's value is greater than the current period, the growth ra
 For example, if this period the value is 80, and the previous period's was 100, the growth for
 this period is 80%, returned as `0.8` (calculation: `80 / 100 = .8`).
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

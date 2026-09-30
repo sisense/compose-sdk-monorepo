@@ -64,6 +64,12 @@ export interface RelativeDateFilterTileProps {
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
+  /**
+   * When true, the tile is linked to a FilterWidget and rendered read-only.
+   *
+   * @internal
+   */
+  linked?: boolean;
 }
 
 /**
@@ -89,6 +95,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
     tileDesignOptions,
     config,
     renderHeaderTitle,
+    linked,
   } = props;
 
   const { filter, updateFilter } = useSynchronizedFilter<RelativeDateFilterType>(
@@ -103,7 +110,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
     <FilterTileContainer
       title={title}
       renderHeaderTitle={renderHeaderTitle}
-      renderContent={(collapsed) => {
+      renderContent={(collapsed, tileDisabled) => {
         return collapsed && isVertical(arrangement) ? (
           <RelativeDateFilterDisplay filter={filter} />
         ) : (
@@ -111,7 +118,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
             filter={filter}
             arrangement={arrangement}
             onUpdate={updateFilter}
-            disabled={disabled}
+            disabled={tileDisabled}
             limit={limit}
           />
         );
@@ -129,6 +136,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
       menuItems={menuItems}
       onDelete={onDelete}
       onEdit={onEdit}
+      linked={linked}
     />
   );
 });

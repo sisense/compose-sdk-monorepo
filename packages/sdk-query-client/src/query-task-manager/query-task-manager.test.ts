@@ -3,8 +3,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+import { DateLevels, DimensionalLevelAttribute, measureFactory } from '@sisense/sdk-data';
+
+import { getDataFromQueryResult } from '../query-result/get-data-from-query-result.js';
 import { CountRowsResponse } from '../types.js';
-import { validateCountRowsResponse, validateJaqlResponse } from './query-task-manager.js';
+import {
+  buildResultColumnsMetadata,
+  validateCountRowsResponse,
+  validateJaqlResponse,
+} from './query-task-manager.js';
 
 describe('validateCountRowsResponse', () => {
   it('should throw error for empty response', () => {
@@ -69,5 +76,59 @@ describe('validateJaqlResponse', () => {
       metadata: [],
     };
     expect(validateJaqlResponse(jaqlResponse)).toBeUndefined();
+  });
+});
+
+describe('buildResultColumnsMetadata', () => {
+  const dateDays = new DimensionalLevelAttribute(
+    'Days',
+    '[Commerce.Date (Calendar)]',
+    DateLevels.Days,
+    'yyyy-MM-dd',
+  );
+  const years = new DimensionalLevelAttribute(
+    'Years',
+    '[Commerce.Date (Calendar)]',
+    DateLevels.Years,
+    'yyyy',
+  );
+
+  it('carries the aggregated attribute of a datetime measure through to the result column type', () => {
+    const maxDate = measureFactory.max(dateDays, 'Max Date');
+
+    const metadata = buildResultColumnsMetadata({ attributes: [years], measures: [maxDate] }, [
+      'Years',
+      'Max Date',
+    ]);
+
+    expect(metadata).toStrictEqual([years, maxDate]);
+    const data = getDataFromQueryResult(
+      {
+        headers: ['Years', 'Max Date'],
+        metadata: [{ jaql: { title: 'Years' } }, { jaql: { title: 'Max Date' } }],
+        values: [
+          [
+            { data: '2010-01-01T00:00:00', text: '2010' },
+            { data: '2010-12-31T00:00:00', text: '31/12/2010 00:00:00 AM' },
+          ],
+        ],
+      },
+      metadata,
+    );
+    expect(data.columns.map((column) => column.type)).toStrictEqual(['datetime', 'datetime']);
+  });
+
+  it('types the extra columns of advanced analytics as number', () => {
+    const maxDate = measureFactory.max(dateDays, 'Max Date');
+
+    const metadata = buildResultColumnsMetadata({ attributes: [], measures: [maxDate] }, [
+      'Max Date',
+      'Max Date_trend',
+    ]);
+
+    expect(metadata).toStrictEqual([
+      maxDate,
+      { name: 'Max Date_trend', title: 'Max Date_trend', type: 'number' },
+    ]);
   });
 });

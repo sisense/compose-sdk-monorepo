@@ -1,6 +1,8 @@
-import { type FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import { type FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Narrative, type NarrativeState } from '@/domains/narrative/components/narrative';
+import { useNarrativeWidgetState } from '@/domains/narrative/hooks/use-narrative-widget-state.js';
+import { useTrackNarrativeCopy } from '@/domains/narrative/hooks/use-track-narrative-copy.js';
 import { withHeaderItemsInConfig } from '@/domains/widgets/helpers/header-items-utils.js';
 import { useTrackWidgetInit } from '@/domains/widgets/hooks/use-track-widget-init';
 import { getWidgetEntityId } from '@/domains/widgets/hooks/widget-entity-id';
@@ -11,23 +13,24 @@ import {
 import { WidgetContainer } from '@/domains/widgets/shared/widget-container/widget-container.js';
 import { useWidgetHeaderMenu } from '@/domains/widgets/shared/widget-header/features/use-widget-header-menu';
 import { useWidgetHeaderTitle } from '@/domains/widgets/shared/widget-header/features/use-widget-header-title';
+import { getWidgetOverheadHeight } from '@/domains/widgets/shared/widget-style-utils';
+import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
+import { useElementHeight } from '@/shared/hooks/use-element-height';
 import { useQuotaNotification } from '@/shared/hooks/use-quota-notification';
 
 import { createNarrativeCopyItem } from './copy-header-item.js';
 import type { NarrativeWidgetProps } from './types.js';
 
-function initialStateFor(narrative: NarrativeWidgetProps['narrative']): NarrativeState {
-  return narrative ? { status: 'ready', data: narrative } : { status: 'idle' };
-}
-
 /**
  * Widget component that renders an AI-generated, natural-language summary of the dashboard
- * it sits on. Owns the narrative state machine; the surrounding container and header are the
- * standard widget chrome, with the copy action as a header item.
+ * it sits on. Generating sends the sibling widgets' queries to the narrative service and renders
+ * the answer; the surrounding container and header are the standard widget chrome, with the copy
+ * action as a header item.
  *
- * Inside a `Dashboard` the widgets it describes are injected automatically; the narrative
- * API is not wired yet, so generating lands in the retryable failed state.
+ * Inside a `Dashboard` the widgets it describes are injected automatically; standalone, pass them
+ * through `widgets` — with none there is nothing to narrate and generating reports no data. With
+ * `dashboardId` the saved dashboard is requested by id instead, and `widgets` is not sent.
  * @example
  * ```tsx
  * <Dashboard
@@ -38,8 +41,8 @@ function initialStateFor(narrative: NarrativeWidgetProps['narrative']): Narrativ
  *   ]}
  * />
  * ```
- * @param props - Dashboard narrative widget props
- * @returns Dashboard narrative widget component
+ * @param props - Dashboard narrative widget props.
+ * @returns Dashboard narrative widget component.
  * @group Dashboards
  * @alpha
  */
@@ -52,9 +55,14 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
     styleOptions,
     config,
     containerless = false,
-    narrative,
+    widgets,
+    dashboardId,
+    sharedMode,
+    adminAccess,
+    generateOnMount = false,
     onReady,
     onStateChange,
+    onContentHeightChange,
     onChange,
   } = props;
 
@@ -69,14 +77,22 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
     onChange,
   });
 
+  const widgetEntityId = getWidgetEntityId(props, 'narrative', getNarrativeWidgetName());
   useTrackWidgetInit({
     widgetType: 'narrative',
     widgetName: getNarrativeWidgetName(),
     widgetTitle: getWidgetTitle(props),
-    entityId: getWidgetEntityId(props, 'narrative', getNarrativeWidgetName()),
+    entityId: widgetEntityId,
   });
+  const trackCopy = useTrackNarrativeCopy({ dashboardId, widgetEntityId });
 
-  const [state, setState] = useState<NarrativeState>(() => initialStateFor(narrative));
+  const { state, generate } = useNarrativeWidgetState({
+    widgets,
+    dashboardId,
+    sharedMode,
+    adminAccess,
+    generateOnMount,
+  });
 
   // With nothing generated yet a spent allowance leaves no action to offer, so it presents as the
   // error state; a narrative already on screen stays and only the regenerate action goes dead.
@@ -93,29 +109,21 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
       ? { usagePercentage: quotaState.usagePercentage, exceeded: quotaState.isExceeded }
       : undefined;
 
+  // Generating on mount holds the host's render pipeline until the narrative (or its error) is on
+  // screen, so an export prints it rather than the loading state.
+  const isSettled = !generateOnMount || (state.status !== 'idle' && state.status !== 'loading');
+  const readyReported = useRef(false);
   useEffect(() => {
+    if (!isSettled || readyReported.current) return;
+    readyReported.current = true;
     onReady?.();
     // Fires once per mount regardless of later prop changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (narrative) {
-      setState({ status: 'ready', data: narrative });
-    }
-  }, [narrative]);
+  }, [isSettled]);
 
   useEffect(() => {
     onStateChange?.(effectiveState);
   }, [effectiveState, onStateChange]);
-
-  // The narrative API is not wired up yet; without a pre-supplied narrative, generating
-  // lands in the retryable failed state.
-  const generate = useCallback(() => {
-    setState(
-      narrative ? { status: 'ready', data: narrative } : { status: 'error', kind: 'failed' },
-    );
-  }, [narrative]);
 
   const copyText = effectiveState.status === 'ready' ? effectiveState.data.copyText : undefined;
 
@@ -125,11 +133,30 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
     () =>
       copyText === undefined
         ? headerConfigWithTitle
-        : withHeaderItemsInConfig([createNarrativeCopyItem({ copyText })])(headerConfigWithTitle),
-    [headerConfigWithTitle, copyText],
+        : withHeaderItemsInConfig([createNarrativeCopyItem({ copyText, onCopied: trackCopy })])(
+            headerConfigWithTitle,
+          ),
+    [headerConfigWithTitle, copyText, trackCopy],
   );
 
   const fullHeaderConfig = useWidgetHeaderMenu(headerConfigWithCopy);
+
+  const { themeSettings } = useThemeContext();
+  // With its own container the widget sizes itself to the content, as an auto-height pivot does;
+  // a host that draws the chrome (`containerless`) sizes it from `onContentHeightChange` instead.
+  const isAutoHeight = !containerless && (styleOptions?.isAutoHeight ?? false);
+  const [naturalHeight, setNaturalHeight] = useState<number>();
+  // What the container adds around the content (header, divider, borders, space around), measured
+  // from the rendered container; estimated from the style until it has rendered once.
+  const { ref: outerRef, height: outerHeight } = useElementHeight<HTMLDivElement>();
+  const { ref: contentAreaRef, height: contentAreaHeight } = useElementHeight<HTMLDivElement>();
+  const handleNaturalHeightChange = useCallback(
+    (height: number) => {
+      setNaturalHeight(height);
+      onContentHeightChange?.(height);
+    },
+    [onContentHeightChange],
+  );
 
   const content = (
     <Narrative
@@ -138,6 +165,9 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
       onGenerate={generate}
       // The host that owns the chrome also owns the loading treatment.
       showLoadingOverlay={!containerless}
+      // Generating on mount means nobody is there to click, as in an export.
+      showActions={!generateOnMount}
+      onNaturalHeightChange={handleNaturalHeightChange}
     />
   );
 
@@ -145,9 +175,33 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
   // Skip WidgetContainer to avoid a double header; the host also owns the copy action there.
   if (containerless) return content;
 
+  if (!isAutoHeight) {
+    return (
+      <WidgetContainer styleOptions={styleOptions} headerConfig={fullHeaderConfig}>
+        {content}
+      </WidgetContainer>
+    );
+  }
+
+  const overhead =
+    outerHeight > 0 && contentAreaHeight > 0
+      ? outerHeight - contentAreaHeight
+      : getWidgetOverheadHeight({
+          styleOptions,
+          themeSettings,
+          hasHeader: !styleOptions?.header?.hidden,
+        });
+
   return (
-    <WidgetContainer styleOptions={styleOptions} headerConfig={fullHeaderConfig}>
-      {content}
-    </WidgetContainer>
+    <div
+      ref={outerRef}
+      style={naturalHeight === undefined ? undefined : { height: naturalHeight + overhead }}
+    >
+      <WidgetContainer styleOptions={styleOptions} headerConfig={fullHeaderConfig}>
+        <div ref={contentAreaRef} style={{ height: '100%' }}>
+          {content}
+        </div>
+      </WidgetContainer>
+    </div>
   );
 });

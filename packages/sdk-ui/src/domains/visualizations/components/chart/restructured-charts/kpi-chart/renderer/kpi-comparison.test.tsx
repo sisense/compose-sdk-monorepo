@@ -3,7 +3,10 @@ import { createRef } from 'react';
 
 import { render } from '@testing-library/react';
 
+import { KPI_COMPARISON_TEXT_STYLE_DEFAULTS } from '../design-options/design-options.js';
 import { KpiComparison } from './kpi-comparison.js';
+
+const COMPARISON_TEXT_STYLE = KPI_COMPARISON_TEXT_STYLE_DEFAULTS;
 
 /** Reads `ref.current`, failing loudly (not with a silent `null`) if it isn't populated yet. */
 function requireCurrent(ref: { current: HTMLDivElement | null }): HTMLDivElement {
@@ -18,8 +21,10 @@ function requireCurrent(ref: { current: HTMLDivElement | null }): HTMLDivElement
 // everything else, same as react-i18next's own uninitialized fallback minus the console warning.
 const T_DICT: Record<string, string> = {
   'kpi.percentFormat': '{{sign}}{{value}}%',
-  'kpi.target.ofGoal': '{{percent}} of goal',
+  'kpi.target.ofGoal': '{{percent}} of goal ({{goalValue}})',
   'kpi.target.toGo': '{{value}} to go',
+  'kpi.comparison.vsBaseline': 'vs {{label}}',
+  'kpi.comparison.withBaseline': '{{label}} ({{baseline}})',
 };
 vi.mock('react-i18next', async (importOriginal) => {
   const mod = await importOriginal<typeof import('react-i18next')>();
@@ -40,12 +45,13 @@ describe('KpiComparison', () => {
     baseline: 100,
     deltaValue: 20,
     deltaPercent: 20,
-    label: 'vs cost',
+    label: 'cost',
   };
 
   it('renders a fixed compact font size for the primary readout when scale is compact', () => {
     const { getByText } = render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={deltaComparison}
         display="percent"
         showIcon={false}
@@ -61,6 +67,7 @@ describe('KpiComparison', () => {
     vi.mocked(ResizeObserver).mockClear();
     render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={deltaComparison}
         display="percent"
         showIcon={false}
@@ -81,12 +88,13 @@ describe('KpiComparison', () => {
       label: 'Total Cost',
     };
     // Rendered through the file-level t() mock's English templates.
-    const PERCENT_LINE = '82% of goal';
+    const PERCENT_LINE = '82% of goal (1M)';
     const TO_GO_LINE = '250K to go';
 
     const renderTarget = (display: 'percent' | 'value' | 'both') =>
       render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={targetComparison}
           display={display}
           showIcon={false}
@@ -119,6 +127,7 @@ describe('KpiComparison', () => {
     it('falls back to the amount-to-go line as primary when the percent is unavailable', () => {
       const { getByText, queryByText } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={{ ...targetComparison, percentOfTarget: undefined }}
           display="percent"
           showIcon={false}
@@ -134,6 +143,7 @@ describe('KpiComparison', () => {
     it('renders consumer targetTextOverrides templates instead of the localized strings', () => {
       const { getByText, queryByText } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={targetComparison}
           display="both"
           showIcon={false}
@@ -155,6 +165,7 @@ describe('KpiComparison', () => {
     it('feeds a labelOverride into the override template’s {{goal}} placeholder', () => {
       const { getByText } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={targetComparison}
           display="percent"
           showIcon={false}
@@ -174,6 +185,7 @@ describe('KpiComparison', () => {
     // make the label compete with the auto-fitted headline for width and ellipsize ("Total Q…").
     const { getByText, rerender } = render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={deltaComparison}
         display="percent"
         showIcon={false}
@@ -183,7 +195,7 @@ describe('KpiComparison', () => {
       />,
     );
     const readCompStackDirection = () => {
-      const root = getByText('vs cost').parentElement;
+      const root = getByText('vs cost (100)').parentElement;
       if (!root) throw new Error('Expected the label to have a ComparisonRoot parent');
       return getComputedStyle(root).flexDirection;
     };
@@ -192,6 +204,7 @@ describe('KpiComparison', () => {
     // Compact scale keeps the tier-driven single-line collapse.
     rerender(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={deltaComparison}
         display="percent"
         showIcon={false}
@@ -208,6 +221,7 @@ describe('KpiComparison', () => {
     // must participate in auto-fit sizing exactly like the value does -- not the old fixed 2.2rem.
     const { getByText } = render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={deltaComparison}
         display="percent"
         showIcon={false}
@@ -225,6 +239,7 @@ describe('KpiComparison', () => {
     const areaRef = createRef<HTMLDivElement>();
     const { getByText, rerender } = render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={deltaComparison}
         display="percent"
         showIcon={false}
@@ -239,6 +254,7 @@ describe('KpiComparison', () => {
     Object.defineProperty(areaElement, 'clientHeight', { value: 0, configurable: true });
     rerender(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={{ ...deltaComparison, deltaPercent: 21 }}
         display="percent"
         showIcon={false}
@@ -252,6 +268,7 @@ describe('KpiComparison', () => {
 
     rerender(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={{ ...deltaComparison, deltaPercent: 22 }}
         display="percent"
         showIcon={false}
@@ -269,6 +286,7 @@ describe('KpiComparison', () => {
     const areaRef = createRef<HTMLDivElement>();
     render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={deltaComparison}
         display="percent"
         showIcon={false}
@@ -288,6 +306,7 @@ describe('KpiComparison', () => {
     // not a stand-in -- for every comparison.type, not just delta/previous-period.
     const { getByText } = render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={{ type: 'target', target: 100, percentOfTarget: 82, toGo: 18, label: 'Goal' }}
         display="percent"
         showIcon={false}
@@ -298,12 +317,13 @@ describe('KpiComparison', () => {
     );
     // This test only cares that the *rendered* primary text got measured and sized in px (not
     // the old fixed 2.2rem).
-    expect(getByText('82% of goal').parentElement!.style.fontSize.endsWith('px')).toBe(true);
+    expect(getByText('82% of goal (100)').parentElement!.style.fontSize.endsWith('px')).toBe(true);
   });
 
   it('measures the real rendered primary text per comparison type (value, headline scale)', () => {
     const { getByText } = render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={{ type: 'value', value: 250000, label: 'Total Cost' }}
         display="percent"
         showIcon={false}
@@ -320,6 +340,7 @@ describe('KpiComparison', () => {
     // printing the same number twice -- the readout must then be the only line.
     const { container } = render(
       <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
         comparison={{ type: 'value', value: 250000, label: '' }}
         display="percent"
         showIcon={false}
@@ -331,6 +352,70 @@ describe('KpiComparison', () => {
     expect(container.textContent).toBe('250K');
   });
 
+  describe('delta-shaped caption', () => {
+    const renderDelta = (
+      comparison: Parameters<typeof KpiComparison>[0]['comparison'],
+      props: Partial<Omit<Parameters<typeof KpiComparison>[0], 'textStyle'>> = {},
+    ) =>
+      render(
+        <KpiComparison
+          comparison={comparison}
+          textStyle={COMPARISON_TEXT_STYLE}
+          display="percent"
+          showIcon={false}
+          scale="compact"
+          compact={false}
+          onColor={false}
+          {...props}
+        />,
+      );
+
+    it("names the baseline measure with the localized relation and its value for type 'delta'", () => {
+      const { getByText } = renderDelta(deltaComparison);
+      expect(getByText('vs cost (100)')).toHaveStyle({ 'font-size': '0.7rem' });
+    });
+
+    it("appends the prior value to the already-relational label for type 'previous-period'", () => {
+      const { getByText } = renderDelta({
+        ...deltaComparison,
+        type: 'previous-period',
+        label: 'vs prior month',
+      });
+      expect(getByText('vs prior month (100)')).toBeTruthy();
+    });
+
+    it("keeps the caption for display: 'value', so a bare delta never reads as the baseline's own value", () => {
+      const { getByText } = renderDelta(deltaComparison, { display: 'value' });
+      expect(getByText('+20')).toBeTruthy();
+      expect(getByText('vs cost (100)')).toBeTruthy();
+    });
+
+    it('formats the baseline with the comparison number format config', () => {
+      const { getByText } = renderDelta(deltaComparison, {
+        numberFormatConfig: { name: 'Currency', symbol: '$' },
+      });
+      expect(getByText('vs cost ($100)')).toBeTruthy();
+    });
+
+    it('renders a labelOverride verbatim, with no baseline appended', () => {
+      const { getByText, queryByText } = renderDelta(deltaComparison, {
+        labelOverride: 'vs budget',
+      });
+      expect(getByText('vs budget')).toBeTruthy();
+      expect(queryByText(/\(100\)/)).toBeNull();
+    });
+
+    it('renders no caption line for an empty labelOverride', () => {
+      const { container } = renderDelta(deltaComparison, { labelOverride: '' });
+      expect(container.textContent).toBe('+20.00%');
+    });
+
+    it('falls back to the relation against the value alone when the data-driven label is empty', () => {
+      const { getByText } = renderDelta({ ...deltaComparison, label: '' });
+      expect(getByText('vs 100')).toBeTruthy();
+    });
+  });
+
   describe('native tooltips for clipped text', () => {
     // The readout clips with `text-overflow: ellipsis` at narrow cards, so every line carries its
     // own full text as a `title` -- the only way a user can recover what was cut off. Asserted per
@@ -338,6 +423,7 @@ describe('KpiComparison', () => {
     it("exposes the full primary and secondary text as titles for type 'delta'", () => {
       const { getByText } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={deltaComparison}
           display="percent"
           showIcon={false}
@@ -347,12 +433,13 @@ describe('KpiComparison', () => {
         />,
       );
       expect(getByText('+20.00%')).toHaveAttribute('title', '+20.00%');
-      expect(getByText('vs cost')).toHaveAttribute('title', 'vs cost');
+      expect(getByText('vs cost (100)')).toHaveAttribute('title', 'vs cost (100)');
     });
 
     it("exposes the full primary and secondary text as titles for type 'target'", () => {
       const { getByText } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={{
             type: 'target',
             target: 1000000,
@@ -367,13 +454,14 @@ describe('KpiComparison', () => {
           onColor={false}
         />,
       );
-      expect(getByText('82% of goal')).toHaveAttribute('title', '82% of goal');
+      expect(getByText('82% of goal (1M)')).toHaveAttribute('title', '82% of goal (1M)');
       expect(getByText('250K to go')).toHaveAttribute('title', '250K to go');
     });
 
     it("exposes the full primary and secondary text as titles for type 'value'", () => {
       const { getByText } = render(
         <KpiComparison
+          textStyle={COMPARISON_TEXT_STYLE}
           comparison={{ type: 'value', value: 250000, label: 'Total Cost' }}
           display="percent"
           showIcon={false}
@@ -385,5 +473,45 @@ describe('KpiComparison', () => {
       expect(getByText('250K')).toHaveAttribute('title', '250K');
       expect(getByText('Total Cost')).toHaveAttribute('title', 'Total Cost');
     });
+  });
+
+  it('renders the default primary line semibold and upright', () => {
+    const { getByText } = render(
+      <KpiComparison
+        textStyle={COMPARISON_TEXT_STYLE}
+        comparison={deltaComparison}
+        display="percent"
+        showIcon={false}
+        scale="compact"
+        compact={false}
+        onColor={false}
+      />,
+    );
+    expect(getByText('+20.00%').parentElement).toHaveStyle({
+      'font-weight': '600',
+      'font-style': 'normal',
+      'text-transform': 'none',
+    });
+  });
+
+  it('applies an overridden text style to the primary line but not to the label', () => {
+    const { getByText } = render(
+      <KpiComparison
+        textStyle={{ fontWeight: '800', fontStyle: 'italic', textTransform: 'uppercase' }}
+        comparison={deltaComparison}
+        display="percent"
+        showIcon={false}
+        scale="compact"
+        compact={false}
+        onColor={false}
+      />,
+    );
+    expect(getByText('+20.00%').parentElement).toHaveStyle({
+      'font-weight': '800',
+      'font-style': 'italic',
+      'text-transform': 'uppercase',
+    });
+    expect(getByText('vs cost (100)')).not.toHaveStyle({ 'font-weight': '800' });
+    expect(getByText('vs cost (100)')).not.toHaveStyle({ 'text-transform': 'uppercase' });
   });
 });

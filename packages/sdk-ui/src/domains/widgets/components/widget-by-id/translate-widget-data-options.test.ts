@@ -1359,3 +1359,112 @@ describe('utils for widget data options translation', () => {
     });
   });
 });
+
+describe('a Fusion date measure, which is always a formula', () => {
+  // verbatim from a stored Sample ECommerce widget: the level lives in the context operand, and
+  // the item itself carries no level at all
+  const lastSaleContext: Record<string, BaseJaql> = {
+    '[60D6C-DEB]': {
+      table: 'Commerce',
+      column: 'Date',
+      dim: '[Commerce.Date (Calendar)]',
+      datatype: 'datetime',
+      merged: true,
+      level: 'days',
+      title: 'Days in Date',
+    },
+  };
+  const lastSaleItem: PanelItem = {
+    jaql: {
+      type: 'measure',
+      formula: 'max([60D6C-DEB])',
+      context: lastSaleContext,
+      datatype: 'datetime',
+      title: 'Last sale',
+    },
+    format: {
+      mask: {
+        years: 'yyyy',
+        quarters: 'yyyy Q',
+        months: 'MM/yyyy',
+        weeks: 'ww yyyy',
+        days: 'shortDate',
+        dateAndTime: 'MM/dd/yyyy HH:mm',
+        isdefault: true,
+      },
+    },
+  };
+  // the control widget: a date operand, but the formula answers a number of days
+  const customerLifetimeItem: PanelItem = {
+    jaql: {
+      type: 'measure',
+      formula: 'sum(ddiff(max([0D504-8FF]),min([0D504-8FF])))',
+      context: {
+        '[0D504-8FF]': {
+          table: 'Commerce',
+          column: 'Date',
+          dim: '[Commerce.Date (Calendar)]',
+          datatype: 'datetime',
+          level: 'days',
+          title: 'Days in Date',
+        },
+      },
+      title: 'Formula',
+      datatype: 'numeric',
+    },
+    format: { mask: { type: 'number', decimals: 'auto', separated: true, isdefault: true } },
+  };
+
+  it('takes the mask of its operand level, not the dateAndTime fallback', () => {
+    const column = createDataColumn(lastSaleItem) as StyledMeasureColumn;
+
+    expect(column.dateFormat).toBe('shortDate');
+  });
+
+  it('is not given a number format, because its saved mask is a date mask', () => {
+    const column = createDataColumn(lastSaleItem) as StyledMeasureColumn;
+
+    expect(column.numberFormatConfig).toBeUndefined();
+  });
+
+  it('writes the mask back, so reading a widget and saving it does not lose it', () => {
+    const column = createDataColumn(lastSaleItem) as StyledMeasureColumn;
+    const item = createPanelItem(column);
+
+    expect((item.format?.mask as Record<string, string>)?.days).toBe('shortDate');
+  });
+
+  // the same widget with nothing stamped: the bare MAX formula is what marks it as a date
+  const inferredDateItem: PanelItem = {
+    ...lastSaleItem,
+    jaql: {
+      type: 'measure',
+      formula: 'max([60D6C-DEB])',
+      context: lastSaleContext,
+      title: 'Last sale',
+    },
+  };
+
+  it('gives an inferred date formula no number format, though its saved item has no datatype', () => {
+    const column = createDataColumn(inferredDateItem) as StyledMeasureColumn;
+
+    expect(column.numberFormatConfig).toBeUndefined();
+    expect(column.dateFormat).toBe('shortDate');
+  });
+
+  it('saves an inferred date formula with the date mask only, never a mixed one', () => {
+    const column = createDataColumn(inferredDateItem) as StyledMeasureColumn;
+    const mask = createPanelItem(column).format?.mask as Record<string, unknown>;
+
+    expect(mask.days).toBe('shortDate');
+    expect(mask.decimals).toBeUndefined();
+    expect(mask.abbreviations).toBeUndefined();
+  });
+
+  it('leaves the numeric control on its number format, with no date format', () => {
+    const column = createDataColumn(customerLifetimeItem) as StyledMeasureColumn;
+
+    expect(column.dateFormat).toBeUndefined();
+    expect(column.numberFormatConfig).toBeDefined();
+  });
+});

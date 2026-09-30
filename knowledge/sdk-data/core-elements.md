@@ -22,7 +22,7 @@ Defines the common shape of every dimensional-model element (attribute, dimensio
 | Pass-through wrapper | `JaqlElement` — packages/sdk-data/src/dimensional-model/jaql-element.ts:36                                                                           |
 | Factory              | `createDimensionalElementFromMetadataItem` — packages/sdk-data/src/dimensional-model/jaql-element.ts:139                                             |
 | Helpers              | `normalizeName` — packages/sdk-data/src/dimensional-model/base.ts:157, `resolveElementNames` — base.ts:144, `wrapIfNeedsNormalization` — base.ts:202 |
-| JAQL type shapes     | `BaseJaql` — types.ts:506, `FormulaJaql` — types.ts:543, `MetadataItem` — types.ts:712, `MetadataItemJaql` — types.ts:761                            |
+| JAQL type shapes     | `BaseJaql` — types.ts:506, `FormulaJaql` — types.ts:543, `MetadataItem` — types.ts:714, `MetadataItemJaql` — types.ts:763                            |
 | Query-result types   | `QueryResultData` — packages/sdk-data/src/interfaces.ts:228, `DataSource` — src/interfaces.ts:209 (union of string \| `DataSourceInfo`)              |
 
 # Contract
@@ -56,7 +56,7 @@ plus duck-typing guards `isMeasure`, `isBaseMeasure`, `isCalculatedMeasure`, `is
 # How it connects
 
 - Subclassed by [attributes & dimensions](./attributes-and-dimensions.md) and [measures](./measures.md); filter classes in `dimensional-model/filters/` implement the same `Element` contract ([filters](./filters.md)).
-- `sdk-ui` / `sdk-query-client` build query payloads by calling `jaql()` on each element; `MetadataItem`/`MetadataItemJaql` (types.ts:712/761) are the wire shapes they exchange.
+- `sdk-ui` / `sdk-query-client` build query payloads by calling `jaql()` on each element; `MetadataItem`/`MetadataItemJaql` (types.ts:714/763) are the wire shapes they exchange.
 - `composeCode` (base.ts:105) carries the CSDK source-code representation of an element — see [compose-code](./compose-code.md).
 - `serialize()`/`__serializable` round-trip elements through JSON; `create()` in `dimensional-model/factory.ts:29` rebuilds elements from serialized JSON.
 - Query-result shapes (`QueryResultData`, `Data`, `Cell`) live at the package root, packages/sdk-data/src/interfaces.ts.

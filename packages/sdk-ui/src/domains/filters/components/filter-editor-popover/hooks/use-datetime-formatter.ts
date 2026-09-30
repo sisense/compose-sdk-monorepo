@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
 import { formatDateValue } from '@/domains/query-execution/core/date-formats';
-import { formatDatetimeString } from '@/domains/visualizations/components/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
+import { formatDatetimeString } from '@/shared/formatters/format-datetime-string';
 
 export type DatetimeFormatter = (value: Date | string, format: string) => string;
 

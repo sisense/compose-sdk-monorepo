@@ -8,8 +8,9 @@ import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '@/props';
+import type { SisenseContextProviderProps } from '@/props';
 
+import { FilterEditorContextProvider } from './filter-editor-context.js';
 import { FilterEditorTextual } from './filter-editor-textual.js';
 
 const contextProviderProps: SisenseContextProviderProps = {
@@ -396,7 +397,7 @@ describe('FilterEditorTextual', () => {
     );
   });
 
-  it('should hide multi-select toggle', async () => {
+  it('should hide multi-select toggle', () => {
     const multiSelectMembersFilter = filterFactory.members(DM.Commerce.CategoryID, ['1', '2']);
     setup(
       <SisenseContextProvider {...contextProviderProps}>
@@ -651,5 +652,57 @@ describe('FilterEditorTextual', () => {
     expect(filterChangeHandlerMock).toHaveBeenCalledWith(
       filterFactory.doesntEqual(DM.Commerce.AgeRange, '', initialFilter.config),
     );
+  });
+
+  describe('members-only mode', () => {
+    const renderEditor = (membersOnlyMode: boolean) =>
+      setup(
+        <SisenseContextProvider {...contextProviderProps}>
+          <FilterEditorContextProvider
+            value={{
+              defaultDataSource: null,
+              dataSources: [],
+              parentFilters: [],
+              membersOnlyMode,
+              rankingVisible: true,
+            }}
+          >
+            <FilterEditorTextual filter={includeAllFilter} onChange={filterChangeHandlerMock} />
+          </FilterEditorContextProvider>
+        </SisenseContextProvider>,
+      );
+
+    const getConditionOptions = async (user: ReturnType<typeof setup>['user']) => {
+      const textConditionSection = await screen.findByLabelText('Text condition section');
+      await user.click(within(textConditionSection).getByLabelText('Condition select'));
+      const conditionSelectContent = await screen.findByLabelText('Single-select content');
+      return Array.from(conditionSelectContent.children, (item) => item.textContent);
+    };
+
+    it('should offer only the "is not" condition when members-only mode is on', async () => {
+      const { user } = renderEditor(true);
+
+      expect(await getConditionOptions(user)).toEqual(['Is not']);
+    });
+
+    it('should offer all conditions when members-only mode is off', async () => {
+      const { user } = renderEditor(false);
+
+      expect(await getConditionOptions(user)).toEqual([
+        'Is not',
+        'Contains',
+        'Does not contain',
+        'Starts with',
+        'Does not start with',
+        'Ends with',
+        'Does not end with',
+        'Equals',
+        'Does not equal',
+        'Is empty',
+        'Is not empty',
+        'Top',
+        'Bottom',
+      ]);
+    });
   });
 });

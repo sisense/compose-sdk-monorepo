@@ -542,6 +542,8 @@ export type {
   KpiSparklineType,
   KpiCardStyleOptions,
   KpiTextSize,
+  KpiTextStyle,
+  KpiTextTransform,
   KpiIconCondition,
   KpiIcon,
   KpiIconName,

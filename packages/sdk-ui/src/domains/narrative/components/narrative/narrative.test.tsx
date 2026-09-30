@@ -1,11 +1,11 @@
 import { screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { setup } from '@/__test-helpers__';
 import { ThemeProvider } from '@/infra/contexts/theme-provider';
 import { translation } from '@/infra/translation/resources/en';
 
-import { mockNarrativeStandard } from './__mocks__/narrative-mocks.js';
+import { mockNarrativeSixInsights, mockNarrativeStandard } from './__mocks__/narrative-mocks.js';
 import { formatNarrativeTimestamp, Narrative } from './narrative.js';
 
 const readyState = { status: 'ready', data: mockNarrativeStandard } as const;
@@ -25,18 +25,10 @@ describe('Narrative', () => {
     );
   });
 
-  it('draws at most three insights', async () => {
-    const extra = { ...mockNarrativeStandard.insights[0], text: 'A **fourth** insight.' };
-    setup(
-      <Narrative
-        state={{
-          status: 'ready',
-          data: { ...mockNarrativeStandard, insights: [...mockNarrativeStandard.insights, extra] },
-        }}
-      />,
-    );
+  it('draws every insight, beyond three included', async () => {
+    setup(<Narrative state={{ status: 'ready', data: mockNarrativeSixInsights }} />);
 
-    expect(await screen.findAllByTestId('csdk-narrative-insight')).toHaveLength(3);
+    expect(await screen.findAllByTestId('csdk-narrative-insight')).toHaveLength(6);
   });
 
   it('keeps emphasis but renders links as plain text and drops images', async () => {
@@ -158,6 +150,110 @@ describe('overflow', () => {
     expect(getComputedStyle(content).overflowY).toBe('auto');
     expect(content.contains(footer)).toBe(false);
     expect(getComputedStyle(screen.getByTestId('csdk-narrative')).overflowY).toBe('hidden');
+  });
+});
+
+/**
+ * The height the content needs, reported so a host can size the widget to it. jsdom lays nothing
+ * out, so every measured element reports the same stubbed height.
+ */
+describe('natural height', () => {
+  const MEASURED = 40;
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const stubHeights = () =>
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(MEASURED);
+
+  it('reports the ready content with the design paddings: 16, text, 16, footer, 8', async () => {
+    stubHeights();
+    const onNaturalHeightChange = vi.fn();
+    setup(<Narrative state={readyState} onNaturalHeightChange={onNaturalHeightChange} />);
+
+    await screen.findByTestId('csdk-narrative-overview');
+
+    expect(onNaturalHeightChange).toHaveBeenLastCalledWith(16 + MEASURED + 16 + MEASURED + 8);
+  });
+
+  it('reports the idle and error states with 16 above and below', async () => {
+    stubHeights();
+    const onIdle = vi.fn();
+    const idle = setup(<Narrative state={{ status: 'idle' }} onNaturalHeightChange={onIdle} />);
+    await screen.findByTestId('csdk-narrative-idle');
+    expect(onIdle).toHaveBeenLastCalledWith(16 + MEASURED + 16);
+    idle.unmount();
+
+    const onError = vi.fn();
+    setup(
+      <Narrative state={{ status: 'error', kind: 'failed' }} onNaturalHeightChange={onError} />,
+    );
+    await screen.findByTestId('csdk-narrative-error');
+    expect(onError).toHaveBeenLastCalledWith(16 + MEASURED + 16);
+  });
+
+  it('reports nothing while loading', async () => {
+    stubHeights();
+    const onNaturalHeightChange = vi.fn();
+    setup(
+      <Narrative state={{ status: 'loading' }} onNaturalHeightChange={onNaturalHeightChange} />,
+    );
+
+    await screen.findByTestId('csdk-narrative-loading');
+
+    expect(onNaturalHeightChange).not.toHaveBeenCalled();
+  });
+});
+
+/** A rendering nobody interacts with, such as an export, draws no actions. */
+describe('without actions', () => {
+  it('draws no generate, regenerate or retry action', async () => {
+    const { unmount } = setup(<Narrative state={{ status: 'idle' }} showActions={false} />);
+    expect(await screen.findByTestId('csdk-narrative-idle')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-generate')).toBeNull();
+    unmount();
+
+    const ready = setup(<Narrative state={readyState} showActions={false} />);
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    expect(screen.getByTestId('csdk-narrative-timestamp')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-generate')).toBeNull();
+    ready.unmount();
+
+    setup(<Narrative state={{ status: 'error', kind: 'failed' }} showActions={false} />);
+    expect(await screen.findByTestId('csdk-narrative-error')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-generate')).toBeNull();
+  });
+});
+
+/** The footer stays one line at any width; the disclaimer is the part that gives way. */
+describe('footer disclaimer', () => {
+  it('keeps the footer on one line and cuts the disclaimer with an ellipsis', async () => {
+    setup(<Narrative state={readyState} />);
+
+    const disclaimer = await screen.findByTestId('csdk-narrative-disclaimer');
+    const row = disclaimer.parentElement as HTMLElement;
+
+    expect(getComputedStyle(row).flexWrap).not.toBe('wrap');
+    expect(getComputedStyle(disclaimer).textOverflow).toBe('ellipsis');
+    expect(getComputedStyle(disclaimer).whiteSpace).toBe('nowrap');
+  });
+
+  it('shows the full disclaimer on hover only when it is cut', async () => {
+    const { user } = setup(<Narrative state={readyState} />);
+    const disclaimer = await screen.findByTestId('csdk-narrative-disclaimer');
+
+    await user.hover(disclaimer);
+    expect(screen.queryByRole('tooltip')).toBeNull();
+    await user.unhover(disclaimer);
+
+    Object.defineProperty(disclaimer, 'scrollWidth', { configurable: true, value: 400 });
+    Object.defineProperty(disclaimer, 'clientWidth', { configurable: true, value: 120 });
+    await user.hover(disclaimer);
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(
+      translation.narrativeWidget.disclaimer,
+    );
   });
 });
 

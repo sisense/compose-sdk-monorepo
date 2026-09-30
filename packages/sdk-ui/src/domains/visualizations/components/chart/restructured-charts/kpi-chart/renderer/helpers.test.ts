@@ -6,6 +6,8 @@ import type { StyledMeasureColumn } from '@/domains/visualizations/core/chart-da
 import { translateKpiChartDataOptions } from '../data-options/data-options.js';
 import { KpiChartData, KpiComparisonData } from '../types.js';
 import {
+  applyTextTransform,
+  buildDeltaCaption,
   buildTargetReadout,
   comparisonMeasureColumn,
   comparisonMeasureNumberFormatConfig,
@@ -38,14 +40,16 @@ const makeT =
 /** English-shaped templates, mirroring `resources/en.ts`. */
 const t = makeT({
   'kpi.percentFormat': '{{sign}}{{value}}%',
-  'kpi.target.ofGoal': '{{percent}} of goal',
+  'kpi.target.ofGoal': '{{percent}} of goal ({{goalValue}})',
   'kpi.target.toGo': '{{value}} to go',
+  'kpi.comparison.vsBaseline': 'vs {{label}}',
+  'kpi.comparison.withBaseline': '{{label}} ({{baseline}})',
 });
 
 /** Turkish-shaped templates: percent sign before the number, per `resources/__external__/tr-tr.ts`. */
 const tTurkish = makeT({
   'kpi.percentFormat': '{{sign}}%{{value}}',
-  'kpi.target.ofGoal': 'hedefe göre {{percent}}',
+  'kpi.target.ofGoal': 'hedefe göre {{percent}} ({{goalValue}})',
   'kpi.target.toGo': '{{value}} kaldı',
 });
 
@@ -661,11 +665,11 @@ describe('toComparisonDisplay', () => {
 });
 
 describe('buildTargetReadout', () => {
-  const target = { percentOfTarget: 82, toGo: 250000, label: 'Total Cost' };
+  const target = { target: 1000000, percentOfTarget: 82, toGo: 250000, label: 'Total Cost' };
 
   it('builds both lines from the localized templates by default', () => {
     expect(buildTargetReadout(target, undefined, t)).toEqual({
-      ofGoalText: '82% of goal',
+      ofGoalText: '82% of goal (1M)',
       toGoText: '250K to go',
     });
   });
@@ -691,7 +695,7 @@ describe('buildTargetReadout', () => {
 
   it('overrides independently: one line overridden, the other stays localized', () => {
     expect(buildTargetReadout(target, undefined, t, { toGoText: '{{value}} left' })).toEqual({
-      ofGoalText: '82% of goal',
+      ofGoalText: '82% of goal (1M)',
       toGoText: '250K left',
     });
   });
@@ -702,37 +706,138 @@ describe('buildTargetReadout', () => {
     );
   });
 
+  it('formats the goal value with the given number format config and exposes it as {{goalValue}}', () => {
+    expect(buildTargetReadout(target, { name: 'Currency', symbol: '$' }, t).ofGoalText).toBe(
+      '82% of goal ($1M)',
+    );
+    expect(
+      buildTargetReadout(target, undefined, t, { ofGoalText: '{{percent}} of {{goalValue}} goal' })
+        .ofGoalText,
+    ).toBe('82% of 1M goal');
+  });
+
   it('localizes both lines through the locale templates (Turkish)', () => {
     expect(buildTargetReadout(target, undefined, tTurkish)).toEqual({
-      ofGoalText: 'hedefe göre %82',
+      ofGoalText: 'hedefe göre %82 (1M)',
       toGoText: '250K kaldı',
     });
   });
 });
 
+describe('buildDeltaCaption', () => {
+  const delta = { type: 'delta' as const, baseline: 107270000, label: 'Total Cost' };
+  const previousPeriod = {
+    type: 'previous-period' as const,
+    baseline: 35340000,
+    label: 'vs prior month',
+  };
+
+  it("wraps a 'delta' measure title in the localized relation and appends the baseline value", () => {
+    expect(buildDeltaCaption(delta, undefined, t)).toBe('vs Total Cost (107.27M)');
+  });
+
+  it("keeps a 'previous-period' label, which is already a relation, and appends the baseline value", () => {
+    expect(buildDeltaCaption(previousPeriod, undefined, t)).toBe('vs prior month (35.34M)');
+  });
+
+  it('formats the baseline with the given number format config', () => {
+    expect(buildDeltaCaption(delta, { name: 'Currency', symbol: '$' }, t)).toBe(
+      'vs Total Cost ($107.27M)',
+    );
+  });
+
+  it('returns a label override verbatim, without appending the baseline', () => {
+    expect(buildDeltaCaption(delta, undefined, t, 'vs budget')).toBe('vs budget');
+    // An empty override means "no caption" (the readout renders nothing for an empty string).
+    expect(buildDeltaCaption(delta, undefined, t, '')).toBe('');
+  });
+
+  it('falls back to the relation against the value alone when the label is empty', () => {
+    // A comparison measure titled with a bare number has its label dropped by the data layer;
+    // the readout must still anchor the delta to something.
+    expect(buildDeltaCaption({ ...delta, label: '' }, undefined, t)).toBe('vs 107.27M');
+    expect(buildDeltaCaption({ ...previousPeriod, label: '' }, undefined, t)).toBe('vs 35.34M');
+  });
+});
+
 describe('summarizeComparisonForAria', () => {
-  it('summarizes a delta-shaped comparison', () => {
+  it('summarizes a delta-shaped comparison as the delta text plus the baseline caption', () => {
     expect(
       summarizeComparisonForAria(
-        { type: 'delta', baseline: 100, deltaValue: 20, deltaPercent: 20, label: 'vs prior month' },
+        {
+          type: 'previous-period',
+          baseline: 100,
+          deltaValue: 20,
+          deltaPercent: 20,
+          label: 'vs prior month',
+        },
         undefined,
         t,
       ),
-    ).toBe('+20.00% vs prior month');
+    ).toBe('+20.00% vs prior month (100)');
+    expect(
+      summarizeComparisonForAria(
+        { type: 'delta', baseline: 100, deltaValue: 20, deltaPercent: 20, label: 'Total Cost' },
+        undefined,
+        t,
+      ),
+    ).toBe('+20.00% vs Total Cost (100)');
   });
 
   it('follows the display mode for delta-shaped comparisons, matching the visible readout', () => {
     const delta = {
-      type: 'delta' as const,
+      type: 'previous-period' as const,
       baseline: 100,
       deltaValue: 20,
       deltaPercent: 20,
       label: 'vs prior month',
     };
-    expect(summarizeComparisonForAria(delta, undefined, t, 'value')).toBe('+20 vs prior month');
-    expect(summarizeComparisonForAria(delta, undefined, t, 'both')).toBe(
-      '+20.00% (+20) vs prior month',
+    expect(summarizeComparisonForAria(delta, undefined, t, 'value')).toBe(
+      '+20 vs prior month (100)',
     );
+    expect(summarizeComparisonForAria(delta, undefined, t, 'both')).toBe(
+      '+20.00% (+20) vs prior month (100)',
+    );
+  });
+
+  it('voices a label override verbatim for delta-shaped comparisons, without the baseline', () => {
+    const delta = {
+      type: 'delta' as const,
+      baseline: 100,
+      deltaValue: 20,
+      deltaPercent: 20,
+      label: 'Total Cost',
+    };
+    expect(summarizeComparisonForAria(delta, undefined, t, 'percent', undefined, 'vs budget')).toBe(
+      '+20.00% vs budget',
+    );
+    // An empty override drops the caption, leaving only the delta text (no trailing space).
+    expect(summarizeComparisonForAria(delta, undefined, t, 'percent', undefined, '')).toBe(
+      '+20.00%',
+    );
+  });
+
+  it("feeds a label override into a target's {{goal}} and a value comparison's label", () => {
+    expect(
+      summarizeComparisonForAria(
+        { type: 'target', target: 100, percentOfTarget: 82, toGo: 18, label: 'Total Cost' },
+        undefined,
+        t,
+        'percent',
+        { ofGoalText: '{{percent}} of {{goal}}' },
+        'Q4 quota',
+      ),
+    ).toBe('82% of Q4 quota');
+    expect(
+      summarizeComparisonForAria(
+        { type: 'value', value: 100, label: 'Total Cost' },
+        undefined,
+        t,
+        'percent',
+        undefined,
+        'Cost',
+      ),
+    ).toBe('Cost 100');
   });
 
   it('summarizes a target comparison per display: percent (default), value, and both', () => {
@@ -746,10 +851,12 @@ describe('summarizeComparisonForAria', () => {
     // The summary must voice the exact strings the visible readout renders (localized
     // `kpi.target.*` templates) and follow the same display semantics, so assistive tech never
     // hears content that isn't shown.
-    expect(summarizeComparisonForAria(target, undefined, t)).toBe('82% of goal');
-    expect(summarizeComparisonForAria(target, undefined, t, 'percent')).toBe('82% of goal');
+    expect(summarizeComparisonForAria(target, undefined, t)).toBe('82% of goal (100)');
+    expect(summarizeComparisonForAria(target, undefined, t, 'percent')).toBe('82% of goal (100)');
     expect(summarizeComparisonForAria(target, undefined, t, 'value')).toBe('18 to go');
-    expect(summarizeComparisonForAria(target, undefined, t, 'both')).toBe('82% of goal, 18 to go');
+    expect(summarizeComparisonForAria(target, undefined, t, 'both')).toBe(
+      '82% of goal (100), 18 to go',
+    );
   });
 
   it('voices consumer target-string overrides, same as the visible readout', () => {
@@ -772,7 +879,7 @@ describe('summarizeComparisonForAria', () => {
         t,
         'percent',
       ),
-    ).toBe('83.33% of goal');
+    ).toBe('83.33% of goal (120)');
   });
 
   it('falls back to the amount-to-go summary when the target percent is unavailable', () => {
@@ -796,5 +903,29 @@ describe('summarizeComparisonForAria', () => {
     expect(summarizeComparisonForAria({ type: 'value', value: 100, label: '' }, undefined, t)).toBe(
       '100',
     );
+  });
+});
+
+describe('applyTextTransform', () => {
+  it('returns the input untouched for none', () => {
+    expect(applyTextTransform('No data', 'none')).toBe('No data');
+  });
+
+  it('uppercases and lowercases the whole string', () => {
+    expect(applyTextTransform('No data', 'uppercase')).toBe('NO DATA');
+    expect(applyTextTransform('No Data', 'lowercase')).toBe('no data');
+  });
+
+  it('capitalizes the first letter of each whitespace-separated word, leaving the rest as-is', () => {
+    expect(applyTextTransform('vs last year', 'capitalize')).toBe('Vs Last Year');
+    expect(applyTextTransform('  two  spaces', 'capitalize')).toBe('  Two  Spaces');
+    expect(applyTextTransform('$1.2K to go', 'capitalize')).toBe('$1.2K To Go');
+  });
+
+  it('capitalizes after punctuation the way CSS does, but not inside contractions or after digits', () => {
+    expect(applyTextTransform('(prior)', 'capitalize')).toBe('(Prior)');
+    expect(applyTextTransform('year-to-date', 'capitalize')).toBe('Year-To-Date');
+    expect(applyTextTransform("it's fine", 'capitalize')).toBe("It's Fine");
+    expect(applyTextTransform('1.2k', 'capitalize')).toBe('1.2k');
   });
 });

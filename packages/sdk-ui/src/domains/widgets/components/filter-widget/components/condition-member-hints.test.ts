@@ -33,4 +33,14 @@ describe('memberHintsForNeedle', () => {
   it('caps the list at five matches', () => {
     expect(memberHintsForNeedle(MEMBERS, 'o')).toHaveLength(5);
   });
+
+  it('uses a custom matcher instead of contains when one is given', () => {
+    const startsWith = (title: string, needle: string) => title.startsWith(needle);
+
+    // 'd' matches Cardiology / Radiology / Dermatology under the default `contains`
+    // (see the test above) but only Dermatology actually starts with it.
+    expect(memberHintsForNeedle(MEMBERS, 'd', 5, startsWith)).toEqual([
+      { key: 'Dermatology', title: 'Dermatology' },
+    ]);
+  });
 });

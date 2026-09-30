@@ -3,7 +3,12 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getQueryPillTooltipModel } from './compose-code-to-readable';
-import { QUERY_PILL_LABEL_STYLE } from './query-definition-style-constants';
+import { countRelationsTooltipLines, FilterRelationsTooltip } from './filter-relations-tooltip';
+import { GroupedFilterTooltip } from './grouped-filter-tooltip';
+import {
+  QUERY_PILL_LABEL_STYLE,
+  QUERY_TOOLTIP_LABEL_STYLE,
+} from './query-definition-style-constants';
 import { QueryPillBubbleTooltip } from './query-pill-bubble-tooltip';
 import { truncatePillLabel } from './truncate-pill-label';
 import type { QueryPillCategory, QueryPillItem } from './types';
@@ -18,6 +23,14 @@ const PILL_COLORS: Record<QueryPillCategory, { bg: string; text: string }> = {
   operator: { bg: '#ebe9fe', text: '#131F29' },
 };
 
+function TooltipRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <strong style={QUERY_TOOLTIP_LABEL_STYLE}>{`${label}:`}</strong> {value}
+    </div>
+  );
+}
+
 function tooltipTitleFromModel(
   model: NonNullable<ReturnType<typeof getQueryPillTooltipModel>>,
   t: (key: string) => string,
@@ -27,12 +40,12 @@ function tooltipTitleFromModel(
       className="csdk-m-0 csdk-max-h-64 csdk-overflow-auto csdk-whitespace-pre-wrap csdk-break-all"
       style={{ margin: 0 }}
     >
-      <div>{`${t('queryDefinition.tooltipType')}: ${model.typeLabel}`}</div>
+      <TooltipRow label={t('queryDefinition.tooltipType')} value={model.typeLabel} />
       {model.showColumnInTooltip ? (
-        <div>{`${t('queryDefinition.tooltipColumn')}: ${model.column}`}</div>
+        <TooltipRow label={t('queryDefinition.tooltipColumn')} value={model.column} />
       ) : null}
       {model.showFormulaInTooltip ? (
-        <div>{`${t('queryDefinition.tooltipFormula')}: ${model.formula}`}</div>
+        <TooltipRow label={t('queryDefinition.tooltipFormula')} value={model.formula} />
       ) : null}
     </div>
   );
@@ -66,16 +79,35 @@ export const QueryPill: FunctionComponent<QueryPillProps> = ({
   maxLength = 0,
 }) => {
   const { t } = useTranslation();
-  const { bg, text } = PILL_COLORS[item.category];
+  const { bg, text } = item.color ?? PILL_COLORS[item.category];
   const displayLabel = useMemo(
     () => truncatePillLabel(item.label, maxLength),
     [item.label, maxLength],
   );
   const isTruncated = displayLabel !== item.label;
-  const tooltipModel = useMemo(() => getQueryPillTooltipModel(item), [item]);
-  const tooltipTitle = tooltipModel === null ? null : tooltipTitleFromModel(tooltipModel, t);
-  const preferBelow = tooltipModel ? (tooltipModel.layoutText ?? '').split('\n').length > 3 : false;
+  const groupedTooltipLines = item.groupedTooltipLines;
+  const relationsTooltip = item.relationsTooltip;
+  const tooltipModel = useMemo(
+    () => (groupedTooltipLines || relationsTooltip ? null : getQueryPillTooltipModel(item)),
+    [groupedTooltipLines, relationsTooltip, item],
+  );
   const [tipOpen, setTipOpen] = useState(false);
+  const tooltipTitle = relationsTooltip ? (
+    <FilterRelationsTooltip node={relationsTooltip} />
+  ) : groupedTooltipLines ? (
+    groupedTooltipLines.length === 0 ? null : (
+      <GroupedFilterTooltip lines={groupedTooltipLines} open={tipOpen} />
+    )
+  ) : tooltipModel === null ? null : (
+    tooltipTitleFromModel(tooltipModel, t)
+  );
+  const preferBelow = relationsTooltip
+    ? countRelationsTooltipLines(relationsTooltip) > 3
+    : groupedTooltipLines
+    ? groupedTooltipLines.length > 3
+    : tooltipModel
+    ? (tooltipModel.layoutText ?? '').split('\n').length > 3
+    : false;
 
   const pill = (
     <span

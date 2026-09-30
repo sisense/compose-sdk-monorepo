@@ -1,0 +1,18 @@
+{
+  // Markdown rules checked on staged files by lint-staged (see package.json).
+  // Generated documentation is excluded; Prettier owns line length.
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD033": false,
+    "MD024": { "siblings_only": true }
+  },
+  "ignores": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "docs-md/**",
+    "docs-mdx/**",
+    "**/CHANGELOG.md",
+    "**/storybook-static/**"
+  ]
+}

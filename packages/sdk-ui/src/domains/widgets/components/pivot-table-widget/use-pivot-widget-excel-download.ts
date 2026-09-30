@@ -5,7 +5,7 @@ import { translateColumnToAttribute } from '@/domains/visualizations/core/chart-
 import {
   mapAttributesForExcelExport,
   mapMeasureColumnsForExcelExport,
-} from '@/domains/widgets/helpers/excel-export-map-dimensions-measures.js';
+} from '@/domains/widgets/helpers/export-map-dimensions-measures.js';
 import { useExcelQueryFileLoader } from '@/domains/widgets/hooks/use-excel-query-file-loader.js';
 import { useWithExcelDownloadMenuItem } from '@/domains/widgets/hooks/use-with-excel-download-menu-item.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';

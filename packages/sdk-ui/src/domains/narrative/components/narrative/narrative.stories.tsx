@@ -11,6 +11,7 @@ import { ThemeProvider } from '@/infra/contexts/theme-provider';
 import {
   mockNarrativeLowDensity,
   mockNarrativeOverflow,
+  mockNarrativeSixInsights,
   mockNarrativeStandard,
   mockNarrativeTwoInsights,
 } from './__mocks__/narrative-mocks.js';
@@ -86,7 +87,7 @@ export const Loading: Story = {
   decorators: [inRow],
 };
 
-/** Standard density: overview plus the maximum of three insights, one per status. */
+/** Standard density: overview plus the default three insights, one per status. */
 export const Ready: Story = {
   args: { state: { status: 'ready', data: mockNarrativeStandard } },
   decorators: [inRow],
@@ -102,6 +103,12 @@ export const ReadyWithHeaderCopy: Story = {
 export const ReadyWithTwoInsights: Story = {
   args: { state: { status: 'ready', data: mockNarrativeTwoInsights } },
   decorators: [inRow],
+};
+
+/** More than three insights, as when an AI context asks for them: they wrap three to a row. */
+export const ReadyWithSixInsights: Story = {
+  args: { state: { status: 'ready', data: mockNarrativeSixInsights } },
+  decorators: [framed(360)],
 };
 
 /** Low density: no insights and no badges — a normal outcome, not an empty state. */

@@ -1,4 +1,7 @@
-import { NarrativeCopyButton } from '@/domains/narrative/components/narrative';
+import {
+  NarrativeCopyButton,
+  type NarrativeCopyButtonProps,
+} from '@/domains/narrative/components/narrative';
 import type { WidgetHeaderItem } from '@/domains/widgets/shared/widget-header/types';
 
 /**
@@ -11,13 +14,12 @@ export const NARRATIVE_COPY_ITEM_ID = 'narrative-copy';
  * Builds the header item that copies the generated narrative to the clipboard.
  *
  * Placed at the start of the trailing group, before the header menu.
- * @param options - The text the action copies.
- * @param options.copyText - The narrative as plain text with formatting preserved.
+ * @param options - The text the action copies and the callback fired after a copy.
  * @returns The header item.
  * @internal
  */
-export const createNarrativeCopyItem = ({ copyText }: { copyText: string }): WidgetHeaderItem => ({
+export const createNarrativeCopyItem = (options: NarrativeCopyButtonProps): WidgetHeaderItem => ({
   id: NARRATIVE_COPY_ITEM_ID,
   position: { type: 'auto' },
-  component: () => <NarrativeCopyButton copyText={copyText} />,
+  component: () => <NarrativeCopyButton {...options} />,
 });

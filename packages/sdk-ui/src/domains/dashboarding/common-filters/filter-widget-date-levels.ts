@@ -5,9 +5,16 @@ import { isFilterWidgetProps } from '@/domains/widgets/components/widget-by-id/u
 import type { WidgetProps, WithCommonWidgetProps } from '@/domains/widgets/components/widget/types';
 
 /**
- * Returns the date granularity levels from `allFilters` that are in use on the same dimension
- * as `widget`, excluding the granularity already owned by the widget's linked filter.
- * Used to hide already-claimed levels from a FilterWidget's granularity dropdown.
+ * Returns the date granularity levels from `allFilters` that are claimed by filters on the
+ * same dimension that are not this widget's own linked filter.
+ *
+ * Used to hide already-claimed levels from a FilterWidget's granularity dropdown — including
+ * when the claimed grain matches this widget's current attribute. A new List created on the
+ * same Weeks level as Condition "This Week" used to keep Weeks available (`g !== ownGrain`)
+ * and then overwrite the Condition expression on empty Apply.
+ *
+ * The dropdown still surfaces the widget's current level when it is excluded (so the control
+ * can name where it is parked); see `translatedGranularities` in FilterWidgetDropdown.
  * @param widget - The filter widget whose dimension and linked filter determine the exclusions.
  * @param allFilters - All active dashboard filters to check for date-level usage.
  * @returns Returns an array of granularity strings that should be hidden from the widget's dropdown.
@@ -20,21 +27,18 @@ function getExcludedDateLevels(
   const expr = widget.attribute?.expression;
   if (!expr) return [];
 
-  const dateLevelFiltersForDim = allFilters.filter(
-    (f) => f.attribute.expression === expr && isLevelAttribute(f.attribute),
-  );
-  if (dateLevelFiltersForDim.length === 0) return [];
+  const ownFilterGuid = widget.filter?.config.guid;
 
-  const ownGranularity =
-    widget.filter != null && isLevelAttribute(widget.filter.attribute)
-      ? widget.filter.attribute.granularity
-      : isLevelAttribute(widget.attribute)
-      ? widget.attribute.granularity
-      : undefined;
+  const claimedByOthers = allFilters
+    .filter(
+      (f) =>
+        f.attribute.expression === expr &&
+        isLevelAttribute(f.attribute) &&
+        f.config.guid !== ownFilterGuid,
+    )
+    .flatMap((f) => (isLevelAttribute(f.attribute) ? [f.attribute.granularity] : []));
 
-  return dateLevelFiltersForDim
-    .flatMap((f) => (isLevelAttribute(f.attribute) ? [f.attribute.granularity] : []))
-    .filter((g) => g !== ownGranularity);
+  return [...new Set(claimedByOthers)];
 }
 
 /**

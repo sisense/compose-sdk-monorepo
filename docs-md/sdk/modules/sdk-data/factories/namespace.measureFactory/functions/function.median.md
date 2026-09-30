@@ -11,6 +11,8 @@ title: median
 
 Creates a median aggregation measure over the given attribute.
 
+Note: Only numeric attributes are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

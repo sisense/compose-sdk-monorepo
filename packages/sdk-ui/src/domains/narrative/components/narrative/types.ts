@@ -26,7 +26,7 @@ export type NarrativeData = {
   /** Summary paragraph. Supports `**bold**` and nothing else. */
   overview: string;
   /**
-   * Up to three insights. An empty list is valid and renders the overview alone — that is the
+   * Insights, drawn three to a row. An empty list is valid and renders the overview alone — that is the
    * low-density output, not a degraded state.
    */
   readonly insights: readonly NarrativeInsight[];
@@ -84,4 +84,15 @@ export type NarrativeProps = {
    * whole widget, so it passes `false` to avoid two indicators.
    */
   showLoadingOverlay?: boolean;
+  /**
+   * Whether the generate, regenerate and retry actions are drawn. Defaults to `true`. A rendering
+   * nobody interacts with, such as an export, passes `false`.
+   */
+  showActions?: boolean;
+  /**
+   * Called with the height the content needs to show without scrolling, in pixels — the design's
+   * paddings included — whenever it changes. Not called while loading, so a host sizing the widget
+   * by it keeps the previous height until the next state arrives.
+   */
+  onNaturalHeightChange?: (height: number) => void;
 };

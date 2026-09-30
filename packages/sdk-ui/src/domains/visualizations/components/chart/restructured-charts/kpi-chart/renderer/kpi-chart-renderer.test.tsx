@@ -192,6 +192,30 @@ describe('KpiChartRenderer', () => {
     expect(getByText('1.5K')).toBeTruthy();
   });
 
+  it('renders the title with the configured text style instead of the uppercase default', () => {
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+    };
+    const { getByText } = render(
+      <KpiChartRenderer
+        chartData={chartData}
+        dataOptions={dataOptionsPlain}
+        designOptions={translateKpiStyleOptionsToDesignOptions(
+          { title: { textStyle: { textTransform: 'none', fontWeight: '400' } } },
+          dataOptionsPlain,
+        )}
+      />,
+    );
+    expect(getByText('Total Revenue')).toHaveStyle({
+      'text-transform': 'none',
+      'font-weight': '400',
+      'letter-spacing': 'normal',
+    });
+  });
+
   it('defaults the value color to the first theme palette color (indicator parity)', () => {
     const chartData: KpiChartData = {
       type: 'kpi',
@@ -697,7 +721,7 @@ describe('KpiChartRenderer', () => {
       expect(getByText('▲')).toBeTruthy();
       expect(getByText('+20.00%')).toBeTruthy();
       expect(translateMock).toHaveBeenCalledWith('kpi.comparison.vsPriorMonth');
-      expect(getByText('kpi.comparison.vsPriorMonth')).toBeTruthy();
+      expect(getByText('kpi.comparison.vsPriorMonth (100)')).toBeTruthy();
     });
 
     it("formats a delta readout with the comparison measure's own numberFormatConfig", () => {
@@ -882,12 +906,14 @@ describe('KpiChartRenderer', () => {
       // Default display is 'percent': ONLY the percent-of-goal line (user-approved mapping --
       // this consciously changed the default target appearance from two lines to one). The
       // literal rendered text must carry the percent sign -- the en template is
-      // '{{percent}} of goal', so the sign must be baked into the interpolated value.
-      expect(getByText('82% of goal')).toBeTruthy();
+      // '{{percent}} of goal ({{goalValue}})', so the sign must be baked into the interpolated
+      // value, and the goal value is formatted with the comparison's number format.
+      expect(getByText('82% of goal ($1M)')).toBeTruthy();
       expect(queryByText('$250K to go')).toBeNull();
       expect(translateMock).toHaveBeenCalledWith('kpi.target.ofGoal', {
         percent: '82%',
         goal: 'Total Cost',
+        goalValue: '$1M',
       });
 
       rerender(
@@ -901,7 +927,7 @@ describe('KpiChartRenderer', () => {
         />,
       );
       // 'value': ONLY the amount-to-go line, promoted to the primary readout.
-      expect(queryByText('82% of goal')).toBeNull();
+      expect(queryByText('82% of goal ($1M)')).toBeNull();
       expect(getByText('$250K to go')).toBeTruthy();
       expect(translateMock).toHaveBeenCalledWith('kpi.target.toGo', { value: '$250K' });
 
@@ -916,7 +942,7 @@ describe('KpiChartRenderer', () => {
         />,
       );
       // 'both': percent primary + amount-to-go secondary (the pre-change look).
-      expect(getByText('82% of goal')).toBeTruthy();
+      expect(getByText('82% of goal ($1M)')).toBeTruthy();
       expect(getByText('$250K to go')).toBeTruthy();
     });
 
@@ -953,7 +979,7 @@ describe('KpiChartRenderer', () => {
       );
       expect(getByText('82% of Total Cost target')).toBeTruthy();
       expect(getByText('$250K remaining')).toBeTruthy();
-      expect(queryByText('82% of goal')).toBeNull();
+      expect(queryByText('82% of goal ($1M)')).toBeNull();
       expect(queryByText('$250K to go')).toBeNull();
       // The aria summary voices the same overridden strings the card shows.
       expect(getByRole('figure')).toHaveAttribute(
@@ -983,10 +1009,11 @@ describe('KpiChartRenderer', () => {
           designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsPlain)}
         />,
       );
-      expect(getByText('83.33% of goal')).toBeTruthy();
+      expect(getByText('83.33% of goal (120)')).toBeTruthy();
       expect(translateMock).toHaveBeenCalledWith('kpi.target.ofGoal', {
         percent: '83.33%',
         goal: 'Goal',
+        goalValue: '120',
       });
     });
 
@@ -1606,7 +1633,7 @@ describe('KpiChartRenderer', () => {
       );
       expect(getByRole('figure')).toHaveAttribute(
         'aria-label',
-        'Total Revenue, 90, -10.00% kpi.comparison.vsPriorMonth',
+        'Total Revenue, 90, -10.00% kpi.comparison.vsPriorMonth (100)',
       );
       expect(getByText('▼')).toHaveAttribute('aria-hidden', 'true');
       expect(getByText('Mock Sparkline').closest('[data-kpi-area="sparkline"]')).toHaveAttribute(

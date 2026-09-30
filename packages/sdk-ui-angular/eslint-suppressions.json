@@ -1,0 +1,1113 @@
+{
+  "src/ai/lib/component-wrapper-helpers/context-connectors.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/ai/lib/components/chatbot.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/check-alignment": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 3
+    }
+  },
+  "src/ai/lib/components/get-nlg-insights.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/check-alignment": {
+      "count": 1
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 9
+    },
+    "tsdoc/syntax": {
+      "count": 5
+    }
+  },
+  "src/ai/lib/sdk-ai.module.ts": {
+    "jsdoc/no-undefined-types": {
+      "count": 2
+    }
+  },
+  "src/ai/lib/services/ai.service.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 4
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 5
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/ai/public-api.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/lib/component-wrapper-helpers/context-connectors.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    }
+  },
+  "src/lib/component-wrapper-helpers/context-connectors.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 4
+    },
+    "jsdoc/require-returns": {
+      "count": 4
+    }
+  },
+  "src/lib/components/charts/area-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/area-range-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/areamap-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 7
+    }
+  },
+  "src/lib/components/charts/bar-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/boxplot-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/calendar-heatmap-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 11
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/chart.component.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 3
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 5
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 14
+    },
+    "tsdoc/syntax": {
+      "count": 11
+    }
+  },
+  "src/lib/components/charts/column-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/funnel-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/indicator-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 7
+    }
+  },
+  "src/lib/components/charts/kpi-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 9
+    },
+    "tsdoc/syntax": {
+      "count": 9
+    }
+  },
+  "src/lib/components/charts/line-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/pie-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/pivot-table.component.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 7
+    }
+  },
+  "src/lib/components/charts/polar-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/sankey-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/scatter-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/scattermap-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 7
+    }
+  },
+  "src/lib/components/charts/streamgraph-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/sunburst-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/charts/table.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 5
+    },
+    "tsdoc/syntax": {
+      "count": 5
+    }
+  },
+  "src/lib/components/charts/treemap-chart.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 10
+    }
+  },
+  "src/lib/components/context-menu.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 3
+    }
+  },
+  "src/lib/components/dashboard/dashboard-by-id.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 5
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 9
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 6
+    }
+  },
+  "src/lib/components/dashboard/dashboard-header-config.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/lib/components/dashboard/dashboard-model.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/lib/components/dashboard/dashboard.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 6
+    },
+    "jsdoc/no-multi-asterisks": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 16
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 13
+    }
+  },
+  "src/lib/components/drilldown-breadcrumbs.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 8
+    },
+    "tsdoc/syntax": {
+      "count": 4
+    }
+  },
+  "src/lib/components/filters/criteria-filter-tile.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 6
+    }
+  },
+  "src/lib/components/filters/date-range-filter-tile.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/check-alignment": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 12
+    },
+    "tsdoc/syntax": {
+      "count": 8
+    }
+  },
+  "src/lib/components/filters/filter-tile.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 11
+    },
+    "tsdoc/syntax": {
+      "count": 3
+    }
+  },
+  "src/lib/components/filters/filters-panel.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 11
+    },
+    "tsdoc/syntax": {
+      "count": 4
+    }
+  },
+  "src/lib/components/filters/member-filter-tile.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 6
+    }
+  },
+  "src/lib/components/filters/relative-date-filter-tile.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 6
+    }
+  },
+  "src/lib/components/widgets/chart-widget.component.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 3
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 5
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 18
+    },
+    "tsdoc/syntax": {
+      "count": 18
+    }
+  },
+  "src/lib/components/widgets/drilldown-widget.component.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 8
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 3
+    }
+  },
+  "src/lib/components/widgets/pivot-table-widget.component.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/check-alignment": {
+      "count": 1
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 13
+    },
+    "tsdoc/syntax": {
+      "count": 13
+    }
+  },
+  "src/lib/components/widgets/widget-by-id.component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 13
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 13
+    }
+  },
+  "src/lib/components/widgets/widget-config.ts": {
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 5
+    },
+    "tsdoc/syntax": {
+      "count": 5
+    }
+  },
+  "src/lib/components/widgets/widget-model.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/lib/components/widgets/widget.component.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 8
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 26
+    },
+    "tsdoc/syntax": {
+      "count": 22
+    }
+  },
+  "src/lib/decorators/decorators.module.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/lib/decorators/trackable.decorator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 3
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/lib/helpers/chart-props-preact-translator.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  },
+  "src/lib/helpers/dashboard-props-preact-translator.test.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    }
+  },
+  "src/lib/helpers/dashboard-props-preact-translator.ts": {
+    "jsdoc/require-param": {
+      "count": 20
+    },
+    "jsdoc/require-returns": {
+      "count": 10
+    },
+    "tsdoc/syntax": {
+      "count": 5
+    }
+  },
+  "src/lib/helpers/widget-props-preact-translator.test.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 8
+    }
+  },
+  "src/lib/helpers/widget-props-preact-translator.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 5
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 6
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 5
+    }
+  },
+  "src/lib/sdk-ui.module.ts": {
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    }
+  },
+  "src/lib/services/angular-component-adapter.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    }
+  },
+  "src/lib/services/angular-component-adapter.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/lib/services/component-translator.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 3
+    },
+    "jsdoc/require-param": {
+      "count": 6
+    },
+    "jsdoc/require-returns": {
+      "count": 3
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/lib/services/custom-widgets.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 14
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 9
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    }
+  },
+  "src/lib/services/custom-widgets.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/lib/services/dashboard.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/lib/services/dashboard.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    },
+    "jsdoc/check-alignment": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 4
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/lib/services/data-source.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/lib/services/data-source.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/lib/services/dynamic-renderer.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    }
+  },
+  "src/lib/services/dynamic-renderer.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 4
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 4
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/lib/services/filter.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/lib/services/filter.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/lib/services/formula.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/lib/services/formula.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/lib/services/hierarchy.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/lib/services/hierarchy.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/lib/services/preact-backed-component.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/lib/services/preact-backed-component.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    }
+  },
+  "src/lib/services/query.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/lib/services/query.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 5
+    },
+    "jsdoc/require-returns": {
+      "count": 3
+    }
+  },
+  "src/lib/services/sisense-context.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    }
+  },
+  "src/lib/services/sisense-context.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 9
+    },
+    "tsdoc/syntax": {
+      "count": 5
+    }
+  },
+  "src/lib/services/theme.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 13
+    }
+  },
+  "src/lib/services/theme.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    }
+  },
+  "src/lib/services/widget.service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 9
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    }
+  },
+  "src/lib/services/widget.service.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "jsdoc/no-multi-asterisks": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 6
+    },
+    "tsdoc/syntax": {
+      "count": 6
+    }
+  },
+  "src/lib/types/chart-event-props.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 27
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 6
+    },
+    "tsdoc/syntax": {
+      "count": 27
+    }
+  },
+  "src/lib/types/custom-widget-component-props.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 6
+    }
+  },
+  "src/lib/types/data-point.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 30
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 18
+    }
+  },
+  "src/lib/types/filter-event-props.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 6
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "src/lib/types/utility-types.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 6
+    }
+  },
+  "src/lib/types/widget-event-props.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/lib/utilities/dashboard-helpers.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 6
+    },
+    "tsdoc/syntax": {
+      "count": 6
+    }
+  },
+  "src/lib/utilities/dashboard-model-translator.ts": {
+    "jsdoc/check-alignment": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/lib/utilities/index.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "tsdoc/syntax": {
+      "count": 3
+    }
+  },
+  "src/lib/utilities/widget-model-translator.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/check-alignment": {
+      "count": 5
+    },
+    "jsdoc/no-multi-asterisks": {
+      "count": 1
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 7
+    },
+    "jsdoc/require-param": {
+      "count": 9
+    },
+    "jsdoc/require-returns": {
+      "count": 9
+    }
+  },
+  "src/public-api.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  }
+}

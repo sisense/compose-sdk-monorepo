@@ -970,7 +970,7 @@ export type WidgetStyle = {
 export type FilterWidgetDtoStyle = {
   /**
    * Rendering type of the filter. Canonical values match FilterWidgetFilterType
-   * ('members' | 'dateRange' | 'period' | 'numericRange' | 'condition');
+   * ('members' | 'calendar' | 'range' | 'period' | 'numericRange' | 'condition');
    * legacy DTOs may carry 'list' or a 'filter/<type>' subtype string.
    */
   filterType?: string;

@@ -4,13 +4,19 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { DimensionalAttribute } from '../attributes/attributes.js';
-import { AggregationType, AggregationTypes, Sort } from '../types.js';
+import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes/attributes.js';
+import { createDateDimension, createDimension } from '../dimensions/dimensions.js';
+import { AggregationType, AggregationTypes, DateLevels, Sort } from '../types.js';
+import * as measureFactory from './factory.js';
 import {
   createMeasure,
   DimensionalBaseMeasure,
   DimensionalCalculatedMeasure,
   DimensionalMeasureTemplate,
+  getDateMeasureAggregation,
+  getDateMeasureAttribute,
+  hasDateMeasureLevel,
+  isDateMeasure,
   isDimensionalBaseMeasure,
   isDimensionalCalculatedMeasure,
   isDimensionalMeasureTemplate,
@@ -1533,5 +1539,422 @@ describe('measures', () => {
         expect(DimensionalBaseMeasure.aggregationToJAQL(undefined as any)).toBe('sum');
       });
     });
+  });
+});
+
+/* The stamp is the only thing saying a formula answers with a date when the formula is not a bare
+   MIN or MAX, so it has to survive a round trip or the measure comes back as a number. */
+describe('a stamped date measure through serialize and createMeasure', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const roundTrip = (measure: { serialize: () => object }) =>
+    createMeasure(JSON.parse(JSON.stringify(measure.serialize())));
+
+  it('keeps the datatype when the formula cannot re-derive it', () => {
+    // built the way a saved Fusion measure arrives, which is the only way one carries a stamp
+    const stamped = new DimensionalCalculatedMeasure(
+      'Last sale',
+      'MAX([D], [F])',
+      { D: dateDimension.Days },
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      'datetime',
+    );
+
+    expect(isDateMeasure(stamped)).toBe(true);
+    expect(isDateMeasure(roundTrip(stamped))).toBe(true);
+    expect(roundTrip(stamped).jaql().jaql.datatype).toBe('datetime');
+  });
+
+  it('does not invent one for a formula that never carried it', () => {
+    const plain = measureFactory.customFormula('Total', 'SUM([D])', { D: dateDimension.Days });
+
+    expect('datatype' in plain.serialize()).toBe(false);
+    expect(isDateMeasure(roundTrip(plain))).toBe(false);
+  });
+});
+
+describe('date measure predicates', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+
+  describe('isDateMeasure', () => {
+    it.each([
+      ['max', measureFactory.max(dateDimension.Days)],
+      ['min', measureFactory.min(dateDimension.Days)],
+    ])('is true for %s over a datetime attribute', (_aggregation, measure) => {
+      expect(isDateMeasure(measure)).toBe(true);
+    });
+
+    it.each([
+      ['count', measureFactory.count(dateDimension.Days)],
+      ['countDistinct', measureFactory.countDistinct(dateDimension.Days)],
+      ['sum', measureFactory.sum(dateDimension.Days)],
+      ['average', measureFactory.average(dateDimension.Days)],
+      ['avg', measureFactory.avg(dateDimension.Days)],
+      ['median', measureFactory.median(dateDimension.Days)],
+      ['mode', measureFactory.mode(dateDimension.Days)],
+      ['aggregate with sum', measureFactory.aggregate(dateDimension.Days, AggregationTypes.Sum)],
+      ['aggregate with an unknown type', measureFactory.aggregate(dateDimension.Days, 'whatever')],
+    ])('is false for %s over the same datetime attribute', (_aggregation, measure) => {
+      expect(isDateMeasure(measure)).toBe(false);
+    });
+
+    it('is true for aggregate with max, which builds the same measure as max', () => {
+      expect(
+        isDateMeasure(measureFactory.aggregate(dateDimension.Days, AggregationTypes.Max)),
+      ).toBe(true);
+    });
+
+    it('is false for max over a numeric attribute', () => {
+      expect(isDateMeasure(measureFactory.max(revenue))).toBe(false);
+    });
+
+    it('is false for sum over a numeric attribute', () => {
+      expect(isDateMeasure(measureFactory.sum(revenue))).toBe(false);
+    });
+
+    it('is false for a custom formula measure', () => {
+      const measure = measureFactory.customFormula('Total', 'SUM([R])', { R: revenue });
+
+      expect(isDateMeasure(measure)).toBe(false);
+    });
+
+    it('is true for a sub-day granularity, which the mask resolver clamps to days', () => {
+      expect(isDateMeasure(measureFactory.max(dateDimension.Minutes))).toBe(true);
+    });
+
+    it.each([
+      ['max', measureFactory.max(dateDimension)],
+      ['min', measureFactory.min(dateDimension)],
+    ])(
+      'is true for %s over a bare date dimension, which is queried at its default level',
+      (_aggregation, measure) => {
+        expect(isDateMeasure(measure)).toBe(true);
+      },
+    );
+
+    it('is false for max over a bare non-date dimension', () => {
+      const productDimension = createDimension({
+        name: 'Product',
+        Name: new DimensionalAttribute('Name', '[Product.Name]', 'text-attribute'),
+      });
+
+      expect(isDateMeasure(measureFactory.max(productDimension))).toBe(false);
+    });
+
+    it('is false for count over a bare date dimension', () => {
+      expect(isDateMeasure(measureFactory.count(dateDimension))).toBe(false);
+    });
+
+    it('is false for a value that is not a measure', () => {
+      expect(isDateMeasure({ name: 'Years', type: 'datelevel' })).toBe(false);
+    });
+  });
+
+  describe('getDateMeasureAttribute', () => {
+    it('returns the aggregated level attribute of a date measure', () => {
+      expect(getDateMeasureAttribute(measureFactory.max(dateDimension.Days))).toBe(
+        dateDimension.Days,
+      );
+    });
+
+    it('returns the default level attribute for a measure over a bare date dimension', () => {
+      expect(dateDimension.defaultLevel).toBe(DateLevels.Years);
+      expect(getDateMeasureAttribute(measureFactory.max(dateDimension))).toBe(dateDimension.Years);
+    });
+
+    it.each([
+      ['count over a date attribute', measureFactory.count(dateDimension.Days)],
+      ['sum over a numeric attribute', measureFactory.sum(revenue)],
+      [
+        'a custom formula measure',
+        measureFactory.customFormula('Total', 'SUM([R])', { R: revenue }),
+      ],
+    ])('returns undefined for %s', (_case, measure) => {
+      expect(getDateMeasureAttribute(measure)).toBeUndefined();
+    });
+  });
+});
+
+describe('date measure jaql format', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+  const formatOf = (measure: { jaql: () => { format?: unknown } }) => measure.jaql().format;
+
+  it.each([
+    [DateLevels.Years, 'years', 'yyyy'],
+    [DateLevels.Months, 'months', 'yyyy-MM'],
+    [DateLevels.Days, 'days', 'yyyy-MM-dd'],
+  ])('emits a %s mask keyed by the level the jaql carries', (level, key, mask) => {
+    expect(formatOf(measureFactory.max(dateDimension[level]))).toEqual({ mask: { [key]: mask } });
+  });
+
+  it('keeps datatype and level in the jaql beside the mask', () => {
+    const { jaql, format } = measureFactory.max(dateDimension.Years).jaql();
+
+    expect(jaql.datatype).toBe('datetime');
+    expect(jaql.level).toBe('years');
+    expect(format).toEqual({ mask: { years: 'yyyy' } });
+  });
+
+  it('clamps a sub-day level to the days mask (getDefaultDateMeasureFormat)', () => {
+    expect(formatOf(measureFactory.max(dateDimension.Hours))).toEqual({
+      mask: { minutes: 'yyyy-MM-dd' },
+    });
+  });
+
+  it('keeps a format set on a sub-day level rather than clamping it', () => {
+    const hours = dateDimension.Hours.format('MM/dd/yyyy HH:mm');
+
+    expect(formatOf(measureFactory.max(hours))).toEqual({
+      mask: { minutes: 'MM/dd/yyyy HH:mm' },
+    });
+  });
+
+  it('keeps a format set on a day level, the control the clamp must not widen to', () => {
+    const days = dateDimension.Days.format('MM/dd/yyyy');
+
+    expect(formatOf(measureFactory.max(days))).toEqual({ mask: { days: 'MM/dd/yyyy' } });
+  });
+
+  it('keeps an explicit format, emitted as a mask rather than as a number', () => {
+    expect(formatOf(measureFactory.max(dateDimension.Days).format('MM/yyyy'))).toEqual({
+      mask: { days: 'MM/yyyy' },
+    });
+  });
+
+  it('emits no mask for a date PART, whose answer is an ordinal and not a date', () => {
+    const weekOfYear = new DimensionalLevelAttribute(
+      'Week of year',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.WeekOfYear,
+    );
+
+    expect(formatOf(measureFactory.max(weekOfYear))).toBeUndefined();
+  });
+
+  it.each([
+    ['sum', measureFactory.sum(dateDimension.Days)],
+    ['average', measureFactory.average(dateDimension.Days)],
+    ['median', measureFactory.median(dateDimension.Days)],
+    ['count', measureFactory.count(dateDimension.Days)],
+    ['countDistinct', measureFactory.countDistinct(dateDimension.Days)],
+    ['aggregate with sum', measureFactory.aggregate(dateDimension.Days, AggregationTypes.Sum)],
+  ])('emits no mask for %s over a date, which answers a number', (_aggregation, measure) => {
+    expect(formatOf(measure)).toBeUndefined();
+  });
+
+  it('emits a number format, not a mask, when a non-date aggregation over a date is formatted', () => {
+    expect(formatOf(measureFactory.sum(dateDimension.Days).format('0,0'))).toEqual({
+      number: '0,0',
+    });
+  });
+
+  it('keeps a number format for a formula measure', () => {
+    const formula = measureFactory.customFormula('Total', 'SUM([R])', { R: revenue });
+
+    expect(formatOf(formula.format('0,0'))).toEqual({ number: '0,0' });
+  });
+
+  it('leaves a numeric measure untouched, the control', () => {
+    expect(formatOf(measureFactory.sum(revenue))).toBeUndefined();
+    expect(formatOf(measureFactory.sum(revenue).format('0.00'))).toEqual({ number: '0.00' });
+  });
+
+  it('a date dimension still emits its own mask', () => {
+    const { format } = dateDimension.Days.format('yyyy-MM-dd').jaql();
+
+    expect(format).toEqual({ mask: { days: 'yyyy-MM-dd' } });
+  });
+});
+
+describe('date measures written as a formula', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+  // Fusion stamps the datatype at save time; `customFormula` has no parameter for it
+  const stamped = (measure: unknown, datatype: string) =>
+    (measure as DimensionalCalculatedMeasure).withDatatype(datatype);
+
+  it('reads the date operand of a formula Fusion stamped as a datetime', () => {
+    const measure = stamped(
+      measureFactory.customFormula('Last sale', 'MAX([D])', { D: dateDimension.Days }),
+      'datetime',
+    );
+
+    expect(getDateMeasureAttribute(measure)).toBe(dateDimension.Days);
+    expect(isDateMeasure(measure)).toBe(true);
+  });
+
+  it('reads the date operand of a bare MAX formula with no stamped datatype', () => {
+    const measure = measureFactory.customFormula('Max date', 'MAX([D])', { D: dateDimension.Days });
+
+    expect(getDateMeasureAttribute(measure)).toBe(dateDimension.Days);
+  });
+
+  it('passes hasDateMeasureLevel, so the exports mask a formula the same way', () => {
+    const measure = measureFactory.customFormula('Max date', 'MAX([D])', { D: dateDimension.Days });
+
+    expect(hasDateMeasureLevel(measure)).toBe(true);
+  });
+
+  it('resolves a bare date dimension to its default level, as the aggregation shape does', () => {
+    const measure = measureFactory.customFormula('Max date', 'MAX([D])', { D: dateDimension });
+
+    expect(getDateMeasureAttribute(measure)).toBe(
+      dateDimension[dateDimension.defaultLevel as keyof typeof dateDimension],
+    );
+  });
+
+  it.each([
+    ['a numeric formula, which must stay numeric', 'SUM([R])', { R: revenue }],
+    ['a date operand behind arithmetic', 'MAX([D]) + 1', { D: dateDimension.Days }],
+    ['an aggregation that does not keep the datatype', 'SUM([D])', { D: dateDimension.Days }],
+  ])('returns nothing for %s', (_case, formula, context) => {
+    const measure = measureFactory.customFormula('m', formula, context);
+
+    expect(getDateMeasureAttribute(measure)).toBeUndefined();
+    expect(isDateMeasure(measure)).toBe(false);
+  });
+
+  it('returns nothing for a numeric formula Fusion stamped, which must stay numeric', () => {
+    const measure = stamped(
+      measureFactory.customFormula('Customer lifetime', 'SUM([R])', { R: revenue }),
+      'numeric',
+    );
+
+    expect(getDateMeasureAttribute(measure)).toBeUndefined();
+  });
+
+  it('returns nothing when two date operands leave the answer ambiguous', () => {
+    const measure = stamped(
+      measureFactory.customFormula('Span', '[A] - [B]', {
+        A: dateDimension.Days,
+        B: dateDimension.Years,
+      }),
+      'datetime',
+    );
+
+    expect(getDateMeasureAttribute(measure)).toBeUndefined();
+  });
+});
+
+describe('date formula jaql format', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+  const stamped = (measure: unknown, datatype: string) =>
+    (measure as DimensionalCalculatedMeasure).withDatatype(datatype);
+  const maxDate = (level = dateDimension.Days, format?: string) =>
+    stamped(
+      measureFactory.customFormula('Last sale', 'MAX([D])', { D: level }, format),
+      'datetime',
+    ).jaql();
+
+  it('sends a date formula as a datetime, carrying the level of its operand', () => {
+    const { jaql } = maxDate();
+
+    expect(jaql.datatype).toBe('datetime');
+    expect(jaql.level).toBe('days');
+    expect(jaql.formula).toBe('MAX([D])');
+  });
+
+  it('masks the result with the level default when nothing was saved', () => {
+    expect(maxDate().format).toEqual({ mask: { days: 'yyyy-MM-dd' } });
+  });
+
+  it('keeps the mask the widget saved, so the measure and the dimension beside it agree', () => {
+    expect(maxDate(dateDimension.Days, 'shortDate').format).toEqual({
+      mask: { days: 'shortDate' },
+    });
+  });
+
+  it('clamps a sub-day operand to the days mask, as the aggregation shape does', () => {
+    const { jaql, format } = maxDate(dateDimension.Hours);
+
+    expect(jaql.dateTimeLevel).toBe('minutes');
+    expect(format).toEqual({ mask: { minutes: 'yyyy-MM-dd' } });
+  });
+
+  it('leaves a numeric formula on a number format, with no datatype and no level', () => {
+    const { jaql, format } = measureFactory
+      .customFormula('Customer lifetime', 'SUM([R])', { R: revenue }, '0,0')
+      .jaql();
+
+    expect(format).toEqual({ number: '0,0' });
+    expect(jaql.datatype).toBeUndefined();
+    expect(jaql.level).toBeUndefined();
+  });
+
+  it('emits no format at all for an unformatted numeric formula', () => {
+    const { format } = measureFactory.customFormula('Total', 'SUM([R])', { R: revenue }).jaql();
+
+    expect(format).toBeUndefined();
+  });
+
+  it('sends a date PART formula as it was, since its answer is an ordinal', () => {
+    const weekOfYear = new DimensionalLevelAttribute(
+      'Week of year',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.WeekOfYear,
+    );
+    const { jaql, format } = stamped(
+      measureFactory.customFormula('Week', 'MAX([W])', { W: weekOfYear }),
+      'datetime',
+    ).jaql();
+
+    expect(jaql.datatype).toBeUndefined();
+    expect(format).toBeUndefined();
+  });
+});
+
+describe('getDateMeasureAggregation', () => {
+  const dateDimension = createDateDimension({
+    name: 'Date',
+    expression: '[Commerce.Date (Calendar)]',
+  });
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+
+  it.each([
+    ['max', measureFactory.max(dateDimension.Days, 'Max Date')],
+    ['min', measureFactory.min(dateDimension.Days, 'Min Date')],
+  ])('reads %s off an aggregation measure', (expected, measure) => {
+    expect(getDateMeasureAggregation(measure)).toBe(expected);
+  });
+
+  it.each([
+    ['max', 'MAX([D])'],
+    ['min', 'MIN([D])'],
+    ['max', 'max([D])'],
+  ])('reads %s out of the formula %s', (expected, formula) => {
+    const measure = measureFactory.customFormula('m', formula, { D: dateDimension.Days });
+
+    expect(getDateMeasureAggregation(measure)).toBe(expected);
+  });
+
+  it('answers nothing for a measure that is not a date measure', () => {
+    expect(getDateMeasureAggregation(measureFactory.sum(revenue, 'Total'))).toBeUndefined();
+    expect(
+      getDateMeasureAggregation(
+        measureFactory.customFormula('Lifetime', 'SUM([R])', { R: revenue }),
+      ),
+    ).toBeUndefined();
   });
 });

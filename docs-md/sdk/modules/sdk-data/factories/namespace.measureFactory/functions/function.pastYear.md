@@ -11,6 +11,8 @@ Creates a calculated measure that calculates the value for the same day, week, m
 The time resolution is determined by the minimum date level of the date dimension in the query
 that uses the returned measure.
 
+Note: Both numeric and date measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

@@ -11,6 +11,8 @@ title: mode
 
 Calculates the mode (most frequent value) of the given attribute.
 
+Note: Only numeric attributes are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

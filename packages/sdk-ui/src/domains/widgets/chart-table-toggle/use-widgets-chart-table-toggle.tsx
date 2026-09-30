@@ -3,10 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { withHeaderItemsInConfig } from '@/domains/widgets/helpers/header-items-utils';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types';
 
-import {
-  type ChartTableToggleLabels,
-  DEFAULT_CHART_TABLE_TOGGLE_LABELS,
-} from './chart-table-toggle-button';
+import { type ChartTableToggleLabels } from './chart-table-toggle-button';
 import { createChartTableToggleItem } from './chart-table-toggle-header-item';
 import {
   applyChartTableOverride,
@@ -89,7 +86,7 @@ function withWidgetChartTableToggle<T extends ChartTableToggleWidget>(
   widget: T,
   isTableView: boolean,
   onTableViewChange: (pressed: boolean) => void,
-  labels: ChartTableToggleLabels,
+  labels: ChartTableToggleLabels | undefined,
   disabled: boolean,
   disabledTitle?: string,
 ): T {
@@ -143,13 +140,7 @@ export function useWidgetsChartTableToggle<T extends ChartTableToggleWidget>(
   widgets: readonly T[] | undefined,
   options: UseWidgetsChartTableToggleOptions<T> = {},
 ): T[] {
-  const labels = useMemo(
-    () => ({
-      ...DEFAULT_CHART_TABLE_TOGGLE_LABELS,
-      ...options.labels,
-    }),
-    [options.labels],
-  );
+  const labels = options.labels;
   const isWidgetDisabled = options.isWidgetDisabled;
   const resetKey = toResetIdentity(options.resetKey);
   const [resetSnapshot, setResetSnapshot] = useState(resetKey);

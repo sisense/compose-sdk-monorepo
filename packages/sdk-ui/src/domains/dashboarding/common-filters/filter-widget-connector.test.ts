@@ -264,6 +264,71 @@ describe('connectFilterWidgetToProps — write path (onChange)', () => {
     expect(setFilters).not.toHaveBeenCalled();
   });
 
+  it('does not clear a Condition filter that List only adopted by attribute match', () => {
+    const conditionFilter = filterFactory.dateRelativeTo(DM.Commerce.Date.Weeks, 0, 1);
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+
+    // List at Weeks with no link — must not treat Condition's "This Week" as its own to clear.
+    const { filter, onChange } = connectFilterWidgetToProps({
+      filters: [conditionFilter],
+      setFilters,
+      link: undefined,
+      setLink,
+    })({ attribute: DM.Commerce.Date.Weeks, filterType: 'members' });
+
+    expect(filter).toBeNull();
+    onChange(null);
+
+    expect(setFilters).not.toHaveBeenCalled();
+    expect(setLink).not.toHaveBeenCalled();
+  });
+
+  // The link is runtime state only: after a reload the widget finds its own filter by
+  // attribute match, and Clear must still reset it.
+  it('resets the Range filter it shows on onChange(null) when no link is set (after reload)', () => {
+    const rangeFilter = filterFactory.dateRange(DM.Commerce.Date.Days, undefined, '2010-12-31');
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+    const { filter, onChange } = connectFilterWidgetToProps({
+      filters: [rangeFilter],
+      setFilters,
+      link: undefined,
+      setLink,
+    })({ attribute: DM.Commerce.Date.Days, filterType: 'range' });
+
+    expect(filter).toBe(rangeFilter);
+    onChange(null);
+
+    expect(setLink).toHaveBeenCalledWith({ filterId: rangeFilter.config.guid });
+    const updatedFilters = setFilters.mock.calls[0][0] as Filter[];
+    expect(updatedFilters).toHaveLength(1);
+    expect(updatedFilters[0].config.guid).toBe(rangeFilter.config.guid);
+    expect(isMembersFilter(updatedFilters[0])).toBe(true);
+    if (!isMembersFilter(updatedFilters[0])) return;
+    expect(updatedFilters[0].members).toEqual([]);
+  });
+
+  it('resets the members filter it shows on onChange(null) when no link is set (after reload)', () => {
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+    const { onChange } = connectFilterWidgetToProps({
+      filters: [memberFilter],
+      setFilters,
+      link: undefined,
+      setLink,
+    })({ attribute: attr, filterType: 'members' });
+
+    onChange(null);
+
+    expect(setLink).toHaveBeenCalledWith({ filterId: memberFilter.config.guid });
+    const updatedFilters = setFilters.mock.calls[0][0] as Filter[];
+    expect(updatedFilters[0].config.guid).toBe(memberFilter.config.guid);
+    expect(isMembersFilter(updatedFilters[0])).toBe(true);
+    if (!isMembersFilter(updatedFilters[0])) return;
+    expect(updatedFilters[0].members).toEqual([]);
+  });
+
   it('re-adds filter under stable guid if linked filter was removed externally', () => {
     const linkedGuid = memberFilter.config.guid;
     const setFilters = vi.fn();
@@ -440,5 +505,154 @@ describe('connectFilterWidgetToProps — the widget owns one filter per dimensio
 
     const updatedFilters = setFilters.mock.calls[0][0] as Filter[];
     expect(updatedFilters).toEqual([otherWidgetsFilter, selected]);
+  });
+
+  /* List and Condition on the same date level must not share a guid: adopting a
+     RelativeDateFilter under a MembersFilter publish replaced the Condition JAQL and
+     left the Condition widget empty while the panel tile drifted. */
+  it('does not adopt a Condition relative filter when List publishes members', () => {
+    const conditionFilter = filterFactory.dateRelativeTo(DM.Commerce.Date.Years, 1, 3);
+    const listSelection = filterFactory.members(DM.Commerce.Date.Years, ['2009-01-01T00:00:00']);
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+
+    const { onChange } = connectFilterWidgetToProps({
+      filters: [conditionFilter],
+      setFilters,
+      link: undefined,
+      setLink,
+    })({ attribute: DM.Commerce.Date.Years, filterType: 'members' });
+
+    onChange(listSelection);
+
+    expect(setLink).toHaveBeenCalledWith({ filterId: listSelection.config.guid });
+    const updatedFilters = setFilters.mock.calls[0][0] as Filter[];
+    expect(updatedFilters).toEqual([conditionFilter, listSelection]);
+  });
+
+  it('lets Condition read-adopt a relative filter at its level', () => {
+    const conditionFilter = filterFactory.dateRelativeTo(DM.Commerce.Date.Weeks, 0, 1);
+    const { filter } = resolveFilterWidgetFilter(
+      [conditionFilter],
+      DM.Commerce.Date.Weeks,
+      undefined,
+      { filterType: 'condition' },
+    );
+    expect(filter).toBe(conditionFilter);
+  });
+
+  it('does not let List read-adopt a Condition relative filter at its level', () => {
+    const conditionFilter = filterFactory.dateRelativeTo(DM.Commerce.Date.Weeks, 0, 1);
+    const { filter } = resolveFilterWidgetFilter(
+      [conditionFilter],
+      DM.Commerce.Date.Weeks,
+      undefined,
+      { filterType: 'members' },
+    );
+    expect(filter).toBeNull();
+  });
+
+  /* Range's own gatekeeper branch. Without it, `isReadableAdoption` fell through to
+     the default `isMembersFilter(candidate)` case for `filterType: 'range'`, so a genuine
+     DateRangeFilter — non-members, same as Condition's relative filter — was never
+     considered readable and Range came back Set filter over its own committed selection. */
+  it('lets Range read-adopt a DateRangeFilter at its level', () => {
+    const rangeFilter = filterFactory.dateRange(DM.Commerce.Date.Weeks, '2026-01-14', undefined);
+    const { filter } = resolveFilterWidgetFilter([rangeFilter], DM.Commerce.Date.Weeks, undefined, {
+      filterType: 'range',
+    });
+    expect(filter).toBe(rangeFilter);
+  });
+
+  it('does not let List read-adopt a Range filter at its level', () => {
+    const rangeFilter = filterFactory.dateRange(DM.Commerce.Date.Weeks, '2026-01-14', undefined);
+    const { filter } = resolveFilterWidgetFilter([rangeFilter], DM.Commerce.Date.Weeks, undefined, {
+      filterType: 'members',
+    });
+    expect(filter).toBeNull();
+  });
+
+  /* Range is narrower than Condition's own catch-all "any non-members" — a relative
+     Condition filter is not a shape Range can display, so it must stay unreadable to Range
+     even though both are non-members. */
+  it('does not let Range read-adopt a Condition relative filter at its level', () => {
+    const conditionFilter = filterFactory.dateRelativeTo(DM.Commerce.Date.Weeks, 0, 1);
+    const { filter } = resolveFilterWidgetFilter(
+      [conditionFilter],
+      DM.Commerce.Date.Weeks,
+      undefined,
+      { filterType: 'range' },
+    );
+    expect(filter).toBeNull();
+  });
+
+  /* `dateBefore`/`dateAfter` also build a real DateRangeFilter (exclusive fromNotEqual/
+     toNotEqual), so `isDateRangeFilter` alone can't tell it apart from Range's own inclusive
+     shape. `.from`/`.to` return the raw stored value regardless of operator — adopting this
+     and republishing it through Range's inclusive `filterFactory.dateRange` would silently
+     change what date the filter excludes. */
+  it('does not let Range read-adopt an exclusive Before anchor at its level', () => {
+    const beforeFilter = filterFactory.dateBefore(DM.Commerce.Date.Weeks, '2026-04-10');
+    const { filter } = resolveFilterWidgetFilter(
+      [beforeFilter],
+      DM.Commerce.Date.Weeks,
+      undefined,
+      { filterType: 'range' },
+    );
+    expect(filter).toBeNull();
+  });
+
+  // dateBefore sets only the exclusive operatorB (toNotEqual); dateAfter sets only the
+  // exclusive operatorA (fromNotEqual) — isInclusiveDateRangeFilter checks both
+  // independently, so covering Before alone leaves the operatorA branch unexercised.
+  it('does not let Range read-adopt an exclusive After anchor at its level', () => {
+    const afterFilter = filterFactory.dateAfter(DM.Commerce.Date.Weeks, '2026-01-14');
+    const { filter } = resolveFilterWidgetFilter([afterFilter], DM.Commerce.Date.Weeks, undefined, {
+      filterType: 'range',
+    });
+    expect(filter).toBeNull();
+  });
+
+  it('lets Condition read-adopt the same exclusive Before anchor at its level', () => {
+    const beforeFilter = filterFactory.dateBefore(DM.Commerce.Date.Weeks, '2026-04-10');
+    const { filter } = resolveFilterWidgetFilter(
+      [beforeFilter],
+      DM.Commerce.Date.Weeks,
+      undefined,
+      { filterType: 'condition' },
+    );
+    expect(filter).toBe(beforeFilter);
+  });
+
+  it('lets Condition read-adopt the same exclusive After anchor at its level', () => {
+    const afterFilter = filterFactory.dateAfter(DM.Commerce.Date.Weeks, '2026-01-14');
+    const { filter } = resolveFilterWidgetFilter([afterFilter], DM.Commerce.Date.Weeks, undefined, {
+      filterType: 'condition',
+    });
+    expect(filter).toBe(afterFilter);
+  });
+
+  /* Same guardrail as the List/Condition test above, mirrored for Range: since
+     `isReadableAdoption` now excludes a Condition filter from Range's read-path candidates
+     too, the write path never reaches `canAdoptFilter` for it either — Range's first Apply
+     lands as its own filter, not a guid steal, so both keep their own tile. */
+  it('does not adopt a Condition relative filter when Range publishes a DateRangeFilter', () => {
+    const conditionFilter = filterFactory.dateRelativeTo(DM.Commerce.Date.Weeks, 0, 1);
+    const rangeSelection = filterFactory.dateRange(DM.Commerce.Date.Weeks, '2026-01-14', undefined);
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+
+    const { onChange } = connectFilterWidgetToProps({
+      filters: [conditionFilter],
+      setFilters,
+      link: undefined,
+      setLink,
+    })({ attribute: DM.Commerce.Date.Weeks, filterType: 'range' });
+
+    onChange(rangeSelection);
+
+    expect(setLink).toHaveBeenCalledWith({ filterId: rangeSelection.config.guid });
+    const updatedFilters = setFilters.mock.calls[0][0] as Filter[];
+    expect(updatedFilters).toEqual([conditionFilter, rangeSelection]);
   });
 });

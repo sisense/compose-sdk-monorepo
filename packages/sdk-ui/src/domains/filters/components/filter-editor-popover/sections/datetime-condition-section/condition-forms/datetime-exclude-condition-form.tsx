@@ -82,17 +82,25 @@ function getDatetimeExcludeConditionFilterData(
 
 type DatetimeConditionSectionFormProps = {
   filter: Filter;
+  selected: boolean;
   multiSelectEnabled: boolean;
   limits?: DatetimeLimits;
   onChange: (filter: Filter | null) => void;
+  /**
+   * Same as `onChange`, but does not select the section.
+   * Used when the filter is rebuilt by something outside this form, such as the multiselect toggle.
+   */
+  onSilentChange: (filter: Filter | null) => void;
 };
 
 /** @internal */
 export const DatetimeExcludeConditionForm = ({
   filter,
+  selected,
   multiSelectEnabled,
   limits,
   onChange,
+  onSilentChange,
 }: DatetimeConditionSectionFormProps) => {
   const { t } = useTranslation();
   const { defaultDataSource, parentFilters } = useFilterEditorContext();
@@ -186,13 +194,28 @@ export const DatetimeExcludeConditionForm = ({
         setSelectedMembers(newSelectedMembers);
       }
 
-      prepareAndChangeFilter({
+      const newFilter = createExcludeConditionFilter(filter, {
         selectedMembers: newSelectedMembers,
         multiSelectEnabled,
         attribute,
       });
+
+      if (selected) {
+        onChange(newFilter);
+      } else {
+        onSilentChange(newFilter);
+      }
     }
-  }, [selectedMembers, multiSelectEnabled, multiSelectChanged, attribute, prepareAndChangeFilter]);
+  }, [
+    filter,
+    selectedMembers,
+    multiSelectEnabled,
+    multiSelectChanged,
+    attribute,
+    selected,
+    onChange,
+    onSilentChange,
+  ]);
 
   const handleMembersChange = useCallback(
     (members: string[] | string) => {

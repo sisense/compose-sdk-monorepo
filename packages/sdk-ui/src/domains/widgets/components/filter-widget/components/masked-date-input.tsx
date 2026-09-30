@@ -11,7 +11,7 @@
  * `DD.MM.YYYY` and a `ja` one `YYYY/MM/DD` with the same machinery.
  * @internal
  */
-import { forwardRef, useLayoutEffect, useRef } from 'react';
+import { forwardRef, useLayoutEffect, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -39,6 +39,7 @@ export type MaskedDateInputProps = {
   onChange?: (text: string) => void;
   /** Enter — the field commits on it, above this input. */
   onEnter?: () => void;
+  onBlur?: () => void;
   /** Names the entry for assistive technology when the field carries no visible label. */
   ariaLabel?: string;
   /** The field's shared label, by id. */
@@ -49,6 +50,12 @@ export type MaskedDateInputProps = {
   /** Goes on the input, so the field's `label htmlFor` reaches it. */
   id?: string;
   dataTestId?: string;
+  /**
+   * Idle empty-state word — `From` / `To` — shown in place of the `MM/DD/YYYY` ghost while
+   * the entry is empty and unfocused. On focus the format guide comes back. Omit for the
+   * plain format-only empty state (Calendar's single-date `DateEntry` keeps this).
+   */
+  placeholder?: string;
 };
 
 const Holder = styled.span`
@@ -149,6 +156,7 @@ export const MaskedDateInput = forwardRef<HTMLInputElement, MaskedDateInputProps
       value,
       onChange,
       onEnter,
+      onBlur,
       ariaLabel,
       labelledBy,
       describedBy,
@@ -156,6 +164,7 @@ export const MaskedDateInput = forwardRef<HTMLInputElement, MaskedDateInputProps
       disabled,
       id,
       dataTestId,
+      placeholder,
     },
     forwardedRef,
   ) {
@@ -165,12 +174,25 @@ export const MaskedDateInput = forwardRef<HTMLInputElement, MaskedDateInputProps
        to be replaced by the first digit typed, and a click cancels it so the date can be
        edited in place. A half-typed date is never armed: tabbing back means "carry on". */
     const freshRef = useRef(false);
+    const [focused, setFocused] = useState(false);
 
     const setRef = (element: HTMLInputElement | null) => {
       innerRef.current = element;
       if (typeof forwardedRef === 'function') forwardedRef(element);
       else if (forwardedRef) forwardedRef.current = element;
     };
+
+    /* A focus lost without a blur event (the focused node re-mounted or hidden, a
+       programmatic move the browser did not report) would strand `focused` true and keep
+       the MM/DD/YYYY guide up instead of the idle word — re-derive it from the document. Its
+       own effect (not folded into the caret placement below) so its `[focused]` dependency
+       stays honest — that effect calls `setFocused`, so exhaustive-deps needs it listed,
+       while the caret effect below deliberately has none. */
+    useLayoutEffect(() => {
+      if (focused && innerRef.current && document.activeElement !== innerRef.current) {
+        setFocused(false);
+      }
+    }, [focused]);
 
     /* Deliberately no dependency array. React re-asserts the controlled template on every
        render, which resets the caret to the end of the input — so the caret has to be put
@@ -206,17 +228,24 @@ export const MaskedDateInput = forwardRef<HTMLInputElement, MaskedDateInputProps
     };
 
     const cells = dateTemplateCells(mask, value);
+    /* The idle word (From/To) shows only while the field is empty AND unfocused; entering
+       it brings the mask guide up so the next digit already has its format. */
+    const showWord = value === '' && placeholder !== undefined && !focused;
 
     return (
       <Holder>
         <Sizer aria-hidden="true">{mask.template}</Sizer>
         <Ghost aria-hidden="true">
-          {cells.map((cell, index) =>
-            cell.filled ? (
-              <CellInk key={index}>{cell.text}</CellInk>
-            ) : (
-              <GhostHint key={index}>{cell.text}</GhostHint>
-            ),
+          {showWord ? (
+            <GhostHint>{placeholder}</GhostHint>
+          ) : (
+            cells.map((cell, index) =>
+              cell.filled ? (
+                <CellInk key={index}>{cell.text}</CellInk>
+              ) : (
+                <GhostHint key={index}>{cell.text}</GhostHint>
+              ),
+            )
           )}
         </Ghost>
         <Input
@@ -227,21 +256,25 @@ export const MaskedDateInput = forwardRef<HTMLInputElement, MaskedDateInputProps
           autoComplete="off"
           disabled={disabled}
           /* The full template, so the caret lines up cell-for-cell with the ghost above
-             it — same string, same font. */
-          value={dateTemplateString(mask, value)}
+             it — same string, same font. Empty + showing the word keeps it blank, so
+             nothing sits under the word. */
+          value={showWord ? '' : dateTemplateString(mask, value)}
           data-testid={dataTestId}
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}
           aria-describedby={describedBy}
           aria-invalid={invalid || undefined}
           onFocus={(event) => {
+            setFocused(true);
             freshRef.current = parseDateInput(mask, value) !== null;
             const caret = firstEmptyCaret(mask, value);
             caretRef.current = caret;
             event.currentTarget.setSelectionRange(caret, caret);
           }}
           onBlur={() => {
+            setFocused(false);
             freshRef.current = false;
+            onBlur?.();
           }}
           onMouseUp={(event) => {
             freshRef.current = false;

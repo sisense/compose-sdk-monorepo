@@ -1,7 +1,11 @@
 import './translation/initialize-i18n.js';
 
 export * from './interfaces.js';
-export { getJaqlQueryPayload, getPivotJaqlQueryPayload } from './jaql/get-jaql-query-payload.js';
+export {
+  getJaqlQueryPayload,
+  getPivotJaqlQueryPayload,
+  isMeasureSentAsDatetime,
+} from './jaql/get-jaql-query-payload.js';
 export {
   DimensionalQueryClient,
   validatePivotQueryDescription,

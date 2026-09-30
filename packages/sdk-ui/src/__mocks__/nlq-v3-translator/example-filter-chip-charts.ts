@@ -1,4 +1,4 @@
-import { ChartJSON } from '@/modules/analytics-composer/index-node.js';
+import type { ChartJSON } from '@/modules/analytics-composer/index-node.js';
 
 const TOTAL_REVENUE = {
   function: 'measureFactory.sum',
@@ -23,6 +23,95 @@ const members = (attribute: string, values: string[]) => ({
 });
 
 export const FILTER_CHIP_ELLIPSIS_CASE = 'Chip: Members & text (ellipsis)';
+
+/** Chart preset whose translated filters are one FilterRelations tree, shown as a pink custom pill. */
+export const CUSTOM_PILL_FILTER_RELATIONS_CASE = 'Chip: Custom pill (pink FilterRelations)';
+
+type FilterCall = NonNullable<ChartJSON['filters']>[number];
+
+const logic = (operator: 'and' | 'or', left: FilterCall, right: FilterCall): FilterCall => ({
+  function: `filterFactory.logic.${operator}`,
+  args: [left, right],
+});
+
+/**
+ * Nested AND/OR tree:
+ * (US OR Male OR Female)
+ * AND ((age band AND revenue > 0 AND quantity 1–100) OR (Sony AND not Accessories AND (New OR Used/Refurbished)))
+ * AND ((cost >= 10 OR quantity < 50 OR (brand starts with S AND doesn't end with sung AND like %sony%))
+ *      OR (category contains Phone OR (category contains Camera AND revenue <= 5000)))
+ */
+const COMPLEX_FILTER_RELATIONS: FilterCall = logic(
+  'and',
+  logic(
+    'and',
+    logic(
+      'or',
+      logic(
+        'or',
+        members('DM.Country.Country', ['United States']),
+        members('DM.Commerce.Gender', ['Male']),
+      ),
+      members('DM.Commerce.Gender', ['Female']),
+    ),
+    logic(
+      'or',
+      logic(
+        'and',
+        logic('and', members('DM.Commerce.Age Range', ['25-34', '35-44', '45-54']), {
+          function: 'filterFactory.greaterThan',
+          args: ['DM.Commerce.Revenue', 0],
+        }),
+        { function: 'filterFactory.between', args: ['DM.Commerce.Quantity', 1, 100] },
+      ),
+      logic(
+        'and',
+        logic(
+          'and',
+          { function: 'filterFactory.contains', args: ['DM.Brand.Brand', 'Sony'] },
+          {
+            function: 'filterFactory.doesntContain',
+            args: ['DM.Category.Category', 'Accessories'],
+          },
+        ),
+        logic(
+          'or',
+          { function: 'filterFactory.equals', args: ['DM.Commerce.Condition', 'New'] },
+          members('DM.Commerce.Condition', ['Used', 'Refurbished']),
+        ),
+      ),
+    ),
+  ),
+  logic(
+    'or',
+    logic(
+      'or',
+      logic(
+        'or',
+        { function: 'filterFactory.greaterThanOrEqual', args: ['DM.Commerce.Cost', 10] },
+        { function: 'filterFactory.lessThan', args: ['DM.Commerce.Quantity', 50] },
+      ),
+      logic(
+        'and',
+        logic(
+          'and',
+          { function: 'filterFactory.startsWith', args: ['DM.Brand.Brand', 'S'] },
+          { function: 'filterFactory.doesntEndWith', args: ['DM.Brand.Brand', 'sung'] },
+        ),
+        { function: 'filterFactory.like', args: ['DM.Brand.Brand', '%sony%'] },
+      ),
+    ),
+    logic(
+      'or',
+      { function: 'filterFactory.contains', args: ['DM.Category.Category', 'Phone'] },
+      logic(
+        'and',
+        { function: 'filterFactory.contains', args: ['DM.Category.Category', 'Camera'] },
+        { function: 'filterFactory.lessThanOrEqual', args: ['DM.Commerce.Revenue', 5000] },
+      ),
+    ),
+  ),
+);
 
 /**
  * Sample ECommerce chart presets for filter-chip grammar in the NLQ demo.
@@ -113,5 +202,8 @@ export const FILTER_CHIP_CHART_CASES: Record<string, ChartJSON> = {
       function: 'filterFactory.cascading',
       args: [[members('DM.Brand.Brand', ['Sony']), members('DM.Category.Category', ['Phones'])]],
     },
+  ]),
+  [CUSTOM_PILL_FILTER_RELATIONS_CASE]: chipChart('DM.Commerce.Age Range', [
+    COMPLEX_FILTER_RELATIONS,
   ]),
 };

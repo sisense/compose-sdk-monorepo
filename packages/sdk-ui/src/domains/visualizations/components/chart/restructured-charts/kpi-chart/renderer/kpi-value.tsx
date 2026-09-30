@@ -1,8 +1,10 @@
 import { RefObject, useRef } from 'react';
 
+import { KpiTextStyleInternal } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
 import { useThemeContext } from '@/infra/contexts/theme-provider/index.js';
 import type { KpiIconCondition, KpiTextSize } from '@/types.js';
 
+import { applyTextTransform } from './helpers.js';
 import { ValueArea, ValueText } from './kpi-card-styles.js';
 import { KpiConditionalIcon, toIconAffix } from './kpi-conditional-icon.js';
 import type { AutoFitAffix } from './use-auto-fit-font-size.js';
@@ -37,6 +39,8 @@ export type KpiValueProps = {
   color?: string;
   /** `'auto'` for auto-fit sizing, or a fixed font size in px. */
   textSize: KpiTextSize;
+  /** Resolved typography of the headline value (`designOptions.value.textStyle`). */
+  textStyle: KpiTextStyleInternal;
   /** First matching conditional icon for the value, if any. */
   icon?: KpiIconCondition;
   onColor: boolean;
@@ -74,6 +78,7 @@ export function KpiValue({
   text,
   color,
   textSize,
+  textStyle,
   icon,
   onColor,
   scale,
@@ -84,12 +89,20 @@ export function KpiValue({
   const internalRef = useRef<HTMLDivElement>(null);
   const containerRef = areaRef ?? internalRef;
 
-  const affixes: AutoFitAffix[] | undefined = icon ? [toIconAffix(icon.icon)] : undefined;
+  const affixes: AutoFitAffix[] | undefined = icon
+    ? [toIconAffix(icon.icon, undefined, textStyle.textTransform)]
+    : undefined;
 
   const autoFitFontSizePx = useAutoFitFontSize({
     containerRef,
-    text,
-    font: { family: themeSettings.typography.fontFamily, weight: 700 },
+    // Measure what the browser paints: CSS applies `text-transform` after layout text is chosen,
+    // so an uppercased string must be measured uppercased or the fit under-budgets its width.
+    text: applyTextTransform(text, textStyle.textTransform),
+    font: {
+      family: textStyle.fontFamily ?? themeSettings.typography.fontFamily,
+      weight: textStyle.fontWeight,
+      style: textStyle.fontStyle,
+    },
     minPx: AUTO_FIT_MIN_PX,
     maxPx: AUTO_FIT_MAX_PX,
     maxHeightPxOverride: maxHeightPx,
@@ -108,7 +121,13 @@ export function KpiValue({
 
   return (
     <ValueArea ref={containerRef} data-kpi-area="value">
-      <ValueText theme={themeSettings} $onColor={onColor} $color={color} style={{ fontSize }}>
+      <ValueText
+        theme={themeSettings}
+        $onColor={onColor}
+        $color={color}
+        $textStyle={textStyle}
+        style={{ fontSize }}
+      >
         {icon && <KpiConditionalIcon icon={icon.icon} color={color} />}
         {text}
       </ValueText>

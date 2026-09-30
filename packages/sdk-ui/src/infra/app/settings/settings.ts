@@ -188,6 +188,8 @@ type ServerSettings = {
      * @internal
      */
     permissions: RoleManifest;
+    /** From `api/globals` `user._id` — used to distinguish owned resources from shared ones. */
+    id?: string;
     /** From `api/globals` `user.firstName` — for embedded UIs (e.g. assistant greeting). */
     firstName?: string;
     /** From `api/globals` `user.lastName`. */
@@ -388,6 +390,7 @@ async function loadServerSettings(
       permissions: {
         dashboards: globals?.user?.userAuth?.dashboards,
       },
+      id: globals.user?._id,
       firstName: globals.user?.firstName,
       lastName: globals.user?.lastName,
       email: globals.user?.email,

@@ -34,21 +34,30 @@ describe('withExcludedDateLevels', () => {
   it('excludes granularities claimed by other date-level filters on the same dimension', () => {
     const yearsFilter = filterFactory.members(DM.Commerce.Date.Years, []);
     const monthsFilter = filterFactory.members(DM.Commerce.Date.Months, []);
-    // No linked `widget.filter`, so the own granularity falls back to `widget.attribute`.
+    // No linked `widget.filter` — both active levels are someone else's, including Years
+    // even though it matches the widget attribute (a new List must not sit on Condition's grain).
     const widget = filterWidget(DM.Commerce.Date.Years);
 
     const result = withExcludedDateLevels([yearsFilter, monthsFilter])(widget);
 
     expect(result).not.toBe(widget);
-    // Years is the widget's own level (retained); only Months is hidden.
+    expect(result).toMatchObject({ excludedDateLevels: ['Years', 'Months'] });
+  });
+
+  it('does not exclude the granularity of the widget’s own linked filter', () => {
+    const yearsFilter = filterFactory.members(DM.Commerce.Date.Years, []);
+    const monthsFilter = filterFactory.members(DM.Commerce.Date.Months, []);
+    const widget = filterWidget(DM.Commerce.Date.Years, yearsFilter);
+
+    const result = withExcludedDateLevels([yearsFilter, monthsFilter])(widget);
+
     expect(result).toMatchObject({ excludedDateLevels: ['Months'] });
   });
 
-  it('never excludes the granularity the widget itself owns', () => {
+  it('leaves the widget untouched when the only level filter is its own', () => {
     const yearsFilter = filterFactory.members(DM.Commerce.Date.Years, []);
     const widget = filterWidget(DM.Commerce.Date.Years, yearsFilter);
 
-    // The only active level filter is the widget's own — nothing to hide.
     expect(withExcludedDateLevels([yearsFilter])(widget)).toBe(widget);
   });
 

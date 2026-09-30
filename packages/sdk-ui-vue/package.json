@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.36.0",
+  "version": "2.37.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -59,7 +59,8 @@
     "build-only": "vite build --mode development",
     "build-only:prod": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --quiet",
+    "lint": "eslint .",
+    "lint:prune": "eslint . --prune-suppressions",
     "lint:fix": "run lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

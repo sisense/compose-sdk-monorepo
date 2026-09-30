@@ -428,6 +428,23 @@ describe('Chart', () => {
     });
   });
 
+  it('renders a column chart with a date-typed value without throwing', async () => {
+    const { findByTestId } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'column'}
+        dataOptions={{
+          category: [cat2],
+          value: [{ column: { name: 'Years', aggregation: 'max' } }],
+          breakBy: [],
+        }}
+      />,
+    );
+
+    const chart = await findByTestId('chart-root');
+    expect(chart).toBeTruthy();
+  });
+
   it('render Table', async () => {
     const tableDataOptions = {
       columns: [cat1, cat2],

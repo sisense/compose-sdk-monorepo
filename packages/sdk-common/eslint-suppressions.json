@@ -1,0 +1,72 @@
+{
+  "src/i18n/abstract-translatable-error.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/i18n/i18next.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/i18n/i18next.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/i18n/resources/index.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/i18n/resources/uk.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/notifications/notifications-center.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    }
+  },
+  "src/notifications/notifications-state.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 8
+    }
+  },
+  "src/notifications/types.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/utils/escapeSingleQuotes.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/utils/levenshtein.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    }
+  },
+  "src/utils/url.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 4
+    }
+  }
+}

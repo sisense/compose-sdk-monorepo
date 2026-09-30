@@ -548,6 +548,8 @@ export type FormulaJaql = {
   context?: Record<FormulaID, FormulaContext>;
   datasource?: JaqlDataSource;
   description?: string;
+  /** Stamped by Fusion at save time. When present, it says the formula answers with a date. */
+  datatype?: string;
 };
 
 /** @internal */
@@ -766,6 +768,7 @@ export type MetadataItemJaql = {
   column?: string;
   level?: string;
   dateTimeLevel?: string;
+  dateTimePart?: string;
   bucket?: string;
   sort?: string;
   in?: {

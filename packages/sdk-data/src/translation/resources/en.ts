@@ -26,6 +26,7 @@ export const translation = {
       membersFilterNullMember: 'MembersFilter of {{attributeId}} - member cannot be null',
       unsupportedConditionFilter:
         'Jaql for {{attributeName}} contains unsupported condition filter: {{filter}}',
+      invalidDateValue: 'Filter date value is an invalid Date',
       unexpectedFilterRelationsModelNode: 'Unexpected filter relations model node: {{node}}',
     },
     unsupportedDimensionalElement: 'Unsupported dimensional element type',

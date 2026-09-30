@@ -122,7 +122,7 @@ export const withResolvedWidgetDataSource: ContextfulTransformer<
 /**
  * Reads the auto-height flag from a widget.
  *
- * Auto height is supported by pivot tables and by table charts. `ChartWidgetProps` is not
+ * Auto height is supported by pivot tables, dashboard narratives and table charts. `ChartWidgetProps` is not
  * discriminated by `chartType`, so its `styleOptions` is the union of every chart's style options
  * and TypeScript cannot narrow it from the `chartType === 'table'` check; a table chart always
  * carries `TableStyleOptions` at runtime, which is why the narrowing is asserted here.
@@ -131,7 +131,7 @@ export const withResolvedWidgetDataSource: ContextfulTransformer<
  * @returns True when the widget supports auto height and has it enabled.
  */
 const isAutoHeightEnabled = (widgetProps: WidgetProps): boolean => {
-  if (widgetProps.widgetType === 'pivot') {
+  if (widgetProps.widgetType === 'pivot' || widgetProps.widgetType === 'narrative') {
     return !!widgetProps.styleOptions?.isAutoHeight;
   }
   if (widgetProps.widgetType === 'chart' && widgetProps.chartType === 'table') {
@@ -153,7 +153,7 @@ export const withOptionallyDisabledAutoHeight = (
 ): WidgetProps => {
   if (shouldDisable && isAutoHeightEnabled(widgetProps)) {
     // Same narrowing limitation as in `isAutoHeightEnabled`: the spread is structurally valid for
-    // both supported widget types, but the union cannot express that without the assertion.
+    // every supported widget type, but the union cannot express that without the assertion.
     return {
       ...widgetProps,
       styleOptions: { ...widgetProps.styleOptions, isAutoHeight: false },

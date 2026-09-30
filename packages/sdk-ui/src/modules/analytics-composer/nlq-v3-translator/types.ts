@@ -20,6 +20,7 @@ import type {
 } from '@/domains/dashboarding/types.js';
 import {
   CategoryStyle,
+  type KpiValueMode,
   SeriesStyle,
   ValueStyle,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
@@ -356,8 +357,9 @@ export function isStyledMeasureColumnJSON(value: unknown): value is StyledMeasur
  */
 export interface DataOptionsJSON {
   // Cartesian charts (column, line, bar, area, polar)
-  category?: DimensionItemJSON[];
-  /** Array for cartesian/categorical; single for calendar-heatmap */
+  /** Array for most charts; single for KPI. */
+  category?: DimensionItemJSON[] | DimensionItemJSON;
+  /** Array for cartesian/categorical; single for calendar-heatmap, KPI and Sankey. */
   value?: MeasureItemJSON[] | MeasureItemJSON;
   breakBy?: DimensionItemJSON[];
 
@@ -394,7 +396,23 @@ export interface DataOptionsJSON {
   secondary?: MeasureItemJSON[];
   min?: MeasureItemJSON[];
   max?: MeasureItemJSON[];
+
+  // KPI (uses category/value too)
+  valueMode?: KpiValueMode;
+  comparison?: KpiComparisonJSON;
 }
+
+/**
+ * JSON representation of a KPI chart comparison (`KpiComparison`).
+ * Mirrors the CSDK variants; measure baselines are serialized as measure JSON.
+ *
+ * @internal
+ */
+export type KpiComparisonJSON =
+  | { type: 'previous-period' }
+  | { type: 'delta'; value: MeasureItemJSON }
+  | { type: 'target'; target: MeasureItemJSON | number }
+  | { type: 'value'; value: MeasureItemJSON };
 
 /**
  * JSON representation of a chart configuration from NLQ API.

@@ -3,7 +3,10 @@ import { createRef } from 'react';
 
 import { render } from '@testing-library/react';
 
+import { KPI_VALUE_TEXT_STYLE_DEFAULTS } from '../design-options/design-options.js';
 import { KpiValue } from './kpi-value.js';
+
+const VALUE_TEXT_STYLE = KPI_VALUE_TEXT_STYLE_DEFAULTS;
 
 /** Reads `ref.current`, failing loudly (not with a silent `null`) if it isn't populated yet. */
 function requireCurrent(ref: { current: HTMLDivElement | null }): HTMLDivElement {
@@ -16,11 +19,25 @@ function requireCurrent(ref: { current: HTMLDivElement | null }): HTMLDivElement
 describe('KpiValue', () => {
   it('renders a fixed numeric textSize as that many px regardless of scale', () => {
     const { getByText, rerender } = render(
-      <KpiValue text="42" textSize={35.2} onColor={false} scale="headline" />,
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="42"
+        textSize={35.2}
+        onColor={false}
+        scale="headline"
+      />,
     );
     expect(getByText('42')).toHaveStyle({ 'font-size': '35.2px' });
 
-    rerender(<KpiValue text="42" textSize={35.2} onColor={false} scale="compact" />);
+    rerender(
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="42"
+        textSize={35.2}
+        onColor={false}
+        scale="compact"
+      />,
+    );
     expect(getByText('42')).toHaveStyle({ 'font-size': '35.2px' });
   });
 
@@ -28,7 +45,13 @@ describe('KpiValue', () => {
     // Issue 2: in the 'comparison-first' layout the value takes the small/compact role -- it must
     // render a fixed, small size, not participate in auto-fit sizing at all.
     const { getByText } = render(
-      <KpiValue text="14.48M" textSize="auto" onColor={false} scale="compact" />,
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="14.48M"
+        textSize="auto"
+        onColor={false}
+        scale="compact"
+      />,
     );
     expect(getByText('14.48M')).toHaveStyle({ 'font-size': '0.9rem' });
   });
@@ -36,15 +59,35 @@ describe('KpiValue', () => {
   it('skips the auto-fit ResizeObserver entirely when the result is unused (compact scale / fixed textSize)', () => {
     vi.mocked(ResizeObserver).mockClear();
     const { rerender } = render(
-      <KpiValue text="14.48M" textSize="auto" onColor={false} scale="compact" />,
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="14.48M"
+        textSize="auto"
+        onColor={false}
+        scale="compact"
+      />,
     );
-    rerender(<KpiValue text="14.48M" textSize={48} onColor={false} scale="headline" />);
+    rerender(
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="14.48M"
+        textSize={48}
+        onColor={false}
+        scale="headline"
+      />,
+    );
     expect(vi.mocked(ResizeObserver)).not.toHaveBeenCalled();
   });
 
   it('renders an auto-fit (pixel) font size when scale is headline and textSize is auto', () => {
     const { getByText } = render(
-      <KpiValue text="14.48M" textSize="auto" onColor={false} scale="headline" />,
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="14.48M"
+        textSize="auto"
+        onColor={false}
+        scale="headline"
+      />,
     );
     const style = getByText('14.48M').style.fontSize;
     expect(style.endsWith('px')).toBe(true);
@@ -58,7 +101,14 @@ describe('KpiValue', () => {
     // maxHeightPx must lift that clamp, proving it's actually used as the height bound.
     const areaRef = createRef<HTMLDivElement>();
     const { getByText, rerender } = render(
-      <KpiValue text="1" textSize="auto" onColor={false} scale="headline" areaRef={areaRef} />,
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="1"
+        textSize="auto"
+        onColor={false}
+        scale="headline"
+        areaRef={areaRef}
+      />,
     );
     const areaElement = requireCurrent(areaRef);
     Object.defineProperty(areaElement, 'clientWidth', { value: 1000, configurable: true });
@@ -66,12 +116,20 @@ describe('KpiValue', () => {
     // Re-render (changing text) forces a re-fit against the newly mocked clientWidth -- the
     // ResizeObserver mock won't fire on its own in this environment.
     rerender(
-      <KpiValue text="2" textSize="auto" onColor={false} scale="headline" areaRef={areaRef} />,
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="2"
+        textSize="auto"
+        onColor={false}
+        scale="headline"
+        areaRef={areaRef}
+      />,
     );
     expect(getByText('2').style.fontSize).toBe('16px'); // clamped: height bound (0) is 0
 
     rerender(
       <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
         text="3"
         textSize="auto"
         onColor={false}
@@ -87,7 +145,14 @@ describe('KpiValue', () => {
   it('forwards areaRef to ValueArea so the orchestrator can measure it externally', () => {
     const areaRef = createRef<HTMLDivElement>();
     render(
-      <KpiValue text="42" textSize="auto" onColor={false} scale="compact" areaRef={areaRef} />,
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="42"
+        textSize="auto"
+        onColor={false}
+        scale="compact"
+        areaRef={areaRef}
+      />,
     );
     expect(areaRef.current).not.toBeNull();
     expect(areaRef.current).toHaveAttribute('data-kpi-area', 'value');
@@ -96,6 +161,7 @@ describe('KpiValue', () => {
   it('renders a conditional icon alongside the text', () => {
     const { getByText } = render(
       <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
         text="150"
         textSize="auto"
         onColor={false}
@@ -117,6 +183,7 @@ describe('KpiValue', () => {
     // the headline value's own color rather than rendering with `currentColor`/unset.
     const { getByText } = render(
       <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
         text="150"
         textSize="auto"
         onColor={false}
@@ -126,5 +193,45 @@ describe('KpiValue', () => {
       />,
     );
     expect(getByText('✓')).toHaveStyle({ color: '#123456' });
+  });
+
+  it('renders the default value as bold upright text with no transform', () => {
+    const { getByText } = render(
+      <KpiValue
+        textStyle={VALUE_TEXT_STYLE}
+        text="42"
+        textSize={35.2}
+        onColor={false}
+        scale="headline"
+      />,
+    );
+    expect(getByText('42')).toHaveStyle({
+      'font-weight': '700',
+      'font-style': 'normal',
+      'text-transform': 'none',
+    });
+  });
+
+  it('applies an overridden weight, style, family and transform', () => {
+    const { getByText } = render(
+      <KpiValue
+        textStyle={{
+          fontFamily: 'Georgia',
+          fontWeight: '400',
+          fontStyle: 'italic',
+          textTransform: 'uppercase',
+        }}
+        text="No data"
+        textSize={35.2}
+        onColor={false}
+        scale="headline"
+      />,
+    );
+    expect(getByText('No data')).toHaveStyle({
+      'font-family': 'Georgia',
+      'font-weight': '400',
+      'font-style': 'italic',
+      'text-transform': 'uppercase',
+    });
   });
 });

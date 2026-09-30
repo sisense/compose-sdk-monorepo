@@ -8,8 +8,11 @@ export const createHeaderCellHighlightFormatter = (): HeaderCellFormatter => {
   return (cell: PivotTreeNode, jaqlPanelItem: JaqlPanel | undefined, jaql: JaqlRequest) => {
     const isCorner = cell.userType === UserType.CORNER;
     const isSubTotal = cell.userType === UserType.SUB_TOTAL;
+    // a measure header shows the measure title, never a member of the highlighted dimension, so it
+    // is skipped the same way `createHeaderCellValueFormatter` skips it
+    const isMeasureHeader = jaqlPanelItem?.panel === 'measures';
 
-    if (!jaqlPanelItem || isCorner || isSubTotal) {
+    if (!jaqlPanelItem || isCorner || isSubTotal || isMeasureHeader) {
       return;
     }
 

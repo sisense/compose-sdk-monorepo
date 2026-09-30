@@ -1,0 +1,637 @@
+{
+  "src/__test-helpers__/sample-ecommerce.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/analytics/factory.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/attributes/attributes.test.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 4
+    }
+  },
+  "src/dimensional-model/attributes/attributes.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 3
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 13
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 29
+    },
+    "jsdoc/require-param": {
+      "count": 5
+    },
+    "jsdoc/require-returns": {
+      "count": 16
+    }
+  },
+  "src/dimensional-model/attributes/factory.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/attributes/factory.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/check-alignment": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/base.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 15
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 6
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/compose-code-utils.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 17
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 6
+    }
+  },
+  "src/dimensional-model/data-model.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/data-model.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/dimensions/__mocks__/sample-ecommerce-fields.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/dimensions/dimensions.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 6
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 33
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 10
+    }
+  },
+  "src/dimensional-model/dimensions/utils.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/dimensions/utils.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-use-before-define": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/factory.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/factory.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/filters/factory.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/factory.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-use-before-define": {
+      "count": 10
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 53
+    },
+    "tsdoc/syntax": {
+      "count": 4
+    }
+  },
+  "src/dimensional-model/filters/filter-config-utils.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/filters/filter-relations.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    }
+  },
+  "src/dimensional-model/filters/filter-relations.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-use-before-define": {
+      "count": 4
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 4
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 31
+    },
+    "jsdoc/require-returns": {
+      "count": 21
+    },
+    "tsdoc/syntax": {
+      "count": 9
+    }
+  },
+  "src/dimensional-model/filters/filters.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/filters.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 8
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 25
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 69
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 5
+    },
+    "jsdoc/require-returns": {
+      "count": 47
+    }
+  },
+  "src/dimensional-model/filters/formula-filter-helpers.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/formula-filter-helpers.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 12
+    },
+    "jsdoc/require-returns": {
+      "count": 8
+    },
+    "security/detect-non-literal-regexp": {
+      "count": 4
+    }
+  },
+  "src/dimensional-model/filters/helpers.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/helpers.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/filters/utils/attribute-measure-util.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 3
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/utils/condition-filter-util.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/utils/date-time-filter-util.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/utils/filter-from-jaql-util.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    }
+  },
+  "src/dimensional-model/filters/utils/filter-from-jaql-util.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 13
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/utils/filter-matcher-utils.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/utils/filter-matcher-utils.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 3
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    },
+    "security/detect-non-literal-regexp": {
+      "count": 6
+    }
+  },
+  "src/dimensional-model/filters/utils/filter-types-util.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/filters/utils/is-include-all-members-filter.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/filters/utils/types.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 29
+    }
+  },
+  "src/dimensional-model/interfaces.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 6
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 8
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 96
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 4
+    }
+  },
+  "src/dimensional-model/jaql-element.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/jaql-element.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 6
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/measures/factory.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/measures/factory.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 15
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 4
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 54
+    },
+    "tsdoc/syntax": {
+      "count": 1
+    }
+  },
+  "src/dimensional-model/measures/measures.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 11
+    }
+  },
+  "src/dimensional-model/measures/measures.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 3
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 8
+    },
+    "@typescript-eslint/no-use-before-define": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 43
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 18
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/parse-compose-code.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 9
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 10
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    },
+    "security/detect-unsafe-regex": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 2
+    }
+  },
+  "src/dimensional-model/simple-column-types.ts": {
+    "jsdoc/require-param-description": {
+      "count": 7
+    },
+    "jsdoc/require-returns": {
+      "count": 7
+    },
+    "tsdoc/syntax": {
+      "count": 7
+    }
+  },
+  "src/dimensional-model/types.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 14
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 37
+    },
+    "jsdoc/require-returns": {
+      "count": 3
+    }
+  },
+  "src/index.ts": {
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "tsdoc/syntax": {
+      "count": 3
+    }
+  },
+  "src/interfaces.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 4
+    },
+    "jsdoc/no-undefined-types": {
+      "count": 6
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 50
+    },
+    "jsdoc/require-param-description": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    },
+    "tsdoc/syntax": {
+      "count": 6
+    }
+  },
+  "src/translation/initialize-i18n.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/translation/resources/index.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/translation/resources/uk.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/translation/translatable-error.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/utils.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    }
+  },
+  "src/utils.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 38
+    },
+    "jsdoc/require-param": {
+      "count": 38
+    },
+    "jsdoc/require-returns": {
+      "count": 10
+    }
+  }
+}

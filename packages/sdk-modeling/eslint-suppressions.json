@@ -1,0 +1,124 @@
+{
+  "src/typescript/utils/compile-ts-code.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/typescript/utils/create-in-memory-duplex-stream.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "src/typescript/utils/create-in-memory-duplex-stream.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/typescript/utils/format-code.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "src/typescript/utils/prepare-description.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/typescript/writer.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    }
+  },
+  "src/typescript/writer.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 4
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 3
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    },
+    "security/detect-non-literal-fs-filename": {
+      "count": 3
+    }
+  },
+  "src/typescript/writers/base.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 6
+    }
+  },
+  "src/typescript/writers/datasource.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "src/typescript/writers/dimensions.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 5
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 5
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "src/typescript/writers/imports.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-inferrable-types": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/typescript/writers/interfaces.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/typescript/writers/measures.ts": {
+    "@typescript-eslint/consistent-type-assertions": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  }
+}

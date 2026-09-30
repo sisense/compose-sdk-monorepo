@@ -44,3 +44,17 @@ Text size of the headline value: `'auto'` to scale it to the card, or a fixed si
 ```ts
 'auto'
 ```
+
+***
+
+### `textStyle`
+
+**textStyle**?: [`KpiTextStyle`](type-alias.KpiTextStyle.md)
+
+Typography of the headline value.
+
+#### Default
+
+```ts
+{ fontWeight: '700', fontStyle: 'normal', textTransform: 'none' } with the theme font
+```

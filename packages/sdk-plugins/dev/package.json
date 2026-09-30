@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.36.0",
+  "version": "2.37.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
@@ -41,7 +41,8 @@
     "clean": "rm -rf dist coverage tsconfig.tsbuildinfo",
     "format": "run -T prettier --write .",
     "format:check": "run -T prettier --check .",
-    "lint": "run -T eslint . --quiet",
+    "lint": "run -T eslint .",
+    "lint:prune": "run -T eslint . --prune-suppressions",
     "lint:fix": "run lint --fix",
     "vitest": "run -T vitest",
     "test": "run vitest run",

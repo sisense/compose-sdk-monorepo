@@ -236,6 +236,10 @@ export const DatetimeConditionSection = ({
     [onChange],
   );
 
+  const handleFilterRecord = useCallback((newFilter: Filter | null) => {
+    setEditedFilter(newFilter);
+  }, []);
+
   const handleRankingCountChange = useCallback(
     (count: number) => {
       setRankingCount(count);
@@ -276,9 +280,11 @@ export const DatetimeConditionSection = ({
       {condition === DatetimeCondition.EXCLUDE && (
         <DatetimeExcludeConditionForm
           filter={filter}
+          selected={selected}
           multiSelectEnabled={multiSelectEnabled}
           limits={limits}
           onChange={handleFilterChange}
+          onSilentChange={handleFilterRecord}
         />
       )}
       {condition === DatetimeCondition.IS_WITHIN && (

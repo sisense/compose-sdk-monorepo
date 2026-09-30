@@ -915,6 +915,11 @@ describe('attributes', () => {
       expect(DimensionalLevelAttribute.translateJaqlToGranularity(json)).toBe(DateLevels.Seconds);
     });
 
+    it('should translate seconds level with no bucket, as Fusion stores it', () => {
+      const json = { dateTimeLevel: 'seconds' };
+      expect(DimensionalLevelAttribute.translateJaqlToGranularity(json)).toBe(DateLevels.Seconds);
+    });
+
     it('should handle unsupported dateTimeLevel bucket', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 

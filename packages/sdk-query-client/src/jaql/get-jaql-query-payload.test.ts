@@ -3,9 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   DataSource,
+  DateLevels,
   DimensionalAttribute,
   DimensionalBaseMeasure,
+  DimensionalLevelAttribute,
   filterFactory,
+  measureFactory,
 } from '@sisense/sdk-data';
 import type { FilterRelationsJaql } from '@sisense/sdk-data';
 
@@ -22,6 +25,12 @@ const dataSource: DataSource = 'Sample ECommerce';
 const ageRangeAttribute = new DimensionalAttribute('AgeRange', '[Commerce.Age Range]', 'attribute');
 const categoryAttribute = new DimensionalAttribute('Category', '[Category.Category]', 'attribute');
 const costAttribute = new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute');
+const dateDaysAttribute = new DimensionalLevelAttribute(
+  'Days',
+  '[Commerce.Date (Calendar)]',
+  DateLevels.Days,
+  'yyyy-MM-dd',
+);
 
 describe('prepareQueryOptions', () => {
   it('should return query options with default values', () => {
@@ -283,6 +292,200 @@ describe('getPivotJaqlQueryPayload', () => {
 
       expect(payload.metadata[0].jaql.agg).toBe('sum');
       expect(payload.metadata[0].panel).toBe('measures');
+    });
+
+    describe('date measures', () => {
+      const maxDate = measureFactory.max(dateDaysAttribute, 'Max Date');
+
+      /** The single measure item the given measures produce. */
+      const measureItem = (measures: PivotQueryDescription['measures']) =>
+        getPivotJaqlQueryPayload(
+          { ...basePivotQueryDescription, rowsAttributes: [], measures },
+          false,
+        ).metadata[0];
+
+      /** The jaql of that item. */
+      const measureJaql = (measures: PivotQueryDescription['measures']) =>
+        measureItem(measures).jaql as Record<string, unknown>;
+
+      const subDayAttribute = (granularity: string) =>
+        new DimensionalLevelAttribute('Time', '[Commerce.Date (Calendar)]', granularity, 'HH:mm');
+
+      const weekOfYearAttribute = new DimensionalLevelAttribute(
+        'Week of year',
+        '[Commerce.Date (Calendar)]',
+        DateLevels.WeekOfYear,
+      );
+
+      it('keeps datetime and the level on a PivotMeasure over a date measure', () => {
+        const jaql = measureJaql([{ measure: maxDate }]);
+
+        expect(jaql.datatype).toBe('datetime');
+        expect(jaql.level).toBe('days');
+      });
+
+      it('keeps datetime and the level on a plain Measure over a date measure', () => {
+        const jaql = measureJaql([maxDate]);
+
+        expect(jaql.datatype).toBe('datetime');
+        expect(jaql.level).toBe('days');
+      });
+
+      it('still sends numeric for a numeric measure', () => {
+        expect(measureJaql([measureFactory.sum(costAttribute, 'Total Cost')]).datatype).toBe(
+          'numeric',
+        );
+      });
+
+      it('still sends numeric for a min over a text attribute', () => {
+        const textAttribute = new DimensionalAttribute(
+          'Category',
+          '[Category.Category]',
+          'text-attribute',
+        );
+
+        expect(measureJaql([measureFactory.min(textAttribute, 'First Category')]).datatype).toBe(
+          'numeric',
+        );
+      });
+
+      it('still sends numeric for a formula measure with no stamped datatype', () => {
+        const formula = measureFactory.customFormula('Total', 'SUM([Cost])', {
+          Cost: costAttribute,
+        });
+
+        expect(measureJaql([formula]).datatype).toBe('numeric');
+      });
+
+      it.each([
+        DateLevels.Hours,
+        DateLevels.Minutes,
+        DateLevels.AggHours,
+        DateLevels.AggMinutesRoundTo1,
+      ])(
+        'keeps datetime on %s, a sub-day level that still answers with a datetime',
+        (granularity) => {
+          // a sub-day min/max comes back as a datetime, so it gets the same datatype as any other
+          // level; sdk-ui formats it as a day
+          const jaql = measureJaql([measureFactory.max(subDayAttribute(granularity), 'Max Time')]);
+
+          expect(jaql.datatype).toBe('datetime');
+        },
+      );
+
+      /* A wrapper names no aggregation of its own, so the subtotal has to come from the operand.
+         Without that the payload carries `subtotalAgg: undefined` on a datetime item and the
+         warning that would report it is gated on the same value being truthy. */
+      it.each([
+        ['pastYear', () => measureFactory.pastYear(maxDate, 'Last year')],
+        ['trend', () => measureFactory.trend(maxDate, 'Trend')],
+        ['measuredValue', () => measureFactory.measuredValue(maxDate, [], 'Filtered')],
+      ])('keeps the subtotal aggregation through %s', (_name, build) => {
+        const jaql = measureJaql([{ measure: build(), totalsCalculation: 'max' }]);
+
+        expect(jaql.subtotalAgg).toBe('max');
+      });
+
+      it('still sends numeric for a date part, which answers with an ordinal and no date', () => {
+        const jaql = measureJaql([measureFactory.max(weekOfYearAttribute, 'Max Week')]);
+
+        expect(jaql.datatype).toBe('numeric');
+        expect(jaql.dateTimePart).toBe('weeks');
+      });
+
+      it('drops the data bars and the range colour a caller asked for on a date measure', () => {
+        const item = measureItem([{ measure: maxDate, dataBars: true, shouldRequestMinMax: true }]);
+
+        expect(item.format?.databars).toBe(false);
+        expect(item.format?.color).toBeUndefined();
+      });
+
+      it('keeps the data bars and the range colour on a granularity that stays numeric', () => {
+        const maxWeek = measureFactory.max(weekOfYearAttribute, 'Max Week');
+        const measures = [
+          { measure: maxWeek, dataBars: true, shouldRequestMinMax: true, totalsCalculation: 'sum' },
+        ] satisfies PivotQueryDescription['measures'];
+
+        expect(measureItem(measures).format?.databars).toBe(true);
+        expect(measureItem(measures).format?.color).toEqual({ type: 'range' });
+        // the caller's totals calculation survives too, because nothing about this item is a date
+        expect(measureJaql(measures).subtotalAgg).toBe('sum');
+      });
+
+      it.each(['sum', 'avg', 'median'] as const)(
+        'overrides a totalsCalculation of %s on a date measure with the measure aggregation',
+        (totalsCalculation) => {
+          expect(measureJaql([{ measure: maxDate, totalsCalculation }]).subtotalAgg).toBe('max');
+        },
+      );
+
+      it("replaces a caller's 'min' totals calculation with the measure aggregation", () => {
+        expect(measureJaql([{ measure: maxDate, totalsCalculation: 'min' }]).subtotalAgg).toBe(
+          'max',
+        );
+      });
+
+      it('keeps a totalsCalculation that already matches the measure aggregation', () => {
+        expect(measureJaql([{ measure: maxDate, totalsCalculation: 'max' }]).subtotalAgg).toBe(
+          'max',
+        );
+      });
+
+      it.each(['sum', 'min'] as const)(
+        'overrides a totalsCalculation of %s on a date measure written as a formula',
+        (totalsCalculation) => {
+          // Fusion saves a date min/max as a formula, so the min or max lives in the expression
+          // and there is no `agg` on the jaql to fall back on
+          const maxDateFormula = measureFactory.customFormula('Max Date', 'MAX([Date])', {
+            Date: dateDaysAttribute,
+          });
+
+          const jaql = measureJaql([{ measure: maxDateFormula, totalsCalculation }]);
+
+          expect(jaql.datatype).toBe('datetime');
+          expect(jaql.subtotalAgg).toBe('max');
+        },
+      );
+
+      it('leaves a numeric measure totalsCalculation untouched', () => {
+        const totalCost = measureFactory.sum(costAttribute, 'Total Cost');
+
+        expect(measureJaql([{ measure: totalCost, totalsCalculation: 'sum' }]).subtotalAgg).toBe(
+          'sum',
+        );
+      });
+
+      it('leaves a numeric measure item unchanged as a whole', () => {
+        const jaql = measureJaql([{ measure: measureFactory.sum(costAttribute, 'Total Cost') }]);
+
+        expect(jaql).toStrictEqual({
+          title: 'Total Cost',
+          dim: '[Commerce.Cost]',
+          datatype: 'numeric',
+          agg: 'sum',
+          subtotalAgg: undefined,
+        });
+      });
+
+      it('leaves a date dimension on rows unchanged', () => {
+        const payload = getPivotJaqlQueryPayload(
+          {
+            ...basePivotQueryDescription,
+            rowsAttributes: [dateDaysAttribute],
+            measures: [],
+          },
+          false,
+        );
+
+        expect(payload.metadata[0].jaql).toStrictEqual({
+          title: 'Days',
+          dim: '[Commerce.Date (Calendar)]',
+          datatype: 'datetime',
+          level: 'days',
+        });
+        // a pivot row item carries no format today, because the builder keeps only the nested jaql
+        expect(payload.metadata[0].format).toBeUndefined();
+      });
     });
   });
 

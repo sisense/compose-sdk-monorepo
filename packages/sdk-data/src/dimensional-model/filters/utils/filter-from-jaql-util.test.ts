@@ -1,17 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 /* eslint-disable vitest/expect-expect */
-import { describe } from 'vitest';
+import { describe, vi } from 'vitest';
 
-import { createCalculatedAttribute } from '../../attributes/attributes.js';
+import {
+  createCalculatedAttribute,
+  DimensionalAttribute,
+  DimensionalLevelAttribute,
+} from '../../attributes/attributes.js';
 import { Filter, LevelAttribute } from '../../interfaces.js';
 import { Sort } from '../../types.js';
 import * as filterFactory from '../factory.js';
 import {
+  createFilter,
   DateRangeFilter,
   ExcludeFilter,
   MembersFilter,
   NumericFilter,
+  RankingFilter,
   TextFilter,
 } from '../filters.js';
 import {
@@ -523,6 +529,74 @@ describe('filter-from-jaql-util', () => {
         expect((filter as DateRangeFilter).to).toBeDefined();
         expect((filter as DateRangeFilter).level).toBeDefined();
       });
+
+      test('should handle exclusive Before (toNotEqual), including the isAdvanced/custom envelope the backend requires', () => {
+        const jaql = {
+          title: 'Years',
+          table: 'Commerce',
+          column: 'Date',
+          dim: '[Commerce.Date (Calendar)]',
+          datatype: 'datetime',
+          level: 'years' as DatetimeLevel,
+          filter: {
+            toNotEqual: '2026-09-11',
+            isAdvanced: true,
+            custom: true,
+          },
+        } as unknown as FilterJaqlInternal;
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql) as LevelAttribute;
+        const expectedFilter = filterFactory.dateBefore(attribute, '2026-09-11', { guid });
+        expectEqualFilters(filter, expectedFilter);
+        expect(filter.filterJaql()).toStrictEqual({
+          toNotEqual: '2026-09-11',
+          isAdvanced: true,
+          custom: true,
+        });
+      });
+
+      test('should handle exclusive After (fromNotEqual), including the isAdvanced/custom envelope the backend requires', () => {
+        const jaql = {
+          title: 'Years',
+          table: 'Commerce',
+          column: 'Date',
+          dim: '[Commerce.Date (Calendar)]',
+          datatype: 'datetime',
+          level: 'years' as DatetimeLevel,
+          filter: {
+            fromNotEqual: '2026-09-11',
+            isAdvanced: true,
+            custom: true,
+          },
+        } as unknown as FilterJaqlInternal;
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql) as LevelAttribute;
+        const expectedFilter = filterFactory.dateAfter(attribute, '2026-09-11', { guid });
+        expectEqualFilters(filter, expectedFilter);
+        expect(filter.filterJaql()).toStrictEqual({
+          fromNotEqual: '2026-09-11',
+          isAdvanced: true,
+          custom: true,
+        });
+      });
+
+      test('does not confuse a numeric fromNotEqual/toNotEqual condition with a date range', () => {
+        const jaql = {
+          title: 'Cost',
+          table: 'Commerce',
+          column: 'Cost',
+          dim: '[Commerce.Cost]',
+          datatype: 'numeric',
+          filter: {
+            toNotEqual: 100,
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        expect(filter).not.toBeInstanceOf(DateRangeFilter);
+      });
     });
 
     describe('RankingFilter', () => {
@@ -964,6 +1038,96 @@ describe('filter-from-jaql-util', () => {
         expect(jaql.type).toBe('calculated_dimension');
         expect(jaql.datatype).toBe('numeric');
         expect(jaql.filter).toMatchObject({ fromNotEqual: 500 });
+      });
+
+      describe('context data types', () => {
+        const contextKey = '[A1B2C-3D4]';
+        const cdFilterJaqlOn = (contextEntry: Record<string, unknown>) =>
+          ({
+            type: 'calculated_dimension',
+            formula: `Substring(${contextKey}, 2)`,
+            context: { [contextKey]: contextEntry },
+            title: 'Substring(Column, 2)',
+            datatype: 'text',
+            filter: { explicit: true, multiSelection: true, members: ['ab'] },
+          } as unknown as FilterJaqlInternal);
+        const contextEntryOf = (filter: Filter) =>
+          (filter.attribute as unknown as { context: Record<string, unknown> }).context[contextKey];
+
+        it('keeps a numeric context entry numeric instead of defaulting to text', () => {
+          const filter = createFilterFromJaqlInternal(
+            cdFilterJaqlOn({ dim: '[Commerce.Cost]', datatype: 'numeric', title: 'Cost' }),
+            guid,
+          );
+
+          expect(contextEntryOf(filter)).toBeInstanceOf(DimensionalAttribute);
+          const { jaql } = filter.jaql();
+          // the formula's own result type stays as sent by Fusion
+          expect(jaql.datatype).toBe('text');
+          expect(jaql.context[contextKey]).toMatchObject({
+            dim: '[Commerce.Cost]',
+            datatype: 'numeric',
+          });
+        });
+
+        it('keeps a level-less datetime context entry datetime and emits it without a level', () => {
+          // a raw date column has no level to translate; silence the granularity warning it triggers
+          const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+          try {
+            const filter = createFilterFromJaqlInternal(
+              cdFilterJaqlOn({
+                dim: '[Commerce.Date (Calendar)]',
+                datatype: 'datetime',
+                title: 'Date',
+                table: 'Commerce',
+                column: 'Date',
+              }),
+              guid,
+            );
+
+            expect(contextEntryOf(filter)).toBeInstanceOf(DimensionalLevelAttribute);
+            const { jaql } = filter.jaql();
+            expect(jaql.context[contextKey]).toMatchObject({
+              dim: '[Commerce.Date (Calendar)]',
+              datatype: 'datetime',
+              table: 'Commerce',
+              column: 'Date',
+            });
+            expect(jaql.context[contextKey]).not.toHaveProperty('level');
+          } finally {
+            warnSpy.mockRestore();
+          }
+        });
+      });
+
+      describe('rebuilding with createFilter', () => {
+        it('rebuilds a members CD filter from the filter instance and from its serialized form', () => {
+          const filter = createFilterFromJaqlInternal(membersCdJaql, guid);
+
+          expect(() => createFilter(filter)).not.toThrow();
+          expect(() => createFilter(filter.serialize())).not.toThrow();
+          expect(createFilter(filter)).toBeInstanceOf(MembersFilter);
+        });
+
+        it('rebuilds a ranking CD filter from the filter instance and from its serialized form', () => {
+          const rankingCdJaql = {
+            ...membersCdJaql,
+            filter: {
+              top: 5,
+              by: {
+                dim: '[Commerce.Revenue]',
+                datatype: 'numeric',
+                agg: 'sum',
+                title: 'sum Revenue',
+              },
+            },
+          } as unknown as FilterJaqlInternal;
+          const filter = createFilterFromJaqlInternal(rankingCdJaql, guid);
+          expect(filter).toBeInstanceOf(RankingFilter);
+
+          expect(() => createFilter(filter)).not.toThrow();
+          expect(() => createFilter(filter.serialize())).not.toThrow();
+        });
       });
     });
   });

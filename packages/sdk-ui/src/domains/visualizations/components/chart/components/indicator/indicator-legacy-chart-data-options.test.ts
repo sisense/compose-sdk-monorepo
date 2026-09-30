@@ -1,5 +1,6 @@
-import { Measure, MeasureColumn } from '@sisense/sdk-data';
+import { createDateDimension, Measure, MeasureColumn, measureFactory } from '@sisense/sdk-data';
 
+import { IndicatorChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options';
 import { DataColorCondition, DataColorOptions, IndicatorChartDataOptions } from '@/types';
 
 import { chartData, chartDataOptions, chartDesignOptions } from './__mocks__/indicator-mocks.js';
@@ -187,6 +188,169 @@ describe('indicator-legacy-chart-data-options', () => {
       );
 
       expect(legacyChartDataOptions).not.toHaveProperty('conditions');
+    });
+  });
+
+  describe('date measures', () => {
+    const dateDimension = createDateDimension({
+      name: 'Date',
+      expression: '[Commerce.Date (Calendar)]',
+    });
+    const maxDate = measureFactory.max(dateDimension.Days, 'Max Date');
+
+    const dateChartData = {
+      ...chartData,
+      value: Date.UTC(2013, 11, 4),
+      valueText: '2013-12-04',
+      secondary: Date.UTC(2009, 0, 1),
+      secondaryText: '2009-01-01',
+      min: Date.UTC(2009, 0, 1),
+      minText: '2009-01-01',
+      max: Date.UTC(2013, 11, 4),
+      maxText: '2013-12-04',
+    };
+
+    const dateDataOptions: IndicatorChartDataOptions = {
+      ...chartDataOptions,
+      value: [maxDate],
+    };
+
+    it('renders the value and the secondary from their date text, not from the epoch', () => {
+      const result = createLegacyChartDataOptions(
+        dateChartData,
+        chartDesignOptions,
+        dateDataOptions,
+      );
+
+      expect(result.value.text).toBe('2013-12-04');
+      expect(result.secondary.text).toBe('2009-01-01');
+    });
+
+    it('renders the gauge min and max labels from their date text', () => {
+      const result = createLegacyChartDataOptions(
+        dateChartData,
+        chartDesignOptions,
+        dateDataOptions,
+      );
+
+      expect(result.min.text).toBe('2009-01-01');
+      expect(result.max.text).toBe('2013-12-04');
+    });
+
+    it('keeps the numeric data of every field as the epoch', () => {
+      const result = createLegacyChartDataOptions(
+        dateChartData,
+        chartDesignOptions,
+        dateDataOptions,
+      );
+
+      expect(result.value.data).toBe(Date.UTC(2013, 11, 4));
+      expect(result.min.data).toBe(Date.UTC(2009, 0, 1));
+      expect(result.max.data).toBe(Date.UTC(2013, 11, 4));
+    });
+
+    it('labels the gauge bounds from the number when the date bounds are not available', () => {
+      const result = createLegacyChartDataOptions(
+        {
+          ...dateChartData,
+          min: NaN,
+          minText: 'N\\A',
+          max: NaN,
+          maxText: 'N\\A',
+        },
+        chartDesignOptions,
+        dateDataOptions,
+      );
+
+      expect(result.min.text).toBe('0');
+      expect(result.max.text).toBe('100');
+    });
+
+    it('still shows the not-available text when the date value is missing', () => {
+      const result = createLegacyChartDataOptions(
+        { ...dateChartData, value: NaN },
+        chartDesignOptions,
+        dateDataOptions,
+      );
+
+      expect(result.value.text).toBe('#N/A');
+    });
+
+    it('skips a color rule on a date measure', () => {
+      const result = createLegacyChartDataOptions(dateChartData, chartDesignOptions, {
+        ...dateDataOptions,
+        value: [{ column: maxDate, color: '#FF0000' }],
+      });
+
+      expect(result.color).toBe('#00cee6');
+    });
+
+    it('does not warn on a date color rule: createLegacyChartDataOptions runs per render, and indicatorData owns the warning', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      createLegacyChartDataOptions(dateChartData, chartDesignOptions, {
+        ...dateDataOptions,
+        value: [{ column: maxDate, color: '#FF0000' }],
+      });
+
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
+    });
+
+    it('skips gauge threshold conditions on a date measure', () => {
+      const result = createLegacyChartDataOptions(dateChartData, chartDesignOptions, {
+        ...dateDataOptions,
+        value: [
+          {
+            column: maxDate,
+            color: {
+              type: 'conditional',
+              conditions: [{ color: '#e74c3c', expression: '25000000', operator: '<' }],
+            },
+          },
+        ],
+      });
+
+      expect(result.conditions).toBeUndefined();
+    });
+
+    const gaugeDesignOptions: IndicatorChartDesignOptions = {
+      ...chartDesignOptions,
+      indicatorType: 'gauge',
+      skin: 1,
+    };
+    const numericDesignOptions = (
+      numericSubtype: 'numericSimple' | 'numericBar',
+    ): IndicatorChartDesignOptions => ({
+      ...chartDesignOptions,
+      indicatorType: 'numeric',
+      numericSubtype,
+      skin: 'vertical',
+    });
+
+    it.each([
+      ['gauge', gaugeDesignOptions],
+      ['numericSimple', numericDesignOptions('numericSimple')],
+      ['numericBar', numericDesignOptions('numericBar')],
+      ['ticker', { ...gaugeDesignOptions, forceTickerView: true }],
+    ])(
+      'returns the date text as value.text and secondary.text for the %s indicator type',
+      (_indicatorType, designOptions) => {
+        const result = createLegacyChartDataOptions(dateChartData, designOptions, dateDataOptions);
+
+        expect(result.value.text).toBe('2013-12-04');
+        expect(result.secondary.text).toBe('2009-01-01');
+      },
+    );
+
+    it('keeps coloring a numeric measure', () => {
+      const result = createLegacyChartDataOptions(
+        chartData,
+        chartDesignOptions,
+        withValueColor('#FF0000'),
+      );
+
+      expect(result.color).toBe('#FF0000');
     });
   });
 });

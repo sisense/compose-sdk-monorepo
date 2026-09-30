@@ -8,6 +8,8 @@ title: pastDay
 
 Creates a calculated measure that calculates the value for the previous day.
 
+Note: Both numeric and date measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

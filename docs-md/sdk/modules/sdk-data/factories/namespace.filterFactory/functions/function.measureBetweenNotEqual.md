@@ -10,15 +10,15 @@ title: measureBetweenNotEqual
   `valueB`,
   `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter to isolate a measure value between but not equal to two given numbers.
+Creates a filter to isolate a measure value between but not equal to two given numbers or dates.
 
 ## Parameters
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `measure` | [`BaseMeasure`](../../../interfaces/interface.BaseMeasure.md) \| [`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md) | Measure to filter by |
-| `valueA` | `number` | Min value |
-| `valueB` | `number` | Max value |
+| `valueA` | `Date` \| `number` \| `string` | Min value. For a date measure pass a `Date` or an ISO 8601 string.<br />A number is only valid for a numeric measure. |
+| `valueB` | `Date` \| `number` \| `string` | Max value. For a date measure pass a `Date` or an ISO 8601 string.<br />A number is only valid for a numeric measure. |
 | `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
@@ -36,5 +36,17 @@ filterFactory.measureBetweenNotEqual(
   measureFactory.average(DM.Commerce.Revenue),
   50,
   100
+)
+```
+
+## Example
+
+Filter for categories whose last order falls strictly inside the fourth quarter of 2013 in the
+Sample ECommerce data model.
+```ts
+filterFactory.measureBetweenNotEqual(
+  measureFactory.max(DM.Commerce.Date.Days),
+  new Date('2013-10-01T00:00:00'),
+  new Date('2013-12-31T23:59:59')
 )
 ```

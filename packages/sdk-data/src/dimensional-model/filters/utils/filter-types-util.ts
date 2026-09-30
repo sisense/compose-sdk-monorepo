@@ -48,6 +48,25 @@ const isDateRangeFilter = (filter: AnyTypeFilterJaql, dataType: FilterModalType)
   return isFromAndToEmpty(from, to);
 };
 
+/**
+ * Exclusive Before/After date bounds. The backend requires `isAdvanced` (+ `custom`) on this
+ * JAQL shape to persist it — same as Fusion's own custom-filter clause — which would otherwise
+ * make `isAdvancedFilter` below misclassify it as FILTER_TYPES.ADVANCED (-> CustomFilter) before
+ * this check ever runs. Must also run ahead of the numeric fromNotEqual/toNotEqual condition
+ * operators (GREATER_THAN/LESS_THAN), so this is gated strictly to datetime.
+ */
+const isExclusiveDateBoundFilter = (
+  filter: AnyTypeFilterJaql,
+  dataType: FilterModalType,
+): boolean => {
+  if (dataType !== FilterModalType.DATE_TIME) return false;
+  // fromNotEqual/toNotEqual are declared as `number` on ConditionFilterJaqlOptions (numeric
+  // conditions); dates publish them as ISO strings, so read them loosely here rather than
+  // widening the shared numeric type.
+  const { fromNotEqual, toNotEqual } = filter as { fromNotEqual?: string; toNotEqual?: string };
+  return !!isFromOrToDefined(fromNotEqual, toNotEqual);
+};
+
 export const isNumericRangeFilter = (filter: AnyTypeFilterJaql): boolean => {
   const { from, to } = filter as RangeFilterJaql;
 
@@ -78,6 +97,7 @@ export const getFilterType = (
 ): FilterType => {
   if (timeData && isTimeLevelNotSupported(timeData)) return FILTER_TYPES.ADVANCED;
 
+  if (isExclusiveDateBoundFilter(filter, dataType)) return FILTER_TYPES.DATE_RANGE;
   if (isAdvancedFilter(filter)) return FILTER_TYPES.ADVANCED;
   if (isIncludeAllFilter(filter)) return FILTER_TYPES.INCLUDE_ALL;
   if (isPeriodFilter(filter)) return FILTER_TYPES.PERIOD;

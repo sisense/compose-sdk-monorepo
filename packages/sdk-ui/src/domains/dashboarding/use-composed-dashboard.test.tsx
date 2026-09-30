@@ -11,6 +11,7 @@ import { DashboardModule } from '@/domains/dashboarding/dashboard-module';
 import { FilterTile } from '@/domains/filters/index.js';
 import type { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { isTextWidgetProps } from '@/domains/widgets/components/text-widget/text-widget.js';
+import { isNarrativeWidgetProps } from '@/domains/widgets/components/widget-by-id/utils.js';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { Widget } from '@/domains/widgets/components/widget/widget';
 import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
@@ -119,6 +120,21 @@ describe('useComposedDashboard', () => {
     expect(getProperty(connectedWidget, 'filters')).toEqual(
       getProperty(widgetPropsMock, 'filters'),
     );
+  });
+
+  it('hands a narrative widget the connected sibling widgets, in layout order', () => {
+    const narrativeWidget: WidgetProps = { id: 'narrative-1', widgetType: 'narrative' };
+    const filters = [filterFactory.members(DM.Commerce.AgeRange, ['35-44'])];
+    const { result } = renderHook(
+      () => useComposedDashboard({ widgets: [narrativeWidget, widgetPropsMock], filters }),
+      { wrapper: CombinedProvider },
+    );
+
+    const connectedNarrative = result.current.dashboard.widgets[0];
+    if (!isNarrativeWidgetProps(connectedNarrative)) throw new Error('expected a narrative widget');
+    const siblings = connectedNarrative.widgets ?? [];
+    expect(siblings.map((widget) => widget.id)).toEqual(['widget-1']);
+    expect(getProperty(siblings[0], 'highlights')).toEqual(filters);
   });
 
   describe('returned dashboard config (tabbers wiring)', () => {

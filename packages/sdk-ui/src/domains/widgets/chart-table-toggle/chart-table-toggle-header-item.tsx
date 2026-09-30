@@ -1,5 +1,4 @@
 import type { WidgetHeaderItem } from '@/domains/widgets/shared/widget-header/widget-header-config';
-import { WidgetHeaderTargets } from '@/domains/widgets/shared/widget-header/widget-header-targets';
 
 import { ChartTableToggleButton, type ChartTableToggleLabels } from './chart-table-toggle-button';
 
@@ -17,8 +16,7 @@ export const CHART_TABLE_TOGGLE_ITEM_ID = 'chart-table-toggle';
  * Builds the chart↔table toggle's header item, which switches a chart between its own type and a
  * table.
  *
- * Placed before the info button, where the control used to sit — an anchor that resolves even on
- * widgets whose info button is hidden.
+ * Placed with `{ type: 'auto' }` at the start of the trailing action group (after the spacer).
  *
  * @param options - The toggle's current state and how to flip it.
  * @param options.pressed - Whether the widget currently shows the table view.

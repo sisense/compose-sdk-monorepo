@@ -20,6 +20,8 @@ If the previous quarter's value is greater than the current quarter, the growth 
 For example, if this quarter the value is 80, and the previous quarter's was 100, the growth for
 this quarter is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

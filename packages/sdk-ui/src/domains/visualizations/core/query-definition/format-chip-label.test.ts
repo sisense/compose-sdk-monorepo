@@ -21,6 +21,9 @@ describe('formatChipLabel', () => {
     ['totalRevenue', 'Total revenue'],
     ['Commerce.Country', 'Commerce country'],
     ['HTTPStatusCode', 'Http status code'],
+    ['# of Admissions', 'Number of admissions'],
+    ['Total # of visits', 'Total number of visits'],
+    ['#Tags', '#tags'],
   ] as const)('cleans technical name %s to %s', (input, expected) => {
     expect(formatChipLabel(input)).toBe(expected);
     expect(formatChipLabel({ name: input })).toBe(expected);
@@ -32,6 +35,12 @@ describe('formatChipLabel', () => {
 
   it('does not rewrite an already sentence-cased single word', () => {
     expect(formatChipLabel({ name: 'Country', title: 'Country' })).toBe('Country');
+  });
+
+  it('keeps # in a distinct Friendly Name', () => {
+    expect(formatChipLabel({ name: 'Admissions', title: '# of Admissions' })).toBe(
+      '# of Admissions',
+    );
   });
 
   it('leaves internal $ names unchanged', () => {

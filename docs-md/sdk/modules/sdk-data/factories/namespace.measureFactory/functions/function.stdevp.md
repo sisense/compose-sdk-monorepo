@@ -11,6 +11,8 @@ title: stdevp
 
 Calculates the standard deviation of the given numeric attribute based on the entire population (all items).
 
+Note: Only numeric attributes are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

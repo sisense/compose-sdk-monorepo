@@ -1,6 +1,9 @@
 /** @vitest-environment jsdom */
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+
+import { IndicatorChartData } from '@/domains/visualizations/core/chart-data/types';
 
 import { IndicatorCanvas } from './indicator-canvas';
 
@@ -221,6 +224,70 @@ describe('IndicatorCanvas', () => {
           }),
         }),
         expect.any(Object),
+      );
+    });
+  });
+
+  describe('date measures', () => {
+    const dateChartData = {
+      type: 'indicator',
+      value: Date.UTC(2013, 11, 4),
+      valueText: '2013-12-04',
+      secondary: Date.UTC(2009, 0, 1),
+      secondaryText: '2009-01-01',
+      min: Date.UTC(2009, 0, 1),
+      minText: '2009-01-01',
+      max: Date.UTC(2013, 11, 4),
+      maxText: '2013-12-04',
+    } satisfies IndicatorChartData;
+
+    it('reports `#N/A` from the click callback when the date value is unavailable', async () => {
+      const onDataPointClickMock = vi.fn();
+      const unavailable = {
+        ...dateChartData,
+        value: NaN,
+        valueText: 'N\\A',
+      } satisfies IndicatorChartData;
+
+      render(
+        <IndicatorCanvas
+          chartData={unavailable}
+          dataOptions={mockDataOptions}
+          designOptions={mockDesignOptions}
+          onDataPointClick={onDataPointClickMock}
+        />,
+      );
+      await userEvent.click(screen.getByTestId('indicator-root'));
+
+      expect(onDataPointClickMock.mock.calls[0][0].entries.value.displayValue).toBe('#N/A');
+    });
+
+    it('reports the date text as the display value of every entry', async () => {
+      const onDataPointClickMock = vi.fn();
+
+      render(
+        <IndicatorCanvas
+          chartData={dateChartData}
+          dataOptions={mockDataOptions}
+          designOptions={mockDesignOptions}
+          onDataPointClick={onDataPointClickMock}
+        />,
+      );
+      await userEvent.click(screen.getByTestId('indicator-root'));
+
+      expect(onDataPointClickMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          entries: expect.objectContaining({
+            value: expect.objectContaining({
+              value: Date.UTC(2013, 11, 4),
+              displayValue: '2013-12-04',
+            }),
+            secondary: expect.objectContaining({ displayValue: '2009-01-01' }),
+            min: expect.objectContaining({ displayValue: '2009-01-01' }),
+            max: expect.objectContaining({ displayValue: '2013-12-04' }),
+          }),
+        }),
+        expect.anything(),
       );
     });
   });

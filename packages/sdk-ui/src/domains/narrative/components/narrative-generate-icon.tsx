@@ -1,24 +1,32 @@
+type NarrativeGenerateIconProps = {
+  /** Fill for the glyph; defaults to `currentColor`. */
+  color?: string;
+  /** Edge length in pixels. */
+  size?: number;
+  /**
+   * Crops the 24px icon canvas to the glyph, so the mark fills `size` — the design's 16px button
+   * icon, drawn without the canvas margin.
+   */
+  trimmed?: boolean;
+};
+
+/** The glyph's bounding square inside the 24px canvas, top-left aligned as in the design. */
+const TRIMMED_VIEW_BOX = '3.3 3.6 18.8 18.8';
+
 /**
  * Renders the generate-narrative mark: lines of text beside a sparkle.
  * @param props - Component props.
- * @param props.color - Fill for the glyph; defaults to `currentColor`.
- * @param props.size - Edge length in pixels.
  * @returns The glyph.
  * @internal
  */
-export function NarrativeGenerateIcon({
-  color = 'currentColor',
-  size = 24,
-}: {
-  color?: string;
-  size?: number;
-}) {
+export function NarrativeGenerateIcon(props: NarrativeGenerateIconProps) {
+  const { color = 'currentColor', size = 24, trimmed = false } = props;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
-      viewBox="0 0 24 24"
+      viewBox={trimmed ? TRIMMED_VIEW_BOX : '0 0 24 24'}
       fill="none"
       aria-hidden="true"
       focusable="false"

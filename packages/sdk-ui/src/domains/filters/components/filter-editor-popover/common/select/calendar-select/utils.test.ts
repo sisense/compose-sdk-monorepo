@@ -4,7 +4,7 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { formatDateValue } from '@/domains/query-execution/core/date-formats';
 import { getDefaultDateMask } from '@/domains/query-execution/core/date-formats/apply-date-format';
-import { formatDatetimeString } from '@/domains/visualizations/components/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
+import { formatDatetimeString } from '@/shared/formatters/format-datetime-string';
 
 import { DatetimeFormatter } from '../../../hooks/use-datetime-formatter';
 import {

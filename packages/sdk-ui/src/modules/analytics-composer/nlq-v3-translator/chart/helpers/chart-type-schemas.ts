@@ -54,6 +54,8 @@ export const VALID_DATA_OPTIONS_KEYS = new Set([
   'min',
   'max',
   'seriesToColorMap',
+  'valueMode',
+  'comparison',
 ]);
 
 /** Per-chart-type axes metadata: valid axes and required axes */
@@ -131,6 +133,14 @@ export const CHART_TYPE_AXES_METADATA: Record<
   },
   arearange: {
     validAxes: new Set(['category', 'value', 'breakBy', 'seriesToColorMap']),
+    requiredAxes: ['category', 'value'],
+  },
+  kpi: {
+    validAxes: new Set(['value', 'category', 'valueMode', 'comparison']),
+    requiredAxes: ['value'],
+  },
+  sankey: {
+    validAxes: new Set(['category', 'value', 'seriesToColorMap']),
     requiredAxes: ['category', 'value'],
   },
 };

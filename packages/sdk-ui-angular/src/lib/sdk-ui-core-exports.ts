@@ -103,6 +103,8 @@ export type {
   KpiSparklineType,
   KpiStyleOptions,
   KpiTextSize,
+  KpiTextStyle,
+  KpiTextTransform,
   KpiTitleAlign,
   KpiTitleStyleOptions,
   KpiValueMode,

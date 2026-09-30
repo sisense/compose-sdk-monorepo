@@ -1,5 +1,5 @@
 {
-  "version": "2.36.0",
+  "version": "2.37.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -102,6 +102,7 @@
     "reset": "yarn clean && rm -rf ./node_modules",
     "lint": "yarn workspaces foreach -p --verbose run lint",
     "lint:fix": "yarn workspaces foreach -p --verbose run lint:fix",
+    "lint:prune": "yarn workspaces foreach -p --verbose run lint:prune",
     "lint:changed": "yarn workspaces foreach --since run lint",
     "format": "yarn workspaces foreach -p run format",
     "format:check": "yarn workspaces foreach -p run format:check",
@@ -132,6 +133,7 @@
     "docs:frameworks:diff": "./scripts/diff-docs-ui.sh",
     "docs:frameworks:diff:full": "FULL_DIFF_REPORT=true ./scripts/diff-docs-ui.sh",
     "public-api-check": "yarn workspace @sisense/sdk-ui public-api-check",
+    "internals-check": "node scripts/check-internal-references.mjs",
     "size-check": "yarn workspace @sisense/sdk-ui size-check",
     "prepare": "husky install",
     "nx:build": "nx run-many --exclude @sisense/root -t build",
@@ -162,7 +164,8 @@
   "resolutions": {
     "form-data": "4.0.4",
     "socket.io-parser": "3.4.1",
-    "js-cookie": "^3.0.7"
+    "js-cookie": "^3.0.7",
+    "smol-toml": "^1.7.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
@@ -189,18 +192,36 @@
     "globals": "^17.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
+    "markdownlint-cli2": "^0.23.2",
     "nx": "20.0.0",
     "nyc": "^17.1.0",
     "prettier": "^2.8.8",
     "storybook": "^9.1.6",
+    "stylelint": "^17.15.0",
+    "stylelint-config-standard-scss": "^17.0.0",
     "typedoc": "0.26.10",
     "typedoc-plugin-vue": "^1.2.0",
     "typescript-eslint": "^8.20.0",
     "vitest": "^3.2.4"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,yaml,yml,md}": [
+    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "node scripts/eslint-staged.mjs",
       "prettier --write"
+    ],
+    "*.md": [
+      "markdownlint-cli2 --fix",
+      "prettier --write"
+    ],
+    "*.{scss,css}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{json,jsonc,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*": [
+      "node scripts/check-internal-references.mjs --staged"
     ]
   }
 }

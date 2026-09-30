@@ -43,14 +43,21 @@ export function createDataCellColorFormatter(
     const dataOption = getPivotDataOptionByJaqlIndex(dataOptions, jaqlPanelItem?.field?.index);
     const colorFormat = (dataOption as StyledMeasureColumn)?.color;
     const dataBarsColorFormat = (dataOption as StyledMeasureColumn)?.dataBarsColor;
+    // a date has no numeric scale, so a colour that reads the cell value would compare against an
+    // ISO string; a Static colour never reads the value and is kept, Absolute and Relative are
+    // skipped
+    const isDateCell = jaqlPanelItem?.jaql?.datatype === 'datetime';
 
     if (colorFormat) {
       const coloringService = getColoringServiceByColorOptions(colorFormat);
 
-      if (coloringService.type === 'Static' || coloringService.type === 'Absolute') {
+      if (
+        coloringService.type === 'Static' ||
+        (coloringService.type === 'Absolute' && !isDateCell)
+      ) {
         const color = coloringService.getColor(cell.value);
         if (color) style.backgroundColor = color as string;
-      } else if (coloringService.type === 'Relative') {
+      } else if (coloringService.type === 'Relative' && !isDateCell) {
         const rangeColorOptions = colorFormat as RangeDataColorOptions;
         const [baseColor] = themeSettings.palette.variantColors;
         const minColor = baseColor ? scaleBrightness(baseColor, 0.2) : DEFAULT_MIN_COLOR;
@@ -84,7 +91,7 @@ export function createDataCellColorFormatter(
       const dataBarsColoringService = getColoringServiceByColorOptions(dataBarsColorFormat);
       if (
         dataBarsColoringService.type === 'Static' ||
-        dataBarsColoringService.type === 'Absolute'
+        (dataBarsColoringService.type === 'Absolute' && !isDateCell)
       ) {
         const color = dataBarsColoringService.getColor(cell.value);
         if (color) {

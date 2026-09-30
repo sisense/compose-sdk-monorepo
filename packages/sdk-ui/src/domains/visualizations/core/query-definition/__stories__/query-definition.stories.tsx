@@ -18,17 +18,22 @@ const meta: Meta<typeof QueryDefinition> = {
       description:
         'Maximum characters shown in each pill label before truncation (default 25). Pass 0 to show the full label.',
     },
+    maxVisiblePills: {
+      control: { type: 'number', min: 1 },
+      description: 'Maximum pills shown before “Show N more” (default 4).',
+    },
   },
   args: {
     showTooltip: true,
     maxPillLength: 25,
+    maxVisiblePills: 4,
   },
   parameters: {
     docs: {
       description: {
         component:
           'Read-only query definition as colored pills (measures → dimensions → filters). ' +
-          'Figma-aligned colors; up to 4 pills then “Show N more” / “Show less”. Hover pills for JSON tooltip. ' +
+          'Figma-aligned colors; up to `maxVisiblePills` (default 4) then “Show N more” / “Show less”. Hover pills for JSON tooltip. ' +
           'Filter pills use readable labels (e.g. `Region: North`, `Category: A, B`). ' +
           'Long labels truncate from the value side at `maxPillLength` (default 25) with an ellipsis; set `maxPillLength={0}` to disable. ' +
           'Tooltips use the viewport by default; pass `tooltipBoundaryElement` (e.g. chart card) to clamp inside a host.',
@@ -115,7 +120,7 @@ export const ManyPillsShowsMore: Story = {
     docs: {
       description: {
         story:
-          'More than 4 pills: use “Show N more” to expand; “Show less” to collapse. Hover any pill for source JSON.',
+          'More than `maxVisiblePills` pills: use “Show N more” to expand; “Show less” to collapse. Hover any pill for source JSON.',
       },
     },
   },
@@ -190,6 +195,36 @@ export const NoLabelTruncation: Story = {
     docs: {
       description: {
         story: 'Pass `maxPillLength={0}` to render the full pill label without truncation.',
+      },
+    },
+  },
+};
+
+export const CustomGroupedFilterPill: Story = {
+  args: {
+    maxPillLength: 0,
+    query: {
+      measures: [sumOfSales],
+      dimensions: [regionAttr],
+      filters: [filterFactory.members(regionAttr, ['North'])],
+    } as ExecuteQueryParams,
+    customPills: [
+      {
+        category: 'filter',
+        value: [
+          filterFactory.members(categoryAttr, ['Electronics']),
+          filterFactory.members(regionAttr, ['South']),
+        ],
+        label: 'Dashboard Filters',
+        color: { bg: '#fcf1cc', text: '#131F29' },
+      },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`customPills` append host-owned chips. A `Filter[]` value is one pill; hover lists each filter label.',
       },
     },
   },

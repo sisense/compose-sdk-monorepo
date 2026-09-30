@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.37.0] - 2026-09-29
+
+### Added
+- Add `textStyle` option to `KpiChart` value, title and comparison to control font family, weight, style and text case
+- Add support for min and max aggregations and formulas over date columns in `Table`, `PivotTable` and `IndicatorChart`
+
+### Changed
+- Improve `KpiChart` comparison captions to name the baseline and show its value, e.g. `vs Total Cost (107.27M)`
+- Fix calculated dimension filters that were unsupported due to having text datatype for numeric and date columns
+- Fix translation of Fusion date dimensions at the seconds level
+- Fix filter editor switching the filter type to "is not" when the multiselect toggle changes
+
+
 ## [2.36.0] - 2026-09-15
 
 ### Added

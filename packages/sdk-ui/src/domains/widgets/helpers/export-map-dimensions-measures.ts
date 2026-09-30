@@ -2,6 +2,8 @@ import {
   type Attribute,
   type CalculatedMeasureColumn,
   DimensionalLevelAttribute,
+  getDefaultDateMeasureFormat,
+  hasDateMeasureLevel,
   isDimensionalLevelAttribute,
   type Measure,
   type MeasureColumn,
@@ -59,12 +61,37 @@ export function mapMeasuresForExcelExport(
     if (typeof measure.format !== 'function') {
       return measure;
     }
+    // a number format would overwrite the mask a date measure carries from `Measure.jaql()`
+    if (hasDateMeasureLevel(measure)) {
+      return measure;
+    }
     const existingFormat =
       typeof measure.getFormat === 'function' ? measure.getFormat() : undefined;
     if (existingFormat) {
       return measure;
     }
     return measure.format(DEFAULT_MEASURE_NUMBER_FORMAT);
+  });
+}
+
+/**
+ * Returns measures prepared for CSV download: gives a date measure its display format so the
+ * server writes a readable date instead of raw datetime values.
+ *
+ * Every other measure is returned unchanged, so a CSV with no date measure is unaffected.
+ *
+ * @param measures - Raw measures from chart, pivot or custom widget translation
+ * @returns New array, with only the date measures replaced
+ */
+export function mapMeasuresForCsvExport(measures: readonly Measure[]): Measure[] {
+  return measures.map((measure) => {
+    if (typeof measure.format !== 'function' || !hasDateMeasureLevel(measure)) {
+      return measure;
+    }
+    const existingFormat =
+      typeof measure.getFormat === 'function' ? measure.getFormat() : undefined;
+
+    return existingFormat ? measure : measure.format(getDefaultDateMeasureFormat(measure));
   });
 }
 

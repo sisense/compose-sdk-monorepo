@@ -12,6 +12,8 @@ of the year up to the current day, week, month, or quarter.
 The time resolution is determined by the minimum date level of the date dimension in the query
 that uses the returned measure.
 
+Note: Only numeric measures are supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

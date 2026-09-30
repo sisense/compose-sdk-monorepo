@@ -127,3 +127,28 @@ describe('translateWidgetToJSON — unknown widgetType', () => {
     expect(getErrors(result)[0]).toMatch(/Unknown widgetType/);
   });
 });
+
+describe('translateWidgetToJSON — KPI chart round-trip', () => {
+  it('round-trips a KPI widget with valueMode and comparison', () => {
+    const kpiWidgetJSON: Extract<WidgetJSON, { widgetType: 'chart' }> = {
+      widgetType: 'chart',
+      id: 'kpi-1',
+      chartType: 'kpi',
+      dataOptions: {
+        value: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
+        category: 'DM.Commerce.Date.Months',
+        valueMode: 'total',
+        comparison: {
+          type: 'delta',
+          value: { function: 'measureFactory.sum', args: ['DM.Commerce.Cost', 'Total Cost'] },
+        },
+      },
+    };
+
+    const csdk = getSuccessData(translateWidgetFromJSON({ data: kpiWidgetJSON, context }));
+    const json = getSuccessData(translateWidgetToJSON(csdk));
+
+    // dataSource is filled in from the translation context
+    expect(json).toEqual({ ...kpiWidgetJSON, dataSource: 'Sample ECommerce' });
+  });
+});

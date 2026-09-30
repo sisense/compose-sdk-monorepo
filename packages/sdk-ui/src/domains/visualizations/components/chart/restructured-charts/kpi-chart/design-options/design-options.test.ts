@@ -8,6 +8,10 @@ import { translateKpiChartDataOptions } from '../data-options/data-options.js';
 import {
   getDefaultKpiStyleOptions,
   isKpiStyleOptions,
+  KPI_COMPARISON_TEXT_STYLE_DEFAULTS,
+  KPI_TITLE_TEXT_STYLE_DEFAULTS,
+  KPI_VALUE_TEXT_STYLE_DEFAULTS,
+  resolveKpiTextStyle,
   translateKpiStyleOptionsToDesignOptions,
 } from './design-options.js';
 
@@ -45,6 +49,7 @@ describe('kpi - design options', () => {
           showValueTitle: true,
           showCategoryTitle: true,
           align: 'space-between',
+          textStyle: KPI_TITLE_TEXT_STYLE_DEFAULTS,
         });
       });
 
@@ -59,6 +64,7 @@ describe('kpi - design options', () => {
           showValueTitle: true,
           showCategoryTitle: true,
           align: 'space-between',
+          textStyle: KPI_TITLE_TEXT_STYLE_DEFAULTS,
         });
       });
 
@@ -73,6 +79,7 @@ describe('kpi - design options', () => {
           showValueTitle: false,
           showCategoryTitle: false,
           align: 'space-between',
+          textStyle: KPI_TITLE_TEXT_STYLE_DEFAULTS,
         });
       });
 
@@ -92,6 +99,7 @@ describe('kpi - design options', () => {
           textSize: 'auto',
           noDataText: undefined,
           conditionalIcons: undefined,
+          textStyle: KPI_VALUE_TEXT_STYLE_DEFAULTS,
         });
       });
 
@@ -113,7 +121,77 @@ describe('kpi - design options', () => {
           textSize: 48,
           noDataText: 'No data',
           conditionalIcons,
+          textStyle: KPI_VALUE_TEXT_STYLE_DEFAULTS,
         });
+      });
+    });
+
+    describe('textStyle', () => {
+      it('resolves every section to its defaults when nothing is set', () => {
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
+        expect(result.value.textStyle).toEqual(KPI_VALUE_TEXT_STYLE_DEFAULTS);
+        expect(result.title.textStyle).toEqual(KPI_TITLE_TEXT_STYLE_DEFAULTS);
+        expect(result.comparison.textStyle).toEqual(KPI_COMPARISON_TEXT_STYLE_DEFAULTS);
+      });
+
+      it('keeps the shipped defaults: bold value, semibold uppercase title, semibold comparison', () => {
+        expect(KPI_VALUE_TEXT_STYLE_DEFAULTS).toEqual({
+          fontWeight: '700',
+          fontStyle: 'normal',
+          textTransform: 'none',
+        });
+        expect(KPI_TITLE_TEXT_STYLE_DEFAULTS).toEqual({
+          fontWeight: '600',
+          fontStyle: 'normal',
+          textTransform: 'uppercase',
+        });
+        expect(KPI_COMPARISON_TEXT_STYLE_DEFAULTS).toEqual({
+          fontWeight: '600',
+          fontStyle: 'normal',
+          textTransform: 'none',
+        });
+      });
+
+      it('merges partial overrides field by field over the section defaults', () => {
+        const result = translateKpiStyleOptionsToDesignOptions(
+          {
+            value: { textStyle: { fontWeight: '400' } },
+            title: { textStyle: { textTransform: 'none', fontFamily: 'Georgia' } },
+            comparison: { textStyle: { fontStyle: 'italic' } },
+          },
+          withoutCategory,
+        );
+        expect(result.value.textStyle).toEqual({
+          fontWeight: '400',
+          fontStyle: 'normal',
+          textTransform: 'none',
+        });
+        expect(result.title.textStyle).toEqual({
+          fontFamily: 'Georgia',
+          fontWeight: '600',
+          fontStyle: 'normal',
+          textTransform: 'none',
+        });
+        expect(result.comparison.textStyle).toEqual({
+          fontWeight: '600',
+          fontStyle: 'italic',
+          textTransform: 'none',
+        });
+      });
+
+      it('does not let an explicit undefined erase a default', () => {
+        expect(
+          resolveKpiTextStyle({ fontWeight: undefined }, KPI_VALUE_TEXT_STYLE_DEFAULTS),
+        ).toEqual(KPI_VALUE_TEXT_STYLE_DEFAULTS);
+      });
+
+      it('leaves fontFamily unset (theme fallback) unless the user provides one', () => {
+        expect(resolveKpiTextStyle(undefined, KPI_TITLE_TEXT_STYLE_DEFAULTS)).not.toHaveProperty(
+          'fontFamily',
+        );
+        expect(
+          resolveKpiTextStyle({ fontFamily: 'Georgia' }, KPI_TITLE_TEXT_STYLE_DEFAULTS).fontFamily,
+        ).toBe('Georgia');
       });
     });
 
@@ -126,6 +204,7 @@ describe('kpi - design options', () => {
           color: undefined,
           showIcon: true,
           conditionalIcons: undefined,
+          textStyle: KPI_COMPARISON_TEXT_STYLE_DEFAULTS,
         });
       });
 
@@ -318,6 +397,23 @@ describe('kpi - design options', () => {
       );
       const fromEmpty = translateKpiStyleOptionsToDesignOptions({}, withCategory);
       expect(fromDefaults).toEqual(fromEmpty);
+    });
+
+    it('hands out its own textStyle object copies, not references to the shared defaults', () => {
+      const first = getDefaultKpiStyleOptions();
+      const second = getDefaultKpiStyleOptions();
+
+      expect(first.value?.textStyle).toEqual(KPI_VALUE_TEXT_STYLE_DEFAULTS);
+      expect(first.value?.textStyle).not.toBe(KPI_VALUE_TEXT_STYLE_DEFAULTS);
+      expect(second.value?.textStyle).not.toBe(first.value?.textStyle);
+
+      expect(first.title?.textStyle).toEqual(KPI_TITLE_TEXT_STYLE_DEFAULTS);
+      expect(first.title?.textStyle).not.toBe(KPI_TITLE_TEXT_STYLE_DEFAULTS);
+      expect(second.title?.textStyle).not.toBe(first.title?.textStyle);
+
+      expect(first.comparison?.textStyle).toEqual(KPI_COMPARISON_TEXT_STYLE_DEFAULTS);
+      expect(first.comparison?.textStyle).not.toBe(KPI_COMPARISON_TEXT_STYLE_DEFAULTS);
+      expect(second.comparison?.textStyle).not.toBe(first.comparison?.textStyle);
     });
   });
 

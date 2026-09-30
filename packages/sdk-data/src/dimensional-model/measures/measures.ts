@@ -12,21 +12,29 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { createAttribute, DimensionalAttribute } from '../attributes/attributes.js';
+import {
+  createAttribute,
+  DimensionalAttribute,
+  DimensionalLevelAttribute,
+} from '../attributes/attributes.js';
 import { DimensionalElement, resolveElementNames } from '../base.js';
+import { isDimensionalDateDimension } from '../dimensions/dimensions.js';
 import { create } from '../factory.js';
 import {
   Attribute,
   BaseMeasure,
   CalculatedMeasure,
+  isLevelAttribute,
   Measure,
   MeasureContext,
   MeasureTemplate,
 } from '../interfaces.js';
+import { isDatetime } from '../simple-column-types.js';
 import {
   AggregationType,
   AggregationTypes,
   AnyObject,
+  DateLevels,
   JaqlDataSource,
   JSONObject,
   MetadataTypes,
@@ -314,7 +322,10 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
       },
     };
 
-    if (this._format) {
+    const levelName = r.jaql.dateTimeLevel || r.jaql.level;
+    if (levelName && hasDateMeasureLevel(this)) {
+      r.format = { mask: { [levelName]: this._format || getDefaultDateMeasureFormat(this) } };
+    } else if (this._format) {
       r.format = { number: this._format };
     }
 
@@ -331,6 +342,260 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
  */
 export const isDimensionalBaseMeasure = (v: AnyObject): v is DimensionalBaseMeasure => {
   return Boolean(v && v.__serializable === 'DimensionalBaseMeasure');
+};
+
+/**
+ * Aggregations that keep the datatype of the aggregated attribute. Every other aggregation
+ * returns a number, even over a datetime attribute.
+ */
+const DATATYPE_PRESERVING_AGGREGATIONS: readonly string[] = [
+  AggregationTypes.Min,
+  AggregationTypes.Max,
+];
+
+/** The whole formula is one `MIN` or `MAX` over one bracketed token, for example `MAX([D])`. */
+const SINGLE_MIN_MAX_FORMULA = /^\s*(min|max)\s*\(\s*(\[[^\]]*\])\s*\)\s*$/i;
+
+/** The formula opens with `MIN(` or `MAX(`, whatever else it carries after that. */
+const LEADING_MIN_MAX = /^\s*(min|max)\s*\(/i;
+
+/**
+ * Resolves an element to the datetime attribute it stands for, or `undefined` when it is not one.
+ *
+ * Both measure shapes resolve through here, so they cannot disagree about a bare date dimension.
+ *
+ * @param element - An aggregated attribute or a formula context operand.
+ * @returns The datetime attribute, or `undefined`.
+ */
+const asDateAttribute = (element: AnyObject | undefined): Attribute | undefined => {
+  if (!element) {
+    return undefined;
+  }
+  // A bare date dimension is queried at its default level, which is what carries the granularity.
+  const resolved = (
+    isDimensionalDateDimension(element) ? element[element.defaultLevel] : element
+  ) as Attribute | undefined;
+
+  return resolved && isDatetime(resolved.type) ? resolved : undefined;
+};
+
+/**
+ * Checks whether an attribute is a date PART rather than a date.
+ *
+ * Week-of-year groups by the ordinal 1 to 53 and is sent as `dateTimePart`, so it answers a number.
+ * Every real granularity translates to a `level` or a `dateTimeLevel`.
+ *
+ * @param attribute - The attribute to check.
+ * @returns `true` when the attribute extracts a part instead of truncating to a granularity.
+ */
+const isDatePartAttribute = (attribute: Attribute): boolean => {
+  if (!isLevelAttribute(attribute)) {
+    return false;
+  }
+  const { level, dateTimeLevel } = attribute.translateGranularityToJaql();
+
+  return level === undefined && dateTimeLevel === undefined;
+};
+
+/**
+ * Returns the datetime attribute a `min`/`max` aggregation reads: the aggregation shape, what
+ * the SDK builds.
+ *
+ * @param measure - The measure to read the aggregated attribute from
+ * @returns The aggregated datetime attribute, or `undefined`
+ */
+const getAggregatedDateAttribute = (measure: AnyObject): Attribute | undefined => {
+  if (
+    !isDimensionalBaseMeasure(measure) ||
+    !DATATYPE_PRESERVING_AGGREGATIONS.includes(measure.aggregation)
+  ) {
+    return undefined;
+  }
+
+  return asDateAttribute(measure.attribute);
+};
+
+/**
+ * Checks whether a value is a {@link DimensionalCalculatedMeasure}, by its serializable tag.
+ *
+ * @param v - The value to check.
+ * @returns `true` when `v` is tagged `DimensionalCalculatedMeasure`, otherwise `false`.
+ * @internal
+ */
+export const isDimensionalCalculatedMeasure = (v: AnyObject): v is DimensionalCalculatedMeasure => {
+  return Boolean(v && v.__serializable === 'DimensionalCalculatedMeasure');
+};
+
+/**
+ * Returns the datetime attribute a formula answers with: the formula shape, what Fusion builds.
+ *
+ * A formula has no attribute, so the date operand comes from its context. Two ways in: the
+ * datatype Fusion stamps at save time, and failing that a formula that is nothing but one
+ * `MIN`/`MAX` over one token. The second stays strict on purpose, because a wider match would
+ * treat formulas as dates whose result is not the operand's type.
+ *
+ * @param measure - The measure to read the context operand from.
+ * @returns The datetime operand, or `undefined`.
+ */
+const getFormulaDateAttribute = (measure: AnyObject): Attribute | undefined => {
+  if (!isDimensionalCalculatedMeasure(measure)) {
+    return undefined;
+  }
+  const asDateOperand = (operand: AnyObject | undefined) =>
+    asDateAttribute(operand) ?? getDateMeasureAttribute(operand ?? {});
+
+  if (measure.datatype && isDatetime(measure.datatype)) {
+    const dates = Object.values(measure.context ?? {})
+      .map(asDateOperand)
+      .filter((attribute): attribute is Attribute => attribute !== undefined);
+
+    // with two date operands nothing says which one the result is, so return neither
+    return dates.length === 1 ? dates[0] : undefined;
+  }
+
+  const [, , token] = SINGLE_MIN_MAX_FORMULA.exec(measure.expression ?? '') ?? [];
+
+  return token ? asDateOperand(measure.context?.[token]) : undefined;
+};
+
+/**
+ * Returns the datetime attribute that a date measure answers with.
+ *
+ * @param measure - The measure to read the attribute from.
+ * @returns The datetime attribute, or `undefined` when the measure is not a date measure.
+ * @internal
+ */
+export function getDateMeasureAttribute(measure: AnyObject): Attribute | undefined {
+  return getAggregatedDateAttribute(measure) ?? getFormulaDateAttribute(measure);
+}
+
+/**
+ * Checks whether the given measure answers with a date: a `min`/`max` aggregation over a datetime
+ * attribute, or a formula the server stamped datetime, or a formula that is a bare `MIN`/`MAX` over
+ * a datetime operand.
+ *
+ * A date PART is excluded: `max` of week-of-year answers an ordinal, and typing that as a date
+ * would send it through the date mask and print a day in 1970.
+ *
+ * @param measure - The measure to check
+ * @returns `true` when the measure answers with a date
+ * @internal
+ */
+export const isDateMeasure = (measure: AnyObject): boolean => {
+  const attribute = getDateMeasureAttribute(measure);
+
+  return attribute !== undefined && !isDatePartAttribute(attribute);
+};
+
+/**
+ * Checks whether a date measure carries a granularity level, which is what a date mask is keyed by.
+ *
+ * A date PART such as week-of-year answers an ordinal and carries `dateTimePart` instead, and a
+ * datetime attribute with no level carries neither, so both are false. `jaql()`, the CSV export
+ * mapper and the Excel export mapper all call this, so they cannot disagree.
+ *
+ * @param measure - The measure to check
+ * @returns `true` when the measure is a date measure whose jaql carries a level
+ * @internal
+ */
+export const hasDateMeasureLevel = (measure: AnyObject): boolean => {
+  const attribute = getDateMeasureAttribute(measure);
+
+  return attribute !== undefined && isLevelAttribute(attribute) && !isDatePartAttribute(attribute);
+};
+
+/**
+ * Returns the `min` or `max` a date measure answers with, whichever shape it is written in.
+ *
+ * A pivot subtotal over dates only makes sense as the measure's own min or max, and the two shapes
+ * keep it in different places: an aggregation on the measure, a function name in the formula. One
+ * place decides it, so the payload and the pivot hook cannot disagree.
+ *
+ * @param measure - The measure to read the min or max from.
+ * @returns `'min'`, `'max'`, or `undefined` when the measure is not a date measure or its formula
+ * does not name one.
+ * @internal
+ */
+export const getDateMeasureAggregation = (measure: AnyObject): string | undefined => {
+  if (!isDateMeasure(measure)) {
+    return undefined;
+  }
+  if (isDimensionalBaseMeasure(measure)) {
+    return measure.aggregation;
+  }
+  const [, name] = SINGLE_MIN_MAX_FORMULA.exec(measure.expression ?? '') ?? [];
+  // a stamped formula can carry more than the bare call, for example the filter operand in
+  // `max([Date], [DateFilter])`, so the leading function name is read when the strict shape misses
+  const [, leading] = LEADING_MIN_MAX.exec(measure.expression ?? '') ?? [];
+  if (name ?? leading) {
+    return (name ?? leading)?.toLowerCase();
+  }
+
+  /* A wrapper such as `pastyear([MaxDate])` names no aggregation of its own, so the answer is the
+     one its single date operand carries. Without this a pivot subtotal over such a measure is sent
+     as `undefined` and the warning that would report it is gated on the same value. */
+  const aggregations = Object.values(measure.context ?? {})
+    .map((operand) => getDateMeasureAggregation(operand as AnyObject))
+    .filter((aggregation): aggregation is string => aggregation !== undefined);
+
+  // two date operands say nothing about which the result is, the same rule the attribute follows
+  return aggregations.length === 1 ? aggregations[0] : undefined;
+};
+
+/**
+ * Returns what a date formula must carry beside its formula: the datatype, and the granularity of
+ * its date operand when it has one. A formula has no `dim`, so without these nothing says its
+ * answer is a date.
+ *
+ * @param measure - The measure to read the date operand from.
+ * @returns The jaql fragment, or `undefined` when the measure does not answer with a date.
+ */
+const dateFormulaJaql = (measure: AnyObject): AnyObject | undefined => {
+  const attribute = getDateMeasureAttribute(measure);
+  if (!attribute || isDatePartAttribute(attribute)) {
+    return undefined;
+  }
+
+  // a date column with no level still answers with a date, the same as its `max` does
+  return isLevelAttribute(attribute)
+    ? { datatype: 'datetime', ...attribute.translateGranularityToJaql() }
+    : { datatype: 'datetime' };
+};
+
+/**
+ * Returns the date format a date measure is displayed with when nothing else sets one.
+ *
+ * A date measure is displayed with the same format as a date column of the same granularity,
+ * so that two columns of one widget can never disagree on how a date looks.
+ *
+ * @param measure - The date measure to resolve the format for
+ * @returns A date format, never an empty one
+ * @internal
+ */
+export const getDefaultDateMeasureFormat = (measure: AnyObject): string => {
+  const daysFormat = DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.Days);
+  const attribute = getDateMeasureAttribute(measure);
+
+  if (!attribute || !isLevelAttribute(attribute)) {
+    return daysFormat;
+  }
+  const levelFormat = DimensionalLevelAttribute.getDefaultFormatForGranularity(
+    attribute.granularity,
+  );
+  // every level a date dimension builds already carries its granularity default, so only a format
+  // that differs from that default can have come from the caller
+  const callerFormat = attribute.getFormat() === levelFormat ? undefined : attribute.getFormat();
+
+  if (callerFormat) {
+    return callerFormat;
+  }
+  // A sub-day level's own format is time-of-day only (`HH:mm`), which does not read as a date.
+  // Show the day instead, so every date measure is displayed as a date.
+  if (DateLevels.timeOnly.includes(attribute.granularity)) {
+    return daysFormat;
+  }
+
+  return levelFormat || daysFormat;
 };
 
 /**
@@ -355,6 +620,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
     dataSource?: JaqlDataSource,
     composeCode?: string,
     title?: string,
+    datatype?: string,
   ) {
     super(
       name,
@@ -369,6 +635,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
 
     this.expression = expression;
     this.context = context;
+    this.datatype = datatype;
   }
 
   /**
@@ -380,6 +647,13 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
    * Defines the Calculated measure's context
    */
   context: MeasureContext;
+
+  /**
+   * The datatype the saved jaql carried, when there was one. A formula has no attribute to read a
+   * type from, so when present this says the result is a date. A bare `MIN`/`MAX` formula is read
+   * as one even without it.
+   */
+  readonly datatype?: string;
 
   /**
    * Gets a sorted {@link Measure} with the given definition
@@ -398,6 +672,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       this.dataSource,
       this.composeCode,
       this.title,
+      this.datatype,
     );
   }
 
@@ -420,6 +695,30 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       this.dataSource,
       this.composeCode,
       this.title,
+      this.datatype,
+    );
+  }
+
+  /**
+   * Returns a copy carrying the given datatype. The ingest path must go through
+   * `measureFactory.customFormula` to get `composeCode`, so it cannot call this constructor
+   * directly. This copies the measure with the datatype added.
+   *
+   * @param datatype - The datatype the saved jaql carried.
+   * @returns A new instance identical to this one but carrying the datatype.
+   */
+  withDatatype(datatype: string): DimensionalCalculatedMeasure {
+    return new DimensionalCalculatedMeasure(
+      this.name,
+      this.expression,
+      this.context,
+      this._format,
+      this.description,
+      this._sort,
+      this.dataSource,
+      this.composeCode,
+      this.title,
+      datatype,
     );
   }
 
@@ -442,6 +741,11 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
         value.serialize ? value.serialize() : value,
       ]),
     );
+    /* A formula that is not a bare MIN or MAX has nothing to re-derive the stamp from, so dropping
+       it here turns a date measure back into a number on the next round trip. */
+    if (this.datatype !== undefined) {
+      result.datatype = this.datatype;
+    }
 
     return result;
   }
@@ -465,7 +769,15 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
 
     r.jaql.context = context;
 
-    if (this._format) {
+    const dateJaql = dateFormulaJaql(this);
+    if (dateJaql) {
+      Object.assign(r.jaql, dateJaql);
+    }
+
+    const levelName = r.jaql.dateTimeLevel || r.jaql.level;
+    if (dateJaql && levelName) {
+      r.format = { mask: { [levelName]: this._format || getDefaultDateMeasureFormat(this) } };
+    } else if (this._format) {
       r.format = { number: this._format };
     }
 
@@ -476,13 +788,6 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
     return nested === true ? r.jaql : r;
   }
 }
-
-/**
- * @internal
- */
-export const isDimensionalCalculatedMeasure = (v: AnyObject): v is DimensionalCalculatedMeasure => {
-  return Boolean(v && v.__serializable === 'DimensionalCalculatedMeasure');
-};
 
 /**
  * Stands for a Measure template - generator for different aggregation over Attribute
@@ -697,6 +1002,7 @@ export function createMeasure(json: any): Measure | BaseMeasure {
       undefined,
       undefined,
       title,
+      json.datatype,
     );
   } else if (MetadataTypes.isMeasureTemplate(json)) {
     if (att === undefined) {

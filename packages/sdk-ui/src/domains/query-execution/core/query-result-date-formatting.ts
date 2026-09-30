@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { Data, isDatetime } from '@sisense/sdk-data';
+import { Data, getDateMeasureAttribute, isDatetime } from '@sisense/sdk-data';
 import type { Cell, Column, QueryResultData } from '@sisense/sdk-data';
 
 import { isMeasureColumn } from '@/domains/visualizations/core/chart-data-options/utils';
@@ -29,24 +29,38 @@ export function applyDateFormats(
 ): QueryResultData | Data {
   type ColumnIndex = number;
   const dateFormats = new Map<ColumnIndex, DateFormat>();
+  // the indicator reads its date measures from value, secondary, min and max. Some other options
+  // hold one column instead of an array, so both shapes are accepted.
+  const asOptions = (option: unknown): StyledColumn[] =>
+    option ? (Array.isArray(option) ? option : [option]) : [];
+
   [
-    ...(chartDataOptions.breakBy ? chartDataOptions.breakBy : []),
-    ...(chartDataOptions.x
-      ? Array.isArray(chartDataOptions.x)
-        ? chartDataOptions.x
-        : [chartDataOptions.x]
-      : []),
-    ...(chartDataOptions.columns ? chartDataOptions.columns : []),
-  ].forEach(function collectDateFormatsFromCategoriesOptions(cat: StyledColumn): void {
-    if (isMeasureColumn(cat) || !cat.dateFormat || !data?.columns) {
+    ...asOptions(chartDataOptions.breakBy),
+    ...asOptions(chartDataOptions.x),
+    ...asOptions(chartDataOptions.columns),
+    ...asOptions(chartDataOptions.value),
+    ...asOptions(chartDataOptions.secondary),
+    ...asOptions(chartDataOptions.min),
+    ...asOptions(chartDataOptions.max),
+  ].forEach(function collectDateFormatsFromDataOptions(dataOption: StyledColumn): void {
+    if (!dataOption.dateFormat || !data?.columns) {
       return;
     }
+
+    // A date measure has no datetime type of its own: the attribute it aggregates carries it.
+    const dateMeasureAttribute = getDateMeasureAttribute(dataOption.column);
+    if (isMeasureColumn(dataOption) && !dateMeasureAttribute) {
+      return;
+    }
+    const dataOptionType = dateMeasureAttribute?.type ?? dataOption.column.type;
 
     const columnIndex = data.columns.findIndex(function isDatetimeColumnWithSameNameSameType(
       column: Column,
     ): boolean {
       return (
-        column.name === cat.column.name && isDatetime(cat.column.type) && isDatetime(column.type)
+        column.name === dataOption.column.name &&
+        isDatetime(dataOptionType) &&
+        isDatetime(column.type)
       );
     });
 
@@ -54,7 +68,7 @@ export function applyDateFormats(
       return;
     }
 
-    dateFormats.set(columnIndex, cat.dateFormat);
+    dateFormats.set(columnIndex, dataOption.dateFormat);
   });
 
   if (dateFormats.size === 0) {
@@ -83,6 +97,10 @@ export function applyDateFormats(
       } else {
         // oldCell is a date string, emulate how JAQL results treats dates
         const compareValue = createCompareValue(`${oldCell}`, 'datetime');
+        // an unparseable value would throw on toISOString and abort the whole pass
+        if (compareValue.valueIsNaN) {
+          return oldCell;
+        }
         date = new Date(compareValue.value);
         newCell = { data: date.toISOString(), text: `${oldCell}` };
       }

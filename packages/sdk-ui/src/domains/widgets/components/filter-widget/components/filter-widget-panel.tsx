@@ -26,7 +26,7 @@ const PANEL_MIN_WIDTH = '260px';
  * padding, an 8px stack gap, at least {@link PANEL_MIN_WIDTH} wide (expands for long locales).
  * @internal
  */
-export const Panel = styled.div<{ $radius: FieldRadius }>`
+export const Panel = styled.div<{ $radius: FieldRadius; $minWidth?: string }>`
   display: flex;
   flex-direction: column;
   gap: ${spacing.m};
@@ -35,7 +35,7 @@ export const Panel = styled.div<{ $radius: FieldRadius }>`
   /* Fit the footer (Clear · Cancel · Apply) when translations outgrow English; never shrink
      below the designed English width. */
   width: fit-content;
-  min-width: ${PANEL_MIN_WIDTH};
+  min-width: ${({ $minWidth }) => $minWidth ?? PANEL_MIN_WIDTH};
   padding: 12px;
   font-family: ${fwVar('fontFamily', fwFallback.fontFamily)};
   background: ${fwVar('panelBg', fwFallback.panelBg)};

@@ -8,8 +8,9 @@ import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '@/props';
+import type { SisenseContextProviderProps } from '@/props';
 
+import { FilterEditorContextProvider } from './filter-editor-context.js';
 import { FilterEditorNumerical } from './filter-editor-numerical.js';
 
 const contextProviderProps: SisenseContextProviderProps = {
@@ -328,7 +329,7 @@ describe('FilterEditorNumerical', () => {
     );
   });
 
-  it('should hide multi-select toggle', async () => {
+  it('should hide multi-select toggle', () => {
     const multiSelectMembersFilter = filterFactory.members(DM.Commerce.CategoryID, ['1', '2']);
     setup(
       <SisenseContextProvider {...contextProviderProps}>
@@ -588,5 +589,66 @@ describe('FilterEditorNumerical', () => {
         within(rangeSection).getByText('"To" must be greater than "From"'),
       ).toBeInTheDocument(),
     );
+  });
+
+  describe('members-only mode', () => {
+    const renderEditor = (membersOnlyMode: boolean) =>
+      setup(
+        <SisenseContextProvider {...contextProviderProps}>
+          <FilterEditorContextProvider
+            value={{
+              defaultDataSource: null,
+              dataSources: [],
+              parentFilters: [],
+              membersOnlyMode,
+              rankingVisible: true,
+            }}
+          >
+            <FilterEditorNumerical filter={includeAllFilter} onChange={filterChangeHandlerMock} />
+          </FilterEditorContextProvider>
+        </SisenseContextProvider>,
+      );
+
+    const getConditionOptions = async (user: ReturnType<typeof setup>['user']) => {
+      const conditionSection = await screen.findByLabelText('Numeric condition section');
+      await user.click(within(conditionSection).getByLabelText('Condition select'));
+      const conditionSelectContent = await screen.findByLabelText('Single-select content');
+      return Array.from(conditionSelectContent.children, (item) => item.textContent);
+    };
+
+    it('should hide the range section when members-only mode is on', async () => {
+      renderEditor(true);
+
+      expect(await screen.findByLabelText('Members section')).toBeInTheDocument();
+      expect(screen.queryByLabelText('Numeric range section')).not.toBeInTheDocument();
+    });
+
+    it('should show the range section when members-only mode is off', async () => {
+      renderEditor(false);
+
+      expect(await screen.findByLabelText('Numeric range section')).toBeInTheDocument();
+    });
+
+    it('should offer only the "is not" condition when members-only mode is on', async () => {
+      const { user } = renderEditor(true);
+
+      expect(await getConditionOptions(user)).toEqual(['Is not']);
+    });
+
+    it('should offer all conditions when members-only mode is off', async () => {
+      const { user } = renderEditor(false);
+
+      expect(await getConditionOptions(user)).toEqual([
+        'Is not',
+        'Equals',
+        'Does not equal',
+        'Smaller than',
+        'Equals or smaller than',
+        'Greater than',
+        'Equals or greater than',
+        'Top',
+        'Bottom',
+      ]);
+    });
   });
 });

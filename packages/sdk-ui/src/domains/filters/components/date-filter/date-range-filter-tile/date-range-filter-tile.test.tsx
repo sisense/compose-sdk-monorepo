@@ -248,4 +248,68 @@ describe('DateRangeFilterTile', () => {
 
     expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
   });
+
+  it('renders linked indicator and disables controls when linked to a FilterWidget', async () => {
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+
+    render(
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
+        <DateRangeFilterTile
+          title="Date Range"
+          attribute={DM.Commerce.Date.Years}
+          dataSource={DM.DataSource}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          onDelete={vi.fn()}
+          tiled
+          linked
+        />
+      </SisenseContextProvider>,
+    );
+
+    expect(await screen.findByTestId('filter-tile-linked-indicator')).toBeInTheDocument();
+    expect(screen.getByTestId('filter-delete-button')).toBeDisabled();
+    expect(screen.getByRole('switch', { name: 'Enable/disable filter' })).toBeDisabled();
+    // The expand toggle is disabled too — a linked tile can never reach its own editable
+    // From/To buttons through the collapsed display in this arrangement (vertical, gated by
+    // `FilterTileContainer`'s own `disabled={linked}` on the arrow). The non-tiled branch
+    // below has no such gate, which is what the next test exercises instead.
+    expect(screen.getByRole('button', { name: 'arrow-down' })).toBeDisabled();
+  });
+
+  it('disables the editable From/To buttons when linked to a FilterWidget (non-tiled — no collapse gate)', async () => {
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+
+    render(
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
+        <DateRangeFilterTile
+          title="Date Range"
+          attribute={DM.Commerce.Date.Years}
+          dataSource={DM.DataSource}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          linked
+        />
+      </SisenseContextProvider>,
+    );
+
+    // CodeRabbit review finding: this branch renders straight to `EditableDateRangeFilter`
+    // with no `FilterTileContainer` collapse gate in front of it, so it was the one place a
+    // linked filter's date buttons stayed genuinely reachable and clickable.
+    const dateButtons = await screen.findAllByLabelText('DateRangeFieldButton');
+    expect(dateButtons).toHaveLength(2);
+    dateButtons.forEach((button) => expect(button).toBeDisabled());
+  });
 });

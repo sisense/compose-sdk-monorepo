@@ -1,12 +1,19 @@
 import type { TFunction } from '@sisense/sdk-common';
 import type {
   Attribute,
+  CalculatedMeasure,
   Filter,
   FilterRelations,
   FilterRelationsNode,
   Measure,
 } from '@sisense/sdk-data';
-import { getColumnNameFromAttribute, isDimensionalLevelAttribute } from '@sisense/sdk-data';
+import {
+  FORECAST_PREFIX,
+  getColumnNameFromAttribute,
+  isDimensionalLevelAttribute,
+  MetadataTypes,
+  TREND_PREFIX,
+} from '@sisense/sdk-data';
 
 import type { BaseQueryParams } from '@/domains/query-execution/types';
 import { generateAttributeName } from '@/shared/utils/generate-attribute-name';
@@ -15,21 +22,117 @@ import { toReadableFilterLabel } from './filter-to-readable-label';
 import { formatChipLabel } from './format-chip-label';
 import { isPillItem, type QueryDefinitionViewModel, type QueryPillItem } from './types';
 
-/** Pill label for a dimension (or filter) attribute; `t` enables date-level strings via {@link generateAttributeName}. */
-function getAttributeLabel(attr: Attribute, t?: TFunction): string {
+/**
+ * Pill label for a dimension (or filter) attribute; `t` enables date-level strings via {@link generateAttributeName}.
+ *
+ * @param attr - Attribute to label.
+ * @param t - Optional i18n translate function for date-level attributes.
+ * @returns Display label for the attribute.
+ * @internal
+ */
+export function getAttributeLabel(attr: Attribute, t?: TFunction): string {
   if (t && isDimensionalLevelAttribute(attr)) {
     return generateAttributeName(t, getColumnNameFromAttribute(attr), attr.granularity);
   }
   return formatChipLabel(attr);
 }
 
-/** Pill label from measure display name. */
-function getMeasureLabel(measure: Measure): string {
-  return formatChipLabel(measure);
+const COMPANION_MEASURES = [
+  { prefix: `${FORECAST_PREFIX}_`, key: 'advanced.tooltip.forecast', fallback: 'Forecast' },
+  { prefix: `${TREND_PREFIX}_`, key: 'advanced.tooltip.trend', fallback: 'Trend' },
+] as const;
+
+/**
+ * Readable label for a forecast/trend companion measure (`$forecast_Revenue` → "Revenue forecast").
+ *
+ * @param name - Measure name.
+ * @param t - Optional i18n translate function.
+ * @returns The label, or undefined when `name` is not a companion measure name.
+ */
+function getCompanionMeasureLabel(name: string, t?: TFunction): string | undefined {
+  const companion = COMPANION_MEASURES.find(({ prefix }) => name.startsWith(prefix));
+  if (!companion) {
+    return undefined;
+  }
+  const suffix = t ? t(companion.key) : companion.fallback;
+  return formatChipLabel(`${name.slice(companion.prefix.length)} ${suffix}`);
 }
 
-/** Pill label from filter attribute and operator/value; empty when the filter should render no chip. */
-function getFilterLabel(filter: Filter, t?: TFunction): string {
+function normalizeFormula(formula: string): string {
+  return formula.replace(/\s+/g, '').toLowerCase();
+}
+
+function getContextItemLabel(item: unknown, t?: TFunction): string | undefined {
+  if (MetadataTypes.isFilter(item)) {
+    return getFilterLabel(item as Filter, t) || undefined;
+  }
+  if (MetadataTypes.isMeasure(item)) {
+    return getMeasureLabel(item as Measure, t);
+  }
+  if (MetadataTypes.isAttribute(item)) {
+    return getAttributeLabel(item, t);
+  }
+  return undefined;
+}
+
+/**
+ * A custom formula named after its own formula (no real title) gets its formula with every
+ * `[key]` replaced by the readable label of the context item it refers to.
+ *
+ * @param measure - Measure to label.
+ * @param t - Optional i18n translate function.
+ * @returns The label, or undefined when `measure` is not a custom formula named after its formula.
+ */
+function getGeneratedFormulaLabel(measure: Measure, t?: TFunction): string | undefined {
+  if (!MetadataTypes.isCalculatedMeasure(measure)) {
+    return undefined;
+  }
+  const { expression, context } = measure as CalculatedMeasure;
+  if (!expression || !context || normalizeFormula(measure.name) !== normalizeFormula(expression)) {
+    return undefined;
+  }
+  const contextByKey = new Map(
+    Object.entries(context).map(([key, item]) => [key.toLowerCase(), item]),
+  );
+  return expression
+    .replace(/\[[^\]]+\]/g, (token) => {
+      const item: unknown = contextByKey.get(token.toLowerCase());
+      return getContextItemLabel(item, t) ?? token;
+    })
+    .replace(/\s*,\s*/g, ', ');
+}
+
+/**
+ * Pill label from measure display name. A distinct Friendly Name is used verbatim; otherwise
+ * system-generated names get a readable label: forecast/trend companions (`$forecast_…`,
+ * `$trend_…`) and custom formulas named after their own formula.
+ *
+ * @param measure - Measure to label.
+ * @param t - Optional i18n translate function.
+ * @returns Display label for the measure.
+ * @internal
+ */
+export function getMeasureLabel(measure: Measure, t?: TFunction): string {
+  const hasFriendlyName = Boolean(measure.title) && measure.title !== measure.name;
+  if (hasFriendlyName) {
+    return formatChipLabel(measure);
+  }
+  return (
+    getCompanionMeasureLabel(measure.name, t) ??
+    getGeneratedFormulaLabel(measure, t) ??
+    formatChipLabel(measure)
+  );
+}
+
+/**
+ * Pill label from filter attribute and operator/value; empty when the filter should render no chip.
+ *
+ * @param filter - Filter to label.
+ * @param t - Optional i18n translate function for date-level attributes.
+ * @returns Readable chip text, or an empty string when the filter should render no chip.
+ * @internal
+ */
+export function getFilterLabel(filter: Filter, t?: TFunction): string {
   if (!filter.attribute) {
     return '';
   }
@@ -64,11 +167,12 @@ export function baseQueryParamsToViewModel(
 
   // Measures
   measures.forEach((m, i) => {
+    const label = getMeasureLabel(m, t);
     result.push({
       type: 'pill',
-      label: getMeasureLabel(m),
+      label,
       category: 'measure',
-      id: `measure-${i}-${getMeasureLabel(m)}`,
+      id: `measure-${i}-${label}`,
       tooltipData: m,
     });
   });

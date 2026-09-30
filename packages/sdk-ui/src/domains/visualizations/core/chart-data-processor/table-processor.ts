@@ -93,6 +93,16 @@ export const separateBy = (rows: readonly Row[], separateByColumns: Column[]) =>
   return allGroups;
 };
 
+// The engine's own value, not the formatted text. Re-parsing the text is what turned a date cell
+// into epoch milliseconds, or into NaN whenever the mask was not ISO shaped.
+const datetimeValueOf = (cell: ComparableData): number => {
+  const compared = cell.compareValue?.value;
+
+  return typeof compared === 'number'
+    ? compared
+    : parseISOWithTimezoneCheck(`${cell.rawValue ?? cell.displayValue}`).valueOf();
+};
+
 const _getAggregatedValues = (
   rows: Row[],
   aggregationColumns: AggregationColumn[],
@@ -114,9 +124,7 @@ const _getAggregatedValues = (
     const blur = dataArray.some((row) => row[col.index].blur);
 
     if (isDatetime(col.type)) {
-      const data = dataArray.map((r) =>
-        parseISOWithTimezoneCheck(r[col.index].displayValue).valueOf(),
-      );
+      const data = dataArray.map((r) => datetimeValueOf(r[col.index]));
       value = new Distribution(data).getStat(aggFunc);
     } else if (isNumber(col.type)) {
       // maybe want to use value if it exists before parsing displayValue
@@ -126,8 +134,15 @@ const _getAggregatedValues = (
       const categoricalData = dataArray.map((r) => r[col.index].displayValue);
       value = new CategoricalDistribution(categoricalData).getStat(aggFunc);
     }
+    // min and max answer with one of the input cells, so that cell's own text, raw value and
+    // compare value are the ones to carry. Any other aggregation has no source cell to carry.
+    const sourceCell = isDatetime(col.type)
+      ? dataArray.find((r) => datetimeValueOf(r[col.index]) === value)?.[col.index]
+      : undefined;
+
     row.push({
-      displayValue: `${value}`,
+      ...sourceCell,
+      displayValue: sourceCell?.displayValue ?? `${value}`,
       ...(color && { color }),
       ...(blur && { blur }),
     });

@@ -2,10 +2,12 @@ import {
   attributeFactory,
   CalculatedMeasureColumn,
   Column,
+  createDateDimension,
   DateLevels,
   DimensionalLevelAttribute,
   LevelAttribute,
   MeasureColumn,
+  measureFactory,
 } from '@sisense/sdk-data';
 
 import { CategoryStyle, StyledColumn, StyledMeasureColumn } from './types.js';
@@ -315,6 +317,86 @@ describe('Chart Data Options Utils', () => {
       expect(column.name).toBe('Units');
       expect(column.title).toBe('Units');
       expect(column.aggregation).toBe('sum');
+    });
+
+    describe('default date format of a date measure', () => {
+      const dateDimension = createDateDimension({
+        name: 'Date',
+        expression: '[Commerce.Date (Calendar)]',
+      });
+
+      it('takes the format of the aggregated level attribute', () => {
+        const result = normalizeMeasureColumn(measureFactory.max(dateDimension.Years, 'Max Year'));
+
+        expect(result.dateFormat).toBe(dateDimension.Years.getFormat());
+        expect(result.dateFormat).toBe('yyyy');
+      });
+
+      it('falls back to the granularity default when the attribute carries no format', () => {
+        const daysWithoutFormat = new DimensionalLevelAttribute(
+          'Days',
+          '[Commerce.Date (Calendar)]',
+          DateLevels.Days,
+        );
+
+        const result = normalizeMeasureColumn(measureFactory.max(daysWithoutFormat, 'Max Date'));
+
+        expect(result.dateFormat).toBe('yyyy-MM-dd');
+      });
+
+      it('falls back to the days format for a granularity with no default', () => {
+        const unknownGranularity = new DimensionalLevelAttribute(
+          'Fortnights',
+          '[Commerce.Date (Calendar)]',
+          'Fortnights',
+        );
+
+        const result = normalizeMeasureColumn(measureFactory.min(unknownGranularity, 'Min Date'));
+
+        expect(result.dateFormat).toBe('yyyy-MM-dd');
+      });
+
+      it('takes the default level format for a measure over a bare date dimension', () => {
+        const result = normalizeMeasureColumn(measureFactory.max(dateDimension, 'Max Date'));
+
+        expect(result.dateFormat).toBe('yyyy');
+      });
+
+      it('clamps an aggregated sub-day granularity to the days format', () => {
+        // the engine answers every sub-day level with the same empty-date sentinel, so a
+        // time-of-day mask would only ever print 00:00
+        const result = normalizeMeasureColumn(
+          measureFactory.max(dateDimension.AggHours, 'Max Hour'),
+        );
+
+        expect(dateDimension.AggHours.getFormat()).toBe('HH:mm');
+        expect(result.dateFormat).toBe('yyyy-MM-dd');
+      });
+
+      it('clamps a sub-day granularity to the days format', () => {
+        const result = normalizeMeasureColumn(
+          measureFactory.max(dateDimension.Minutes, 'Max Time'),
+        );
+
+        expect(dateDimension.Minutes.getFormat()).toBe('yyyy-MM-dd HH:mm');
+        expect(result.dateFormat).toBe('yyyy-MM-dd');
+      });
+
+      it('keeps an explicitly configured date format', () => {
+        const result = normalizeMeasureColumn({
+          column: measureFactory.max(dateDimension.Days, 'Max Date'),
+          dateFormat: 'MM/yyyy',
+        });
+
+        expect(result.dateFormat).toBe('MM/yyyy');
+      });
+
+      it('leaves the date format undefined for a numeric measure', () => {
+        expect(normalizeMeasureColumn(thisMeasure).dateFormat).toBeUndefined();
+        expect(
+          normalizeMeasureColumn(measureFactory.count(dateDimension.Days, '# of Dates')).dateFormat,
+        ).toBeUndefined();
+      });
     });
   });
 

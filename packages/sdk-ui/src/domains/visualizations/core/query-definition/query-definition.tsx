@@ -8,11 +8,14 @@ import { useThemeContext } from '@/infra/contexts/theme-provider';
 import type { ChartProps } from '@/props';
 
 import { translateTableDataOptions } from '../chart-data-options/translate-data-options';
+import { appendCustomPills, customPillsToViewModel } from './custom-pills';
+import { DEFAULT_MAX_VISIBLE_PILLS, splitCollapsedView } from './query-definition-collapse';
 import { QUERY_DEFINITION_TEXT_STYLE } from './query-definition-style-constants';
 import { baseQueryParamsToViewModel } from './query-params-to-view-model';
 import { QueryPill } from './query-pill';
+import type { QueryDefinitionCustomPill } from './types';
 
-const MAX_VISIBLE_PILLS = 4;
+export { DEFAULT_MAX_VISIBLE_PILLS };
 
 const EXPANDER_BUTTON_COLOR_STYLE = { color: 'inherit' as const };
 
@@ -26,6 +29,11 @@ const CONNECTOR_CLASS = 'csdk-select-none';
 export interface QueryDefinitionProps {
   /** Either chart props (uses getTranslatedDataOptions internally) or query params (same shape as {@link useExecuteQuery}) */
   query: ExecuteQueryParams | ChartProps;
+  /**
+   * Extra pills appended after chips derived from {@link QueryDefinitionProps.query}.
+   * Presentation (`label`, `color`, `pin`) lives on each item — not a parallel override map.
+   */
+  customPills?: readonly QueryDefinitionCustomPill[];
   /** When true (default), pills show JSON tooltip on hover. */
   showTooltip?: boolean;
   /**
@@ -38,38 +46,15 @@ export interface QueryDefinitionProps {
    * Pass `0` to show the full label.
    */
   maxPillLength?: number;
+  /**
+   * Maximum number of pills shown before “Show N more”.
+   * Defaults to {@link DEFAULT_MAX_VISIBLE_PILLS} when omitted.
+   */
+  maxVisiblePills?: number;
 }
 
 function isChartPropsInput(input: ExecuteQueryParams | ChartProps): input is ChartProps {
   return 'chartType' in input && 'dataOptions' in input && typeof input.chartType === 'string';
-}
-
-/**
- * Splits view model into visible part (first MAX_VISIBLE_PILLS pills + connectors)
- * and count of remaining pills.
- */
-function splitCollapsedView(viewModel: ReturnType<typeof baseQueryParamsToViewModel>): {
-  visible: ReturnType<typeof baseQueryParamsToViewModel>;
-  moreCount: number;
-} {
-  let pillCount = 0;
-  const visible: ReturnType<typeof baseQueryParamsToViewModel> = [];
-  let moreCount = 0;
-
-  for (const item of viewModel) {
-    if (item.type === 'pill') {
-      if (pillCount < MAX_VISIBLE_PILLS) {
-        visible.push(item);
-        pillCount += 1;
-      } else {
-        moreCount += 1;
-      }
-    } else if (pillCount < MAX_VISIBLE_PILLS && pillCount > 0) {
-      visible.push(item);
-    }
-  }
-
-  return { visible, moreCount };
 }
 
 function chartPropsToQueryParams({
@@ -89,15 +74,17 @@ function chartPropsToQueryParams({
 
 /**
  * Read-only query definition as colored pills above the widget.
- * Order: Measures → Dimensions → Filters; collapsed to 4 pills with “Show N more” / “Show less”.
+ * Order: Measures → Dimensions → Filters → customPills; collapsed to {@link QueryDefinitionProps.maxVisiblePills} with “Show N more” / “Show less”.
  *
  * @sisenseInternal
  */
 export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
   query: queryInput,
+  customPills,
   showTooltip = true,
   tooltipBoundaryElement,
   maxPillLength = 25,
+  maxVisiblePills = DEFAULT_MAX_VISIBLE_PILLS,
 }) => {
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
@@ -105,10 +92,16 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
 
   const viewModel = useMemo(() => {
     const params = isChartPropsInput(queryInput) ? chartPropsToQueryParams(queryInput) : queryInput;
-    return baseQueryParamsToViewModel(params, t);
-  }, [queryInput, t]);
+    return appendCustomPills(
+      baseQueryParamsToViewModel(params, t),
+      customPillsToViewModel(customPills, t),
+    );
+  }, [queryInput, customPills, t]);
 
-  const { visible, moreCount } = useMemo(() => splitCollapsedView(viewModel), [viewModel]);
+  const { visible, moreCount } = useMemo(
+    () => splitCollapsedView(viewModel, maxVisiblePills),
+    [viewModel, maxVisiblePills],
+  );
   const showExpander = moreCount > 0;
   const displayItems = expanded || !showExpander ? viewModel : visible;
 

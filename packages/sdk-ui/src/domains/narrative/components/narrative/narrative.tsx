@@ -1,3 +1,4 @@
+import { type PointerEvent, type Ref, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
@@ -10,20 +11,24 @@ import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-s
 import { formatDate } from '@/infra/formatting/format-date';
 import Tooltip from '@/modules/ai/common/tooltip';
 import { LoadingOverlay } from '@/shared/components/loading-overlay';
+import { useElementHeight } from '@/shared/hooks/use-element-height';
 import { WarningIcon } from '@/shared/icons/warning-icon.js';
 import { XCircleIcon } from '@/shared/icons/x-circle-icon.js';
+import { applyOpacity } from '@/shared/utils/color/index.js';
 
 import { NarrativeGenerateIcon } from '../narrative-generate-icon.js';
 import { InsightCard } from './insight-card.js';
 import { NARRATIVE_MARKDOWN_OPTIONS } from './narrative-markdown.js';
 import type { NarrativeData, NarrativeErrorKind, NarrativeProps } from './types.js';
 
-/** The PRD allows at most three insights; anything beyond is not drawn. */
-const MAX_INSIGHTS = 3;
+/** Insights sharing one row; more wrap onto further rows. */
+const INSIGHTS_PER_ROW = 3;
 
 /** Spacing lifted from the reference design. */
 const GAP_PX = 16;
 const FOOTER_GAP_PX = 4;
+/** Divider to the footer row, and the footer row to the card's bottom edge. */
+const FOOTER_EDGE_PX = 8;
 const INSIGHT_GAP_PX = 24;
 
 /** The design's Responsiveness frame keeps the insights in a row at a widget this wide. */
@@ -63,7 +68,7 @@ export function formatNarrativeTimestamp(
   return formatDate(generatedAt, TIMESTAMP_MASK, { locale: getBaseDateFnsLocale(language) });
 }
 
-const Body = styled.div<Themable>`
+const Body = styled.div<Themable & { hasFooter: boolean }>`
   box-sizing: border-box;
   container: narrative / inline-size;
   display: flex;
@@ -72,7 +77,7 @@ const Body = styled.div<Themable>`
   width: 100%;
   height: 100%;
   min-height: 0;
-  padding: ${GAP_PX}px ${GAP_PX}px ${FOOTER_GAP_PX}px;
+  padding: ${GAP_PX}px ${GAP_PX}px ${({ hasFooter }) => (hasFooter ? FOOTER_EDGE_PX : GAP_PX)}px;
   overflow-x: hidden;
   overflow-y: hidden;
   font-family: ${({ theme }) => theme.typography.fontFamily};
@@ -90,14 +95,15 @@ const Overview = styled.div`
   }
 `;
 
-const InsightRow = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: ${INSIGHT_GAP_PX}px;
+const InsightRow = styled.div<{ columns: number }>`
+  display: grid;
+  grid-template-columns: repeat(${({ columns }) => columns}, minmax(0, 1fr));
+  align-items: start;
+  column-gap: ${INSIGHT_GAP_PX}px;
+  row-gap: ${GAP_PX}px;
 
   @container narrative (width < ${INSIGHTS_STACK_BREAKPOINT_PX}px) {
-    flex-direction: column;
-    gap: ${GAP_PX}px;
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
@@ -106,34 +112,39 @@ const InsightRow = styled.div`
  * so the footer stays pinned to the bottom edge whatever the content height.
  */
 const Content = styled.div`
-  display: flex;
   flex: 1 1 auto;
-  flex-direction: column;
-  gap: ${GAP_PX}px;
   min-height: 0;
   overflow-y: auto;
+`;
+
+/** The generated text at its natural height, measured to size the widget to it. */
+const ContentFlow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${GAP_PX}px;
 `;
 
 const Footer = styled.div`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  gap: ${FOOTER_GAP_PX}px;
+  gap: ${FOOTER_EDGE_PX}px;
 `;
 
+// Translucent through its colour, never `opacity`: older html2canvas builds, which host image exports
+// use, carry an element's opacity over to everything painted after it.
 const FooterDivider = styled.div<Themable>`
   height: 1px;
   width: 100%;
-  background-color: ${({ theme }) => theme.widget.borderColor};
-  opacity: 0.5;
+  background-color: ${({ theme }) => applyOpacity(theme.widget.borderColor, 0.5)};
 `;
 
+// One line at any width: the disclaimer gives way, the timestamp and actions never wrap.
 const FooterRow = styled.div<Themable>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: ${GAP_PX}px;
-  flex-wrap: wrap;
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.2px;
@@ -142,10 +153,46 @@ const FooterRow = styled.div<Themable>`
 
 const FooterActions = styled.div`
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   gap: ${GAP_PX / 2}px;
   margin-left: auto;
+  white-space: nowrap;
 `;
+
+const DisclaimerText = styled.span`
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+type FooterDisclaimerProps = {
+  /** Disclaimer text. */
+  text: string;
+};
+
+/**
+ * The disclaimer, cut with an ellipsis when the row is too narrow; the full text shows on hover.
+ * @param props - Component props.
+ * @returns The disclaimer element.
+ */
+function FooterDisclaimer(props: FooterDisclaimerProps) {
+  const { text } = props;
+  const [isTruncated, setIsTruncated] = useState(false);
+  const measure = (event: PointerEvent<HTMLSpanElement>) => {
+    const { scrollWidth, clientWidth } = event.currentTarget;
+    setIsTruncated(scrollWidth > clientWidth);
+  };
+  return (
+    <Tooltip title={isTruncated ? text : ''}>
+      <DisclaimerText data-testid="csdk-narrative-disclaimer" onPointerEnter={measure}>
+        {text}
+      </DisclaimerText>
+    </Tooltip>
+  );
+}
 
 /** Hosts the shared loading overlay, which positions itself absolutely inside its parent. */
 const LoadingArea = styled.div`
@@ -160,9 +207,16 @@ const Centered = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${FOOTER_GAP_PX}px;
   min-height: 0;
   text-align: center;
+`;
+
+/** What `Centered` centres, at its natural height, measured to size the widget to it. */
+const CenteredStack = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${FOOTER_GAP_PX}px;
 `;
 
 /** Mark and title on one line, per the design's error states. */
@@ -193,9 +247,12 @@ const Muted = styled.div<Themable>`
 const ActionButton = styled.button<Themable>`
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border: 1px solid ${({ theme }) => theme.widget.borderColor};
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  min-height: 28px;
+  padding: 4px 16px;
+  border: 1px solid color-mix(in srgb, currentColor 50%, transparent);
   border-radius: 4px;
   background-color: transparent;
   color: ${({ theme }) => theme.typography.primaryTextColor};
@@ -262,7 +319,7 @@ function GenerateButton({
       disabled={disabled}
       data-testid="csdk-narrative-generate"
     >
-      <NarrativeGenerateIcon size={ICON_PX} />
+      <NarrativeGenerateIcon size={ICON_PX} trimmed />
       {label}
     </ActionButton>
   );
@@ -312,44 +369,52 @@ function QuotaWarning({
   );
 }
 
+type ReadyBodyProps = Pick<NarrativeProps, 'quotaWarning' | 'onGenerate' | 'showActions'> & {
+  /** The narrative to render. */
+  data: NarrativeData;
+  /** Receives the generated text at its natural height. */
+  contentRef?: Ref<HTMLDivElement>;
+  /** Receives the footer. */
+  footerRef?: Ref<HTMLDivElement>;
+};
+
 /**
- * Renders the generated narrative: summary, up to three insights, then provenance and the
+ * Renders the generated narrative: summary, the insights three to a row, then provenance and the
  * regenerate action.
  * @param props - Component props.
- * @param props.data - The narrative to render.
- * @param props.quotaWarning - Near-limit credit warning, when one applies.
- * @param props.onGenerate - Requests regeneration.
  * @returns The ready-state body.
  * @internal
  */
-function ReadyBody({
-  data,
-  quotaWarning,
-  onGenerate,
-}: { data: NarrativeData } & Pick<NarrativeProps, 'quotaWarning' | 'onGenerate'>) {
+function ReadyBody(props: ReadyBodyProps) {
+  const { data, quotaWarning, onGenerate, showActions = true, contentRef, footerRef } = props;
   const { t, i18n } = useTranslation();
   const { themeSettings } = useThemeContext();
 
   return (
     <>
       <Content data-testid="csdk-narrative-content">
-        <Overview data-testid="csdk-narrative-overview">
-          <Markdown options={NARRATIVE_MARKDOWN_OPTIONS}>{data.overview}</Markdown>
-        </Overview>
+        <ContentFlow ref={contentRef}>
+          <Overview data-testid="csdk-narrative-overview">
+            <Markdown options={NARRATIVE_MARKDOWN_OPTIONS}>{data.overview}</Markdown>
+          </Overview>
 
-        {data.insights.length > 0 && (
-          <InsightRow data-testid="csdk-narrative-insights">
-            {data.insights.slice(0, MAX_INSIGHTS).map((insight, index) => (
-              <InsightCard key={index} insight={insight} />
-            ))}
-          </InsightRow>
-        )}
+          {data.insights.length > 0 && (
+            <InsightRow
+              data-testid="csdk-narrative-insights"
+              columns={Math.min(data.insights.length, INSIGHTS_PER_ROW)}
+            >
+              {data.insights.map((insight, index) => (
+                <InsightCard key={index} insight={insight} />
+              ))}
+            </InsightRow>
+          )}
+        </ContentFlow>
       </Content>
 
-      <Footer data-testid="csdk-narrative-footer">
+      <Footer data-testid="csdk-narrative-footer" ref={footerRef}>
         <FooterDivider theme={themeSettings} />
         <FooterRow theme={themeSettings}>
-          <span>{t('narrativeWidget.disclaimer')}</span>
+          <FooterDisclaimer text={t('narrativeWidget.disclaimer')} />
           <FooterActions>
             <span data-testid="csdk-narrative-timestamp">
               {t('narrativeWidget.updatedAt', {
@@ -358,11 +423,13 @@ function ReadyBody({
                 interpolation: { escapeValue: false },
               })}
             </span>
-            <GenerateButton
-              label={t('narrativeWidget.regenerate')}
-              onClick={onGenerate}
-              disabled={quotaWarning?.exceeded}
-            />
+            {showActions && (
+              <GenerateButton
+                label={t('narrativeWidget.regenerate')}
+                onClick={onGenerate}
+                disabled={quotaWarning?.exceeded}
+              />
+            )}
             {quotaWarning && (
               <QuotaWarning usagePercentage={quotaWarning.usagePercentage} presentation="tooltip" />
             )}
@@ -373,30 +440,35 @@ function ReadyBody({
   );
 }
 
+type ErrorBodyProps = Pick<NarrativeProps, 'onGenerate' | 'showActions'> & {
+  /** Which failure to describe. */
+  kind: NarrativeErrorKind;
+  /** Receives the centred content at its natural height. */
+  contentRef?: Ref<HTMLDivElement>;
+};
+
 /**
  * Renders a failure state. Only `failed` offers an action — its copy asks the reader to try again;
  * retrying cannot help `no-data`, and `quota-exceeded` is out of the reader's hands.
  * @param props - Component props.
- * @param props.kind - Which failure to describe.
- * @param props.onGenerate - Requests a retry.
  * @returns The error-state body.
  * @internal
  */
-function ErrorBody({
-  kind,
-  onGenerate,
-}: Pick<NarrativeProps, 'onGenerate'> & { kind: NarrativeErrorKind }) {
+function ErrorBody(props: ErrorBodyProps) {
+  const { kind, onGenerate, showActions = true, contentRef } = props;
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
 
   if (kind === 'quota-exceeded') {
     return (
       <Centered data-testid="csdk-narrative-error" data-error-kind={kind}>
-        <ErrorHeading>
-          <XCircleIcon />
-          <ErrorTitle>{t('ai.quota.exceededErrorTitle')}</ErrorTitle>
-        </ErrorHeading>
-        <Muted theme={themeSettings}>{t('ai.quota.exceededErrorDescription')}</Muted>
+        <CenteredStack ref={contentRef}>
+          <ErrorHeading>
+            <XCircleIcon />
+            <ErrorTitle>{t('ai.quota.exceededErrorTitle')}</ErrorTitle>
+          </ErrorHeading>
+          <Muted theme={themeSettings}>{t('ai.quota.exceededErrorDescription')}</Muted>
+        </CenteredStack>
       </Centered>
     );
   }
@@ -405,16 +477,22 @@ function ErrorBody({
 
   return (
     <Centered data-testid="csdk-narrative-error" data-error-kind={kind}>
-      <ErrorHeading>
-        {isNoData ? <WarningIcon /> : <XCircleIcon />}
-        <ErrorTitle>
-          {isNoData ? t('narrativeWidget.noDataTitle') : t('narrativeWidget.failedTitle')}
-        </ErrorTitle>
-      </ErrorHeading>
-      <Muted theme={themeSettings}>
-        {isNoData ? t('narrativeWidget.noDataDescription') : t('narrativeWidget.failedDescription')}
-      </Muted>
-      {!isNoData && <GenerateButton label={t('narrativeWidget.retry')} onClick={onGenerate} />}
+      <CenteredStack ref={contentRef}>
+        <ErrorHeading>
+          {isNoData ? <WarningIcon /> : <XCircleIcon />}
+          <ErrorTitle>
+            {isNoData ? t('narrativeWidget.noDataTitle') : t('narrativeWidget.failedTitle')}
+          </ErrorTitle>
+        </ErrorHeading>
+        <Muted theme={themeSettings}>
+          {isNoData
+            ? t('narrativeWidget.noDataDescription')
+            : t('narrativeWidget.failedDescription')}
+        </Muted>
+        {!isNoData && showActions && (
+          <GenerateButton label={t('narrativeWidget.retry')} onClick={onGenerate} />
+        )}
+      </CenteredStack>
     </Centered>
   );
 }
@@ -436,12 +514,39 @@ export const Narrative = asSisenseComponent({
   quotaWarning,
   onGenerate,
   showLoadingOverlay = true,
+  showActions = true,
+  onNaturalHeightChange,
 }: NarrativeProps) {
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
+  const { ref: observeContent, height: contentHeight } = useElementHeight<HTMLDivElement>();
+  const { ref: footerRef, height: footerHeight } = useElementHeight<HTMLDivElement>();
+  const contentNode = useRef<HTMLDivElement | null>(null);
+  const contentRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      contentNode.current = node;
+      observeContent(node);
+    },
+    [observeContent],
+  );
+
+  const { status } = state;
+  useEffect(() => {
+    if (status === 'loading' || contentHeight === 0 || !onNaturalHeightChange) return;
+    // `scrollHeight`, not the box: inline text can overhang its line box by a pixel, and that
+    // pixel would bring back the scrollbar.
+    const content = Math.max(contentHeight, contentNode.current?.scrollHeight ?? 0);
+    // The design's paddings: 16 above everything; the ready state keeps 16 before its footer and 8
+    // below it, the centred states 16 below.
+    const natural =
+      status === 'ready'
+        ? GAP_PX + content + GAP_PX + footerHeight + FOOTER_EDGE_PX
+        : GAP_PX + content + GAP_PX;
+    onNaturalHeightChange(Math.ceil(natural));
+  }, [status, contentHeight, footerHeight, onNaturalHeightChange]);
 
   return (
-    <Body theme={themeSettings} data-testid="csdk-narrative">
+    <Body theme={themeSettings} hasFooter={status === 'ready'} data-testid="csdk-narrative">
       {state.status === 'loading' && (
         <LoadingArea data-testid="csdk-narrative-loading">
           {showLoadingOverlay && <LoadingOverlay />}
@@ -449,17 +554,35 @@ export const Narrative = asSisenseComponent({
       )}
 
       {state.status === 'ready' && (
-        <ReadyBody data={state.data} quotaWarning={quotaWarning} onGenerate={onGenerate} />
+        <ReadyBody
+          data={state.data}
+          quotaWarning={quotaWarning}
+          onGenerate={onGenerate}
+          showActions={showActions}
+          contentRef={contentRef}
+          footerRef={footerRef}
+        />
       )}
 
-      {state.status === 'error' && <ErrorBody kind={state.kind} onGenerate={onGenerate} />}
+      {state.status === 'error' && (
+        <ErrorBody
+          kind={state.kind}
+          onGenerate={onGenerate}
+          showActions={showActions}
+          contentRef={contentRef}
+        />
+      )}
 
       {state.status === 'idle' && (
         <Centered data-testid="csdk-narrative-idle">
-          <GenerateButton label={t('narrativeWidget.generate')} onClick={onGenerate} />
-          {quotaWarning && (
-            <QuotaWarning usagePercentage={quotaWarning.usagePercentage} presentation="inline" />
-          )}
+          <CenteredStack ref={contentRef}>
+            {showActions && (
+              <GenerateButton label={t('narrativeWidget.generate')} onClick={onGenerate} />
+            )}
+            {quotaWarning && (
+              <QuotaWarning usagePercentage={quotaWarning.usagePercentage} presentation="inline" />
+            )}
+          </CenteredStack>
         </Centered>
       )}
     </Body>

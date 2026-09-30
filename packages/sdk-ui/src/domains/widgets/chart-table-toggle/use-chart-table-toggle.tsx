@@ -3,11 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import type { ChartWidgetConfig } from '@/domains/widgets/components/widget/widget-config';
 import { withHeaderItemsInConfig } from '@/domains/widgets/helpers/header-items-utils';
 
-import {
-  ChartTableToggleButton,
-  type ChartTableToggleLabels,
-  DEFAULT_CHART_TABLE_TOGGLE_LABELS,
-} from './chart-table-toggle-button';
+import { ChartTableToggleButton, type ChartTableToggleLabels } from './chart-table-toggle-button';
 import { createChartTableToggleItem } from './chart-table-toggle-header-item';
 import {
   applyChartTableOverride,
@@ -48,13 +44,7 @@ export function useChartTableToggle(
   chartType: string | undefined,
   options: UseChartTableToggleOptions = {},
 ) {
-  const labels = useMemo(
-    () => ({
-      ...DEFAULT_CHART_TABLE_TOGGLE_LABELS,
-      ...options.labels,
-    }),
-    [options.labels],
-  );
+  const labels = options.labels;
   const disabled = Boolean(options.disabled);
   const showToggle = shouldShowChartTableToggle(chartType, options.dataOptions);
   const resetKey = toResetIdentity(options.resetKey);

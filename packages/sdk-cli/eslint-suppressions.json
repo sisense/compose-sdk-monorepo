@@ -1,0 +1,80 @@
+{
+  "src/commands/get-api-token.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    }
+  },
+  "src/commands/get-data-model.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/commands/helpers.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    }
+  },
+  "src/commands/helpers.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 4
+    },
+    "@typescript-eslint/no-use-before-define": {
+      "count": 2
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 8
+    },
+    "jsdoc/require-param": {
+      "count": 8
+    },
+    "jsdoc/require-returns": {
+      "count": 3
+    }
+  },
+  "src/commands/prompts.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/run-cli.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    }
+  },
+  "src/run-cli.ts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/tracking.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "src/types.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "jsdoc/require-description-complete-sentence": {
+      "count": 2
+    },
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  }
+}

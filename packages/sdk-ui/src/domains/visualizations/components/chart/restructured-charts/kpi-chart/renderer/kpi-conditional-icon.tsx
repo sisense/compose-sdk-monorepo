@@ -1,5 +1,6 @@
-import type { KpiIcon } from '@/types.js';
+import type { KpiIcon, KpiTextTransform } from '@/types.js';
 
+import { applyTextTransform } from './helpers.js';
 import {
   CONDITIONAL_ICON_EM,
   CONDITIONAL_ICON_GAP_PX,
@@ -85,15 +86,24 @@ export function KpiConditionalIcon({ icon, color }: KpiConditionalIconProps) {
  * Builds the {@link AutoFitAffix} that budgets `icon`'s width into the headline auto-fit:
  * `text` icons are canvas-measured at their em scale (glyph widths vary); SVG variants occupy
  * a fixed {@link CONDITIONAL_ICON_EM}-square box. `extraGapPx` folds in the host's flex gap
- * (the comparison readout adds one per flex item; the value box does not).
+ * (the comparison readout adds one per flex item; the value box does not). A `text` icon shares
+ * its host text's `text-transform` (both sit in the same `ValueText` / `ComparisonPrimaryText`
+ * box), so `textTransform` must be applied here too -- otherwise the fit measures the icon's raw
+ * value while the browser paints it transformed, under-budgeting the width.
  * @param icon - The resolved icon to budget into the fit
  * @param extraGapPx - Extra fixed gap the host layout adds around the icon, in px
+ * @param textTransform - The host text element's resolved case transform, mirrored onto a `text`
+ * icon's glyph so it's measured as painted; ignored for SVG variants, which carry no text.
  * @returns The affix entry describing the icon's width contribution
  * @internal
  */
-export function toIconAffix(icon: KpiIcon, extraGapPx = 0): AutoFitAffix {
+export function toIconAffix(
+  icon: KpiIcon,
+  extraGapPx = 0,
+  textTransform: KpiTextTransform = 'none',
+): AutoFitAffix {
   const gapPx = CONDITIONAL_ICON_GAP_PX + extraGapPx;
   return icon.type === 'text'
-    ? { text: icon.value, emScale: CONDITIONAL_ICON_EM, gapPx }
+    ? { text: applyTextTransform(icon.value, textTransform), emScale: CONDITIONAL_ICON_EM, gapPx }
     : { widthEm: CONDITIONAL_ICON_EM, gapPx };
 }

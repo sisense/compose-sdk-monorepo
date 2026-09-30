@@ -13,9 +13,9 @@ dashboard the widget sits on.
 
 #### styleOptions
 
-> **styleOptions**?: [`WidgetContainerStyleOptions`](../../sdk-ui/interfaces/interface.WidgetContainerStyleOptions.md)
+> **styleOptions**?: [`NarrativeWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.NarrativeWidgetStyleOptions.md)
 
-Style options for the widget container and header
+Style options for the widget container and header.
 
 ***
 
@@ -23,4 +23,4 @@ Style options for the widget container and header
 
 > **title**?: `string`
 
-Title of the widget
+Title of the widget.

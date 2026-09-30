@@ -218,4 +218,87 @@ describe('createDataCellColorFormatter', () => {
 
     expect(cell.style?.backgroundColor).toBeUndefined();
   });
+
+  describe('date measure cells', () => {
+    // partial on purpose: the formatter reads only field.index and jaql
+    const datetimePanelItem = {
+      field: { index: 0 },
+      jaql: { datatype: 'datetime', level: 'days' },
+    } as JaqlPanel;
+
+    beforeEach(() => {
+      cell = { value: '2013-12-04T00:00:00.000' };
+    });
+
+    it('keeps a uniform colour, which never reads the value', () => {
+      valueCol.color = { type: 'uniform', color: 'red' };
+
+      const formatter = createDataCellColorFormatter(dataOptions, themeSettings);
+      formatter(cell, rowItem, columnItem, datetimePanelItem);
+
+      expect(cell.style?.backgroundColor).toBe('red');
+    });
+
+    it('skips a conditional colour, which would compare against an ISO string', () => {
+      valueCol.color = {
+        type: 'conditional',
+        conditions: [{ operator: '>', expression: '0', color: 'green' }],
+        defaultColor: 'grey',
+      };
+
+      const formatter = createDataCellColorFormatter(dataOptions, themeSettings);
+      formatter(cell, rowItem, columnItem, datetimePanelItem);
+
+      expect(cell.style?.backgroundColor).toBeUndefined();
+    });
+
+    it('skips a range colour, so no range is compiled onto the cell', () => {
+      valueCol.color = { type: 'range', steps: 0, minColor: 'red', maxColor: 'blue' };
+
+      const formatter = createDataCellColorFormatter(dataOptions, themeSettings);
+      formatter(cell, rowItem, columnItem, datetimePanelItem);
+
+      expect(cell.style?.backgroundColor).toBeUndefined();
+      expect(cell.store?.compileRange).toBeUndefined();
+    });
+
+    it('keeps a uniform data bar colour but skips a conditional one', () => {
+      valueCol.dataBarsColor = { type: 'uniform', color: 'red' };
+      const formatter = createDataCellColorFormatter(dataOptions, themeSettings);
+      formatter(cell, rowItem, columnItem, datetimePanelItem);
+      expect(cell.style?.databarColor).toBe('red');
+
+      cell = { value: '2013-12-04T00:00:00.000' };
+      valueCol.dataBarsColor = {
+        type: 'conditional',
+        conditions: [{ operator: '>', expression: '0', color: 'yellow' }],
+        defaultColor: 'grey',
+      };
+      createDataCellColorFormatter(dataOptions, themeSettings)(
+        cell,
+        rowItem,
+        columnItem,
+        datetimePanelItem,
+      );
+      expect(cell.style?.databarColor).toBeUndefined();
+    });
+
+    it('still colours a numeric measure by its conditional rule', () => {
+      // partial on purpose: the formatter reads only field.index and jaql
+      const numericPanelItem = {
+        field: { index: 0 },
+        jaql: { datatype: 'numeric' },
+      } as JaqlPanel;
+      cell = { value: 10 };
+      valueCol.color = {
+        type: 'conditional',
+        conditions: [{ operator: '>', expression: '5', color: 'green' }],
+      };
+
+      const formatter = createDataCellColorFormatter(dataOptions, themeSettings);
+      formatter(cell, rowItem, columnItem, numericPanelItem);
+
+      expect(cell.style?.backgroundColor).toBe('green');
+    });
+  });
 });

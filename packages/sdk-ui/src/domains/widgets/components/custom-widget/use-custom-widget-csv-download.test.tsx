@@ -1,6 +1,8 @@
+import { measureFactory } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
 import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
 import { extractDimensionsAndMeasures } from '@/infra/contexts/custom-widgets-provider/use-execute-custom-widget-query.js';
@@ -71,5 +73,23 @@ describe('useCustomWidgetCsvDownload', () => {
         filename: 'Custom.csv',
       }),
     );
+  });
+
+  it('gives a date measure its display format and passes other measures through by identity', async () => {
+    const dateMeasure = measureFactory.max(DM.Commerce.Date.Days, 'Max Date');
+    const numeric = measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue');
+    vi.mocked(extractDimensionsAndMeasures).mockReturnValue({
+      dimensions: [],
+      measures: [dateMeasure, numeric],
+    });
+
+    const { result } = renderHook(() => useCustomWidgetCsvDownload(baseParams));
+    await act(async () => {
+      findCsvOnClick(result.current.headerConfig)?.();
+    });
+
+    const { measures } = mockExecute.mock.calls[0][0];
+    expect(measures[0].getFormat()).toBe('yyyy-MM-dd');
+    expect(measures[1]).toBe(numeric);
   });
 });

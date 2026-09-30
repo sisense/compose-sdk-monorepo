@@ -81,3 +81,20 @@ Title text.
 #### Default
 
 the `value` measure's title
+
+***
+
+### `textStyle`
+
+**textStyle**?: [`KpiTextStyle`](type-alias.KpiTextStyle.md)
+
+Typography of the title text (not the category caption).
+
+The default uppercase rendering comes with a 0.06em letter-spacing; any other
+`textTransform` renders with normal letter-spacing.
+
+#### Default
+
+```ts
+{ fontWeight: '600', fontStyle: 'normal', textTransform: 'uppercase' } with the theme font
+```

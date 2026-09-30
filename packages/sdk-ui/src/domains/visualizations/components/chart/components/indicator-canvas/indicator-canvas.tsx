@@ -1,6 +1,8 @@
 import { type FunctionComponent, type MouseEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { NOT_AVAILABLE_TEXT } from '@/shared/const';
+
 import { useThemeContext } from '../../../../../../infra/contexts/theme-provider';
 import { IndicatorDataPointEventHandler } from '../../../../../../props';
 import { DataPointEntry, IndicatorDataPoint } from '../../../../../../types';
@@ -53,9 +55,16 @@ const createIndicatorDataPoint = (
 ): IndicatorDataPoint => {
   const entries: NonNullable<IndicatorDataPoint['entries']> = {};
 
-  // Helper function to create display value
-  const createDisplayValue = (value: number | undefined, dataOption: any) => {
+  /**
+   * Builds the display value of one data point entry: `undefined` when there is no value, `#N/A`
+   * when the value is not available, else the carried text or the formatted number. Availability is
+   * checked before the text, in the same order as `getValueText`, which produces the text drawn on
+   * screen.
+   */
+  const createDisplayValue = (value: number | undefined, dataOption: any, text?: string) => {
     if (value === undefined) return undefined;
+    if (!Number.isFinite(value)) return `#${NOT_AVAILABLE_TEXT}`;
+    if (text !== undefined) return text;
     const formatConfig = getCompleteNumberFormatConfig(dataOption);
     return applyFormatPlainText(formatConfig, value);
   };
@@ -65,7 +74,7 @@ const createIndicatorDataPoint = (
     entries.value = {
       ...getDataPointMetadata(dataOptions.value[0]),
       value: chartData.value ?? 0,
-      displayValue: createDisplayValue(chartData.value, dataOptions.value[0]),
+      displayValue: createDisplayValue(chartData.value, dataOptions.value[0], chartData.valueText),
     } as DataPointEntry;
   }
 
@@ -77,7 +86,11 @@ const createIndicatorDataPoint = (
     entries.secondary = {
       ...getDataPointMetadata(dataOptions.secondary[0]),
       value: chartData.secondary,
-      displayValue: createDisplayValue(chartData.secondary, dataOptions.secondary[0]),
+      displayValue: createDisplayValue(
+        chartData.secondary,
+        dataOptions.secondary[0],
+        chartData.secondaryText,
+      ),
     } as DataPointEntry;
   }
 
@@ -85,7 +98,7 @@ const createIndicatorDataPoint = (
     entries.min = {
       ...getDataPointMetadata(dataOptions.min[0]),
       value: chartData.min,
-      displayValue: createDisplayValue(chartData.min, dataOptions.min[0]),
+      displayValue: createDisplayValue(chartData.min, dataOptions.min[0], chartData.minText),
     } as DataPointEntry;
   }
 
@@ -93,7 +106,7 @@ const createIndicatorDataPoint = (
     entries.max = {
       ...getDataPointMetadata(dataOptions.max[0]),
       value: chartData.max,
-      displayValue: createDisplayValue(chartData.max, dataOptions.max[0]),
+      displayValue: createDisplayValue(chartData.max, dataOptions.max[0], chartData.maxText),
     } as DataPointEntry;
   }
 

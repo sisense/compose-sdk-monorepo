@@ -86,6 +86,12 @@ export interface DateRangeFilterTileProps {
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
+  /**
+   * When true, the tile is linked to a FilterWidget and rendered read-only.
+   *
+   * @internal
+   */
+  linked?: boolean;
 }
 
 /**
@@ -131,6 +137,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     tileDesignOptions,
     config,
     renderHeaderTitle,
+    linked,
   }: DateRangeFilterTileProps) => {
     const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
 
@@ -158,6 +165,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
         <EditableDateRangeFilter
           filter={filter}
           dateLimits={dateLimits}
+          disabled={filter.config.disabled || linked === true}
           isOldDateRangeFilterTile
           onChange={updateFilter}
           title={title}
@@ -170,7 +178,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
       <FilterTileContainer
         title={title}
         renderHeaderTitle={renderHeaderTitle}
-        renderContent={(collapsed) => {
+        renderContent={(collapsed, tileDisabled) => {
           return collapsed || !dateLimits ? (
             <DateRangeFilterDisplay filter={filter} />
           ) : (
@@ -178,7 +186,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
               <EditableDateRangeFilter
                 filter={filter}
                 dateLimits={dateLimits}
-                disabled={filter.config.disabled}
+                disabled={tileDisabled}
                 onChange={updateFilter}
                 title={title}
                 attribute={attribute}
@@ -198,6 +206,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
         menuItems={menuItems}
         onDelete={onDelete}
         onEdit={onEdit}
+        linked={linked}
       />
     );
   },
