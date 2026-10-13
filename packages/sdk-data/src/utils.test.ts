@@ -2,22 +2,20 @@ import { describe, expect, it } from 'vitest';
 
 import * as DM from './__test-helpers__/sample-ecommerce.js';
 import * as filterFactory from './dimensional-model/filters/factory.js';
-import { MembersFilter } from './dimensional-model/filters/filters.js';
+import type { MembersFilter } from './dimensional-model/filters/filters.js';
 import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
 import type { FilterRelations, SortDirection } from './dimensional-model/interfaces.js';
 import * as measureFactory from './dimensional-model/measures/factory.js';
-import { DimensionalCalculatedMeasure } from './dimensional-model/measures/measures.js';
+import type { DimensionalCalculatedMeasure } from './dimensional-model/measures/measures.js';
+import type { DataType, FilterJaql, FormulaJaql } from './dimensional-model/types.js';
 import {
   AggregationTypes,
   CALCULATED_DIMENSION_JAQL_TYPE,
-  DataType,
-  FilterJaql,
-  FormulaJaql,
   JaqlSortDirection,
   MetadataTypes,
   Sort,
 } from './dimensional-model/types.js';
-import { DataSource, DataSourceInfo } from './interfaces.js';
+import type { DataSource, DataSourceInfo } from './interfaces.js';
 import {
   convertJaqlDataSourceForDto,
   convertSortDirectionToSort,
@@ -33,6 +31,7 @@ import {
   getFilterListAndRelationsJaql,
   guidFast,
   isDataSourceInfo,
+  parseExpression,
   translateSharedFormulas,
 } from './utils.js';
 
@@ -722,5 +721,43 @@ describe('utils', () => {
 
       expect(() => translateSharedFormulas([invalidFormula])).toThrow('Invalid');
     });
+  });
+});
+
+describe('parseExpression', () => {
+  it('splits a simple [Table.Column] expression', () => {
+    expect(parseExpression('[Commerce.Revenue]')).toEqual({
+      table: 'Commerce',
+      column: 'Revenue',
+    });
+  });
+
+  it('strips the `(Calendar)` suffix from a datetime column', () => {
+    expect(parseExpression('[Commerce.Date (Calendar)]')).toEqual({
+      table: 'Commerce',
+      column: 'Date',
+    });
+  });
+
+  // A CSV data source column expression carries the table name including its `.csv`
+  // extension: `[till_2035_dates.csv.datetime (Calendar)]`. A greedy left-split takes
+  // `csv` as the column and drops the real one — derived names come out as
+  // `Days in csv` and the widget↔filter identity match breaks.
+  it('splits a CSV table expression on the LAST dot', () => {
+    expect(parseExpression('[till_2035_dates.csv.datetime (Calendar)]')).toEqual({
+      table: 'till_2035_dates.csv',
+      column: 'datetime',
+    });
+  });
+
+  it('splits a CSV table expression without a datetime marker', () => {
+    expect(parseExpression('[sales_export.csv.amount]')).toEqual({
+      table: 'sales_export.csv',
+      column: 'amount',
+    });
+  });
+
+  it('returns table-only when the expression has no dot', () => {
+    expect(parseExpression('[SoloTable]')).toEqual({ table: 'SoloTable', column: '' });
   });
 });

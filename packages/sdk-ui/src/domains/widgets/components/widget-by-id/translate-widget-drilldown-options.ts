@@ -17,7 +17,12 @@ import { Hierarchy, HierarchyId } from '../../../../domains/drilldown/hierarchy-
 import { DataPoint, DrilldownOptions, PivotTableDrilldownOptions } from '../../../../types.js';
 import { createDataColumn } from './translate-widget-data-options.js';
 import { FusionWidgetType, Panel, PanelItem } from './types.js';
-import { getEnabledPanelItems, getRootPanelItem, isMeasurePanelItem } from './utils.js';
+import {
+  getEnabledPanelItems,
+  getRootPanelItem,
+  isMeasurePanelItem,
+  isPivotTableFusionWidget,
+} from './utils.js';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent
@@ -83,6 +88,7 @@ function getDrilldownAllowedPanelNames(widgetType: FusionWidgetType) {
       return ['category'];
     case 'chart/scatter':
       return ['x-axis', 'y-axis', 'point', 'Break By / Color'];
+    case 'pivot':
     case 'pivot2':
       return ['rows', 'columns'];
     default:
@@ -96,7 +102,7 @@ const findDrillableItems = (widgetType: FusionWidgetType, panels: Panel[]): Pane
     .flat()
     .filter((item) => !isMeasurePanelItem(item));
 
-  if (widgetType === 'pivot2') {
+  if (isPivotTableFusionWidget(widgetType)) {
     return drillableItems;
   }
 
@@ -215,7 +221,7 @@ export const extractDrilldownOptions = (
     ({ expression }) => expression,
   );
 
-  if (widgetType === 'pivot2') {
+  if (isPivotTableFusionWidget(widgetType)) {
     const rootItemWithSelections =
       drillableItemWithSelections && getRootPanelItem(drillableItemWithSelections);
     const drilldownTarget =

@@ -48,6 +48,9 @@ const INSIGHTS_STACK_BREAKPOINT_PX = INSIGHTS_ROW_MIN_WIDGET_PX - CARD_BORDERS_P
 /** Mark size from the design. */
 const ICON_PX = 16;
 
+/** Box of the error states' leading mark in the design. */
+const ERROR_MARK_BOX_PX = 24;
+
 /** One of the SDK's locale-aware masks: short date plus time. */
 const TIMESTAMP_MASK = 'short';
 
@@ -219,15 +222,37 @@ const CenteredStack = styled.div`
   gap: ${FOOTER_GAP_PX}px;
 `;
 
+/** The error states' message block, then the action 16px below it, per the design. */
+const ErrorStack = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${GAP_PX}px;
+`;
+
+/** Heading and description of an error state. */
+const ErrorMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${FOOTER_GAP_PX}px;
+`;
+
 /** Mark and title on one line, per the design's error states. */
 const ErrorHeading = styled.div`
   display: flex;
   align-items: center;
   gap: ${FOOTER_GAP_PX}px;
+`;
 
-  svg {
-    flex-shrink: 0;
-  }
+/** The design's 24px box around the 18px error marks. */
+const ErrorMark = styled.span`
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: ${ERROR_MARK_BOX_PX}px;
+  height: ${ERROR_MARK_BOX_PX}px;
 `;
 
 const ErrorTitle = styled.div`
@@ -462,13 +487,17 @@ function ErrorBody(props: ErrorBodyProps) {
   if (kind === 'quota-exceeded') {
     return (
       <Centered data-testid="csdk-narrative-error" data-error-kind={kind}>
-        <CenteredStack ref={contentRef}>
-          <ErrorHeading>
-            <XCircleIcon />
-            <ErrorTitle>{t('ai.quota.exceededErrorTitle')}</ErrorTitle>
-          </ErrorHeading>
-          <Muted theme={themeSettings}>{t('ai.quota.exceededErrorDescription')}</Muted>
-        </CenteredStack>
+        <ErrorStack ref={contentRef}>
+          <ErrorMessage>
+            <ErrorHeading>
+              <ErrorMark>
+                <XCircleIcon />
+              </ErrorMark>
+              <ErrorTitle>{t('ai.quota.exceededErrorTitle')}</ErrorTitle>
+            </ErrorHeading>
+            <Muted theme={themeSettings}>{t('ai.quota.exceededErrorDescription')}</Muted>
+          </ErrorMessage>
+        </ErrorStack>
       </Centered>
     );
   }
@@ -477,22 +506,24 @@ function ErrorBody(props: ErrorBodyProps) {
 
   return (
     <Centered data-testid="csdk-narrative-error" data-error-kind={kind}>
-      <CenteredStack ref={contentRef}>
-        <ErrorHeading>
-          {isNoData ? <WarningIcon /> : <XCircleIcon />}
-          <ErrorTitle>
-            {isNoData ? t('narrativeWidget.noDataTitle') : t('narrativeWidget.failedTitle')}
-          </ErrorTitle>
-        </ErrorHeading>
-        <Muted theme={themeSettings}>
-          {isNoData
-            ? t('narrativeWidget.noDataDescription')
-            : t('narrativeWidget.failedDescription')}
-        </Muted>
+      <ErrorStack ref={contentRef}>
+        <ErrorMessage>
+          <ErrorHeading>
+            <ErrorMark>{isNoData ? <WarningIcon /> : <XCircleIcon />}</ErrorMark>
+            <ErrorTitle>
+              {isNoData ? t('narrativeWidget.noDataTitle') : t('narrativeWidget.failedTitle')}
+            </ErrorTitle>
+          </ErrorHeading>
+          <Muted theme={themeSettings}>
+            {isNoData
+              ? t('narrativeWidget.noDataDescription')
+              : t('narrativeWidget.failedDescription')}
+          </Muted>
+        </ErrorMessage>
         {!isNoData && showActions && (
           <GenerateButton label={t('narrativeWidget.retry')} onClick={onGenerate} />
         )}
-      </CenteredStack>
+      </ErrorStack>
     </Centered>
   );
 }

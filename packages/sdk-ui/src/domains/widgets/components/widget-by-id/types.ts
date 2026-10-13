@@ -1,4 +1,4 @@
-import {
+import type {
   BaseJaql,
   FormulaContext,
   FormulaJaql,
@@ -7,8 +7,8 @@ import {
   JaqlSortDirection,
 } from '@sisense/sdk-data';
 
-import { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import {
+import type { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type {
   DashStyle,
   KpiCardStyleOptions,
   KpiComparisonStyleOptions,
@@ -19,8 +19,8 @@ import {
   WidgetContainerStyleOptions,
 } from '@/types';
 
-import { HierarchyId } from '../../../../domains/drilldown/hierarchy-model';
-import { LEGACY_DESIGN_TYPES } from '../../../../infra/themes/legacy-design-settings';
+import type { HierarchyId } from '../../../../domains/drilldown/hierarchy-model';
+import type { LEGACY_DESIGN_TYPES } from '../../../../infra/themes/legacy-design-settings';
 import type { FilterWidgetControlStyleOptions } from '../filter-widget/types';
 
 /**
@@ -217,7 +217,7 @@ export interface HierarchyDto {
 }
 
 /**
- * The scroll location of the navigator scroller / auto zoom feature
+ * The scroll location of the navigator scroller / auto zoom feature.
  */
 export type AutoZoomNavigatorScrollerLocation = {
   min: number;
@@ -590,7 +590,7 @@ export type CartesianWidgetStyle = BaseWidgetStyle &
       /** Custom line width in px from Fusion design panel. Overrides width when > 0. */
       customWidth?: number | null;
     };
-    /** CSDK-compatible line stroke options (e.g. dashStyle, width from styleOptions.line). */
+    /** CSDK-compatible line stroke options (e.g. DashStyle, width from styleOptions.line). */
     line?: {
       dashStyle?: DashStyle;
       width?: number;
@@ -970,7 +970,7 @@ export type WidgetStyle = {
 export type FilterWidgetDtoStyle = {
   /**
    * Rendering type of the filter. Canonical values match FilterWidgetFilterType
-   * ('members' | 'calendar' | 'range' | 'period' | 'numericRange' | 'condition');
+   * ('members' | 'calendar' | 'range' | 'period' | 'condition');
    * legacy DTOs may carry 'list' or a 'filter/<type>' subtype string.
    */
   filterType?: string;
@@ -985,6 +985,19 @@ export type FilterWidgetDtoStyle = {
    * saved dashboards carry it; the props read it into `styleOptions.control`.
    */
   filterDesign?: FilterWidgetControlStyleOptions;
+  /**
+   * Time Frame — whether the designer flipped the Customize time frames toggle on. When
+   * off (or missing), the widget offers the default 11-frame catalogue; when on, it
+   * offers `timeFrames`.
+   */
+  customizeTimeFrames?: boolean;
+  /**
+   * Time Frame — the curated set of frame keys the widget offers when
+   * `customizeTimeFrames` is on. Canonical `tense:count:grain[:c]` keys, e.g.
+   * `'last:7:Day'`, `'last:2:Month:c'` — same shape the FilterWidget's `timeFrames`
+   * prop accepts.
+   */
+  timeFrames?: string[];
 };
 
 export enum FiltersMergeStrategyEnum {

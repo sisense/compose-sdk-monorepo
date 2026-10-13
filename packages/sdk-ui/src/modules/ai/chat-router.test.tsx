@@ -123,4 +123,67 @@ describe('ChatRouter', () => {
       expect(screen.queryByLabelText('go back')).toBeNull();
     });
   });
+
+  describe('when data models have display names', () => {
+    const renamedContexts: ChatContext[] = [
+      { title: 'Model 1', live: false, displayName: 'Sales' },
+      { title: 'Model 2', live: false, displayName: '   ' },
+      { title: 'Model 3', live: false, displayName: null },
+    ];
+
+    it('shows display names in the data topics list and chat header, and falls back to titles', async () => {
+      setupMockDataTopicsApi(renamedContexts);
+      setupMockChatsApi({ ...mockChat, contextId: 'm1', contextTitle: 'Model 1' });
+
+      const { user } = setup(
+        <AiTestWrapper>
+          <ChatRouter />
+        </AiTestWrapper>,
+      );
+
+      await waitFor(() => expect(screen.getByText('Sales')).toBeInTheDocument());
+      expect(screen.queryByText('Model 1')).toBeNull();
+      expect(screen.getByText('Model 2')).toBeInTheDocument();
+      expect(screen.getByText('Model 3')).toBeInTheDocument();
+
+      await user.click(screen.getByText('Sales'));
+
+      expect(screen.getByLabelText('chat input')).toBeInTheDocument();
+      expect(screen.getByText('Sales')).toBeInTheDocument();
+      expect(screen.queryByText('Model 1')).toBeNull();
+    });
+
+    it('matches dataTopicsList by title, not by display name', async () => {
+      setupMockDataTopicsApi(renamedContexts);
+      setupMockChatsApi({ ...mockChat, contextId: 'm1', contextTitle: 'Model 1' });
+
+      setup(
+        <AiTestWrapper>
+          <ChatConfigProvider value={{ dataTopicsList: ['Model 1'] }}>
+            <ChatRouter />
+          </ChatConfigProvider>
+        </AiTestWrapper>,
+      );
+
+      await waitFor(() => expect(screen.getByLabelText('chat input')).toBeInTheDocument());
+      expect(screen.getByText('Sales')).toBeInTheDocument();
+    });
+
+    it('renders a hostile display name as plain text', async () => {
+      const hostile = '<img src=x onerror="alert(1)">';
+      setupMockDataTopicsApi([
+        ...contexts,
+        { title: 'Model 4', live: false, displayName: hostile },
+      ]);
+
+      setup(
+        <AiTestWrapper>
+          <ChatRouter />
+        </AiTestWrapper>,
+      );
+
+      await waitFor(() => expect(screen.getByText(hostile)).toBeInTheDocument());
+      expect(document.querySelector('img[src="x"]')).toBeNull();
+    });
+  });
 });

@@ -8,7 +8,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   type DashboardConfig as DashboardConfigPreact,
   type DashboardFiltersPanelConfig,
   type DashboardHeaderItemComponentProps,
@@ -19,6 +18,7 @@ import {
   Dashboard as DashboardPreact,
   type DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createCustomWidgetsContextConnector,

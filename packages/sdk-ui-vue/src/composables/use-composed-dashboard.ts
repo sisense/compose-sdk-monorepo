@@ -1,13 +1,15 @@
 import type { Filter, FilterRelations } from '@sisense/sdk-data';
 import {
   type ComposableDashboardProps as ComposableDashboardPropsPreact,
-  createHookApiFacade,
   type DashboardProps as DashboardPropsPreact,
-  HookAdapter,
-  useComposedDashboardInternal,
   type UseComposedDashboardOptions,
   type WidgetsPanelLayout,
 } from '@sisense/sdk-ui-preact';
+import {
+  createHookApiFacade,
+  HookAdapter,
+  useComposedDashboardInternal,
+} from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, type Ref, watch } from 'vue';
 
 import type { DashboardConfig, DashboardProps } from '../components/dashboard';

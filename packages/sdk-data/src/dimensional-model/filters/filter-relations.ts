@@ -19,7 +19,11 @@ import {
   isLevelAttribute,
 } from '../interfaces.js';
 import * as filterFactory from './factory.js';
-import { isCascadingFilter } from './filters.js';
+import {
+  isCascadingFilter,
+  isDateMeasureMembersFilter,
+  isDateMeasureRelativeFilter,
+} from './filters.js';
 
 /**
  * Type guard for checking if the provided filters are FilterRelations.
@@ -790,7 +794,15 @@ export function getFilterCompareId(filter: Filter): string {
   // TODO: remove fallback on 'filter.jaql()' after removing temporal 'jaql()' workaround from filter translation layer
   // The filter's own JAQL (not the bare attribute's) carries the resolved datetime granularity and
   // the calculated-dimension formula, so identity is derived from it.
-  return buildAttributeCompareId(filter.attribute, filter.jaql().jaql);
+  const attributeCompareId = buildAttributeCompareId(filter.attribute, filter.jaql().jaql);
+
+  // A measure filter holds the LEVEL in `attribute`, so a min-date and a max-date filter on one
+  // dimension would share an identity and mergeFilters would keep only one of them.
+  if (isDateMeasureMembersFilter(filter) || isDateMeasureRelativeFilter(filter)) {
+    return `${filter.measure.id}_${attributeCompareId}`;
+  }
+
+  return attributeCompareId;
 }
 
 /**

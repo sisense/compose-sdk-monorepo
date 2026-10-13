@@ -24,6 +24,8 @@ import { MetadataTypes } from '../types.js';
 import {
   CascadingFilter,
   CustomFilter,
+  DateMeasureMembersFilter,
+  DateMeasureRelativeFilter,
   DateOperators,
   DateRangeFilter,
   EmptyFilter,
@@ -1375,6 +1377,140 @@ export const measureBetweenNotEqual: (
       config,
     ),
   'measureBetweenNotEqual',
+);
+
+/**
+ * Creates a filter to isolate items whose measure value matches one of the given dates.
+ *
+ * The `level` is the level the members are matched at, and it is not the level inside the measure.
+ * A `max` over days answers with a day, so filtering it to whole years needs a years level here.
+ *
+ * @example
+ * Filter for categories whose last order was in 2012 or 2013 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.dateMeasureMembers(
+ *   measureFactory.max(DM.Commerce.Date.Days, 'Last Order'),
+ *   DM.Commerce.Date.Years,
+ *   ['2012-01-01T00:00:00', '2013-01-01T00:00:00'],
+ * )
+ * ```
+ * @example
+ * The same filter negated, keeping every category whose last order was NOT in 2013.
+ * ```ts
+ * filterFactory.dateMeasureMembers(
+ *   measureFactory.max(DM.Commerce.Date.Days, 'Last Order'),
+ *   DM.Commerce.Date.Years,
+ *   ['2013-01-01T00:00:00'],
+ *   { excludeMembers: true },
+ * )
+ * ```
+ * @param measure - Measure to filter by.
+ * @param level - Date {@link LevelAttribute} the members are matched at.
+ * @param members - Members to match, as `yyyy-MM-ddTHH:mm:ss` strings or `Date` objects.
+ * @param config - Optional configuration, where `excludeMembers` negates the filter.
+ * @returns A filter instance.
+ */
+export const dateMeasureMembers: (
+  measure: Measure,
+  level: LevelAttribute,
+  members: (string | Date)[],
+  config?: MembersFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (measure, level, members, config) =>
+    new DateMeasureMembersFilter(measure, level, members, config),
+  'dateMeasureMembers',
+);
+
+/**
+ * Creates a filter to isolate items whose measure value falls in a period after an anchor.
+ *
+ * An `offset` of `0` includes the anchor's own period; `1` excludes it and starts at the one after.
+ * The `level` is the level the period is counted in, and it is not the level inside the measure.
+ *
+ * @example
+ * Filter for categories whose last order was in the two years starting 1 January 2012.
+ * ```ts
+ * filterFactory.dateMeasureRelativeFrom(
+ *   measureFactory.max(DM.Commerce.Date.Days, 'Last Order'),
+ *   DM.Commerce.Date.Years,
+ *   0,
+ *   2,
+ *   '2012-01-01',
+ * )
+ * ```
+ * @param measure - Measure to filter by.
+ * @param level - Date {@link LevelAttribute} the period is counted in.
+ * @param offset - Periods to skip from the anchor; `0` includes the anchor's own period and `1` excludes it.
+ * @param count - Number of periods to include.
+ * @param anchor - Date to count from as `yyyy-MM-dd` or a `Date`, defaults to the current day.
+ * @param config - Optional configuration for the filter.
+ * @returns A filter instance.
+ */
+export const dateMeasureRelativeFrom: (
+  measure: Measure,
+  level: LevelAttribute,
+  offset: number,
+  count: number,
+  anchor?: Date | string,
+  config?: BaseFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (measure, level, offset, count, anchor, config) =>
+    new DateMeasureRelativeFilter(
+      measure,
+      level,
+      offset,
+      count,
+      DateOperators.Next,
+      anchor,
+      config,
+    ),
+  'dateMeasureRelativeFrom',
+);
+
+/**
+ * Creates a filter to isolate items whose measure value falls in a period before an anchor.
+ *
+ * An `offset` of `0` includes the anchor's own period; `1` excludes it and ends at the one before.
+ * The `level` is the level the period is counted in, and it is not the level inside the measure.
+ *
+ * @example
+ * Filter for categories whose last order was in the year up to and including 1 June 2013.
+ * ```ts
+ * filterFactory.dateMeasureRelativeTo(
+ *   measureFactory.max(DM.Commerce.Date.Days, 'Last Order'),
+ *   DM.Commerce.Date.Years,
+ *   0,
+ *   1,
+ *   '2013-06-01',
+ * )
+ * ```
+ * @param measure - Measure to filter by.
+ * @param level - Date {@link LevelAttribute} the period is counted in.
+ * @param offset - Periods to skip from the anchor; `0` includes the anchor's own period and `1` excludes it.
+ * @param count - Number of periods to include.
+ * @param anchor - Date to count to as `yyyy-MM-dd` or a `Date`, defaults to the current day.
+ * @param config - Optional configuration for the filter.
+ * @returns A filter instance.
+ */
+export const dateMeasureRelativeTo: (
+  measure: Measure,
+  level: LevelAttribute,
+  offset: number,
+  count: number,
+  anchor?: Date | string,
+  config?: BaseFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (measure, level, offset, count, anchor, config) =>
+    new DateMeasureRelativeFilter(
+      measure,
+      level,
+      offset,
+      count,
+      DateOperators.Last,
+      anchor,
+      config,
+    ),
+  'dateMeasureRelativeTo',
 );
 
 // RANKING FILTERS

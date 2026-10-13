@@ -258,13 +258,13 @@
       "count": 25
     },
     "jsdoc/require-description-complete-sentence": {
-      "count": 69
+      "count": 67
     },
     "jsdoc/require-jsdoc": {
       "count": 5
     },
     "jsdoc/require-returns": {
-      "count": 47
+      "count": 46
     }
   },
   "src/dimensional-model/filters/formula-filter-helpers.test.ts": {
@@ -612,20 +612,12 @@
       "count": 1
     }
   },
-  "src/utils.test.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    }
-  },
   "src/utils.ts": {
     "@typescript-eslint/consistent-type-assertions": {
       "count": 1
     },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    },
     "jsdoc/require-description-complete-sentence": {
-      "count": 38
+      "count": 20
     },
     "jsdoc/require-param": {
       "count": 38

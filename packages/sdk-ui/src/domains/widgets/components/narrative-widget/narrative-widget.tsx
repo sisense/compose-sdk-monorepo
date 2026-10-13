@@ -14,6 +14,7 @@ import { WidgetContainer } from '@/domains/widgets/shared/widget-container/widge
 import { useWidgetHeaderMenu } from '@/domains/widgets/shared/widget-header/features/use-widget-header-menu';
 import { useWidgetHeaderTitle } from '@/domains/widgets/shared/widget-header/features/use-widget-header-title';
 import { getWidgetOverheadHeight } from '@/domains/widgets/shared/widget-style-utils';
+import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { useElementHeight } from '@/shared/hooks/use-element-height';
@@ -67,9 +68,14 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
   } = props;
 
   // Reads the AI credit balance and owns the 85 % threshold; returns nothing unless the
-  // tenant is on a Sisense-managed model with quota notifications on. Needs a
-  // QueryClientProvider ancestor, which SisenseContextProvider supplies.
-  const { quotaState } = useQuotaNotification();
+  // tenant is on a Sisense-managed model with quota notifications on. An unlimited narrative
+  // entitlement draws no credits, so its balance says nothing about this widget — including a
+  // balance another consumer of the same query already cached. Needs a QueryClientProvider
+  // ancestor, which SisenseContextProvider supplies.
+  const { app } = useSisenseContext();
+  const isUnlimited = app?.settings?.narrative?.isUnlimited === true;
+  const { quotaState: creditQuotaState } = useQuotaNotification({ enabled: !isUnlimited });
+  const quotaState = isUnlimited ? null : creditQuotaState;
 
   const headerConfigWithTitle = useWidgetHeaderTitle(config?.header, {
     title,

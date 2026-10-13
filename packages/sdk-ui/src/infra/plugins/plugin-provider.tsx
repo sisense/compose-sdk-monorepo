@@ -9,6 +9,15 @@ import type { AnyCustomVisualization, AnyWidgetPlugin } from './widget-plugins/t
 import { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js';
 
 /**
+ * Shared empty plugins list used as the default when no plugins are passed.
+ * A stable reference keeps `PluginProvider`'s memoized registry and context value
+ * from being re-created on every render.
+ *
+ * @internal
+ */
+export const EMPTY_PLUGINS = Object.freeze<Plugin[]>([]) as Plugin[];
+
+/**
  * Props for PluginProvider component
  *
  * @sisenseInternal

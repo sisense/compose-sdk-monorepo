@@ -2,6 +2,8 @@ import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { DashboardPersistenceManager } from '@/domains/dashboarding/persistence/types';
+import type { CustomWidgetChangeEvent } from '@/domains/widgets/change-events';
+import type { VisualizationStateUpdate } from '@/infra/plugins/widget-plugins/types';
 
 import { useWidgetUpdatesPersistence } from './use-widget-updates-persistence';
 
@@ -304,8 +306,64 @@ describe('useWidgetUpdatesPersistence', () => {
   });
 
   describe('custom widgets', () => {
-    const getOnVisualizationUpdate = (widget: unknown) =>
-      (widget as { onChange?: (update: unknown) => void }).onChange;
+    const getOnChange = (widget: unknown) =>
+      (widget as { onChange?: (event: CustomWidgetChangeEvent) => void }).onChange;
+
+    /** Emits plugin state updates as `visualizationState/changed` events, as CustomWidget does. */
+    const getOnVisualizationUpdate = (widget: unknown) => {
+      const onChange = getOnChange(widget);
+      return (
+        onChange &&
+        ((update: VisualizationStateUpdate) =>
+          onChange({ type: 'visualizationState/changed', payload: update }))
+      );
+    };
+
+    it('forwards non-visualization events (e.g. title/changed) to the upstream onChange', () => {
+      const persistence = makePersistence();
+      const setWidgets = vi.fn();
+      const upstreamOnChange = vi.fn();
+      const widgets = [{ ...(makeCustomWidget('cw-a') as object), onChange: upstreamOnChange }];
+      const event: CustomWidgetChangeEvent = { type: 'title/changed', payload: { title: 'T' } };
+
+      const { result } = renderHook(() =>
+        useWidgetUpdatesPersistence(widgets as never, setWidgets, persistence),
+      );
+
+      act(() => {
+        getOnChange(result.current.widgets[0])?.(event);
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(upstreamOnChange).toHaveBeenCalledWith(event);
+      expect(setWidgets).not.toHaveBeenCalled();
+      expect(persistence.updateWidget).not.toHaveBeenCalled();
+    });
+
+    it('persists visualizationState/changed and forwards it to the upstream onChange', () => {
+      const persistence = makePersistence();
+      const setWidgets = vi.fn();
+      const upstreamOnChange = vi.fn();
+      const widgets = [{ ...(makeCustomWidget('cw-a') as object), onChange: upstreamOnChange }];
+
+      const { result } = renderHook(() =>
+        useWidgetUpdatesPersistence(widgets as never, setWidgets, persistence),
+      );
+
+      act(() => {
+        getOnVisualizationUpdate(result.current.widgets[0])?.({ customOptions: { lastPage: 3 } });
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(upstreamOnChange).toHaveBeenCalledTimes(1);
+      expect(upstreamOnChange).toHaveBeenCalledWith({
+        type: 'visualizationState/changed',
+        payload: { customOptions: { lastPage: 3 } },
+      });
+      expect(persistence.updateWidget).toHaveBeenCalledWith('cw-a', {
+        customOptions: { lastPage: 3 },
+      });
+    });
 
     it('injects onChange that emits a customOptions update', () => {
       const persistence = makePersistence();
@@ -523,6 +581,101 @@ describe('useWidgetUpdatesPersistence', () => {
       expect((stored[0] as { customOptions: unknown }).customOptions).toEqual({
         selectedIds: [4],
       });
+    });
+  });
+
+  describe('chaining consumer-supplied callbacks', () => {
+    it('calls the original navigator onScrollerChange and persists the scroller location', () => {
+      const persistence = makePersistence();
+      const original = vi.fn();
+      const widgets = [
+        {
+          id: 'w-a',
+          widgetType: 'chart' as const,
+          styleOptions: { navigator: { enabled: true, onScrollerChange: original } },
+        } as never,
+      ];
+
+      const { result } = renderHook(() =>
+        useWidgetUpdatesPersistence(widgets, vi.fn(), persistence),
+      );
+      const { navigator } = (
+        result.current.widgets[0] as never as {
+          styleOptions: { navigator: { onScrollerChange: (min: number, max: number) => void } };
+        }
+      ).styleOptions;
+
+      act(() => {
+        navigator.onScrollerChange(10, 90);
+      });
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(original).toHaveBeenCalledTimes(1);
+      expect(original).toHaveBeenCalledWith(10, 90);
+      expect(persistence.updateWidget).toHaveBeenCalledWith('w-a', {
+        styleOptions: { navigator: { scrollerLocation: { min: 10, max: 90 } } },
+      });
+    });
+
+    it('calls the original table onColumnsResize and persists the column widths', () => {
+      const persistence = makePersistence();
+      const original = vi.fn();
+      const widgets = [
+        {
+          id: 'table-a',
+          widgetType: 'chart' as const,
+          chartType: 'table' as const,
+          styleOptions: { columns: { onColumnsResize: original } },
+        } as never,
+      ];
+
+      const { result } = renderHook(() =>
+        useWidgetUpdatesPersistence(widgets, vi.fn(), persistence),
+      );
+      const { columns } = (
+        result.current.widgets[0] as never as {
+          styleOptions: { columns: { onColumnsResize: (widths: number[]) => void } };
+        }
+      ).styleOptions;
+
+      act(() => {
+        columns.onColumnsResize([120, 200]);
+      });
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(original).toHaveBeenCalledTimes(1);
+      expect(original).toHaveBeenCalledWith([120, 200]);
+      expect(persistence.updateWidget).toHaveBeenCalledWith('table-a', {
+        styleOptions: { columns: { widths: [120, 200] } },
+      });
+    });
+
+    it('forwards an empty visualizationState/changed upstream without persisting', () => {
+      const persistence = makePersistence();
+      const original = vi.fn();
+      const widgets = [{ ...(makeCustomWidget('cw-a') as object), onChange: original } as never];
+
+      const { result } = renderHook(() =>
+        useWidgetUpdatesPersistence(widgets, vi.fn(), persistence),
+      );
+
+      const event: CustomWidgetChangeEvent = { type: 'visualizationState/changed', payload: {} };
+
+      act(() => {
+        (result.current.widgets[0] as { onChange: (e: CustomWidgetChangeEvent) => void }).onChange(
+          event,
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(original).toHaveBeenCalledWith(event);
+      expect(persistence.updateWidget).not.toHaveBeenCalled();
     });
   });
 });

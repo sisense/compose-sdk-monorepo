@@ -1,16 +1,16 @@
 import type { Attribute } from '@sisense/sdk-data';
-import { DataSource, Filter } from '@sisense/sdk-data';
+import type { DataSource, Filter } from '@sisense/sdk-data';
 
 import type {
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import {
+import type {
   ChartDataOptions,
   PivotTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types';
-import { EmptyObject } from '@/shared/utils/utility-types';
-import {
+import type { EmptyObject } from '@/shared/utils/utility-types';
+import type {
   ChartType,
   DrilldownOptions,
   PivotTableDrilldownOptions,
@@ -117,7 +117,7 @@ export interface WidgetModel {
    * `WidgetDto` via `fromWidgetDto`. Populated with the same translation as dashboard
    * `fromDashboardDto` uses for `widgetsOptions` (via `translateWidgetsOptions` →
    * `jumpToDashboardConfigFromWidgetDto`). Omitted or `undefined` when the model is not
-   * Fusion-sourced (e.g. from widget props) or the widget has no versioned JTD.
+   * Fusion-sourced (e.g. From widget props) or the widget has no versioned JTD..
    *
    * @see {@link widgetModelTranslator.toJtdConfig}
    * @internal
@@ -135,6 +135,11 @@ export interface WidgetModel {
     filterType: FilterWidgetFilterType;
     isMultiselect: boolean;
     controlStyleOptions?: FilterWidgetControlStyleOptions;
+    /**
+     * Curated set of Time Frame keys the widget offers, when the designer has flipped
+     * `style.customizeTimeFrames` on. `undefined` means the default 11 frames are used.
+     */
+    timeFrames?: string[];
   };
 }
 

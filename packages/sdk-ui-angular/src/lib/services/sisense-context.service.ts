@@ -1,6 +1,6 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 import type { SisenseContextProviderProps } from '@sisense/sdk-ui-preact';
-import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact';
+import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact/internal';
 import { concat, firstValueFrom, Observable, of, ReplaySubject } from 'rxjs';
 
 /**

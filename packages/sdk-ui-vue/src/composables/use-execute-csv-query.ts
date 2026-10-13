@@ -1,9 +1,5 @@
-import {
-  type CsvQueryState,
-  type ExecuteCsvQueryParams,
-  HookAdapter,
-  useExecuteCsvQueryInternal,
-} from '@sisense/sdk-ui-preact';
+import { type CsvQueryState, type ExecuteCsvQueryParams } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useExecuteCsvQueryInternal } from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, toRefs, watch } from 'vue';
 
 import { createSisenseContextConnector } from '../helpers/context-connectors';

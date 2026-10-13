@@ -10,7 +10,7 @@ import {
   executeQuery,
   executeQueryByWidgetId,
   executeQueryWithRowCount,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { Mock, Mocked } from 'vitest';
 
 import { ExecutePivotQueryParams, QueryService } from './query.service';
@@ -20,7 +20,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@sisense/sdk-ui-preact/internal', () => ({
   executeQuery: vi.fn(),
   executeQueryByWidgetId: vi.fn(),
   executePivotQuery: vi.fn(),

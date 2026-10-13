@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { type PreactNode } from '@sisense/sdk-ui-preact';
+import { type PreactNode } from '@sisense/sdk-ui-preact/internal';
 
 /**
  * A Preact component. Its render output matches the Preact-facing component interfaces, so a

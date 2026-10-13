@@ -1,10 +1,7 @@
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
-import type {
-  ClientApplication,
-  ExecuteQueryByWidgetIdParams,
-  QueryByWidgetIdState,
-} from '@sisense/sdk-ui-preact';
-import { executeQueryByWidgetId, queryStateReducer } from '@sisense/sdk-ui-preact';
+import type { ExecuteQueryByWidgetIdParams, QueryByWidgetIdState } from '@sisense/sdk-ui-preact';
+import type { ClientApplication } from '@sisense/sdk-ui-preact/internal';
+import { executeQueryByWidgetId, queryStateReducer } from '@sisense/sdk-ui-preact/internal';
 import { ref, toRefs, type ToRefs, watch } from 'vue';
 
 import { useReducer } from '../helpers/use-reducer';

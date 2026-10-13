@@ -10,7 +10,7 @@ import type { NlqTranslationError } from '../../../types.js';
 import { findBestMatch, SUGGESTION_THRESHOLD } from '../../shared/utils/fuzzy-match.js';
 import { isRecordStringUnknown } from '../../types.js';
 
-const VALID_WIDGET_TYPES: readonly WidgetType[] = ['chart', 'pivot', 'text', 'custom'];
+const VALID_WIDGET_TYPES: readonly WidgetType[] = ['chart', 'pivot', 'text', 'narrative', 'custom'];
 
 const isValidWidgetType = (value: unknown): value is WidgetType =>
   typeof value === 'string' && VALID_WIDGET_TYPES.includes(value as WidgetType);

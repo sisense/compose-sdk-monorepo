@@ -1,6 +1,6 @@
 /** @vitest-environment jsdom */
 import type { Attribute, CascadingFilter, Filter, QueryResultData } from '@sisense/sdk-data';
-import { filterFactory, isMembersFilter } from '@sisense/sdk-data';
+import { filterFactory, isMembersFilter, parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 import { render, screen, waitFor } from '@testing-library/react';
 
 import { MockedSisenseContextProvider, setup } from '@/__test-helpers__';
@@ -114,5 +114,26 @@ describe('CascadingFilterTile editing', () => {
     expect(top).toBe(genderFilter);
     expect(isMembersFilter(middle) && middle.members).toEqual(['0-18', '19-24']);
     expect(isMembersFilter(bottom) && bottom.members).toEqual([]);
+  });
+
+  it('gives the changed filter compose code built from its new levels', async () => {
+    const onChange = vi.fn();
+    const { user } = setup(
+      <MockedSisenseContextProvider>
+        <CascadingFilterTile filter={cascadingFilter} onChange={onChange} />
+      </MockedSisenseContextProvider>,
+    );
+
+    const [, middleLevelExpandButton] = await screen.findAllByTestId('expand-collapse-button');
+    await user.click(middleLevelExpandButton);
+    await user.click(await screen.findByLabelText('19-24', { selector: 'input' }));
+
+    await waitFor(() => expect(onChange).toHaveBeenCalledOnce());
+    const newFilter = onChange.mock.calls[0][0] as CascadingFilter;
+    const call = parseComposeCodeToFunctionCall(newFilter.composeCode ?? '');
+    expect(call.function).toBe('filterFactory.cascading');
+    expect(call.args[0]).toEqual(
+      newFilter.filters.map((level) => parseComposeCodeToFunctionCall(level.composeCode ?? '')),
+    );
   });
 });

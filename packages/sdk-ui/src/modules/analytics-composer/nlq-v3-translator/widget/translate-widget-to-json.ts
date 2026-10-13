@@ -12,21 +12,22 @@ import {
   stripDelimitersFromJson,
   translateDataSourceToJSON,
 } from '../shared/utils/translation-helpers.js';
-import type { CustomWidgetJSON, WidgetJSON } from '../types.js';
+import type { WidgetJSON } from '../types.js';
 
 /**
  * Translates CSDK widget props to NLQ WidgetJSON format.
- * Direction: CSDK → JSON
+ * Direction: CSDK → JSON.
  *
  * Dispatches to the appropriate sub-translator based on `widgetType`:
  * - `'chart'` → `translateChartToJSON`
  * - `'pivot'` → `translatePivotTableToJSON`
  * - `'text'` → pass-through of styleOptions
- * - `'custom'` → filters/highlights translated; dataOptions passed through as opaque JSON
+ * - `'narrative'` → pass-through of title, styleOptions, config and dashboardId
+ * - `'custom'` → filters/highlights translated; dataOptions passed through as opaque JSON.
  *
- * @param widgetProps - Widget props with widgetType discriminant (id required)
- * @returns NlqTranslationResult with WidgetJSON or errors
- * @internal
+ * @param widgetProps - Widget props with widgetType discriminant (id required).
+ * @returns NlqTranslationResult with WidgetJSON or errors.
+ * @sisenseInternal
  */
 export const translateWidgetToJSON = (
   widgetProps: WidgetProps,
@@ -87,6 +88,18 @@ export const translateWidgetToJSON = (
       return { success: true, data: textJSON };
     }
 
+    case 'narrative': {
+      const narrativeJSON: Extract<WidgetJSON, { widgetType: 'narrative' }> = {
+        widgetType: 'narrative',
+        id: widgetProps.id,
+        ...(widgetProps.title !== undefined && { title: widgetProps.title }),
+        ...(widgetProps.styleOptions !== undefined && { styleOptions: widgetProps.styleOptions }),
+        ...(widgetProps.config !== undefined && { config: widgetProps.config }),
+        ...(widgetProps.dashboardId !== undefined && { dashboardId: widgetProps.dashboardId }),
+      };
+      return { success: true, data: narrativeJSON };
+    }
+
     case 'custom': {
       const translationErrors: NlqTranslationError[] = [];
 
@@ -129,11 +142,11 @@ export const translateWidgetToJSON = (
         }),
         ...(filtersJSON &&
           filtersJSON.length > 0 && {
-            filters: filtersJSON as CustomWidgetJSON['filters'],
+            filters: filtersJSON,
           }),
         ...(highlightsJSON &&
           highlightsJSON.length > 0 && {
-            highlights: highlightsJSON as CustomWidgetJSON['highlights'],
+            highlights: highlightsJSON,
           }),
       };
 

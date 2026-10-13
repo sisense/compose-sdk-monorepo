@@ -22,7 +22,7 @@ Turns plain JSON descriptions of attributes, dimensions, measures, and filters i
 | Export (internal) | `DimensionalDataModel` / `DimensionalDataModel.fromConfig(config)` — packages/sdk-data/src/dimensional-model/data-model.ts:14 |
 | Type (internal)   | `DataModel` — packages/sdk-data/src/dimensional-model/interfaces.ts:7                                                         |
 | Type              | `DataSourceInfo` — packages/sdk-data/src/interfaces.ts:187                                                                    |
-| Type              | `DataSource = string \| DataSourceInfo` — packages/sdk-data/src/interfaces.ts:209                                             |
+| Type              | `DataSource = string \| DataSourceInfo` — packages/sdk-data/src/interfaces.ts:212                                             |
 | Const (internal)  | `DATA_MODEL_MODULE_NAME` — packages/sdk-data/src/dimensional-model/consts.ts:1                                                |
 
 # Contract
@@ -49,7 +49,7 @@ type DataSourceInfo = {
   id?: string;
   address?: string;
   fullname?: string; // all @internal
-  title: string;
+  title: string; // identity name: queries, JAQL, matching
   type: 'live' | 'elasticube';
 };
 ```
@@ -82,7 +82,7 @@ Example generated file: examples/angular-demo/src/assets/sample-ecommerce-autoge
 2. Data model files must be imported as `import * as DM from ...` (or an alias matching `DATA_MODEL_MODULE_NAME = 'DM'`): auto-generated `composeCode` hardcodes the `DM.` prefix, so widget-to-code round-tripping assumes that alias.
 3. Factory JSON accepts legacy JAQL synonyms (`dim`/`expression`/`attribute`, `desc`/`description`, `dimtype`/`type`) — keep accepting all of them; server payloads and old generated files use different spellings.
 4. `DimensionalDataModel` attaches each metadata element as a named property on the instance (data-model.ts:46) and suffixes a random key on collision — do not rely on property order or on collision-suffixed names.
-5. A `DataSource` may be a bare title string or a `DataSourceInfo` object; code must handle both (use `isDataSource`/`isDataSourceInfo` guards from packages/sdk-data/src/interfaces.ts:375).
+5. A `DataSource` may be a bare title string or a `DataSourceInfo` object; code must handle both (use the `isDataSource` guard from packages/sdk-data/src/interfaces.ts:378 and `isDataSourceInfo` from packages/sdk-data/src/utils.ts:208).
 
 # Related
 

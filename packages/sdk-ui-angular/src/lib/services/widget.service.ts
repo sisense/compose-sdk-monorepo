@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
-  getWidgetModel,
   type GetWidgetModelParams as GetWidgetModelParamsPreact,
-  HookAdapter,
   type JumpToDashboardConfigForPivot as JumpToDashboardConfigForPivotPreact,
   type JumpToDashboardConfig as JumpToDashboardConfigPreact,
   useJtdWidget as useJtdWidgetPreact,
 } from '@sisense/sdk-ui-preact';
+import { getWidgetModel, HookAdapter } from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject } from 'rxjs';
 
 import {

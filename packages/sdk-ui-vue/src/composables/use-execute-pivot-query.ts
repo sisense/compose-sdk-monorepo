@@ -1,9 +1,5 @@
-import {
-  type ExecutePivotQueryParams,
-  HookAdapter,
-  type PivotQueryState,
-  useExecutePivotQueryInternal,
-} from '@sisense/sdk-ui-preact';
+import { type ExecutePivotQueryParams, type PivotQueryState } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useExecutePivotQueryInternal } from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, toRefs, watch } from 'vue';
 
 import { createSisenseContextConnector } from '../helpers/context-connectors';

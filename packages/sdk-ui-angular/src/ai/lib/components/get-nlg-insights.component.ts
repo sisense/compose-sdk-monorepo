@@ -15,11 +15,11 @@ import {
   SisenseContextService,
   ThemeService,
 } from '@sisense/sdk-ui-angular';
-import { ComponentAdapter } from '@sisense/sdk-ui-preact';
 import {
   GetNlgInsights as GetNlgInsightsPreact,
   type GetNlgInsightsProps as GetNlgInsightsPropsPreact,
 } from '@sisense/sdk-ui-preact/ai';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import { createAiContextConnector, rootId, styles, template } from '../component-wrapper-helpers';
 import { AiService } from '../services/ai.service';

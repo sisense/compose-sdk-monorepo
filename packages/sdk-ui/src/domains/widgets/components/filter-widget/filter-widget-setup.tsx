@@ -1,6 +1,8 @@
 import { type FunctionComponent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { applyOpacity } from '@/shared/utils/color/color-interpolation';
+
 import { fieldPaletteVars, useFieldPalette } from './components/field-palette';
 import { filterWidgetDesign } from './filter-widget-design';
 import type { FilterWidgetControlStyleOptions } from './types';
@@ -99,10 +101,15 @@ export const FilterWidgetSetup: FunctionComponent<FilterWidgetSetupProps> = ({
           gap: emptySetup.iconGap,
           borderWidth: 1,
           borderStyle: 'solid',
-          borderColor: palette.border,
+          /* The primary ink at partial strength, not the fields' faint border: the button is
+             the widget's call to action and its outline has to read as one, in the theme's
+             (or Filter Style's) own primary text color. */
+          borderColor: applyOpacity(palette.textPrimary, emptySetup.borderOpacity),
           borderRadius: emptySetup.radius,
           background: palette.bg,
-          color: palette.textSecondary,
+          /* Primary ink, not secondary: this is the widget's one call to action, and the
+             secondary grey read as a disabled button. The glyph follows via currentColor. */
+          color: palette.textPrimary,
           fontFamily: palette.fontFamily,
           fontSize: emptySetup.fontSize,
           lineHeight: emptySetup.lineHeight,

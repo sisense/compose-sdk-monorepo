@@ -1,3 +1,4 @@
+import { createAttribute } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -10,6 +11,12 @@ function getWidgetOnChange(widget: WidgetProps): ((event: WidgetChangeEvent) => 
   return 'onChange' in widget && typeof widget.onChange === 'function'
     ? (widget.onChange as (event: WidgetChangeEvent) => void)
     : undefined;
+}
+
+/** Narrows away `undefined`, failing the test when the value is missing. */
+function defined<T>(value: T | undefined): T {
+  if (value === undefined) throw new Error('Expected a defined value');
+  return value;
 }
 
 const createMinimalWidget = (overrides?: Partial<WidgetProps>): WidgetProps =>
@@ -58,10 +65,10 @@ describe('useWidgetRenaming', () => {
 
     const { result } = renderHook(() => useWidgetRenaming(params));
 
-    const wrappedOnChange = getWidgetOnChange(result.current.widgets[0]!);
+    const wrappedOnChange = getWidgetOnChange(result.current.widgets[0]);
     expect(wrappedOnChange).toBeDefined();
     act(() => {
-      wrappedOnChange!({ type: 'title/changed', payload: { title: 'Renamed Widget' } });
+      defined(wrappedOnChange)({ type: 'title/changed', payload: { title: 'Renamed Widget' } });
     });
 
     expect(updateWidget).toHaveBeenCalledWith('w1', { title: 'Renamed Widget' });
@@ -79,10 +86,10 @@ describe('useWidgetRenaming', () => {
 
     const { result } = renderHook(() => useWidgetRenaming(params));
 
-    const wrappedOnChange = getWidgetOnChange(result.current.widgets[0]!);
+    const wrappedOnChange = getWidgetOnChange(result.current.widgets[0]);
     expect(wrappedOnChange).toBeDefined();
     act(() => {
-      wrappedOnChange!({ type: 'title/changed', payload: { title: 'New Title' } });
+      defined(wrappedOnChange)({ type: 'title/changed', payload: { title: 'New Title' } });
     });
 
     expect(onChange).toHaveBeenCalledWith({
@@ -104,10 +111,10 @@ describe('useWidgetRenaming', () => {
 
     const { result } = renderHook(() => useWidgetRenaming(params));
 
-    const wrappedOnChange = getWidgetOnChange(result.current.widgets[0]!);
+    const wrappedOnChange = getWidgetOnChange(result.current.widgets[0]);
     expect(wrappedOnChange).toBeDefined();
     await act(async () => {
-      wrappedOnChange!({ type: 'title/changed', payload: { title: 'New Title' } });
+      defined(wrappedOnChange)({ type: 'title/changed', payload: { title: 'New Title' } });
       await Promise.resolve();
     });
 
@@ -145,7 +152,7 @@ describe('useWidgetRenaming', () => {
 
     const { result } = renderHook(() => useWidgetRenaming(params));
 
-    expect(getWidgetOnChange(result.current.widgets[0]!)).toBe(onChange);
+    expect(getWidgetOnChange(result.current.widgets[0])).toBe(onChange);
   });
 
   it('FilterWidget: wraps the unified onChange for persistence on title/changed', () => {
@@ -155,8 +162,11 @@ describe('useWidgetRenaming', () => {
       createMinimalWidget({
         id: 'fw-1',
         widgetType: 'filter',
-        // Cast rationale: minimal attribute stub — only identity fields matter here.
-        attribute: { name: 'Country', expression: '[Country]', type: 'text' } as any,
+        attribute: createAttribute({
+          name: 'Country',
+          expression: '[Country]',
+          type: 'text-attribute',
+        }),
         onChange,
       } as Partial<WidgetProps>),
     ];
@@ -168,8 +178,8 @@ describe('useWidgetRenaming', () => {
 
     const { result } = renderHook(() => useWidgetRenaming(params));
 
-    const fw = result.current.widgets[0]!;
-    const wrappedOnChange = getWidgetOnChange(fw)!;
+    const fw = result.current.widgets[0];
+    const wrappedOnChange = defined(getWidgetOnChange(fw));
     expect(wrappedOnChange).not.toBe(onChange);
     act(() => {
       wrappedOnChange({ type: 'title/changed', payload: { title: 'My Filter' } });
@@ -190,8 +200,11 @@ describe('useWidgetRenaming', () => {
       createMinimalWidget({
         id: 'fw-1',
         widgetType: 'filter',
-        // Cast rationale: minimal attribute stub — only identity fields matter here.
-        attribute: { name: 'Country', expression: '[Country]', type: 'text' } as any,
+        attribute: createAttribute({
+          name: 'Country',
+          expression: '[Country]',
+          type: 'text-attribute',
+        }),
         onChange,
       } as Partial<WidgetProps>),
     ];
@@ -205,35 +218,68 @@ describe('useWidgetRenaming', () => {
 
     const event = { type: 'filter/changed', payload: { filter: null } } as const;
     act(() => {
-      getWidgetOnChange(result.current.widgets[0]!)!(event);
+      defined(getWidgetOnChange(result.current.widgets[0]))(event);
     });
 
     expect(updateWidget).not.toHaveBeenCalled();
     expect(onChange).toHaveBeenCalledWith(event);
   });
 
-  it('does not wrap onChange of a custom widget (it is the persistence callback, not a change-event channel)', () => {
-    const persistenceOnChange = vi.fn();
-    const updateWidget = vi.fn().mockResolvedValue(undefined);
-    const widgets = [
+  describe('custom widget', () => {
+    const createCustomWidget = (onChange = vi.fn()) =>
       createMinimalWidget({
         id: 'cw-1',
         widgetType: 'custom',
-        onChange: persistenceOnChange,
-      } as Partial<WidgetProps>),
-    ];
-    const params: UseWidgetRenamingParams = {
-      widgets,
-      enabled: true,
-      persistence: { updateWidget },
-    };
+        title: 'Old Title',
+        onChange,
+      } as Partial<WidgetProps>);
 
-    const { result } = renderHook(() => useWidgetRenaming(params));
+    it('persists title/changed via updateWidget and forwards it to the original onChange', () => {
+      const onChange = vi.fn();
+      const updateWidget = vi.fn().mockResolvedValue(undefined);
 
-    // The custom widget's onChange must pass through untouched...
-    expect(getWidgetOnChange(result.current.widgets[0]!)).toBe(persistenceOnChange);
-    // ...while title editing config is still applied.
-    expect(result.current.widgets[0]?.config?.header?.title?.editing?.enabled).toBe(true);
+      const { result } = renderHook(() =>
+        useWidgetRenaming({
+          widgets: [createCustomWidget(onChange)],
+          enabled: true,
+          persistence: { updateWidget },
+        }),
+      );
+
+      const widget = result.current.widgets[0];
+      expect(widget?.config?.header?.title?.editing?.enabled).toBe(true);
+      const event: WidgetChangeEvent = { type: 'title/changed', payload: { title: 'Renamed' } };
+      act(() => {
+        defined(getWidgetOnChange(widget))(event);
+      });
+
+      expect(updateWidget).toHaveBeenCalledWith('cw-1', { title: 'Renamed' });
+      expect(onChange).toHaveBeenCalledWith(event);
+    });
+
+    it('forwards visualizationState/changed without persisting it as a rename', () => {
+      const onChange = vi.fn();
+      const updateWidget = vi.fn().mockResolvedValue(undefined);
+
+      const { result } = renderHook(() =>
+        useWidgetRenaming({
+          widgets: [createCustomWidget(onChange)],
+          enabled: true,
+          persistence: { updateWidget },
+        }),
+      );
+
+      const event: WidgetChangeEvent = {
+        type: 'visualizationState/changed',
+        payload: { customOptions: { lastPage: 3 } },
+      };
+      act(() => {
+        defined(getWidgetOnChange(result.current.widgets[0]))(event);
+      });
+
+      expect(updateWidget).not.toHaveBeenCalled();
+      expect(onChange).toHaveBeenCalledWith(event);
+    });
   });
 
   it('NarrativeWidget: wraps the unified onChange for persistence on title/changed', () => {
@@ -254,8 +300,8 @@ describe('useWidgetRenaming', () => {
 
     const { result } = renderHook(() => useWidgetRenaming(params));
 
-    const nw = result.current.widgets[0]!;
-    const wrappedOnChange = getWidgetOnChange(nw)!;
+    const nw = result.current.widgets[0];
+    const wrappedOnChange = defined(getWidgetOnChange(nw));
     expect(wrappedOnChange).not.toBe(onChange);
     act(() => {
       wrappedOnChange({ type: 'title/changed', payload: { title: 'My Narrative' } });

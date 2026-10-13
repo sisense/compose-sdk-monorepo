@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import {
   type ComposableDashboardProps as ComposableDashboardPropsPreact,
-  createHookApiFacade,
   type DashboardProps as DashboardPropsPreact,
-  getDashboardModel,
   type GetDashboardModelOptions,
-  getDashboardModels,
   type GetDashboardModelsOptions,
-  HookAdapter,
-  useComposedDashboardInternal,
   UseComposedDashboardOptions,
   WidgetsPanelLayout,
 } from '@sisense/sdk-ui-preact';
+import {
+  createHookApiFacade,
+  getDashboardModel,
+  getDashboardModels,
+  HookAdapter,
+  useComposedDashboardInternal,
+} from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject } from 'rxjs';
 
 import {

@@ -12,6 +12,7 @@ import { parseDimensionalName } from '../../utils/schema-index.js';
 import {
   formatFormulaFunctionArityMessage,
   FORMULA_FUNCTION_SCHEMAS,
+  getFormulaFunctionsByCategory,
   getRequiredDateLevel,
   getXDiffFormulaFunctions,
   UNSUPPORTED_FORMULA_FUNCTIONS,
@@ -88,13 +89,15 @@ const AGGREGATIVE_FORMULA_FUNCTIONS = new Set([
   // RAVG, RSUM are non-aggregative per Sisense doc (Other Functions, not (A))
   // CONTRIBUTION is non-aggregative (scalar).
   // CORREL, COVAR*, SKEW*, SLOPE, LARGEST are unsupported in custom formulas (see UNSUPPORTED_FORMULA_FUNCTIONS).
+  // Every function the schema registry classifies as aggregative (ANYVALUE, whisker/outlier functions, ...),
+  // except NOAGGFUNCTION, whose engine semantics are unverified and may pass a raw column through
+  ...getFormulaFunctionsByCategory('aggregative').filter((name) => name !== 'NOAGGFUNCTION'),
 ]);
 
-/** Regex matching a call to any known aggregative function (e.g. SUM(, AVG(). Case-insensitive. */
-const AGGREGATIVE_FUNCTION_CALL_PATTERN = new RegExp(
-  `\\b(${Array.from(AGGREGATIVE_FORMULA_FUNCTIONS).join('|')})\\s*\\(`,
-  'i',
-);
+/**
+ * Measured-value modifiers: their arguments are filter dimensions, not values to aggregate.
+ */
+const MEASURED_VALUE_MODIFIER_FUNCTIONS = new Set(['ALL', 'PREV', 'NEXT']);
 
 function isContextValueMeasure(value: unknown): boolean {
   if (isFunctionCall(value)) return true;
@@ -128,6 +131,9 @@ function formatNonAggregativePhrase(names: string[]): string {
     ? `${names[0]} is not an aggregative function. `
     : `${names.join(', ')} are not aggregative functions. `;
 }
+
+/** Index of the first RANK groupBy (partition attribute) argument. */
+const RANK_FIRST_PARTITION_ARG_INDEX = 3;
 
 /** Normalizes key to bracket format, consistent with measureFactory.customFormula. */
 const toBracketKey = (k: string) => (k.startsWith('[') ? k : `[${k}]`);
@@ -361,21 +367,125 @@ function validateMissingReferences(ctx: ValidatorCtx): void {
   );
 }
 
+/**
+ * Returns bracket references with at least one occurrence outside any aggregative call.
+ * Nesting-aware and skips quoted strings. Refs that are filter dimensions rather than values are
+ * exempt per occurrence: arguments of a measured-value modifier (ALL, PREV, NEXT), the filter
+ * arguments of a measured-value tuple `(measure, filter, ...)`, and whole RANK groupBy arguments.
+ * Exported for unit tests.
+ *
+ * @param formula - The formula string to scan.
+ * @returns Names of references with an occurrence outside every aggregative call.
+ * @internal
+ */
+export function findUnaggregatedReferences(formula: string): Set<string> {
+  const unaggregated = new Set<string>();
+  // One frame per open paren: the call it belongs to and which top-level argument the scan is in
+  const frames: FormulaScanFrame[] = [];
+  // Open aggregative and filter-context frames, kept so each reference is an O(1) check
+  let aggregativeDepth = 0;
+  let filterDepth = 0;
+  let i = 0;
+  while (i < formula.length) {
+    const char = formula[i];
+    if (char === "'" || char === '"') {
+      i = skipQuotedString(formula, i);
+      continue;
+    }
+    const refMatch = char === '[' ? /^\[(\w[\w.-]*)\]/.exec(formula.slice(i)) : null;
+    if (refMatch) {
+      const end = i + refMatch[0].length;
+      const frame = frames[frames.length - 1];
+      const isRankPartition =
+        frame?.kind === 'rank' &&
+        frame.argIndex >= RANK_FIRST_PARTITION_ARG_INDEX &&
+        isWholeArgument(formula, i, end);
+      if (aggregativeDepth === 0 && filterDepth === 0 && !isRankPartition) {
+        unaggregated.add(refMatch[1]);
+      }
+      i = end;
+      continue;
+    }
+    if (/[A-Za-z_]/.test(char)) {
+      const nameStart = i;
+      while (i < formula.length && /[A-Za-z0-9_]/.test(formula[i])) i++;
+      const name = formula.slice(nameStart, i).toUpperCase();
+      let j = i;
+      while (j < formula.length && /\s/.test(formula[j])) j++;
+      if (formula[j] === '(') {
+        const aggregative = AGGREGATIVE_FORMULA_FUNCTIONS.has(name);
+        const isModifier = MEASURED_VALUE_MODIFIER_FUNCTIONS.has(name);
+        const kind = name === 'RANK' ? 'rank' : 'call';
+        frames.push({ aggregative, kind, argIndex: 0, filterContext: isModifier });
+        aggregativeDepth += aggregative ? 1 : 0;
+        filterDepth += isModifier ? 1 : 0;
+        i = j + 1;
+      }
+      continue;
+    }
+    if (char === '(') {
+      frames.push({ aggregative: false, kind: 'tuple', argIndex: 0, filterContext: false });
+    } else if (char === ')') {
+      const closed = frames.pop();
+      aggregativeDepth -= closed?.aggregative ? 1 : 0;
+      filterDepth -= closed?.filterContext ? 1 : 0;
+    } else if (char === ',' && frames.length > 0) {
+      const frame = frames[frames.length - 1];
+      frame.argIndex++;
+      // In a measured-value tuple (measure, filter, ...), everything after the measure is a filter
+      if (frame.kind === 'tuple' && !frame.filterContext) {
+        frame.filterContext = true;
+        filterDepth++;
+      }
+    }
+    i++;
+  }
+  return unaggregated;
+}
+
+interface FormulaScanFrame {
+  aggregative: boolean;
+  kind: 'rank' | 'call' | 'tuple';
+  argIndex: number;
+  /** Whether refs inside this frame are filter dimensions rather than values. */
+  filterContext: boolean;
+}
+
+/**
+ * Checks whether the text at [start, end) is a whole call argument, bounded by `(`/`,` and `,`/`)`.
+ *
+ * @param formula - The formula being scanned.
+ * @param start - Start offset of the ref.
+ * @param end - End offset of the ref (exclusive).
+ * @returns True when nothing but whitespace separates the ref from its argument delimiters.
+ */
+function isWholeArgument(formula: string, start: number, end: number): boolean {
+  const before = formula.slice(0, start).trimEnd();
+  const after = formula.slice(end).trimStart();
+  return /[(,]$/.test(before) && /^[,)]/.test(after);
+}
+
 function validateAggregativeRequirement(ctx: ValidatorCtx): void {
   if (!ctx.requireAggregative) return;
-  if (AGGREGATIVE_FUNCTION_CALL_PATTERN.test(ctx.formula)) return;
 
+  const unaggregated = findUnaggregatedReferences(ctx.formula);
   const rawAttrRefs = ctx.result.references.filter((ref) => {
+    if (!unaggregated.has(ref)) return false;
     const value = ctx.context[toBracketKey(ref)] ?? ctx.context[ref];
     return value !== undefined && !isContextValueMeasure(value);
   });
   if (rawAttrRefs.length === 0) return;
 
+  // When the formula already aggregates, the problem is the listed refs, not its other functions
+  const hasAggregation = extractParenFunctionCalls(ctx.formula).some(({ name }) =>
+    AGGREGATIVE_FORMULA_FUNCTIONS.has(name.toUpperCase()),
+  );
+  const functionPhrase = hasAggregation
+    ? ''
+    : formatNonAggregativePhrase(getNonAggregativeFunctionNames(ctx.formula));
   addError(
     ctx,
-    `${ctx.errorPrefix}args[1]: ${formatNonAggregativePhrase(
-      getNonAggregativeFunctionNames(ctx.formula),
-    )}Bracket reference(s) ${formatBracketRefList(
+    `${ctx.errorPrefix}args[1]: ${functionPhrase}Bracket reference(s) ${formatBracketRefList(
       rawAttrRefs,
     )} point to raw attributes and must be wrapped in an aggregative function (e.g. SUM, AVG)`,
   );

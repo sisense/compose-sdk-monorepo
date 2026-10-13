@@ -10,10 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   PivotTableWidget as PivotTableWidgetPreact,
   type PivotTableWidgetProps as PivotTableWidgetPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

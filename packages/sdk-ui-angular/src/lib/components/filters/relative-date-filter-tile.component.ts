@@ -10,10 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   RelativeDateFilterTile as RelativeDateFilterTilePreact,
   type RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

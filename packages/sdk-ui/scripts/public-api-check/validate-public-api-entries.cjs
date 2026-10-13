@@ -1,7 +1,9 @@
 // @ts-check
 
+const console = require('console');
 const fs = require('fs');
 const path = require('path');
+const process = require('process');
 const ts = require('typescript');
 
 /**
@@ -325,16 +327,110 @@ function validatePublicApiEntry(program, packageRoot, barrelPath, requiredTag, f
 }
 
 /**
+ * @typedef {{
+ *  entry: string;
+ *  requiredTag?: string;
+ *  forbiddenTags?: string[];
+ * }} EntrySurface
+ */
+
+/**
+ * Resolves the full export surface of a package entry file, following `export *` chains.
+ *
+ * @param {import('typescript').Program} program
+ * @param {string} packageRoot
+ * @param {string} entryPath
+ * @returns {{ sourceFile: import('typescript').SourceFile; exports: import('typescript').Symbol[] }}
+ */
+function getEntryExports(program, packageRoot, entryPath) {
+  const sourceFile = program.getSourceFile(path.resolve(packageRoot, entryPath));
+  if (!sourceFile) {
+    throw new Error(
+      `Entry file ${entryPath} is not part of TypeScript program. Check tsconfig include/rootDir.`,
+    );
+  }
+  const checker = program.getTypeChecker();
+  const moduleSymbol = checker.getSymbolAtLocation(sourceFile);
+  return { sourceFile, exports: moduleSymbol ? checker.getExportsOfModule(moduleSymbol) : [] };
+}
+
+/**
+ * Validates every symbol an entry exports (its whole surface, not only one barrel) against the
+ * entry's tag policy.
+ *
+ * @param {import('typescript').Program} program
+ * @param {string} packageRoot
+ * @param {EntrySurface} entrySurface
+ * @returns {Violation[]}
+ */
+function validateEntrySurface(program, packageRoot, { entry, requiredTag, forbiddenTags }) {
+  const checker = program.getTypeChecker();
+  const { sourceFile, exports } = getEntryExports(program, packageRoot, entry);
+  /** @type {Violation[]} */
+  const violations = [];
+
+  for (const symbol of exports) {
+    const exportName = symbol.getName();
+    const declaration = resolveDeclaration(symbol, checker);
+    if (!declaration) {
+      violations.push({
+        barrelPath: entry,
+        requiredTag: requiredTag || '<none>',
+        exportName,
+        file: normalizePath(sourceFile.fileName),
+        line: 1,
+        reason: `Cannot resolve declaration exported by entry ${entry}.`,
+      });
+      continue;
+    }
+
+    const declarationFile = declaration.getSourceFile();
+    const line = ts.getLineAndCharacterOfPosition(declarationFile, declaration.getStart()).line + 1;
+    const file = normalizePath(declarationFile.fileName);
+
+    if (forbiddenTags && forbiddenTags.length > 0 && hasForbiddenTag(declaration, forbiddenTags)) {
+      violations.push({
+        barrelPath: entry,
+        requiredTag: '<none>',
+        exportName,
+        file,
+        line,
+        reason: `Entry ${entry} must not export items tagged ${forbiddenTags.join(', ')}.`,
+      });
+    }
+
+    if (requiredTag && !hasRequiredTag(declaration, requiredTag)) {
+      violations.push({
+        barrelPath: entry,
+        requiredTag,
+        exportName,
+        file,
+        line,
+        reason: `Entry ${entry} exports an item without the required tag ${requiredTag}.`,
+      });
+    }
+  }
+
+  return violations;
+}
+
+/**
  * Runs export-entry validation for the configured entries from current execution folder.
  *
- * @param {readonly ExportEntry[]} exportEntries
+ * @param {readonly ExportEntry[]} exportEntries - Tier barrels: named exports only, one tag each
+ * @param {readonly EntrySurface[]} [entrySurfaces] - Package entries validated as a whole
  */
-function validatePublicApiEntries(exportEntries) {
+function validatePublicApiEntries(exportEntries, entrySurfaces = []) {
   const packageRoot = process.cwd();
   const program = createProgram(packageRoot);
-  const violations = exportEntries.flatMap(({ entry, requiredTag, forbiddenTags }) =>
-    validatePublicApiEntry(program, packageRoot, entry, requiredTag, forbiddenTags),
-  );
+  const violations = [
+    ...exportEntries.flatMap(({ entry, requiredTag, forbiddenTags }) =>
+      validatePublicApiEntry(program, packageRoot, entry, requiredTag, forbiddenTags),
+    ),
+    ...entrySurfaces.flatMap((entrySurface) =>
+      validateEntrySurface(program, packageRoot, entrySurface),
+    ),
+  ];
 
   if (violations.length === 0) {
     console.log('Public API check passed.');

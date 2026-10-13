@@ -1,8 +1,7 @@
 /* eslint-disable sonarjs/no-identical-functions */
-import { Column, normalizeName } from '@sisense/sdk-data';
+import { Attribute, Column, normalizeName } from '@sisense/sdk-data';
 
 import { isPivotRowsSort } from '@/domains/visualizations/components/pivot-table/sorting-utils.js';
-import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data.js';
 import {
   AreamapChartDataOptions,
   BoxplotChartDataOptions,
@@ -20,6 +19,7 @@ import {
   TableDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
 import {
+  isDerivedResultColumn,
   normalizeAnyColumn,
   normalizeColumn,
   normalizeMeasureColumn,
@@ -162,19 +162,21 @@ export function toPolarPanels(dataOptions: CartesianChartDataOptions): Panel[] {
 }
 
 /**
- * Builds the single `columns` panel for a table widget. Attributes are emitted first,
- * then measure columns, preserving the order produced by {@link getTableAttributesAndMeasures}.
+ * Builds the single `columns` panel for a table widget.
  *
- * @param dataOptions - Internal table data options from the WidgetModel
- * @returns Single-element array with the `columns` panel
+ * Passes each styled column through {@link normalizeAnyColumn} and {@link createPanelItem}
+ * so presentation fields (`sortType`, width, number format, color) become Fusion
+ * `jaql.sort` / `format.*`, matching cartesian and pivot panel builders. Skips derived
+ * result columns (for example forecast bounds) and preserves display order.
+ *
+ * @param dataOptions - Internal table data options from the WidgetModel.
+ * @returns Single-element array with the `columns` panel.
  * @internal
  */
 export function toTablePanels(dataOptions: TableDataOptionsInternal): Panel[] {
-  const { attributes, measures } = getTableAttributesAndMeasures(dataOptions);
-  const items: PanelItem[] = [
-    ...attributes.map((column) => createPanelItem(normalizeColumn(column))),
-    ...measures.map((column) => createPanelItem(normalizeMeasureColumn(column))),
-  ];
+  const items: PanelItem[] = dataOptions.columns
+    .filter((column) => !isDerivedResultColumn(column))
+    .map((column) => createPanelItem(normalizeAnyColumn(column)));
   return [{ name: 'columns', items }];
 }
 
@@ -830,4 +832,21 @@ export function toCustomWidgetPanels(dataOptions: GenericDataOptions | undefined
     });
   }
   return panels;
+}
+
+/**
+ * Builds the panels of a filter widget DTO: the `dimension` panel holding the widget's single
+ * attribute — the panel the read side takes the attribute from. An unconfigured widget (no
+ * attribute expression yet) gets an empty `dimension` panel.
+ *
+ * @param attribute - The attribute the filter widget filters on.
+ * @returns The filter widget panels, without the trailing `filters` panel.
+ */
+export function toFilterWidgetPanels(attribute: Attribute): Panel[] {
+  return [
+    {
+      name: 'dimension',
+      items: attribute.expression ? [createPanelItem({ column: attribute })] : [],
+    },
+  ];
 }

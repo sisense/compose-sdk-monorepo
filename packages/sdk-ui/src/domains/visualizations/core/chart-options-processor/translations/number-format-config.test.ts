@@ -1,8 +1,12 @@
+import { i18nextInstance } from '@/infra/translation/initialize-i18n';
+import { registerAllTranslations } from '@/infra/translation/register-all-translations';
+
 import {
   applyFormat,
   applyFormatPlainText,
   applyFormatStaticMarkup,
   getCompleteNumberFormatConfig,
+  getNumberSeparators,
 } from './number-format-config.js';
 
 const testConfig = getCompleteNumberFormatConfig({ kilo: false });
@@ -71,6 +75,78 @@ describe('NumberFormatConfig', () => {
         prefix: true,
         symbol: '$',
       });
+    });
+  });
+
+  describe('localization', () => {
+    const currency = getCompleteNumberFormatConfig({ name: 'Currency', decimalScale: 2 });
+
+    beforeAll(() => {
+      registerAllTranslations();
+    });
+
+    afterEach(async () => {
+      await i18nextInstance.changeLanguage('en-US');
+    });
+
+    it.each([
+      ['en-US', '8.92', '$1.70B'],
+      ['de-DE', '8,92', '$1,70Mrd'],
+      ['ja-JP', '8.92', '$1.70(十億)'],
+      ['fr-FR', '8,92', '$1,70B'],
+    ])('uses the %s separators and abbreviations', async (language, plain, abbreviated) => {
+      await i18nextInstance.changeLanguage(language);
+
+      expect(applyFormat(getCompleteNumberFormatConfig({ decimalScale: 2 }), 8.92)).toBe(plain);
+      expect(applyFormat(currency, 1_700_000_000)).toBe(abbreviated);
+    });
+
+    it('groups thousands with the locale separator', async () => {
+      await i18nextInstance.changeLanguage('de-DE');
+
+      expect(applyFormat(testConfig, 1234)).toBe('1.234');
+    });
+
+    it('follows a language change at runtime', async () => {
+      const config = getCompleteNumberFormatConfig({ decimalScale: 2 });
+      expect(applyFormat(config, 8.92)).toBe('8.92');
+
+      await i18nextInstance.changeLanguage('de-DE');
+
+      expect(applyFormat(config, 8.92)).toBe('8,92');
+    });
+
+    it.each([
+      ['de-DE', ['Tsd', 'Mio', 'Mrd', 'Bio']],
+      ['es-AR', ['M', 'MM', 'B', 'T']],
+      ['es-ES', ['M', 'MM', 'B', 'T']],
+      ['ja-JP', ['(千)', '(百万)', '(十億)', '(兆)']],
+      ['pt-BR', ['Mil', 'Mi', 'Bi', 'Tri']],
+      ['ru-RU', ['тыс.', 'млн', 'млрд', 'трлн']],
+      ['tr-TR', ['K', 'M', 'B', 'T']],
+      ['zh-CN', ['千', '百万', '十亿', '万亿']],
+    ])('abbreviates thousand to trillion for %s', async (language, suffixes) => {
+      await i18nextInstance.changeLanguage(language);
+      const config = getCompleteNumberFormatConfig({ decimalScale: 0 });
+
+      const results = [1e3, 1e6, 1e9, 1e12].map((value) => applyFormat(config, 789 * value));
+
+      expect(results).toEqual(suffixes.map((suffix) => `789${suffix}`));
+    });
+  });
+
+  describe('getNumberSeparators', () => {
+    it('reads the separators of the given locale', () => {
+      expect(getNumberSeparators('de-DE')).toEqual({ thousand: '.', decimal: ',' });
+      expect(getNumberSeparators('es-ES')).toEqual({ thousand: '.', decimal: ',' });
+    });
+
+    it('falls back to English separators for an invalid locale', () => {
+      expect(getNumberSeparators('not a locale')).toEqual({ thousand: ',', decimal: '.' });
+    });
+
+    it('falls back to English separators for an unsupported locale', () => {
+      expect(getNumberSeparators('zz-ZZ')).toEqual({ thousand: ',', decimal: '.' });
     });
   });
 });

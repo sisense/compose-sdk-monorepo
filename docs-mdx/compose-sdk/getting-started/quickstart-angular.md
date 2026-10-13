@@ -307,4 +307,4 @@ See the [SISENSE_CONTEXT_CONFIG_TOKEN](../modules/sdk-ui-angular/contexts/variab
 
 The sample application in this quickstart guide is designed to give you a basis for what you can do with Compose SDK. Build on the code sample by using other components from Compose SDK to add Sisense analytical experiences to your applications.
 
-Check out our demo application for Compose SDK with [Angular](https://csdk-angular.sisense.com).
+Explore live, editable Compose SDK examples for Angular in the [Compose SDK Playground](https://csdk-playground.sisense.com/?framework=angular).

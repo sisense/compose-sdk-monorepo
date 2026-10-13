@@ -6,7 +6,7 @@ import {
   CompleteThemeSettingsInternal,
   getDefaultThemeSettings,
   getThemeSettingsByOid,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject, firstValueFrom, take, toArray } from 'rxjs';
 import { Mock, Mocked, MockInstance } from 'vitest';
 
@@ -17,7 +17,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@sisense/sdk-ui-preact/internal', () => ({
   getDefaultThemeSettings: vi.fn().mockReturnValue({}),
   getThemeSettingsByOid: vi.fn().mockResolvedValue({}),
 }));

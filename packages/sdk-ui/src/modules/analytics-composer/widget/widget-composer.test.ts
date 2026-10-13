@@ -2,8 +2,9 @@
 import { JaqlDataSourceForDto } from '@sisense/sdk-data';
 
 import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { isChartWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetDto, widgetModelTranslator } from '@/index';
+import { widgetModelTranslator } from '@/index';
 
 import { commonDataSources } from '../__mocks__/common-datasources';
 import {

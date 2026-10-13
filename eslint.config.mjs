@@ -514,7 +514,8 @@ export default [
     },
   },
 
-  // Root-level Node scripts (ESM/CJS): plain Node globals, no browser globals, no typed linting.
+  // Root-level Node scripts (ESM/CJS) — `scripts/` and the CI helpers in `ci/`: plain Node globals,
+  // no browser globals, no typed linting.
   // These files aren't part of `tsconfig.eslint.json`'s program, so `parserOptions.project: null`
   // alone stops a type-checked program from being built but does not stop the `Main layer` block's
   // `baseRules` from still enabling typed (type-information-requiring) rules for them — those then
@@ -522,7 +523,7 @@ export default [
   // `disableTypeChecked` is typescript-eslint's own config for exactly this situation (plain JS/config
   // files parsed by the TS parser without a type-aware program): it turns every typed rule off.
   {
-    files: ['scripts/**/*.{mjs,cjs,js}'],
+    files: ['scripts/**/*.{mjs,cjs,js}', 'ci/**/*.{mjs,cjs,js}'],
     languageOptions: {
       globals: { ...globals.node },
       parserOptions: { project: null, projectService: false },

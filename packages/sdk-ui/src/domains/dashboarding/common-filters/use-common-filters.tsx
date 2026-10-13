@@ -18,7 +18,6 @@ import {
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { withHeaderItems } from '@/domains/widgets/helpers/header-items-utils.js';
 import { BeforeMenuOpenHandler, OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
-import { getFiltersArray } from '@/shared/utils/filter-relations.js';
 import { isSameAttribute } from '@/shared/utils/filters.js';
 
 import { createClearSelectionButtonItem } from './clear-selection-button.js';
@@ -53,7 +52,7 @@ export const useCommonFilters = ({
     addFilter: addCommonFilter,
     setFiltersOrFilterRelations: setCommonFiltersOrFilterRelations,
     setFilters: setCommonFilters,
-    applyRelationsToOtherFilters,
+    connectWidgetFilters,
   } = useConvertFilterRelations(initialCommonFiltersOrFilterRelations, onFiltersChange);
 
   const connectToWidgetProps = useCallback(
@@ -139,11 +138,9 @@ export const useCommonFilters = ({
 
       connectedWidgetProps.onBeforeMenuOpen = onBeforeMenuOpen;
 
-      connectedWidgetProps.filters = applyRelationsToOtherFilters(
-        mergeFilters(
-          commonFiltersConnectionProps.filters,
-          getFiltersArray(initialWidgetProps.filters),
-        ),
+      connectedWidgetProps.filters = connectWidgetFilters(
+        commonFiltersConnectionProps.filters,
+        initialWidgetProps.filters,
       );
 
       if (commonFiltersConnectionProps.onDataPointClick) {
@@ -175,7 +172,7 @@ export const useCommonFilters = ({
       translate,
       openMenu,
       onBeforeMenuOpen,
-      applyRelationsToOtherFilters,
+      connectWidgetFilters,
     ],
   );
 

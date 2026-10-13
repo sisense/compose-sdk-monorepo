@@ -10,16 +10,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  type BeforeMenuOpenHandler,
-  ComponentAdapter,
   type CustomWidgetProps as CustomWidgetPropsPreact,
   type FilterWidgetProps as FilterWidgetPropsPreact,
   type NarrativeWidgetProps,
-  type SoftUnion,
   TextWidgetProps as TextWidgetPropsPreact,
   Widget as WidgetPreact,
   type WidgetProps as WidgetPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import {
+  type BeforeMenuOpenHandler,
+  ComponentAdapter,
+  type SoftUnion,
+} from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

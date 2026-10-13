@@ -8,8 +8,7 @@ describe('filterWidgetFilterTypeLabels', () => {
       members: 'List',
       calendar: 'Calendar',
       range: 'Range',
-      period: 'Period',
-      numericRange: 'Numeric Range',
+      period: 'Time Frame',
       condition: 'Condition',
     });
   });

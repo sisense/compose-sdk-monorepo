@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react-vite';
+import type { Meta } from '@storybook/react-vite';
 
 import { templateForComponent } from '../../../__stories__/template';
 import { DataTopicItem as DataTopicItemComponent } from '../data-topics';
@@ -13,5 +13,11 @@ export default meta;
 
 export const DataTopicItem = template({
   title: 'Sample Retail',
+  description: 'Data Topic Description',
+});
+
+export const DataTopicItemWithDisplayName = template({
+  title: 'Sample Retail',
+  label: 'Retail Sales',
   description: 'Data Topic Description',
 });

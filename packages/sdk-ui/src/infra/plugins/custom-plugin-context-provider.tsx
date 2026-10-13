@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 
 import { CustomContextProviderProps } from '../../types';
-import { PluginProvider } from './plugin-provider.js';
+import { EMPTY_PLUGINS, PluginProvider } from './plugin-provider.js';
 import type { Plugin } from './types.js';
 
 /** @internal */
@@ -27,5 +27,5 @@ export const CustomPluginContextProvider: React.FC<
   if (error) {
     throw error;
   }
-  return <PluginProvider plugins={context?.plugins ?? []}>{children}</PluginProvider>;
+  return <PluginProvider plugins={context?.plugins ?? EMPTY_PLUGINS}>{children}</PluginProvider>;
 };

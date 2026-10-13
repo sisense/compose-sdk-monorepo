@@ -9,8 +9,14 @@ import {
 import { describe, expect, it } from 'vitest';
 
 import type { BaseQueryParams } from '@/domains/query-execution/types';
+import { i18nextInstance } from '@/infra/translation/initialize-i18n';
+import { registerAllTranslations } from '@/infra/translation/register-all-translations';
 
-import { baseQueryParamsToViewModel, getMeasureLabel } from './query-params-to-view-model';
+import {
+  baseQueryParamsToViewModel,
+  getFilterLabel,
+  getMeasureLabel,
+} from './query-params-to-view-model';
 import { isConnectorItem, isPillItem } from './types';
 
 describe('baseQueryParamsToViewModel', () => {
@@ -359,5 +365,23 @@ describe('getMeasureLabel', () => {
       b: filterFactory.members(hai, ['Yes']),
     });
     expect(getMeasureLabel(measure)).toBe('Admissions with hai');
+  });
+});
+
+describe('getFilterLabel', () => {
+  it('translates the chip value with the given translate function', () => {
+    registerAllTranslations();
+    const country = createAttribute({
+      name: 'Country',
+      type: 'text-attribute',
+      expression: '[Country.Country]',
+    });
+
+    const label = getFilterLabel(
+      filterFactory.contains(country, 'land'),
+      i18nextInstance.getFixedT('es-ES'),
+    );
+
+    expect(label).toBe('Country: contiene "land"');
   });
 });

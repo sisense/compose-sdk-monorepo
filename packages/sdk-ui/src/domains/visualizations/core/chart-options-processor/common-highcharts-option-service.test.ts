@@ -1,4 +1,5 @@
-import { CompleteThemeSettingsInternal } from '../../../..';
+import type { CompleteThemeSettingsInternal } from '@/types';
+
 import { HighchartsOptionsInternal } from './chart-options-service';
 import {
   applyCommonHighchartsOptions,

@@ -18,6 +18,28 @@ function visibleWidgetIdsInLayoutOrder(layout: WidgetsPanelLayout): string[] {
 }
 
 /**
+ * The dashboard widgets a narrative describes: the non-narrative widgets visible in the layout, in
+ * layout order, or every non-narrative widget, in list order, when there is no layout. A widget
+ * that is not in the layout does not count as visible.
+ * @param widgets - Dashboard widgets.
+ * @param layout - Widgets-panel layout, hidden cells included.
+ * @returns The widgets to narrate.
+ * @internal
+ */
+export function getNarrativeSiblings(
+  widgets: readonly WidgetProps[],
+  layout?: WidgetsPanelLayout,
+): WidgetProps[] {
+  const byId = new Map(widgets.map((widget) => [widget.id, widget]));
+  const ordered = layout
+    ? visibleWidgetIdsInLayoutOrder(layout)
+        .map((id) => byId.get(id))
+        .filter((widget): widget is WidgetProps => !!widget)
+    : widgets;
+  return ordered.filter((widget) => !isNarrativeWidgetProps(widget));
+}
+
+/**
  * Hands every narrative widget the dashboard widgets it describes: the other widgets that are
  * visible in the layout, in layout order, with the props they have at this point of the pipeline
  * (dashboard filters and highlights already connected). Narrative widgets never describe each
@@ -32,10 +54,7 @@ export const withNarrativeSiblings: ContextfulTransformer<WidgetProps[], Widgets
   (layout) => (widgets) => {
     if (!widgets.some(isNarrativeWidgetProps)) return widgets as WidgetProps[];
 
-    const byId = new Map(widgets.map((widget) => [widget.id, widget]));
-    const siblings = visibleWidgetIdsInLayoutOrder(layout)
-      .map((id) => byId.get(id))
-      .filter((widget): widget is WidgetProps => !!widget && !isNarrativeWidgetProps(widget));
+    const siblings = getNarrativeSiblings(widgets, layout);
 
     return widgets.map((widget) =>
       isNarrativeWidgetProps(widget) ? { ...widget, widgets: siblings } : widget,

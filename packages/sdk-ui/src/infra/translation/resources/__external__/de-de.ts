@@ -1,3 +1,7 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys (a calendar `nextMonth` glyph label and a Time Frame frame name can hold
+   the same word). Extracting them to constants would fragment the translations for a
+   reviewer walking one section. */
 import type { TranslationDictionary } from '../index.js';
 import { PACKAGE_NAMESPACE as SDK_UI_NAMESPACE } from '../index.js';
 
@@ -160,10 +164,10 @@ const translation: TranslationDictionary = {
   formatting: {
     number: {
       abbreviations: {
-        thousand: 'T',
-        million: 'M',
+        thousand: 'Tsd',
+        million: 'Mio',
         billion: 'Mrd',
-        trillion: 'B',
+        trillion: 'Bio',
       },
     },
   },
@@ -218,13 +222,13 @@ const translation: TranslationDictionary = {
       whiskers: 'Whiskers',
       box: 'Box',
       min: 'Min',
-      median: 'Median',
+      median: 'Medianwert',
       max: 'Max',
     },
   },
   treemap: {
     tooltip: {
-      ofTotal: 'von insgesamt',
+      ofTotal: 'der Gesamtsumme',
       of: 'von',
     },
   },
@@ -242,8 +246,8 @@ const translation: TranslationDictionary = {
       trendData: {
         min: 'Min',
         max: 'Max',
-        median: 'Median',
-        average: 'Durchschnitt',
+        median: 'Medianwert',
+        average: 'Mittelwert',
       },
     },
   },
@@ -263,6 +267,12 @@ const translation: TranslationDictionary = {
       invertedFrom: 'Muss vor dem Enddatum liegen',
       invertedTo: 'Muss nach dem Startdatum liegen',
     },
+    numberRange: {
+      minimum: 'Minimum',
+      maximum: 'Maximum',
+      notSet: 'Nicht festgelegt',
+      clear: '{{field}} löschen',
+    },
     selectedCount: '{{count}} ausgewählt',
     allExceptCount: 'Alle außer {{count}}',
     setupTitle: 'Filter-Widget einrichten',
@@ -274,6 +284,7 @@ const translation: TranslationDictionary = {
       onOrAfter: 'Am oder nach',
       includingCurrent: 'aktuelles einschließen',
       includingCurrentLabel: 'Aktuelles einschließen',
+      countMin: 'Geben Sie eine ganze Zahl ab 1 ein',
       summary: {
         current: '{{- operator}} {{- grain}}',
         relative: '{{- operator}} {{- count}} {{- grain}}',
@@ -301,6 +312,89 @@ const translation: TranslationDictionary = {
       decreaseCount: 'Verringern',
       selectValues: '{{level}} auswählen',
       clear: 'Löschen',
+    },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: 'Zeitraumoptionen',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to the
+       * `_one` (singular) or `_other` (plural) key by CLDR plural rules. Locales
+       * with more plural forms — Russian's `_few`/`_many`, Polish's `_many` — add
+       * more suffixes in their own resources; English needs only the two.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: 'Heute',
+        yesterday: 'Gestern',
+        tomorrow: 'Morgen',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: 'Diese Woche',
+          month: 'Dieser Monat',
+          quarter: 'Dieses Quartal',
+          year: 'Dieses Jahr',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         */
+        last: {
+          week_one: 'Letzte Woche',
+          week_few: 'Letzte {{count}} Wochen',
+          week_many: 'Letzte {{count}} Wochen',
+          week_other: 'Letzte {{count}} Wochen',
+          month_one: 'Letzter Monat',
+          month_few: 'Letzte {{count}} Monate',
+          month_many: 'Letzte {{count}} Monate',
+          month_other: 'Letzte {{count}} Monate',
+          quarter_one: 'Letztes Quartal',
+          quarter_few: 'Letzte {{count}} Quartale',
+          quarter_many: 'Letzte {{count}} Quartale',
+          quarter_other: 'Letzte {{count}} Quartale',
+          year_one: 'Letztes Jahr',
+          year_few: 'Letzte {{count}} Jahre',
+          year_many: 'Letzte {{count}} Jahre',
+          year_other: 'Letzte {{count}} Jahre',
+          day_few: 'Letzte {{count}} Tage',
+          day_many: 'Letzte {{count}} Tage',
+          day_other: 'Letzte {{count}} Tage',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: 'Nächste Woche',
+          week_few: 'Nächste {{count}} Wochen',
+          week_many: 'Nächste {{count}} Wochen',
+          week_other: 'Nächste {{count}} Wochen',
+          month_one: 'Nächster Monat',
+          month_few: 'Nächste {{count}} Monate',
+          month_many: 'Nächste {{count}} Monate',
+          month_other: 'Nächste {{count}} Monate',
+          quarter_one: 'Nächstes Quartal',
+          quarter_few: 'Nächste {{count}} Quartale',
+          quarter_many: 'Nächste {{count}} Quartale',
+          quarter_other: 'Nächste {{count}} Quartale',
+          year_one: 'Nächstes Jahr',
+          year_few: 'Nächste {{count}} Jahre',
+          year_many: 'Nächste {{count}} Jahre',
+          year_other: 'Nächste {{count}} Jahre',
+          day_few: 'Nächste {{count}} Tage',
+          day_many: 'Nächste {{count}} Tage',
+          day_other: 'Nächste {{count}} Tage',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: 'Diese & letzte Woche',
+          month: 'Dieser & letzter Monat',
+          quarter: 'Dieses & letztes Quartal',
+          year: 'Dieses & letztes Jahr',
+        },
+        thisAndNext: {
+          week: 'Diese & nächste Woche',
+          month: 'Dieser & nächster Monat',
+          quarter: 'Dieses & nächstes Quartal',
+          year: 'Dieses & nächstes Jahr',
+        },
+      },
     },
     calendar: {
       selectDates: 'Datumsangaben auswählen',
@@ -331,7 +425,7 @@ const translation: TranslationDictionary = {
     andOrFormulaApplied: 'UND/ODER-Formel angewendet',
   },
   drilldown: {
-    drillMenuItem: 'Drill',
+    drillMenuItem: 'Drillen',
     breadcrumbsAllSuffix: 'Alle',
     breadcrumbsPrev: 'Zurück',
     breadcrumbsNext: 'Weiter',
@@ -355,7 +449,7 @@ const translation: TranslationDictionary = {
       deleteWidget: 'Widget löschen',
       duplicateWidget: 'Widget duplizieren',
       renameWidget: 'Widget umbenennen',
-      distributeEqualWidth: 'Gleichmäßig in dieser Zeile verteilen',
+      distributeEqualWidth: 'In dieser Zeile gleichmäßig verteilen',
       download: 'Herunterladen',
       csvFile: 'CSV-Datei',
       excelFile: 'Excel-Datei',
@@ -666,24 +760,96 @@ const translation: TranslationDictionary = {
     tooltipType: 'Typ',
     tooltipColumn: 'Spalte',
     tooltipFormula: 'Formel',
+    filterPill: {
+      customFilter: 'benutzerdefinierter Filter',
+      empty: 'leer',
+      notEmpty: 'nicht leer',
+      not: 'nicht {{value}}',
+      and: 'und',
+      or: 'oder',
+      moreValues: '{{values}} +{{count}} weitere',
+      range: '{{from}} bis {{to}}',
+      fromToLatest: '{{from}} bis spätestes Datum',
+      earliestTo: 'frühestes Datum bis {{to}}',
+      dependentOn: 'abhängig von {{parents}}',
+      dependentFilter: 'abhängiger Filter',
+      text: {
+        contains: 'enthält {{value}}',
+        startsWith: 'beginnt mit {{value}}',
+        endsWith: 'endet mit {{value}}',
+        doesntEqual: 'ungleich {{value}}',
+        doesntStartWith: 'beginnt nicht mit {{value}}',
+        doesntContain: 'enthält nicht {{value}}',
+        doesntEndWith: 'endet nicht mit {{value}}',
+        like: 'wie {{value}}',
+      },
+      ranking: {
+        top: 'Top {{count}}',
+        bottom: 'Letzte {{count}}',
+        by: '{{rank}} nach {{measure}}',
+      },
+      relative: {
+        last: 'letzte {{count}} {{unit}}',
+        next: 'nächste {{count}} {{unit}}',
+        lastTo: 'letzte {{count}} {{unit}} bis {{date}}',
+        nextFrom: 'nächste {{count}} {{unit}} ab {{date}}',
+        includingCurrent: '{{period}} einschließlich des aktuellen',
+        withOffset: '{{period}}, Versatz {{offset}}',
+        today: 'heute',
+        thisWeek: 'diese Woche',
+        thisMonth: 'dieser Monat',
+        thisQuarter: 'dieses Quartal',
+        thisYear: 'dieses Jahr',
+      },
+      units: {
+        year_one: 'Jahr',
+        year_few: 'Jahre',
+        year_many: 'Jahre',
+        year_other: 'Jahre',
+        quarter_one: 'Quartal',
+        quarter_few: 'Quartale',
+        quarter_many: 'Quartale',
+        quarter_other: 'Quartale',
+        month_one: 'Monat',
+        month_few: 'Monate',
+        month_many: 'Monate',
+        month_other: 'Monate',
+        week_one: 'Woche',
+        week_few: 'Wochen',
+        week_many: 'Wochen',
+        week_other: 'Wochen',
+        day_one: 'Tag',
+        day_few: 'Tage',
+        day_many: 'Tage',
+        day_other: 'Tage',
+        hour_one: 'Stunde',
+        hour_few: 'Stunden',
+        hour_many: 'Stunden',
+        hour_other: 'Stunden',
+        minute_one: 'Minute',
+        minute_few: 'Minuten',
+        minute_many: 'Minuten',
+        minute_other: 'Minuten',
+      },
+    },
   },
   measures: {
     countShort: 'Anz. {{level}}',
-    countDistinct: 'Eindeutige Anzahl',
-    count: 'Alle zählen',
-    average: 'Durchschnitt',
+    countDistinct: 'Anzahl eindeutige',
+    count: 'Anzahl alle',
+    average: 'Mittelwert',
     sum: 'Summe',
     min: 'Min',
     max: 'Max',
     stdev: 'Standardabweichung',
-    median: 'Median',
+    median: 'Medianwert',
     variance: 'Varianz',
   },
   measuresAgg: {
     countDistinct: '# eindeutige',
-    count: '# von',
+    count: 'Anzahl von',
     sum: 'Gesamt',
-    average: 'Durchschnitt',
+    average: 'Mittelwert',
     min: 'Min',
     max: 'Max',
     median: 'Median von',

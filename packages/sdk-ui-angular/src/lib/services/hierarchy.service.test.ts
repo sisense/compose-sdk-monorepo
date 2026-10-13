@@ -2,7 +2,7 @@
 
 /** @vitest-environment jsdom */
 import { Attribute } from '@sisense/sdk-data';
-import { type ClientApplication, getHierarchyModels } from '@sisense/sdk-ui-preact';
+import { type ClientApplication, getHierarchyModels } from '@sisense/sdk-ui-preact/internal';
 import { Mock, Mocked } from 'vitest';
 
 import { HierarchyService } from './hierarchy.service';
@@ -12,7 +12,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@sisense/sdk-ui-preact/internal', () => ({
   getHierarchyModels: vi.fn(),
 }));
 

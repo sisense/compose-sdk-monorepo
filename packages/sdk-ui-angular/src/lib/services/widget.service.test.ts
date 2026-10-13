@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 
 /** @vitest-environment jsdom */
+import { useJtdWidget as useJtdWidgetPreact } from '@sisense/sdk-ui-preact';
 import {
   type ClientApplication,
   getWidgetModel,
   HookAdapter,
-  useJtdWidget as useJtdWidgetPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject } from 'rxjs';
 import { Mock, Mocked } from 'vitest';
 
@@ -25,8 +25,15 @@ vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
   return {
     ...actual,
-    getWidgetModel: vi.fn(),
     useJtdWidget: vi.fn(),
+  };
+});
+
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
+  return {
+    ...actual,
+    getWidgetModel: vi.fn(),
     HookAdapter: vi.fn().mockImplementation(() => ({
       subscribe: vi.fn(),
       run: vi.fn(),

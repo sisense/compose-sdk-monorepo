@@ -257,6 +257,11 @@ describe('widget-by-id utils', () => {
       expect(getFusionWidgetType('chart', 'line')).toBe('chart/line');
     });
 
+    it('should return "filter" for filter widget type, the inverse of getWidgetType', () => {
+      expect(getFusionWidgetType('filter')).toBe('filter');
+      expect(getWidgetType(getFusionWidgetType('filter'))).toBe('filter');
+    });
+
     it('should throw error for unsupported widget type', () => {
       expect(() => getFusionWidgetType('unsupported' as any)).toThrow();
     });

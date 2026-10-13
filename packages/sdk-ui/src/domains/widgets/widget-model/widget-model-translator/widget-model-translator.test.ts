@@ -1,5 +1,6 @@
-import { measureFactory, MetadataTypes } from '@sisense/sdk-data';
+import { createAttribute, filterFactory, measureFactory, MetadataTypes } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
+import omit from 'lodash-es/omit';
 
 import { Commerce } from '@/__test-helpers__/sample-ecommerce';
 import { advancedLineChartWidgetDto } from '@/domains/dashboarding/dashboard-model/__mocks__/advanced-line-chart-widget.js';
@@ -14,6 +15,7 @@ import {
   PivotTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types';
 import type { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
+import type { FilterWidgetProps } from '@/domains/widgets/components/filter-widget/types';
 import {
   BoxplotWidgetStyle,
   CalendarHeatmapWidgetStyle,
@@ -24,7 +26,7 @@ import {
   ScatterWidgetStyle,
   TabberWidgetDtoStyle,
 } from '@/domains/widgets/components/widget-by-id/types';
-import { WidgetDto } from '@/index';
+import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { AppSettings } from '@/infra/app/settings/settings';
 import {
   CalendarHeatmapStyleOptions,
@@ -36,6 +38,7 @@ import type { WidgetModel } from '../widget-model.js';
 import {
   fromChartWidgetProps,
   fromCustomWidgetProps,
+  fromFilterWidgetProps,
   fromPivotTableWidgetProps,
   fromWidgetDto,
   fromWidgetProps,
@@ -45,6 +48,7 @@ import {
   toJtdConfig,
   toPivotTableWidgetProps,
   toWidgetDto,
+  toWidgetProps,
 } from './widget-model-translator.js';
 
 /** Minimal versioned JTD DTO for chart widgets (see translate-dashboard-utils). */
@@ -2270,8 +2274,8 @@ describe('WidgetModelTranslator', () => {
 
     it('preserves a known filter type and falls back to "members" for unknown values', () => {
       expect(
-        toFilterProps(makeFilterWidgetDto({ style: { filterType: 'numericRange' } })).filterType,
-      ).toBe('numericRange');
+        toFilterProps(makeFilterWidgetDto({ style: { filterType: 'condition' } })).filterType,
+      ).toBe('condition');
       expect(
         toFilterProps(makeFilterWidgetDto({ style: { filterType: 'bogus' } })).filterType,
       ).toBe('members');
@@ -2287,9 +2291,20 @@ describe('WidgetModelTranslator', () => {
       expect(props.filterType).toBe('range');
     });
 
-    // A stale/API-provided 'range' DTO paired with a non-datetime attribute must
-    // never reach a CSDK host as 'range' — the same fallback the legacy 'list' value gets.
-    it('normalizes "range" to "members" for a non-datetime dimension', () => {
+    // A numeric dimension keeps 'range' — the Minimum / Maximum slider.
+    it('preserves "range" for a numeric dimension', () => {
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          jaql: { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'Revenue' },
+          style: { filterType: 'range' },
+        }),
+      );
+      expect(props.filterType).toBe('range');
+    });
+
+    // A stale/API-provided 'range' DTO paired with a text attribute must never reach a CSDK
+    // host as 'range' — the same fallback the legacy 'list' value gets.
+    it('normalizes "range" to "members" for a text dimension', () => {
       const props = toFilterProps(makeFilterWidgetDto({ style: { filterType: 'range' } }));
       expect(props.filterType).toBe('members');
     });
@@ -2435,6 +2450,225 @@ describe('WidgetModelTranslator', () => {
         size: 'l',
         accentColor: '#94F5F0',
       });
+    });
+  });
+
+  describe('FilterWidget write side (props → model → DTO)', () => {
+    const datasourceForDto = {
+      title: 'Sample ECommerce',
+      id: 'localhost_aSampleIAAaECommerce',
+      address: 'LocalHost',
+      live: false,
+    };
+    const dataSource = {
+      title: 'Sample ECommerce',
+      type: 'elasticube' as const,
+      id: 'localhost_aSampleIAAaECommerce',
+      address: 'LocalHost',
+    };
+
+    const makeFilterWidgetProps = (overrides: Partial<FilterWidgetProps> = {}) => {
+      const dimensionFilters = [filterFactory.members(Commerce.Condition, ['New'])];
+      return {
+        id: 'fw-1',
+        widgetType: 'filter' as const,
+        attribute: Commerce.AgeRange,
+        dataSource,
+        title: 'Age Range',
+        filterType: 'members' as const,
+        isMultiselect: false,
+        parentFilters: dimensionFilters,
+        dimensionFilters,
+        styleOptions: {
+          backgroundColor: '#ff0000',
+          control: { primaryText: '#131F29', size: 'l' as const, borderEnabled: false },
+        },
+        ...overrides,
+      };
+    };
+
+    /** The fields of FilterWidgetProps that the DTO read side understands. */
+    const persistedFields = (props: ReturnType<typeof toWidgetProps>) => {
+      const p = props as FilterWidgetProps & { widgetType: string };
+      return {
+        widgetType: p.widgetType,
+        attribute: {
+          expression: p.attribute.expression,
+          type: p.attribute.type,
+          granularity: (p.attribute as { granularity?: string }).granularity,
+        },
+        title: p.title,
+        filterType: p.filterType,
+        isMultiselect: p.isMultiselect,
+        timeFrames: p.timeFrames,
+        control: p.styleOptions?.control,
+        // The read side attaches the widget data source to each filter JAQL; compare the rest.
+        dimensionFilters: p.dimensionFilters?.map((f) => omit(f.jaql().jaql, 'datasource')),
+        parentFilters: p.parentFilters?.map((f) => omit(f.jaql().jaql, 'datasource')),
+      };
+    };
+
+    it('fromWidgetProps translates filter widget props to a filter WidgetModel', () => {
+      const props = makeFilterWidgetProps();
+      const model = fromWidgetProps(props);
+
+      expect(model.oid).toBe('fw-1');
+      expect(model.widgetType).toBe('filter');
+      expect(model.title).toBe('Age Range');
+      expect(model.dataSource).toEqual(dataSource);
+      expect(model.filters).toEqual(props.dimensionFilters);
+      // The control styling moves to filterWidgetData; the container style stays.
+      expect(model.styleOptions).toEqual({ backgroundColor: '#ff0000' });
+      expect(model.filterWidgetData).toEqual({
+        attribute: Commerce.AgeRange,
+        filterType: 'members',
+        isMultiselect: false,
+        controlStyleOptions: { primaryText: '#131F29', size: 'l', borderEnabled: false },
+      });
+    });
+
+    it('fromFilterWidgetProps applies the read-side defaults and falls back to parentFilters', () => {
+      const parentFilters = [filterFactory.members(Commerce.Condition, ['Used'])];
+      const model = fromFilterWidgetProps({ attribute: Commerce.AgeRange, parentFilters });
+
+      expect(model.title).toBe('');
+      expect(model.filters).toEqual(parentFilters);
+      expect(model.filterWidgetData).toEqual({
+        attribute: Commerce.AgeRange,
+        filterType: 'members',
+        isMultiselect: true,
+      });
+    });
+
+    it('toWidgetDto writes the filter widget DTO the read side understands', () => {
+      const dto = toWidgetDto(fromWidgetProps(makeFilterWidgetProps()), datasourceForDto);
+
+      expect(dto.type).toBe('filter');
+      expect(dto.subtype).toBe('filter');
+      expect(dto.title).toBe('Age Range');
+      expect(dto.metadata.panels.map((p) => p.name)).toEqual(['dimension', 'filters']);
+      const [dimensionPanel, filtersPanel] = dto.metadata.panels;
+      expect(dimensionPanel.items).toHaveLength(1);
+      expect(dimensionPanel.items[0].jaql).toMatchObject({
+        dim: '[Commerce.Age Range]',
+        datatype: 'text',
+      });
+      expect(filtersPanel.items).toHaveLength(1);
+      expect(filtersPanel.items[0].jaql).toMatchObject({ dim: '[Commerce.Condition]' });
+      expect(dto.style).toMatchObject({
+        filterType: 'members',
+        multiSelection: false,
+        filterDesign: { primaryText: '#131F29', size: 'l', borderEnabled: false },
+      });
+      expect(dto.style).not.toHaveProperty('customizeTimeFrames');
+    });
+
+    it('toWidgetDto writes an empty dimension panel for an unconfigured filter widget', () => {
+      const model = fromFilterWidgetProps({
+        attribute: createAttribute({ name: '', expression: '', type: MetadataTypes.TextAttribute }),
+      });
+      const dto = toWidgetDto(model, datasourceForDto);
+
+      expect(dto.metadata.panels.find((p) => p.name === 'dimension')?.items).toEqual([]);
+      const props = toWidgetProps(fromWidgetDto(dto)) as FilterWidgetProps;
+      expect(props.attribute.expression).toBeFalsy();
+    });
+
+    it('toWidgetDto falls back to defaults for a filter model without filterWidgetData', () => {
+      const model = { ...fromFilterWidgetProps({ attribute: Commerce.AgeRange }) };
+      delete model.filterWidgetData;
+      const dto = toWidgetDto(model, datasourceForDto);
+
+      expect(dto.type).toBe('filter');
+      expect(dto.style).toMatchObject({ filterType: 'members', multiSelection: true });
+    });
+
+    it('round-trips a members filter widget: props → model → DTO → model → props', () => {
+      const props = makeFilterWidgetProps();
+
+      const dto = toWidgetDto(fromWidgetProps(props), datasourceForDto);
+      const roundTripped = toWidgetProps(fromWidgetDto(dto));
+
+      expect(roundTripped.id).toBe('fw-1');
+      expect(persistedFields(roundTripped)).toEqual(persistedFields(props));
+    });
+
+    it('round-trips a datetime Time Frame filter widget with a curated set of frames', () => {
+      const props = makeFilterWidgetProps({
+        attribute: Commerce.Date.Months,
+        title: 'Date',
+        filterType: 'period',
+        isMultiselect: true,
+        timeFrames: ['last:7:Day', 'this:1:Year'],
+        styleOptions: undefined,
+        parentFilters: undefined,
+        dimensionFilters: undefined,
+      });
+
+      const dto = toWidgetDto(fromWidgetProps(props), datasourceForDto);
+      expect(dto.style).toMatchObject({
+        filterType: 'period',
+        customizeTimeFrames: true,
+        timeFrames: ['last:7:Day', 'this:1:Year'],
+      });
+      expect(dto.style).not.toHaveProperty('filterDesign');
+
+      const roundTripped = persistedFields(toWidgetProps(fromWidgetDto(dto)));
+      expect(roundTripped).toEqual({
+        ...persistedFields(props),
+        // Read side always yields arrays for the widget's own filters.
+        dimensionFilters: [],
+        parentFilters: [],
+      });
+      expect(roundTripped.attribute.granularity).toBe('Months');
+    });
+
+    it('round-trips a filter widget DTO: DTO → model → DTO keeps the fields the read side uses', () => {
+      const original = {
+        oid: 'fw-oid',
+        title: 'Country',
+        desc: '',
+        type: 'filter',
+        subtype: 'filter',
+        datasource: datasourceForDto,
+        metadata: {
+          panels: [
+            {
+              name: 'dimension',
+              items: [
+                {
+                  jaql: {
+                    table: 'Commerce',
+                    column: 'Age Range',
+                    dim: '[Commerce.Age Range]',
+                    datatype: 'text',
+                    title: 'Age Range',
+                  },
+                },
+              ],
+            },
+            { name: 'filters', items: [] },
+          ],
+        },
+        style: {
+          filterType: 'condition',
+          multiSelection: false,
+          filterDesign: { accentColor: '#94F5F0', cornerRadius: 'm' },
+        },
+      } as unknown as WidgetDto;
+
+      const model = fromWidgetDto(original);
+      const written = toWidgetDto(model, datasourceForDto);
+
+      expect(written.type).toBe(original.type);
+      expect(written.subtype).toBe(original.subtype);
+      expect(written.metadata.panels[0].items[0].jaql).toMatchObject({
+        dim: '[Commerce.Age Range]',
+        datatype: 'text',
+        title: 'Age Range',
+      });
+      expect(written.style).toMatchObject(original.style);
+      expect(fromWidgetDto(written)).toEqual(model);
     });
   });
 });

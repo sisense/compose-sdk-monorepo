@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import type { CalculatedMeasure } from '@sisense/sdk-data';
 import {
-  HookAdapter,
   type SharedFormulaState,
-  useGetSharedFormulaInternal,
   type UseGetSharedFormulaParams as UseGetSharedFormulaParamsPreact,
 } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useGetSharedFormulaInternal } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

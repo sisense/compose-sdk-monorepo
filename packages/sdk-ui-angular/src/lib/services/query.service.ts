@@ -3,17 +3,19 @@ import { getFilterListAndRelationsJaql, QueryResultData } from '@sisense/sdk-dat
 import {
   type ExecuteCsvQueryParams as ExecuteCsvQueryParamsPreact,
   type ExecuteCustomWidgetQueryParams as ExecuteCustomWidgetQueryParamsPreact,
-  executePivotQuery,
   type ExecutePivotQueryParams as ExecutePivotQueryParamsPreact,
-  executeQuery,
-  executeQueryByWidgetId,
   type ExecuteQueryByWidgetIdParams as ExecuteQueryByWidgetIdParamsPreact,
   type ExecuteQueryParams as ExecuteQueryParamsPreact,
+} from '@sisense/sdk-ui-preact';
+import {
+  executePivotQuery,
+  executeQuery,
+  executeQueryByWidgetId,
   executeQueryWithRowCount,
   HookAdapter,
   useExecuteCsvQueryInternal,
   useExecuteCustomWidgetQueryInternal,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

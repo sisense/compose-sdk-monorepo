@@ -6,8 +6,11 @@ import type {
 import { ExpandedQueryModel } from '@/modules/analytics-composer';
 
 export interface ChatContext {
+  /** Identity name of the data model, used for chats and queries. */
   title: string;
   live: boolean;
+  /** User-visible label of the data model. Absent on Sisense versions without renaming. */
+  displayName?: string | null;
 }
 
 export interface ChatContextDetails {

@@ -1,4 +1,3 @@
-import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
 import {
   type ChatRestApi,
   prepareGetNlqResultPayload,
@@ -6,6 +5,7 @@ import {
   type UseGetNlqResultState as UseGetNlqResultStatePreact,
   widgetComposer,
 } from '@sisense/sdk-ui-preact/ai';
+import { dataLoadStateReducer } from '@sisense/sdk-ui-preact/internal';
 import { type Ref, toRefs, watch } from 'vue';
 
 import type { WidgetProps } from '../../components/widgets';

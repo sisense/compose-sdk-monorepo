@@ -25,6 +25,7 @@ import {
  * - `'chart'` → `translateChartFromJSON`
  * - `'pivot'` → `translatePivotTableFromJSON`
  * - `'text'` → pass-through (no data translation)
+ * - `'narrative'` → pass-through (no data translation)
  * - `'custom'` → filters/highlights translated; dataOptions passed through as opaque JSON
  *
  *
@@ -69,6 +70,19 @@ export const translateWidgetFromJSON = (input: WidgetInput): NlqTranslationResul
         ...(widgetJSON.config !== undefined && { config: widgetJSON.config }),
       };
       return { success: true, data: textProps };
+    }
+
+    case 'narrative': {
+      const { id, title, styleOptions, config, dashboardId } = widgetJSON;
+      const narrativeProps: Extract<WidgetProps, { widgetType: 'narrative' }> = {
+        widgetType: 'narrative',
+        id,
+        ...(title !== undefined && { title }),
+        ...(styleOptions !== undefined && { styleOptions }),
+        ...(config !== undefined && { config }),
+        ...(dashboardId !== undefined && { dashboardId }),
+      };
+      return { success: true, data: narrativeProps };
     }
 
     case 'custom': {

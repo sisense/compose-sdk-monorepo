@@ -8,13 +8,13 @@ import {
 import * as attributeFactory from './dimensional-model/attributes/factory.js';
 import { isCascadingFilter } from './dimensional-model/filters/filters.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
-import {
+import type {
   FilterJaqlInternal,
   JaqlDataSource,
   JaqlDataSourceForDto,
   RankingFilterJaql,
 } from './dimensional-model/filters/utils/types.js';
-import {
+import type {
   Attribute,
   AttributeContext,
   BaseMeasure,
@@ -35,27 +35,29 @@ import {
   isDimensionalCalculatedMeasure,
 } from './dimensional-model/measures/measures.js';
 import { isDatetime, isNumber } from './dimensional-model/simple-column-types.js';
-import {
+import type {
   AggregationType,
-  AggregationTypes,
   BaseJaql,
-  CALCULATED_DIMENSION_JAQL_TYPE,
-  DateLevels,
   FilterJaql,
   FormulaJaql,
   Jaql,
-  JaqlSortDirection,
   MetadataItemJaql,
+} from './dimensional-model/types.js';
+import {
+  AggregationTypes,
+  CALCULATED_DIMENSION_JAQL_TYPE,
+  DateLevels,
+  JaqlSortDirection,
   MetadataTypes,
   Sort,
 } from './dimensional-model/types.js';
-import { DataSource, DataSourceInfo } from './interfaces.js';
+import type { DataSource, DataSourceInfo } from './interfaces.js';
 
 /**
  * Generates a cryptographically secure random number between 0 and 1.
  * Uses Web Crypto API which is available in both browser and Node.js environments.
  *
- * @returns A random number between 0 (inclusive) and 1 (exclusive)
+ * @returns A random number between 0 (inclusive) and 1 (exclusive).
  * @internal
  */
 export function secureRandom(): number {
@@ -101,7 +103,7 @@ export const guidFast = function (len?: number) {
 };
 
 /**
- * Function to separate list of filters from the provided relation and get logical relations for jaql
+ * Function to separate list of filters from the provided relation and get logical relations for jaql.
  *
  * @internal
  */
@@ -166,7 +168,7 @@ function isFilter(node: FilterRelationsNode | FilterRelationsJaqlNode): node is 
 }
 
 /**
- * Gets the name of the data source
+ * Gets the name of the data source.
  *
  * @internal
  */
@@ -177,8 +179,8 @@ export function getDataSourceName(dataSource: DataSource): string {
 /**
  * Returns the Fusion `fullname` when the data source carries one.
  *
- * @param dataSource - The data source to read the full name from
- * @returns The Fusion `fullname` if present on a {@link DataSourceInfo}; otherwise `undefined`
+ * @param dataSource - The data source to read the full name from.
+ * @returns The Fusion `fullname` if present on a {@link DataSourceInfo}; otherwise `undefined`.
  * @internal
  */
 export function getDataSourceFullName(dataSource: DataSource): string | undefined {
@@ -189,8 +191,8 @@ export function getDataSourceFullName(dataSource: DataSource): string | undefine
  * Encodes a Fusion datasource path for use in a URL path segment while preserving `/`.
  * Encodes spaces and `:` (e.g. `live:Title` → `live%3ATitle`, `LocalHost/A B` → `LocalHost/A%20B`).
  *
- * @param path - The datasource path to encode
- * @returns The path with each `/`-separated segment URI-encoded
+ * @param path - The datasource path to encode.
+ * @returns The path with each `/`-separated segment URI-encoded.
  * @internal
  */
 export function encodeDataSourcePath(path: string): string {
@@ -263,10 +265,10 @@ export function convertJaqlDataSourceForDto(dataSource: DataSource): JaqlDataSou
 }
 
 /**
- * Converts a string to a Sort enum
+ * Converts a string to a Sort enum.
  *
- * @param sort - The string to convert
- * @returns The converted Sort enum
+ * @param sort - The string to convert.
+ * @returns The converted Sort enum.
  * @internal
  */
 export function convertSort(sort?: string) {
@@ -278,10 +280,10 @@ export function convertSort(sort?: string) {
 }
 
 /**
- * Converts a SortDirection to a Sort enum
+ * Converts a SortDirection to a Sort enum.
  *
- * @param sortDirection - The SortDirection to convert
- * @returns The converted Sort enum
+ * @param sortDirection - The SortDirection to convert.
+ * @returns The converted Sort enum.
  * @internal
  */
 export function convertSortDirectionToSort(sortDirection: SortDirection): Sort {
@@ -298,8 +300,8 @@ export function convertSortDirectionToSort(sortDirection: SortDirection): Sort {
 /**
  * Converts Sort enum to SortDirection string.
  *
- * @param sort - Sort enum value
- * @returns SortDirection string
+ * @param sort - Sort enum value.
+ * @returns SortDirection string.
  * @internal
  */
 export function convertSortToSortDirection(sort: Sort): SortDirection {
@@ -358,14 +360,23 @@ export const createFilterFromJaql = (
 /**
  * Extracts the table and column names from the given expression string.
  *
+ * Splits on the LAST dot so table names that carry their own dots (a CSV data
+ * source column expression looks like `[till_2035_dates.csv.datetime (Calendar)]`
+ * — the table is `till_2035_dates.csv` and the column is `datetime`) resolve
+ * correctly. A greedy left-split would take `csv` as the column and drop the
+ * real one — visible in derived names like `Days in csv`.
+ *
  * @internal
  */
 export function parseExpression(expression: string) {
-  const [table, column] = expression.slice(1, -1).split('.');
+  const inner = expression.slice(1, -1);
+  const lastDot = inner.lastIndexOf('.');
+  const table = lastDot === -1 ? inner : inner.slice(0, lastDot);
+  const rawColumn = lastDot === -1 ? '' : inner.slice(lastDot + 1);
   return {
     table,
-    column: column
-      ? column
+    column: rawColumn
+      ? rawColumn
           // in case of Date we have to remove the (Calendar) part
           .replace('(Calendar)', '')
           .trim()
@@ -410,9 +421,9 @@ export function getSortType(jaqlSort: `${JaqlSortDirection}` | undefined): SortD
 }
 
 /**
- * Creates an attribute or level attribute from the provided parameters
+ * Creates an attribute or level attribute from the provided parameters.
  *
- * @returns attribute or level attribute
+ * @returns Attribute or level attribute.
  * @internal
  */
 export const createAttributeHelper = ({
@@ -496,9 +507,9 @@ export const createAttributeHelper = ({
 };
 
 /**
- * Creates a measure from the provided parameters
+ * Creates a measure from the provided parameters.
  *
- * @returns measure
+ * @returns Measure.
  * @internal
  */
 export const createMeasureHelper = ({
@@ -554,7 +565,7 @@ export const createMeasureHelper = ({
 };
 
 /**
- * @returns measure
+ * @returns Measure.
  * @internal
  */
 export function createMeasureByAggType(
@@ -602,11 +613,11 @@ export function createMeasureByAggType(
 }
 
 /**
- * Creates a measure from the provided parameters
+ * Creates a measure from the provided parameters.
  *
  * @param jaql - The formula jaql to build the measure from.
  * @param datetimeFormat - Mask the saved widget carried, applied when the formula answers with a date.
- * @returns calculated measure
+ * @returns Calculated measure.
  * @internal
  */
 export const createCalculatedMeasureHelper = (
@@ -650,7 +661,7 @@ export const createCalculatedMeasureHelper = (
 /**
  * Creates a calculated attribute (a calculated dimension) from the provided JAQL.
  *
- * @returns calculated attribute
+ * @returns Calculated attribute.
  * @internal
  */
 export const createCalculatedAttributeHelper = (jaql: FormulaJaql): Attribute => {
@@ -735,7 +746,7 @@ export function createDimensionalElementFromJaql(
  * Returns the granularity from the provided JAQL object.
  *
  * @param jaql - The JAQL object.
- * @returns string.
+ * @returns String.
  * @internal
  */
 export function getGranularityFromJaql(
@@ -751,9 +762,9 @@ export function getGranularityFromJaql(
  *
  * This is a pure Node.js function that converts Fusion structures to CSDK structures.
  *
- * @param formulas - Array of Fusion FormulaJaql structures
- * @returns Array of CSDK CalculatedMeasure objects
- * @throws Error if any formula cannot be converted (includes formula title in error message)
+ * @param formulas - Array of Fusion FormulaJaql structures.
+ * @returns Array of CSDK CalculatedMeasure objects.
+ * @throws Error if any formula cannot be converted (includes formula title in error message).
  * @internal
  */
 export function translateSharedFormulas(formulas: FormulaJaql[]): CalculatedMeasure[] {

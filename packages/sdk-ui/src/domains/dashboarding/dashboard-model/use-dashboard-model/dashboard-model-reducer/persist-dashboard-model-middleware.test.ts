@@ -5,6 +5,7 @@ import { WidgetsPanelColumnLayout } from '@/domains/dashboarding/types.js';
 import { narrativeWidgetDto } from '@/domains/widgets/components/widget-by-id/__mocks__/narrative-widget-dto.js';
 import type { TableWidgetStyle, WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
+import type { WidgetModel } from '@/domains/widgets/widget-model';
 import { RestApi } from '@/infra/api/rest-api';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
@@ -320,6 +321,56 @@ describe('persistDashboardModelMiddleware', () => {
       id: 'localhost_aSampleIAAaECommerce',
       address: 'LocalHost',
     });
+  });
+
+  it('persists a filter widget on ADD_WIDGET, falling back to the dashboard data source when it has none', async () => {
+    const restApi = {
+      patchDashboard: vi.fn(),
+      // Echo the sent DTO back with a server oid, like the add-widget endpoint does.
+      addWidgetToDashboard: vi
+        .fn()
+        .mockImplementation((_oid: string, dto: WidgetDto) =>
+          Promise.resolve({ ...dto, oid: 'server-filter-oid' }),
+        ),
+      deleteWidgetFromDashboard: vi.fn(),
+    };
+    // A code-composed FilterWidget may omit its data source (it queries the default one).
+    const newWidget = widgetModelTranslator.fromWidgetProps({
+      id: 'temp-filter',
+      widgetType: 'filter',
+      attribute: DM.Commerce.AgeRange,
+      filterType: 'members',
+      isMultiselect: false,
+    });
+
+    const result = await persistDashboardModelMiddleware({
+      dashboardOid,
+      action: { type: UseDashboardModelActionType.ADD_WIDGET, payload: newWidget },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+      dashboardDataSource: {
+        title: 'Sample ECommerce',
+        type: 'elasticube',
+        id: 'localhost_aSampleIAAaECommerce',
+        address: 'LocalHost',
+      },
+    });
+
+    const sentDto = restApi.addWidgetToDashboard.mock.calls[0][1] as WidgetDto;
+    expect(sentDto.type).toBe('filter');
+    expect(sentDto.datasource).toMatchObject({
+      title: 'Sample ECommerce',
+      id: 'localhost_aSampleIAAaECommerce',
+      address: 'LocalHost',
+    });
+    expect(sentDto.style).toMatchObject({ filterType: 'members', multiSelection: false });
+
+    const persistedWidget = (result.payload as { widget: WidgetModel }).widget;
+    expect(persistedWidget.oid).toBe('server-filter-oid');
+    expect(persistedWidget.widgetType).toBe('filter');
+    expect(persistedWidget.filterWidgetData?.attribute.expression).toBe('[Commerce.Age Range]');
   });
 
   it('should throw when addWidgetToDashboard returns null', async () => {

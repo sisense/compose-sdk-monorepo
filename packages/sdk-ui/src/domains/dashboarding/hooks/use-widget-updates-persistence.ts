@@ -6,17 +6,10 @@ import flow from 'lodash-es/flow';
 import { deepMerge } from '@/domains/dashboarding/persistence/deep-merge';
 import type { DashboardPersistenceManager } from '@/domains/dashboarding/persistence/types';
 import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types';
+import type { CustomWidgetChangeEvent } from '@/domains/widgets/change-events';
+import { isCustomWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
-import type { VisualizationStateUpdate } from '@/infra/plugins/widget-plugins/types';
 import type { Navigator, TableStyleOptions } from '@/types';
-
-/** Narrowed custom-widget variant of {@link WidgetProps}. */
-type CustomWidgetProps = Extract<WidgetProps, { widgetType: 'custom' }>;
-
-/** Identifies the custom-widget variant of the {@link WidgetProps} union. */
-function isCustomWidgetProps(widget: WidgetProps): widget is CustomWidgetProps {
-  return widget.widgetType === 'custom';
-}
 
 /** `styleOptions.columns` shape for table column-resize persistence, reused from {@link TableStyleOptions} to stay in sync with `types.ts`. */
 type TableColumnsStyleOptions = { columns?: TableStyleOptions['columns'] };
@@ -67,6 +60,7 @@ type DebouncedSaver = ReturnType<typeof debounce>;
  *    `useComposedDashboardInternal` re-renders with the new value).
  * 2. Schedules a debounced (500 ms) call to `persistence.updateWidget` with
  *    a {@link WidgetPropsUpdate}-shaped payload.
+ * 3. Calls the widget's original callback (if any) with the same arguments.
  *
  * When `persistence` is `undefined`, the optimistic apply still runs (so
  * visualizations behave correctly in read-only mode) and the persist call
@@ -130,12 +124,17 @@ export function useWidgetUpdatesPersistence(
 }
 
 function wireWidget(widget: WidgetProps, emit: (update: WidgetPropsUpdate) => void): WidgetProps {
+  // Branches are mutually exclusive (early return): a widget gets at most one injected handler.
+  // Each injected handler applies the update and schedules the debounced persistence write, then
+  // synchronously chains to the incoming callback with the same argument, so consumer-supplied
+  // callbacks keep firing inside a composed dashboard. The `updateWidget` write itself runs later.
   // Branch 1: chart widgets with a navigator scroller.
   if ('styleOptions' in widget && widget.styleOptions) {
     const styleOptions = widget.styleOptions as {
       navigator?: { enabled?: boolean; onScrollerChange?: (min: number, max: number) => void };
     } & typeof widget.styleOptions;
     if (styleOptions.navigator) {
+      const originalOnScrollerChange = styleOptions.navigator.onScrollerChange;
       return {
         ...widget,
         styleOptions: {
@@ -144,6 +143,7 @@ function wireWidget(widget: WidgetProps, emit: (update: WidgetPropsUpdate) => vo
             ...styleOptions.navigator,
             onScrollerChange: (min: number, max: number) => {
               emit({ styleOptions: { navigator: { scrollerLocation: { min, max } } } });
+              originalOnScrollerChange?.(min, max);
             },
           },
         },
@@ -153,6 +153,7 @@ function wireWidget(widget: WidgetProps, emit: (update: WidgetPropsUpdate) => vo
 
   // Branch 2: table chart widgets with resizable columns.
   if (isResizableTableChartWidget(widget)) {
+    const originalOnColumnsResize = widget.styleOptions.columns?.onColumnsResize;
     return {
       ...widget,
       styleOptions: {
@@ -161,26 +162,35 @@ function wireWidget(widget: WidgetProps, emit: (update: WidgetPropsUpdate) => vo
           ...widget.styleOptions.columns,
           onColumnsResize: (widths: number[]) => {
             emit({ styleOptions: { columns: { widths } } });
+            originalOnColumnsResize?.(widths);
           },
         },
       },
     } as WidgetProps;
   }
 
-  // Branch 3: custom (plugin) widgets. The plugin-facing `onChange`
-  // callback is translated here from `VisualizationStateUpdate` into the internal
+  // Branch 3: custom (plugin) widgets. The `visualizationState/changed` event wraps the
+  // plugin's `VisualizationStateUpdate`; it is translated here into the internal
   // `WidgetPropsUpdate`, keeping the plugin API decoupled from the persistence type.
   // `customOptions` persists to the opaque DTO `customOptions` bag; `styleOptions`
   // persists to the opaque DTO `style` (see widget-plugin-persistence.md §4).
+  // Every event, `visualizationState/changed` included, is then forwarded to the upstream
+  // `onChange` (renaming, change detection, the consumer's own callback).
   if (isCustomWidgetProps(widget)) {
+    const upstreamOnChange = widget.onChange;
     return {
       ...widget,
-      onChange: (update: VisualizationStateUpdate) => {
-        if (update.styleOptions === undefined && update.customOptions === undefined) return;
-        emit({
-          ...(update.styleOptions !== undefined && { styleOptions: update.styleOptions }),
-          ...(update.customOptions !== undefined && { customOptions: update.customOptions }),
-        });
+      onChange: (event: CustomWidgetChangeEvent) => {
+        if (event.type === 'visualizationState/changed') {
+          const update = event.payload;
+          if (update.styleOptions !== undefined || update.customOptions !== undefined) {
+            emit({
+              ...(update.styleOptions !== undefined && { styleOptions: update.styleOptions }),
+              ...(update.customOptions !== undefined && { customOptions: update.customOptions }),
+            });
+          }
+        }
+        upstreamOnChange?.(event);
       },
     } as WidgetProps;
   }

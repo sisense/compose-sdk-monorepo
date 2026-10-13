@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
 
+import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { ChatContextDetails } from '@/modules/ai/api/types';
 
-import { useThemeContext } from '../..';
 import LoadingSpinner from '../../shared/components/loading-spinner';
 import { QuotaNotification } from '../../shared/components/quota-notification/quota-notification.js';
 import { useQuotaNotification } from '../../shared/hooks/use-quota-notification.js';
@@ -30,6 +30,8 @@ import { useGetQueryRecommendationsInternal } from './use-get-query-recommendati
 
 export type ChatBoxProps = {
   contextTitle: string;
+  /** User-visible label of the context shown in the header; defaults to `contextTitle`. */
+  contextLabel?: string;
   contextDetails?: ChatContextDetails;
   onGoBack?: () => void;
 };
@@ -63,7 +65,12 @@ const FollowupQuestionsContainer = styled.div<Themable>`
   row-gap: ${({ theme }) => theme.aiChat.suggestions.gap};
 `;
 
-export default function ChatBox({ contextTitle, onGoBack, contextDetails }: ChatBoxProps) {
+export default function ChatBox({
+  contextTitle,
+  contextLabel = contextTitle,
+  onGoBack,
+  contextDetails,
+}: ChatBoxProps) {
   const { t } = useTranslation();
   const {
     enableFollowupQuestions,
@@ -138,7 +145,7 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
   const header = enableHeader ? (
     <Toolbar
       ref={ref}
-      title={contextTitle}
+      title={contextLabel}
       leftNav={
         onGoBack && (
           <NavBackButton onClick={onGoBack} color={themeSettings.aiChat.header.textColor} />

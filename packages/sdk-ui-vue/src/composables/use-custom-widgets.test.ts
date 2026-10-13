@@ -1,5 +1,5 @@
 /** @vitest-environment jsdom */
-import type { CustomWidgetsContextAdapter } from '@sisense/sdk-ui-preact';
+import type { CustomWidgetsContextAdapter } from '@sisense/sdk-ui-preact/internal';
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { defineComponent, h, provide, ref } from 'vue';

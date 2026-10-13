@@ -18,6 +18,12 @@ vi.mock('@/infra/contexts/menu-provider/hooks/use-menu', () => ({
   useMenu: vi.fn(),
 }));
 
+// Resolve data source labels to their titles without fetching display names.
+vi.mock('@/shared/hooks/use-data-source-label-resolver', async () => {
+  const { getDataSourceLabel } = await import('@/shared/utils/data-sources-utils');
+  return { useDataSourceLabelResolver: () => getDataSourceLabel };
+});
+
 const mockUseGetDataSourceFields = useGetDataSourceFields as Mock;
 const mockUseMenu = useMenu as Mock;
 

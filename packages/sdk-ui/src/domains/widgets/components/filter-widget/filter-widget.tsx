@@ -1,6 +1,4 @@
-import { type FunctionComponent, useEffect, useMemo, useRef } from 'react';
-
-import { getDataSourceName } from '@sisense/sdk-data';
+import { type FunctionComponent, useEffect, useRef } from 'react';
 
 import { useTrackWidgetInit } from '@/domains/widgets/hooks/use-track-widget-init';
 import { getWidgetEntityId } from '@/domains/widgets/hooks/widget-entity-id';
@@ -21,7 +19,7 @@ import type { FilterWidgetProps } from './types';
  * Widget component that renders as a compact searchable dropdown and drives
  * a dashboard-level filter for the configured dimension.
  *
- * When placed inside a {@link Dashboard} component, the `filter` and `onChange`
+ * When placed inside a Dashboard component, the `filter` and `onChange`
  * props are injected automatically. For standalone use, pass them explicitly.
  *
  * Filter values are NOT affected by other dashboard filters — the member list
@@ -42,8 +40,8 @@ import type { FilterWidgetProps } from './types';
  *   />
  * );
  * ```
- * @param props - Filter widget props
- * @returns Filter widget component
+ * @param props - Filter widget props.
+ * @returns Filter widget component.
  * @group Filter Widgets
  * @alpha
  */
@@ -67,6 +65,7 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
     excludedDateLevels,
     emptyState,
     onSetup,
+    timeFrames,
   } = props;
 
   /* Split once: the control's own styling goes to the control, and the rest — the widget
@@ -136,6 +135,7 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
       controlStyleOptions={controlStyleOptions}
       emptyState={emptyState}
       onSetup={onSetup}
+      timeFrames={timeFrames}
     />
   );
 

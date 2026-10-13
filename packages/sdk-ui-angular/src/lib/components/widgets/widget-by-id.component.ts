@@ -8,10 +8,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   WidgetById as WidgetByIdPreact,
   type WidgetByIdProps as WidgetByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

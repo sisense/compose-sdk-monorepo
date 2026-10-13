@@ -10,11 +10,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   type FiltersPanelConfig,
   FiltersPanel as FiltersPanelPreact,
   type FiltersPanelProps as FiltersPanelPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createSisenseContextConnector,

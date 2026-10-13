@@ -1,16 +1,13 @@
 /** @vitest-environment jsdom */
-import {
-  type DataSourceDimensionsState,
-  HookAdapter,
-  useGetDataSourceDimensionsInternal,
-} from '@sisense/sdk-ui-preact';
+import { type DataSourceDimensionsState } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useGetDataSourceDimensionsInternal } from '@sisense/sdk-ui-preact/internal';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick, ref } from 'vue';
 
 import { useGetDataSourceDimensions } from './use-get-data-source-dimensions';
 
-vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
   return {
     ...actual,
     useGetDataSourceDimensionsInternal: vi.fn(),

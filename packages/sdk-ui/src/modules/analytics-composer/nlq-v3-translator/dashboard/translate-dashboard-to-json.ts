@@ -1,11 +1,7 @@
-import {
-  Filter,
-  FilterRelations,
-  isFilterRelations,
-  splitFiltersAndRelations,
-} from '@sisense/sdk-data';
+import type { Filter, FilterRelations } from '@sisense/sdk-data';
+import { isFilterRelations, splitFiltersAndRelations } from '@sisense/sdk-data';
 
-import { DashboardProps } from '@/domains/dashboarding/types.js';
+import type { DashboardProps } from '@/domains/dashboarding/types.js';
 
 import type { NlqTranslationError, NlqTranslationResult } from '../../types.js';
 import { translateFiltersToJSON } from '../constructs/filters/translate-filters-to-json.js';
@@ -27,9 +23,9 @@ import { translateWidgetToJSON } from '../widget/translate-widget-to-json.js';
  * can't be tagged with a single source without silently guessing.
  *
  * @internal
- * @param filters - The dashboard's CSDK filters, used as the source of truth for each entry's data source
- * @param translationErrors - Error accumulator to push into when a combined tree can't be resolved
- * @returns One data source title (or `undefined`) per serialized entry, or `null` when rejected
+ * @param filters - The dashboard's CSDK filters, used as the source of truth for each entry's data source.
+ * @param translationErrors - Error accumulator to push into when a combined tree can't be resolved.
+ * @returns One data source title (or `undefined`) per serialized entry, or `null` when rejected.
  */
 function resolveFilterEntryDataSources(
   filters: Filter[] | FilterRelations,
@@ -59,7 +55,7 @@ function resolveFilterEntryDataSources(
 
 /**
  * Translates CSDK DashboardProps to NLQ DashboardJSON format.
- * Direction: CSDK → JSON
+ * Direction: CSDK → JSON.
  *
  * Translates each widget using `translateWidgetToJSON` and dashboard-level filters using the
  * shared filter translator. Each resulting filter tile is tagged with the data source of the
@@ -69,9 +65,9 @@ function resolveFilterEntryDataSources(
  * or if a combined `FilterRelations` tree's leaves target more than one data source (that shape
  * can't be represented as today's single-tag-per-tile JSON).
  *
- * @param dashboardProps - Dashboard props to serialize
- * @returns NlqTranslationResult with DashboardJSON or errors
- * @internal
+ * @param dashboardProps - Dashboard props to serialize.
+ * @returns NlqTranslationResult with DashboardJSON or errors.
+ * @sisenseInternal
  */
 export const translateDashboardToJSON = (
   dashboardProps: DashboardProps,
@@ -114,7 +110,6 @@ export const translateDashboardToJSON = (
 
       if (entryDataSources) {
         filtersJSON = rawFunctionCalls.map((functionCall, i) => {
-          // eslint-disable-next-line security/detect-object-injection -- i is the map's own loop index
           const entryDataSource = entryDataSources[i];
           return entryDataSource !== undefined && entryDataSource !== defaultDataSourceTitle
             ? { dataSource: entryDataSource, filter: functionCall }

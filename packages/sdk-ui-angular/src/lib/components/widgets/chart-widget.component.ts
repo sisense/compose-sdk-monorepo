@@ -12,8 +12,8 @@ import {
 import {
   ChartWidget as ChartWidgetPreact,
   type ChartWidgetProps as ChartWidgetPropsPreact,
-  ComponentAdapter,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

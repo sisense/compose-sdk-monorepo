@@ -273,7 +273,11 @@ vi.mock('./components', () => ({
             config: filter?.config,
           };
     return (
-      <div data-testid="condition-filter-mock" data-condition-kind={conditionKind ?? 'text'}>
+      <div
+        data-testid="condition-filter-mock"
+        data-condition-kind={conditionKind ?? 'text'}
+        data-filter-guid={filter?.config?.guid ?? ''}
+      >
         <button
           data-testid="condition-apply"
           onClick={() => onFilterUpdate(conditionFilterStubPayload)}
@@ -542,6 +546,29 @@ describe('FilterWidgetDropdown', () => {
     );
     expect(queryByTestId('filter-widget-condition-unsupported')).toBeNull();
     expect(getByTestId('condition-filter-mock')).toHaveAttribute('data-condition-kind', 'numeric');
+  });
+
+  /* The date Condition remembers an unfinished draft (Before with no date) under the linked
+     filter's guid. A cleared filter comes back as include-all, so the date Condition has to get
+     that background — and its guid — rather than the null seed text / numeric get. */
+  it('hands a date Condition the include-all background with its guid', () => {
+    const includeAll = filterFactory.members(DM.Commerce.Date.Years, [], { guid: 'linked-guid' });
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={DM.Commerce.Date.Years}
+        filterType="condition"
+        filter={includeAll}
+      />,
+    );
+    expect(getByTestId('condition-filter-mock')).toHaveAttribute('data-filter-guid', 'linked-guid');
+  });
+
+  it('still seeds a text Condition with null over an include-all background', () => {
+    const includeAll = filterFactory.members(textAttribute, [], { guid: 'linked-guid' });
+    const { getByTestId } = render(
+      <FilterWidgetDropdown attribute={textAttribute} filterType="condition" filter={includeAll} />,
+    );
+    expect(getByTestId('condition-filter-mock')).toHaveAttribute('data-filter-guid', '');
   });
 
   it('treats leftover List members as an empty Condition seed, not unsupported', () => {

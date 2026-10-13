@@ -14,6 +14,8 @@ Info of data source
 
 **title**: `string`
 
+Identity name of the data source, used for queries and matching.
+
 ***
 
 ### `type`

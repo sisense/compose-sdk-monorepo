@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { TFunction } from '@sisense/sdk-common';
 import type { Attribute } from '@sisense/sdk-data';
-import { getDrilldownMenuItems, getSelectionTitleMenuItem } from '@sisense/sdk-ui-preact';
 import type { DataPoint, Hierarchy, MenuPosition } from '@sisense/sdk-ui-preact';
+import { getDrilldownMenuItems, getSelectionTitleMenuItem } from '@sisense/sdk-ui-preact/internal';
 import { computed, ref, toRefs } from 'vue';
 
 import { useCustomDrilldown } from '../composables/use-custom-drilldown';

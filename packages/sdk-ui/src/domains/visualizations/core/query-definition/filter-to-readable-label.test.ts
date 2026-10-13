@@ -6,7 +6,10 @@ import {
   filterFactory,
   measureFactory,
 } from '@sisense/sdk-data';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+
+import { i18nextInstance } from '@/infra/translation/initialize-i18n';
+import { registerAllTranslations } from '@/infra/translation/register-all-translations';
 
 import { toReadableFilterLabel } from './filter-to-readable-label';
 
@@ -146,6 +149,21 @@ describe('toReadableFilterLabel', () => {
   it('formats a text "endsWith" filter', () => {
     const f = filterFactory.endsWith(productName, 'Z');
     expect(toReadableFilterLabel(f)).toBe('Product name: ends with "Z"');
+  });
+
+  it('formats a text "equals" filter as the bare value, like a selected member', () => {
+    const f = filterFactory.equals(country, 'United States');
+    expect(toReadableFilterLabel(f)).toBe('Country: United States');
+  });
+
+  it('keeps an empty text "equals" value visible as ""', () => {
+    const f = filterFactory.equals(country, '');
+    expect(toReadableFilterLabel(f)).toBe('Country: ""');
+  });
+
+  it('keeps the quoted operator for a text "doesntEqual" filter', () => {
+    const f = filterFactory.doesntEqual(country, 'United States');
+    expect(toReadableFilterLabel(f)).toBe('Country: doesn\'t equal "United States"');
   });
 
   it('formats negative text operators with contractions', () => {
@@ -399,6 +417,35 @@ describe('toReadableFilterLabel', () => {
     expect(toReadableFilterLabel(f)).toBe('Category: contains "Phone" or "Camera"');
   });
 
+  it('lists bare values for a compound text filter of "equals" clauses', () => {
+    const f = {
+      attribute: country,
+      filterType: 'logicalAttribute',
+      operator: 'or',
+      filters: [
+        filterFactory.equals(country, 'United States'),
+        filterFactory.equals(country, 'Canada'),
+      ],
+      isScope: false,
+      config: {},
+      filterJaql: () => ({}),
+    } as unknown as Filter;
+    expect(toReadableFilterLabel(f)).toBe('Country: United States or Canada');
+  });
+
+  it('keeps an empty value in a compound text filter of "equals" clauses', () => {
+    const f = {
+      attribute: country,
+      filterType: 'logicalAttribute',
+      operator: 'or',
+      filters: [filterFactory.equals(country, 'Canada'), filterFactory.equals(country, '')],
+      isScope: false,
+      config: {},
+      filterJaql: () => ({}),
+    } as unknown as Filter;
+    expect(toReadableFilterLabel(f)).toBe('Country: Canada or ""');
+  });
+
   it('spells out both clauses when compound operators differ', () => {
     const f = {
       attribute: brand,
@@ -460,5 +507,99 @@ describe('toReadableFilterLabel', () => {
       },
     } as unknown as Filter;
     expect(toReadableFilterLabel(broken)).toBe('Country: custom filter');
+  });
+});
+
+describe('toReadableFilterLabel localization', () => {
+  const totalRevenue = measureFactory.sum(revenue, 'Total Revenue');
+  const dateMonths = new DimensionalLevelAttribute(
+    'Months',
+    '[Commerce.Date (Calendar)]',
+    'Months',
+    'yyyy-MM',
+  );
+  const relativeMonths = (count: number, offset: number) =>
+    ({
+      attribute: dateMonths,
+      filterType: 'relativeDate',
+      operator: 'last',
+      count,
+      offset,
+      isScope: false,
+      config: {},
+      filterJaql: () => ({}),
+    } as unknown as Filter);
+
+  beforeAll(() => {
+    registerAllTranslations();
+  });
+
+  afterEach(async () => {
+    await i18nextInstance.changeLanguage('en-US');
+  });
+
+  it('translates the ranking direction and connector', async () => {
+    await i18nextInstance.changeLanguage('de-DE');
+
+    expect(toReadableFilterLabel(filterFactory.topRanking(country, totalRevenue, 10))).toBe(
+      'Country: Top 10 nach Total revenue',
+    );
+    expect(toReadableFilterLabel(filterFactory.bottomRanking(country, totalRevenue, 5))).toBe(
+      'Country: Letzte 5 nach Total revenue',
+    );
+  });
+
+  it('lets a language reorder the ranking phrase', async () => {
+    await i18nextInstance.changeLanguage('ja-JP');
+
+    expect(toReadableFilterLabel(filterFactory.topRanking(country, totalRevenue, 10))).toBe(
+      'Country: Total revenueによる上位10',
+    );
+  });
+
+  it('keeps quotes in a translated text operator unescaped', async () => {
+    await i18nextInstance.changeLanguage('de-DE');
+
+    expect(toReadableFilterLabel(filterFactory.contains(productName, 'say "hi" & <b>'))).toBe(
+      'Product name: enthält "say \\"hi\\" & <b>"',
+    );
+  });
+
+  it('translates excluded members and numeric ranges', async () => {
+    await i18nextInstance.changeLanguage('tr-TR');
+
+    expect(
+      toReadableFilterLabel(filterFactory.members(country, ['Andorra'], { excludeMembers: true })),
+    ).toBe('Country: Andorra değil');
+    expect(toReadableFilterLabel(filterFactory.between(revenue, 10, 20))).toBe('Revenue: 10 - 20');
+  });
+
+  it.each([
+    [1, 'Months: последние 1 месяц, смещение 2'],
+    [3, 'Months: последние 3 месяца, смещение 2'],
+    [5, 'Months: последние 5 месяцев, смещение 2'],
+  ])('pluralizes the date unit for count %i', async (count, expected) => {
+    await i18nextInstance.changeLanguage('ru-RU');
+
+    expect(toReadableFilterLabel(relativeMonths(count, 2))).toBe(expected);
+  });
+
+  it('uses the singular unit in English for a count of one', () => {
+    expect(toReadableFilterLabel(relativeMonths(1, 2))).toBe('Months: last 1 month, offset 2');
+  });
+
+  it('translates the current-period shortcut', async () => {
+    await i18nextInstance.changeLanguage('fr-FR');
+
+    expect(toReadableFilterLabel(relativeMonths(1, 0))).toBe('Months: ce mois-ci');
+  });
+
+  it('uses the translate function it is given instead of the current language', () => {
+    const t = i18nextInstance.getFixedT('de-DE');
+
+    expect(
+      toReadableFilterLabel(filterFactory.topRanking(country, totalRevenue, 3), undefined, t),
+    ).toBe('Country: Top 3 nach Total revenue');
+    expect(i18nextInstance.language).toBe('en-US');
   });
 });

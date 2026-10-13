@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
-  getHierarchyModels,
   type GetHierarchyModelsParams as GetHierarchyModelsParamsPreact,
   HierarchyModel,
 } from '@sisense/sdk-ui-preact';
+import { getHierarchyModels } from '@sisense/sdk-ui-preact/internal';
 
 import { TrackableService } from '../decorators/trackable.decorator';
 import { SisenseContextService } from './sisense-context.service';

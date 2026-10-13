@@ -9,6 +9,7 @@ export * from './widget/translate-widget-from-json.js';
 export * from './widget/translate-widget-to-json.js';
 export * from './dashboard/translate-dashboard-from-json.js';
 export * from './dashboard/translate-dashboard-to-json.js';
+export { translateFiltersToJSON } from './constructs/filters/translate-filters-to-json.js';
 
 // JAQL translation functionality
 export * from './query/translate-query-to-jaql.js';

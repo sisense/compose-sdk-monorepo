@@ -9,6 +9,8 @@ import DataTopicItem from './data-topic-item.js';
 
 export interface DataTopic {
   title: string;
+  /** User-visible label; defaults to `title`. */
+  label?: string;
   onClick?: () => void;
 }
 

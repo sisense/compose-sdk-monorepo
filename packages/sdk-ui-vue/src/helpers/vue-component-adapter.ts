@@ -3,7 +3,7 @@ import {
   type CustomSisenseContext,
   type CustomWidgetsContextAdapter,
   type ExternalComponentAdapter,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { type App, type Component, createApp, type DefineComponent, h, ref, type Ref } from 'vue';
 
 import { customWidgetsContextKey } from '../providers/custom-widgets-provider/custom-widgets-context';

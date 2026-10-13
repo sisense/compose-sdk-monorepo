@@ -825,7 +825,13 @@ export type DataSourceSchema = {
  * @internal
  */
 export type DataSourceMetadata = {
+  /** Identity name of the data source, used for queries and matching. */
   title: string;
   fullname: string;
   live: boolean;
+  /**
+   * User-visible label of the data source. Display only.
+   * Absent on Sisense versions that do not support renaming data models.
+   */
+  displayName?: string | null;
 };

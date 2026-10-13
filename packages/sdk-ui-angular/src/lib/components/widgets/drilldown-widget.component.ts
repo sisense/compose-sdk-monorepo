@@ -10,17 +10,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
-  type ComponentRenderer,
   type ContextMenuProps,
-  createComponentRenderer,
-  createWrapperElement,
-  createWrapperElementHandler,
   type CustomDrilldownResult as CustomDrilldownResultBase,
   DrilldownBreadcrumbsProps,
   DrilldownWidget as DrilldownWidgetPreact,
   type DrilldownWidgetProps,
 } from '@sisense/sdk-ui-preact';
+import {
+  ComponentAdapter,
+  type ComponentRenderer,
+  createComponentRenderer,
+  createWrapperElement,
+  createWrapperElementHandler,
+} from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

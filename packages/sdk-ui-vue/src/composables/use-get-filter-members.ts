@@ -7,9 +7,9 @@ import {
   type GetFilterMembersData,
   type GetFilterMembersParams,
   type GetFilterMembersResult as GetFilterMembersResultPreact,
-  HookAdapter,
   useGetFilterMembers as useGetFilterMembersPreact,
 } from '@sisense/sdk-ui-preact';
+import { HookAdapter } from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, type ToRefs, toRefs, watch } from 'vue';
 
 import { createSisenseContextConnector } from '../helpers/context-connectors';

@@ -83,6 +83,12 @@ type FieldProps = FieldOwnProps & {
   /** The whole box is the trigger — paints the pointer cursor. */
   clickable?: boolean;
   /**
+   * Rings the box in the accent while it is Active — the focus mark the date range's two
+   * ends need, since both share one panel and only the ring says which end the calendar is
+   * filling. Opt-in: the other controls show Active through their open panel alone.
+   */
+  focusRing?: boolean;
+  /**
    * Overlay anchored directly under the box. It sits in a zero-height slot between the
    * box and the error line, so the overlay's position never depends on whether the
    * control has a label or a message.
@@ -108,20 +114,22 @@ type FieldProps = FieldOwnProps & {
   popoverRef?: Ref<HTMLDivElement>;
 };
 
-/**
- * Which visual state to paint, given what the control knows.
- *
- * Shared by every control so they cannot disagree about it.
- * @param input - The pinned state, plus whether the control is disabled, hovered or open
- * @returns The single state the field should paint
- * @internal
- */
-export function resolveFieldState(input: {
+type ResolveFieldStateInput = {
   state?: FieldState;
   disabled?: boolean;
   hovered?: boolean;
   active?: boolean;
-}): ResolvedFieldState {
+};
+
+/**
+ * Which visual state to paint, given what the control knows.
+ *
+ * Shared by every control so they cannot disagree about it.
+ * @param input - The pinned state, plus whether the control is disabled, hovered or open.
+ * @returns The single state the field should paint.
+ * @internal
+ */
+export function resolveFieldState(input: ResolveFieldStateInput): ResolvedFieldState {
   if (input.disabled) {
     return 'disabled';
   }
@@ -181,6 +189,7 @@ const Box = styled.div<{
   $state: ResolvedFieldState;
   $invalid: boolean;
   $clickable: boolean;
+  $focusRing: boolean;
 }>`
   display: flex;
   gap: ${spacing.inputGap};
@@ -204,6 +213,13 @@ const Box = styled.div<{
     ${({ $invalid }) =>
       $invalid ? fwVar('error', fwFallback.error) : fwVar('border', fwFallback.border)};
   border-radius: ${({ $radius }) => FIELD_RADIUS[$radius]};
+  /* The focus ring sits outside the border, a 1px gap of the surface between them, so the
+     border keeps its own colour (or the error's) underneath. A shadow rather than an
+     outline: it follows the corner radius and takes no layout space. */
+  box-shadow: ${({ $state, $focusRing }) =>
+    $focusRing && $state === 'active'
+      ? `0 0 0 1px ${fwVar('bg', fwFallback.bg)}, 0 0 0 3px ${fwVar('accent', fwFallback.accent)}`
+      : 'none'};
   cursor: ${({ $state, $clickable }) =>
     $state === 'disabled' ? 'not-allowed' : $clickable ? 'pointer' : 'default'};
 `;
@@ -244,31 +260,33 @@ const ErrorText = styled.p`
  *
  * Publishes the resolved theme palette as custom properties on its root, which is how
  * the pieces below and every control's own styles get their colour.
- * @param props - Field chrome, the resolved state, and the box contents
- * @returns The control's outer structure
+ * @param props - Field chrome, the resolved state, and the box contents.
+ * @returns The control's outer structure.
  * @internal
  */
-export function Field({
-  label,
-  error,
-  resolvedState,
-  size = 's',
-  radius = 's',
-  width,
-  controlStyle,
-  className,
-  children,
-  boxProps,
-  rootProps,
-  clickable,
-  popover,
-  tooltip,
-  labelFor,
-  errorId,
-  style,
-  rootRef,
-  popoverRef,
-}: FieldProps) {
+export function Field(props: FieldProps) {
+  const {
+    label,
+    error,
+    resolvedState,
+    size = 's',
+    radius = 's',
+    width,
+    controlStyle,
+    className,
+    children,
+    boxProps,
+    rootProps,
+    clickable,
+    focusRing = false,
+    popover,
+    tooltip,
+    labelFor,
+    errorId,
+    style,
+    rootRef,
+    popoverRef,
+  } = props;
   const palette = useFieldPalette(controlStyle);
   const invalid = Boolean(error);
   const message = typeof error === 'boolean' ? null : error;
@@ -300,6 +318,7 @@ export function Field({
         $state={resolvedState}
         $invalid={invalid}
         $clickable={Boolean(clickable)}
+        $focusRing={focusRing}
       >
         {children}
       </Box>
@@ -363,16 +382,20 @@ export function Field({
    properties `Field` publishes, and fall back to the design's own colour so a piece
    rendered outside a `Field` still looks right. */
 
+type ValueProps = {
+  $placeholder?: boolean;
+};
+
 /** A read-only value or placeholder. Pass `$placeholder` to grey it. @internal */
-export const Value = styled.span<{ $placeholder?: boolean }>`
+export const Value = styled.span<ValueProps>`
   flex: 1 1 0;
   min-width: 0;
   overflow: hidden;
   font-size: ${typography.label.size};
   font-weight: ${typography.label.weight};
   line-height: ${typography.label.lineHeight};
-  color: ${({ $placeholder }) =>
-    $placeholder
+  color: ${(valueProps) =>
+    valueProps.$placeholder
       ? fwVar('textSecondary', fwFallback.textSecondary)
       : fwVar('textPrimary', fwFallback.textPrimary)};
   text-align: left;
@@ -384,6 +407,11 @@ export const Value = styled.span<{ $placeholder?: boolean }>`
 /** A real text field, with the same metrics as {@link Value}. @internal */
 export const FieldInput = styled.input`
   flex: 1 1 0;
+  /* \`width: 0\` with the grow above: the input still fills the box, but its own intrinsic
+     width (~20 characters, whatever the value) no longer counts towards a shrink-to-fit
+     parent. The condition panel sizes to its content, so every input in a chained row
+     used to push it wider the moment "+ Add condition" was pressed. */
+  width: 0;
   min-width: 0;
   padding: 0;
   font-family: inherit;
@@ -443,11 +471,16 @@ export const IconButton = styled.button`
   align-items: center;
   justify-content: center;
   padding: 0;
-  color: inherit;
   cursor: pointer;
   background: none;
   border: 0;
   border-radius: 999px;
+
+  /* The glyph takes the field's own ink. Doubled so a host \`button\` rule cannot paint
+     its own colour on this native button instead (see \`FieldInput\` below). */
+  && {
+    color: inherit;
+  }
 
   &:hover:not(:disabled) {
     background: ${fwVar('surfaceMuted', fwFallback.surfaceMuted)};

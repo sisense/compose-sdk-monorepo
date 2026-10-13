@@ -555,7 +555,9 @@ export function ConditionFilterText({
                         }}
                       />
                     ) : (
-                      <ConnectorText>{connectorLabel(draft.connector)}</ConnectorText>
+                      <ConnectorText $radius={radius}>
+                        {connectorLabel(draft.connector)}
+                      </ConnectorText>
                     )}
                   </ConnectorSlot>
                   <RowGrow>
@@ -607,6 +609,7 @@ export function ConditionFilterText({
           {allowChaining && (
             <AddCondition
               type="button"
+              $radius={radius}
               data-testid="filter-widget-condition-add"
               /* Without this, a mousedown here blurs the focused value field first,
                  collapsing the hint list (in normal flow) and reflowing this very

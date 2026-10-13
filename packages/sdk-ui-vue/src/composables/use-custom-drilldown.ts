@@ -4,12 +4,14 @@ import {
   type DataPoint,
   type DrilldownSelection,
   type Hierarchy,
+  type StyledColumn,
+} from '@sisense/sdk-ui-preact';
+import {
   isSameAttribute,
   processDrilldownSelections,
-  type StyledColumn,
   translateColumnToAttribute,
   updateDrilldownSelections,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { computed, ref, type Ref } from 'vue';
 
 /**

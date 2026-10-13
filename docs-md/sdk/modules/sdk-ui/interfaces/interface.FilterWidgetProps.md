@@ -76,8 +76,10 @@ Configuration of the widget.
 
 How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
 `'condition'` renders a condition control for text, numeric, or datetime attributes,
-`'calendar'` a calendar for datetime attributes, and `'range'` a two-field From/To
-date-range picker for datetime attributes.
+`'calendar'` a calendar for datetime attributes, `'range'` a two-field From/To
+date-range picker for datetime attributes, and `'period'` a Time Frame dropdown —
+a one-click list of ready-made relative windows (Today, Last 7 days, This month, …)
+for datetime attributes.
 Additional types will be added as they are implemented.
 
 ##### Default Value
@@ -108,6 +110,27 @@ true
 
 Style options for the widget container (look & feel, border, shadow, etc.), and for the
 filter control inside it under `control`.
+
+***
+
+#### timeFrames <Badge type="beta" text="Beta" />
+
+> **timeFrames**?: `string`[]
+
+The frames a `'period'` (Time Frame) filter offers, given as an array of canonical
+frame keys (`tense:count:grain[:c]`, e.g. `'last:7:Day'`, `'last:2:Month:c'`).
+
+When omitted, the filter offers the default 11: Today · Yesterday · This week ·
+Last week · This month · Last month · Last 6 months · This quarter · Last quarter ·
+This year · Last year — the common set for a fresh widget.
+
+A key not in the 47-frame catalogue is dropped on read, and a set of fewer than two
+valid keys reads as the default 11 — a defensive guard so a saved dashboard can
+never present an unusable list. Order is canonical (Days → Weeks → Months →
+Quarters → Years, and within each grain the row order of the catalogue), not the
+caller's order.
+
+Ignored for every filter type other than `'period'`.
 
 ***
 

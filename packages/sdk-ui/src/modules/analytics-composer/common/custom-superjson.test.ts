@@ -1,6 +1,8 @@
 import {
   CascadingFilter,
   CustomFilter,
+  DateMeasureMembersFilter,
+  DateMeasureRelativeFilter,
   DateRangeFilter,
   DimensionalAttribute,
   DimensionalBaseMeasure,
@@ -364,6 +366,55 @@ describe('CustomSuperJSON', () => {
 
     it('should leave a measure that never carried a datatype without one', () => {
       expect(roundTrip(calculatedMeasure).datatype).toBeUndefined();
+    });
+
+    /* Both classes override __serializable, so without their own registrations superjson has no
+       rule that applies and a round trip hands back a plain object with no jaql(). */
+    // a max over the same level, so it is a date measure on the dimension the level belongs to
+    const lastOrder = new DimensionalBaseMeasure('Last Order', levelAttribute, 'max');
+    const dateMeasureMembersFilter = new DateMeasureMembersFilter(lastOrder, levelAttribute, [
+      '2013-01-01T00:00:00',
+    ]);
+    const dateMeasureRelativeFilter = new DateMeasureRelativeFilter(
+      lastOrder,
+      levelAttribute,
+      0,
+      1,
+      undefined,
+      '2013-06-01',
+    );
+
+    it.each([
+      ['DateMeasureMembersFilter', () => dateMeasureMembersFilter, DateMeasureMembersFilter],
+      ['DateMeasureRelativeFilter', () => dateMeasureRelativeFilter, DateMeasureRelativeFilter],
+    ])('should rebuild a %s as an instance, not a plain object', (_name, build, ctor) => {
+      const parsed = CustomSuperJSON.parse(CustomSuperJSON.stringify(build()));
+
+      expect(parsed).toBeInstanceOf(ctor);
+      expect((parsed as DateMeasureMembersFilter).jaql().jaql.level).toBe('years');
+    });
+
+    /* A calculated measure rebuilds its context through its own list of filter classes, so one
+       missing there comes back as plain JSON and jaql() puts that JSON in the context as-is. */
+    it.each([
+      ['DateMeasureMembersFilter', () => dateMeasureMembersFilter, DateMeasureMembersFilter],
+      ['DateMeasureRelativeFilter', () => dateMeasureRelativeFilter, DateMeasureRelativeFilter],
+    ])('should rebuild a %s inside a calculated measure context', (_name, build, ctor) => {
+      const filter = build();
+      const measure = new DimensionalCalculatedMeasure(
+        'Filtered last order',
+        '([M], [F])',
+        { '[M]': lastOrder, '[F]': filter },
+        undefined,
+        undefined,
+        undefined,
+        jaqlDataSource,
+      );
+
+      const parsed = roundTrip(measure);
+
+      expect(parsed.context['[F]']).toBeInstanceOf(ctor);
+      expect(parsed.jaql()).toEqual(measure.jaql());
     });
 
     it('should stringify and parse back DimensionalMeasureTemplate', () => {

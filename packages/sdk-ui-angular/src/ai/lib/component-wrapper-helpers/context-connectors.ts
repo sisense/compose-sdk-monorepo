@@ -1,5 +1,5 @@
-import { ContextConnector, DataObserver } from '@sisense/sdk-ui-preact';
 import { CustomAiContextProvider, CustomAiContextProviderProps } from '@sisense/sdk-ui-preact/ai';
+import { ContextConnector, DataObserver } from '@sisense/sdk-ui-preact/internal';
 
 import { AiService } from '../services/ai.service';
 

@@ -17,6 +17,8 @@ const handlers = [
   http.get('*/api/palettes/*', () => HttpResponse.json(mockPalettes)),
   http.get('*/api/v1/settings/system', () => HttpResponse.json(mockSystemSettings)),
   http.get('*/api/v2/settings/ai', () => HttpResponse.json(mockAiSettings)),
+  // Data source list used to resolve data source display names (none by default)
+  http.get('*/api/datasources/', () => HttpResponse.json([])),
 
   // Mock tracking calls
   http.post('*/api/activities', () => new HttpResponse()),

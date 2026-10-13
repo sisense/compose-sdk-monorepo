@@ -1,10 +1,10 @@
 import {
-  HookAdapter,
   type JumpToDashboardConfigForPivot as JumpToDashboardConfigForPivotPreact,
   type JumpToDashboardConfig as JumpToDashboardConfigPreact,
   useJtdWidget as useJtdWidgetPreact,
   type WidgetProps,
 } from '@sisense/sdk-ui-preact';
+import { HookAdapter } from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, ref, type Ref, toValue, watch } from 'vue';
 
 import type { DashboardConfig } from '../components/dashboard';

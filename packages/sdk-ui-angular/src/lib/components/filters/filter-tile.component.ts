@@ -10,7 +10,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   type FilterTileActionsConfig,
   type FilterTileConfig,
   type FilterTileHeaderConfig,
@@ -23,6 +22,7 @@ import {
   FilterTile as FilterTilePreact,
   type FilterTileProps as FilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

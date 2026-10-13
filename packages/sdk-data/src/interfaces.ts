@@ -199,6 +199,9 @@ export type DataSourceInfo = {
    * @internal
    */
   fullname?: string;
+  /**
+   * Identity name of the data source, used for queries and matching.
+   */
   title: string;
   type: 'live' | 'elasticube';
 };

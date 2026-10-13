@@ -27,6 +27,9 @@ const getTranslationEntries = (): Record<string, string> => {
     }, {});
 };
 
+/** Entry that carries the package stylesheet; see `src/styles.ts`. */
+const stylesEntry = resolve(__dirname, 'src/styles.ts');
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [
@@ -38,8 +41,9 @@ export default defineConfig(({ mode }) => ({
     }),
     cssInjectedByJsPlugin({
       topExecutionPriority: false,
+      // Only the `styles` entry carries the stylesheet; the styled entries import it
       jsAssetsFilterFunction(outputChunk) {
-        return ['index.js', 'ai.js', 'ai.cjs', 'index.cjs'].includes(outputChunk.fileName);
+        return ['styles.js', 'styles.cjs'].includes(outputChunk.fileName);
       },
       useStrictCSP: true,
     }),
@@ -75,12 +79,19 @@ export default defineConfig(({ mode }) => ({
           __dirname,
           'src/modules/analytics-composer/index-node.ts',
         ),
+        styles: stylesEntry,
+        internal: resolve(__dirname, 'src/modules/internal/index.ts'),
+        'sisense-internal': resolve(__dirname, 'src/modules/sisense-internal/index.ts'),
         ...getTranslationEntries(),
       },
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      treeshake: { preset: 'smallest' },
+      treeshake: {
+        preset: 'smallest',
+        // `smallest` drops imports without used bindings; keep the side-effect import of `styles`
+        moduleSideEffects: (id) => id === stylesEntry,
+      },
       external: [
         // React + all submodules
         /^react(?:\/[\w-]+)*$/,

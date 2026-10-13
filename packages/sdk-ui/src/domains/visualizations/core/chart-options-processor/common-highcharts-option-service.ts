@@ -1,6 +1,7 @@
 import { merge } from 'ts-deepmerge';
 
-import { CompleteThemeSettingsInternal } from '../../../..';
+import type { CompleteThemeSettingsInternal } from '@/types';
+
 import { HighchartsOptionsInternal } from './chart-options-service';
 
 // Highcharts default is 1000ms

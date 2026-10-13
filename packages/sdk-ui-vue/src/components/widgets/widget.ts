@@ -3,11 +3,11 @@ import type {
   CustomWidgetProps as CustomWidgetPropsPreact,
   FilterWidgetProps as FilterWidgetPropsPreact,
   NarrativeWidgetProps,
-  SoftUnion,
   TextWidgetProps as TextWidgetPropsPreact,
   WidgetProps as WidgetPropsPreact,
   WithCommonWidgetProps,
 } from '@sisense/sdk-ui-preact';
+import type { SoftUnion } from '@sisense/sdk-ui-preact/internal';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 

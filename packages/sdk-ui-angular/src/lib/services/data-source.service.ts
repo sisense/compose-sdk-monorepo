@@ -3,9 +3,8 @@ import type { Dimension } from '@sisense/sdk-data';
 import {
   type DataSourceDimensionsState,
   type GetDataSourceDimensionsParams as GetDataSourceDimensionsParamsPreact,
-  HookAdapter,
-  useGetDataSourceDimensionsInternal,
 } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useGetDataSourceDimensionsInternal } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

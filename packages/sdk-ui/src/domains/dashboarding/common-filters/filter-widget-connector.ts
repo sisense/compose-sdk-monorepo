@@ -1,11 +1,12 @@
+import type { Attribute, Filter } from '@sisense/sdk-data';
 import {
-  Attribute,
-  Filter,
   filterFactory,
   isIncludeAllMembersFilter,
   isMembersFilter,
+  isRelativeDateFilter,
 } from '@sisense/sdk-data';
 
+import { isEditableNumberRangeFilter } from '@/domains/widgets/components/filter-widget/components/number-range.js';
 import { isInclusiveDateRangeFilter } from '@/domains/widgets/components/filter-widget/components/range-date.js';
 import type {
   FilterWidgetFilterType,
@@ -45,13 +46,25 @@ function canAdoptFilter(existing: Filter, incoming: Filter): boolean {
  * `DateRangeFilter` too, and its `.from`/`.to` getters read the same regardless of operator;
  * adopting it and republishing through Range's inclusive `filterFactory.dateRange` would
  * silently change what the filter excludes.
+ *
+ * On a numeric attribute Range adopts only an inclusive `NumericFilter` — `between`,
+ * `≥` or `≤` — never `<` / `>` / `=` or an AND / OR chain, which only numeric Condition shows.
+ *
+ * Time Frame ('period') publishes a `RelativeDateFilter` and nothing else, so it only
+ * adopts that exact shape — without this branch the default falls through to
+ * `isMembersFilter`, so a persisted Time Frame selection reloads as a stranger tile
+ * (unlinked, no selection in the widget) even though widget attribute and filter attribute
+ * match on expression + granularity.
  */
 function isReadableAdoption(
   candidate: Filter,
   filterType: FilterWidgetFilterType | undefined,
 ): boolean {
   if (isIncludeAllMembersFilter(candidate)) return true;
-  if (filterType === 'range') return isInclusiveDateRangeFilter(candidate);
+  if (filterType === 'range') {
+    return isInclusiveDateRangeFilter(candidate) || isEditableNumberRangeFilter(candidate);
+  }
+  if (filterType === 'period') return isRelativeDateFilter(candidate);
   if (filterType === 'condition') return !isMembersFilter(candidate);
   return isMembersFilter(candidate);
 }
@@ -112,9 +125,7 @@ export function resolveFilterWidgetFilter(
   // Same dimension, so the same widget's filter — only its level moved. A stale link on
   // another dimension is a foreign filter and stays untouched.
   const ownFilterAtOtherLevel =
-    isLinkStale && filterByLink!.attribute.expression === attribute.expression
-      ? filterByLink
-      : null;
+    isLinkStale && filterByLink.attribute.expression === attribute.expression ? filterByLink : null;
 
   /* Own before adopted, matching the write path: the widget's own filter is handed back even
      though its `attribute` names another level, because the level that filter carries IS the
@@ -133,8 +144,8 @@ export function resolveFilterWidgetFilter(
 
 /**
  * Returns a copy of `filter` with `guid` assigned in config.
- * @param filter - Filter to copy
- * @param guid - Guid to assign on the copy
+ * @param filter - Filter to copy.
+ * @param guid - Guid to assign on the copy.
  * @returns Returns a new filter with `guid` in config; does not mutate `filter`.
  * @internal
  */
@@ -151,8 +162,8 @@ function withFilterGuid(filter: Filter, guid: string): Filter {
  * Clear / blank Condition Apply resets the linked filter to include-all
  * (`{ all: true }` / empty MembersFilter), it does not delete the tile. Condition mode
  * seeds that as an empty Condition UI; List mode reads it as Set filter / Include all.
- * @param existing - The filter to reset
- * @param guid - The stable guid to assign to the cleared filter
+ * @param existing - The filter to reset.
+ * @param guid - The stable guid to assign to the cleared filter.
  * @returns Returns a new filter expression representing include-all under `guid`.
  * @internal
  */
@@ -169,9 +180,9 @@ function resetLinkedFilterToIncludeAll(existing: Filter, guid: string): Filter {
 
 /**
  * Replaces the filter with `guid` in `filters`, or appends `replacement` when absent.
- * @param filters - Current dashboard filters
- * @param guid - Guid of the filter slot to replace
- * @param replacement - Filter to install under `guid`
+ * @param filters - Current dashboard filters.
+ * @param guid - Guid of the filter slot to replace.
+ * @param replacement - Filter to install under `guid`.
  * @returns Returns a new filters array with `replacement` installed under `guid`.
  * @internal
  */
@@ -205,7 +216,7 @@ type FilterWidgetConnection = {
  * The attribute-identity match (same semantic as the dim|level|bucket key) is
  * authoritative. The guid link is only a runtime stability hint: it disambiguates
  * replacement so filterRelations references stay valid, and it is re-validated on
- * every read — a link whose filter no longer matches the widget attribute (e.g. the
+ * every read — a link whose filter no longer matches the widget attribute (e.g. The
  * filter was re-leveled externally) is treated as absent.
  *
  * Read path: resolves the widget's current filter by validated guid link, falling back

@@ -9,7 +9,8 @@ import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import {
   DASHBOARD_NARRATIVE_DASHBOARDS_ENDPOINT,
   DASHBOARD_NARRATIVE_QUERIES_ENDPOINT,
-  type DashboardNarrativeQueriesRequest,
+  type DashboardNarrativeQuery,
+  type DashboardNarrativeRequestBody,
   type DashboardNarrativeResponseDto,
 } from '@/infra/api/narrative/dashboard-narrative-endpoints.js';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
@@ -69,15 +70,18 @@ const cacheMissBody: DashboardNarrativeResponseDto = {
 
 type Respond = () => HttpResponse | Promise<HttpResponse>;
 
+/** Body of a queries-route request as it goes on the wire. */
+type WireRequest = DashboardNarrativeRequestBody & { queries: DashboardNarrativeQuery[] };
+
 /** Generation requests; cache-only lookups are recorded in `lookups`. */
-let requests: DashboardNarrativeQueriesRequest[];
-let lookups: DashboardNarrativeQueriesRequest[];
+let requests: WireRequest[];
+let lookups: WireRequest[];
 let lookupResponse: Respond;
 
 function respondWith(...responses: Respond[]) {
   server.use(
     http.post(`*/${DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}`, async ({ request }) => {
-      const body = (await request.json()) as DashboardNarrativeQueriesRequest;
+      const body = (await request.json()) as WireRequest;
       if (body.cacheOnly) {
         lookups.push(body);
         return lookupResponse();
@@ -219,6 +223,15 @@ describe('useNarrativeWidgetState', () => {
     await waitFor(() => expect(result.current.state).toEqual({ status: 'error', kind: 'failed' }));
   });
 
+  it('shows no-data when every widget returned no data', async () => {
+    respondWith(() => HttpResponse.json({ ...cacheMissBody, excludedWidgetIds: ['c1'] }));
+    const { result } = await renderNarrative({ widgets: [chart('c1')] });
+
+    act(() => result.current.generate());
+
+    await waitFor(() => expect(result.current.state).toEqual({ status: 'error', kind: 'no-data' }));
+  });
+
   it('generates once on mount with generateOnMount, without a generate call', async () => {
     respondWith(ok);
     const { result, rerender } = await renderNarrative({
@@ -328,6 +341,76 @@ describe('useNarrativeWidgetState', () => {
     });
   });
 
+  describe('usage-tracking fields', () => {
+    it('marks the first click as generate from the widget button, and the lookup as neither', async () => {
+      respondWith(ok);
+      const { result } = await renderNarrative({ widgets: [chart('c1')] });
+      await waitFor(() => expect(result.current.state).toEqual({ status: 'idle' }));
+
+      act(() => result.current.generate());
+
+      await waitFor(() => expect(result.current.state.status).toBe('ready'));
+      expect(requests[0]).toMatchObject({
+        tracking: { subActionType: 'generate', triggerType: 'widgetButton' },
+      });
+      expect(lookups[0]).not.toHaveProperty('tracking');
+    });
+
+    it('marks a click after a narrative was shown as regenerate', async () => {
+      respondWith(ok);
+      const { result } = await renderNarrative({ widgets: [chart('c1')] });
+      await waitFor(() => expect(result.current.state).toEqual({ status: 'idle' }));
+      act(() => result.current.generate());
+      await waitFor(() => expect(result.current.state.status).toBe('ready'));
+
+      act(() => result.current.generate());
+
+      await waitFor(() => expect(requests).toHaveLength(2));
+      expect(requests[1]).toMatchObject({
+        tracking: { subActionType: 'regenerate', triggerType: 'widgetButton' },
+      });
+    });
+
+    it('marks a click on a cached narrative as regenerate', async () => {
+      lookupResponse = cacheHit;
+      respondWith(ok);
+      const { result } = await renderNarrative({ widgets: [chart('c1')] });
+      await waitFor(() => expect(result.current.state.status).toBe('ready'));
+
+      act(() => result.current.generate());
+
+      await waitFor(() => expect(requests).toHaveLength(1));
+      expect(requests[0]).toMatchObject({ tracking: { subActionType: 'regenerate' } });
+    });
+
+    it('keeps a retry after a failed regenerate as regenerate', async () => {
+      respondWith(ok, status(422), ok);
+      const { result } = await renderNarrative({ widgets: [chart('c1')] });
+      await waitFor(() => expect(result.current.state).toEqual({ status: 'idle' }));
+      act(() => result.current.generate());
+      await waitFor(() => expect(result.current.state.status).toBe('ready'));
+      act(() => result.current.generate());
+      await waitFor(() =>
+        expect(result.current.state).toEqual({ status: 'error', kind: 'failed' }),
+      );
+
+      act(() => result.current.generate());
+
+      await waitFor(() => expect(requests).toHaveLength(3));
+      expect(requests[2]).toMatchObject({ tracking: { subActionType: 'regenerate' } });
+    });
+
+    it('marks a generation on mount as generate, with no trigger', async () => {
+      respondWith(ok);
+      const { result } = await renderNarrative({ widgets: [chart('c1')], generateOnMount: true });
+
+      await waitFor(() => expect(result.current.state.status).toBe('ready'));
+      expect(requests[0]).toEqual(
+        expect.objectContaining({ tracking: { subActionType: 'generate' } }),
+      );
+    });
+  });
+
   describe('with a dashboardId', () => {
     type DashboardRequest = { dashboardId: string; body: unknown };
     /** Generation requests; cache-only lookups are recorded in `dashboardLookups`. */
@@ -421,7 +504,12 @@ describe('useNarrativeWidgetState', () => {
 
       await waitFor(() => expect(result.current.state).toEqual({ status: 'loading' }));
       await waitFor(() => expect(result.current.state.status).toBe('ready'));
-      expect(dashboardRequests).toEqual([{ dashboardId: 'd1', body: {} }]);
+      expect(dashboardRequests).toEqual([
+        {
+          dashboardId: 'd1',
+          body: { tracking: { subActionType: 'generate', triggerType: 'widgetButton' } },
+        },
+      ]);
       expect(requests).toHaveLength(0);
     });
 

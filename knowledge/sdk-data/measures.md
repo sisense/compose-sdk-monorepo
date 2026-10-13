@@ -57,7 +57,7 @@ A formula is treated as a date measure when the saved jaql stamped `datatype: 'd
 | Statistics/Statistical | `stdev` :421; `variance` :467; `percentile` :531; `quartile` :567; `covarp` :608; `correlation` :636; `slope` :668; `runningSum` :1058; `growth` :1097; `growthRate` :1132; `contribution` :1576; `rank` :1741                       |
 | Arithmetic (5 fns)     | `constant` :264; `add` :830; `subtract` :858; `multiply` :886; `divide` :914                                                                                                                                                       |
 | Time-based (14 fns)    | `yearToDateSum` :944; `quarterToDateSum` :970; `monthToDateSum` :996; `weekToDateSum` :1022; `growthPastWeek/Month/Quarter/Year` :1166-:1271; `difference` :1298; `diffPastWeek…Year` :1324-:1402; `pastDay…pastYear` :1424-:1533 |
-| Advanced Analytics     | `customFormula` :167; `measuredValue` :783 (measure + filters context); `trend` :1609; `forecast` :1661 (options: `TrendFormulaOptions`/`ForecastFormulaOptions`, packages/sdk-data/src/interfaces.ts:382/:402)                      |
+| Advanced Analytics     | `customFormula` :167; `measuredValue` :783 (measure + filters context); `trend` :1609; `forecast` :1661 (options: `TrendFormulaOptions`/`ForecastFormulaOptions`, packages/sdk-data/src/interfaces.ts:385/:405)                      |
 
 `rank` defaults, verbatim (factory.ts:31-61): `RankingTypes = { StandardCompetition: '1224', ModifiedCompetition: '1334', Dense: '1223', Ordinal: '1234' }`, `RankingSortTypes = { Ascending: 'ASC', Descending: 'DESC' }`.
 

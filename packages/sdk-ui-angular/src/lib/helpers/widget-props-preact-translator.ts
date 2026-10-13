@@ -2,10 +2,10 @@
 import type {
   ChartWidgetProps as ChartWidgetPropsPreact,
   PivotTableWidgetProps as PivotTableWidgetPropsPreact,
-  SoftUnion,
   TextWidgetProps as TextWidgetPropsPreact,
   WidgetProps as WidgetPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import type { SoftUnion } from '@sisense/sdk-ui-preact/internal';
 
 import type {
   ChartWidgetProps,

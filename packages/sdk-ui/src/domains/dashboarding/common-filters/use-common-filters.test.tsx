@@ -1,20 +1,21 @@
 import { act } from 'react';
 
-import { attributeFactory, filterFactory, MembersFilter, MetadataTypes } from '@sisense/sdk-data';
+import type { MembersFilter } from '@sisense/sdk-data';
+import { attributeFactory, filterFactory, MetadataTypes } from '@sisense/sdk-data';
 import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import type { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import {
   isChartWidgetProps,
   isFilterWidgetProps,
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { WidgetHeaderTargets } from '@/domains/widgets/shared/widget-header/widget-header-targets';
-import { MenuOptions } from '@/infra/contexts/menu-provider/types';
-import { DataPointEventHandler, DataPointsEventHandler } from '@/props';
-import { CartesianChartDataOptions, DataPoint } from '@/types';
+import type { MenuOptions } from '@/infra/contexts/menu-provider/types';
+import type { DataPointEventHandler, DataPointsEventHandler } from '@/props';
+import type { CartesianChartDataOptions, DataPoint } from '@/types';
 
 import { useCommonFilters } from './use-common-filters.js';
 
@@ -115,6 +116,15 @@ describe('useCommonFilters', () => {
       };
     });
 
+    const tableWidgetProps: WidgetProps = {
+      id: 'table-widget-1',
+      widgetType: 'chart',
+      chartType: 'table',
+      dataOptions: { columns: [DM.Commerce.AgeRange] },
+      filters: [],
+      highlights: [],
+    };
+
     it('should connect common filters as highlights to widget props by default', () => {
       const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'])];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
@@ -163,6 +173,35 @@ describe('useCommonFilters', () => {
       expect(getProperty(connectedWidget, 'filters')).toEqual(initialFilters);
     });
 
+    it("should apply filters (not highlights) to a table widget even when applyMode is 'highlight'", () => {
+      const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'])];
+      const { result } = renderHook(() => useCommonFilters({ initialFilters }));
+      const connectedWidget = result.current.connectToWidgetProps(tableWidgetProps, {
+        applyMode: 'highlight',
+      });
+
+      expect(getProperty(connectedWidget, 'highlights')).toEqual([]);
+      expect(getProperty(connectedWidget, 'filters')).toEqual(initialFilters);
+    });
+
+    it('should force-apply background filters to a table widget', () => {
+      const backgroundFilter = filterFactory.members(DM.Commerce.AgeRange, [
+        '0-18',
+        '19-24',
+        '25-34',
+      ]);
+      const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18'], {
+        guid: '123',
+        backgroundFilter,
+        disabled: true,
+      });
+      const { result } = renderHook(() => useCommonFilters({ initialFilters: [filter] }));
+      const connectedWidget = result.current.connectToWidgetProps(tableWidgetProps);
+
+      expect(getProperty(connectedWidget, 'highlights')).toEqual([]);
+      expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
+    });
+
     it('should connect common filters as filters to widget props', () => {
       const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'])];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
@@ -174,6 +213,25 @@ describe('useCommonFilters', () => {
       expect(getProperty(connectedWidget, 'highlights')).toEqual(
         getProperty(widgetPropsMock, 'highlights'),
       );
+    });
+
+    it("should keep the widget's own filter relations, ANDed with the common filters", () => {
+      const conditionFilter = filterFactory.members(DM.Commerce.Condition, ['New']);
+      const widgetRelations = filterFactory.logic.or(
+        filterFactory.members(DM.Brand.Brand, ['Apple']),
+        filterFactory.members(DM.Commerce.Cost, ['10']),
+      );
+      const { result } = renderHook(() => useCommonFilters({ initialFilters: [conditionFilter] }));
+      const connectedWidget = result.current.connectToWidgetProps(
+        { ...tableWidgetProps, filters: widgetRelations } as WidgetProps,
+        { applyMode: 'filter' },
+      );
+
+      expect(getProperty(connectedWidget, 'filters')).toMatchObject({
+        operator: 'AND',
+        left: conditionFilter,
+        right: widgetRelations,
+      });
     });
 
     it('should ignore connected filter by id', () => {

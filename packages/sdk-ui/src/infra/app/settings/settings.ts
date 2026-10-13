@@ -173,6 +173,12 @@ type ServerSettings = {
     canGenerateNarrativeViaAI: boolean;
 
     /**
+     * From `api/globals` props.isNarration: the unlimited narrative entitlement, which draws no AI
+     * credits.
+     */
+    isUnlimited: boolean;
+
+    /**
      * Narrative text provider from the license (`api/globals` props.narrationProvider).
      * `arria` is the legacy 3rd-party engine served only via `POST /api/v1/narration/widget`,
      * which CSDK does not support; `sisenseAI` uses the AI endpoints CSDK can call.
@@ -381,6 +387,7 @@ async function loadServerSettings(
       isEnabled: apiNarration.isEnabled,
       canGenerateNarrativeViaAI:
         isUnified && (unlimitedNarrativesEnabled || creditNarrativesEnabled),
+      isUnlimited: props?.isNarration === true,
       provider: props?.narrationProvider,
     },
     user: {

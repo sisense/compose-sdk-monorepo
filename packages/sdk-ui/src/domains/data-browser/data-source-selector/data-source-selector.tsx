@@ -10,15 +10,12 @@ import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { getElementStateColor } from '@/infra/contexts/theme-provider/utils';
 import { Popover } from '@/shared/components/popover';
+import { useDataSourceLabelResolver } from '@/shared/hooks/use-data-source-label-resolver.js';
 import { ApprovalIcon } from '@/shared/icons/approval-icon';
 import { ArrowIcon } from '@/shared/icons/arrow-icon';
 import { ElasticubeIcon } from '@/shared/icons/elasticube-icon';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
-import {
-  DataSourceObject,
-  getDataSourceTitle,
-  toDataSourceObject,
-} from '@/shared/utils/data-sources-utils';
+import { DataSourceObject, toDataSourceObject } from '@/shared/utils/data-sources-utils';
 import { ElementStates } from '@/types';
 
 export type DataSourceSelectorProps = {
@@ -33,6 +30,7 @@ export function DataSourceSelector({
   onChange,
 }: DataSourceSelectorProps) {
   const { themeSettings } = useThemeContext();
+  const getDataSourceLabel = useDataSourceLabelResolver();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
 
@@ -61,7 +59,7 @@ export function DataSourceSelector({
         theme={themeSettings}
       >
         <ShrinkableText theme={themeSettings}>
-          {selectedDataSource ? getDataSourceTitle(selectedDataSource) : 'Select data source'}
+          {selectedDataSource ? getDataSourceLabel(selectedDataSource) : 'Select data source'}
         </ShrinkableText>
       </SelectorButton>
 
@@ -87,15 +85,16 @@ export function DataSourceSelector({
       >
         <DataSourcesList theme={themeSettings}>
           {dataSourceObjects.map((ds) => {
-            const isSelected = findDataSourceByDataSourceObject(ds) === selectedDataSource;
+            const dataSource = findDataSourceByDataSourceObject(ds);
+            const isSelected = dataSource === selectedDataSource;
             return (
               <DataSourcesListItem
                 key={ds.id}
                 selected={isSelected}
-                onClick={() => handleSelect(findDataSourceByDataSourceObject(ds))}
+                onClick={() => handleSelect(dataSource)}
                 theme={themeSettings}
               >
-                <DataSourceItem dataSourceTitle={ds.title} isSelected={isSelected} />
+                <DataSourceItem label={getDataSourceLabel(dataSource)} isSelected={isSelected} />
               </DataSourcesListItem>
             );
           })}
@@ -119,18 +118,12 @@ const createFindDataSourceByDataSourceObject = (dataSources: DataSource[]) => {
   };
 };
 
-const DataSourceItem = ({
-  dataSourceTitle,
-  isSelected,
-}: {
-  dataSourceTitle: string;
-  isSelected: boolean;
-}) => {
+const DataSourceItem = ({ label, isSelected }: { label: string; isSelected: boolean }) => {
   const { themeSettings } = useThemeContext();
   return (
     <DataSourceItemContainer isSelected={isSelected}>
       <ElasticubeIcon />
-      <ShrinkableText theme={themeSettings}>{dataSourceTitle}</ShrinkableText>
+      <ShrinkableText theme={themeSettings}>{label}</ShrinkableText>
       <ApprovalIcon />
     </DataSourceItemContainer>
   );

@@ -43,9 +43,8 @@ Compose SDK is a software development kit that enables a composable, code-driven
 
 <!-- <SectionIndex /> -->
 
-:::tip Demo Application
-Check out our demo applications for Compose SDK + [React](https://csdk-react.sisense.com), [Angular](https://csdk-angular.sisense.com),
-or [Vue](https://csdk-vue.sisense.com).
+:::tip Compose SDK Playground
+Explore live, editable Compose SDK examples for [React](https://csdk-playground.sisense.com/?framework=react), [Angular](https://csdk-playground.sisense.com/?framework=angular), or [Vue](https://csdk-playground.sisense.com/?framework=vue) in the Compose SDK Playground.
 :::
 
 ### What can I do with Compose SDK?

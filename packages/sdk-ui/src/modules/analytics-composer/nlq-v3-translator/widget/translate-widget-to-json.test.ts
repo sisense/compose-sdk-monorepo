@@ -120,6 +120,64 @@ describe('translateWidgetToJSON — text pass-through', () => {
   });
 });
 
+describe('translateWidgetToJSON — narrative pass-through', () => {
+  it('keeps title, styleOptions, config and dashboardId', () => {
+    const styleOptions = { isAutoHeight: true };
+    const config = { header: { menu: { enabled: false } } };
+    const result = translateWidgetToJSON({
+      widgetType: 'narrative',
+      id: 'w-n',
+      title: 'Dashboard Narrative',
+      styleOptions,
+      config,
+      dashboardId: 'dash-1',
+    });
+    expect(result.success).toBe(true);
+    expect(getSuccessData(result)).toEqual({
+      widgetType: 'narrative',
+      id: 'w-n',
+      title: 'Dashboard Narrative',
+      styleOptions,
+      config,
+      dashboardId: 'dash-1',
+    });
+  });
+
+  it('drops host-only props such as callbacks and render flags', () => {
+    const result = translateWidgetToJSON({
+      widgetType: 'narrative',
+      id: 'w-n',
+      containerless: true,
+      generateOnMount: true,
+      onReady: () => {},
+      widgets: [],
+    });
+    expect(result.success).toBe(true);
+    expect(getSuccessData(result)).toEqual({ widgetType: 'narrative', id: 'w-n' });
+  });
+
+  it('keeps dashboardId when it drops widgets, so the narrative can still be requested', () => {
+    const result = translateWidgetToJSON({
+      widgetType: 'narrative',
+      id: 'w-n',
+      dashboardId: 'dash-1',
+      widgets: [
+        {
+          widgetType: 'text',
+          id: 'w-t',
+          styleOptions: { html: '', vAlign: 'valign-top', bgColor: '#fff' },
+        },
+      ],
+    });
+    expect(result.success).toBe(true);
+    expect(getSuccessData(result)).toEqual({
+      widgetType: 'narrative',
+      id: 'w-n',
+      dashboardId: 'dash-1',
+    });
+  });
+});
+
 describe('translateWidgetToJSON — unknown widgetType', () => {
   it('returns error for unknown widgetType', () => {
     const result = translateWidgetToJSON({ widgetType: 'unknown', id: 'w-x' } as never);

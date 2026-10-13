@@ -1,21 +1,26 @@
-import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
   DateLevels,
-  DimensionalLevelAttribute,
   filterFactory,
   isIncludeAllMembersFilter,
   isLevelAttribute,
   isMembersFilter,
-  MembersFilter,
   Sort,
 } from '@sisense/sdk-data';
-import type { Attribute, Filter } from '@sisense/sdk-data';
+import type {
+  Attribute,
+  DimensionalLevelAttribute,
+  Filter,
+  MembersFilter,
+} from '@sisense/sdk-data';
 import debounce from 'lodash-es/debounce';
 
 import {
   type DatetimeAttributeStats,
+  type NumericAttributeStats,
   useGetAttributeStats,
 } from '@/domains/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
 import { granularities } from '@/domains/filters/components/filter-editor-popover/sections/common/granularities';
@@ -43,6 +48,7 @@ import {
   DatePickerFilter,
   DateRangePickerFilter,
   FilterSelect,
+  NumberRangeFilter,
   PeriodFilter,
 } from './components';
 import type { DropdownScrollEvent } from './components';
@@ -50,6 +56,7 @@ import { isEditableDateConditionFilter } from './components/condition-date.js';
 import { isEditableNumericConditionFilter } from './components/condition-numeric.js';
 import { isEditableTextConditionFilter } from './components/condition-text.js';
 import { asDateMembers, asDateText, asDateTexts } from './components/date-picker-members';
+import { isEditableNumberRangeFilter } from './components/number-range.js';
 import { isEditableRangeFilter } from './components/range-date.js';
 import { useDateMask } from './components/use-date-mask';
 import {
@@ -64,9 +71,24 @@ import {
 } from './filter-widget-design';
 import { FilterWidgetSetup } from './filter-widget-setup';
 import filterWidgetSetupImage from './images/filter-widget-setup.svg';
+import {
+  filterToTimeFrame,
+  readTimeFramesInput,
+  specKey,
+  TimeFrameFilter,
+  timeFrameToFilter,
+} from './time-frame';
+import type { RelativeSpec } from './time-frame';
 import type { FilterWidgetControlStyleOptions, FilterWidgetProps } from './types';
 
 const BORDER_BOX = 'border-box' as const;
+
+/** The muted note a control shows instead of itself when it cannot show the linked filter. */
+const UNSUPPORTED_NOTE_STYLE: CSSProperties = {
+  fontSize: 13,
+  lineHeight: '16px',
+  color: 'var(--secondary-text-color, #9ea2ae)',
+};
 const LIST_SCROLL_LOAD_MORE_THRESHOLD = 0.75;
 const QUERY_MEMBERS_COUNT = 50;
 const SEARCH_VALUE_UPDATE_DELAY = 300;
@@ -83,24 +105,25 @@ type FilterWidgetDropdownProps = Pick<
   | 'excludedDateLevels'
   | 'emptyState'
   | 'onSetup'
+  | 'timeFrames'
 > & {
   /** The control's own styling — `styleOptions.control`, unwrapped by the widget. */
   controlStyleOptions?: FilterWidgetControlStyleOptions;
   /**
-   * Called when the user changes the filter selection. The host widget wraps
-   * this into its unified `onChange` channel as a `filter/changed` event.
+   * Called when the user changes the filter selection.
+   * The host widget wraps this into its unified `onChange` channel as a `filter/changed` event.
    */
   onFilterUpdate?: (filter: Filter | null) => void;
   /**
-   * Called when the user picks a different date granularity, with the attribute
-   * at the new level. The host widget wraps this into its unified `onChange`
-   * channel as a `dateLevel/changed` event (e.g. to sync host widget metadata).
+   * Called when the user picks a different date granularity, with the attribute at the new level.
+   * The host widget wraps this into its unified `onChange` channel as a `dateLevel/changed`
+   * event (for example, to sync host widget metadata).
    */
   onDateLevelChange?: (attribute: Attribute) => void;
   /**
    * Calls the provided callback on every rising edge of readiness — after member data loads
    * successfully and the list is ready to display, including after subsequent
-   * reloads (e.g. dimension change, refetch). Used by the host FilterWidget to
+   * reloads (for example a dimension change or refetch). Used by the host FilterWidget to
    * surface the `onRender` prop.
    */
   onReady?: () => void;
@@ -122,6 +145,9 @@ type FilterWidgetDropdownProps = Pick<
  * from a single-select one that made a round trip. Reading it is what made every reopened
  * widget editor come back multi. The member count carries the same signal and is real data
  * rather than a defaulted flag.
+ * @param widgetMultiselect - The widget's own `isMultiselect` setting.
+ * @param selectedCount - How many members the current selection actually holds.
+ * @returns Whether the control should render in multi-select mode.
  * @internal
  */
 export function getEffectiveMultiselect(
@@ -148,23 +174,30 @@ export function asSingleSelectionMembers(members: readonly string[]): string[] {
  * commits them together.
  *
  * Used internally by FilterWidget to provide the 'members' filter type UI.
+ * @param props - See {@link FilterWidgetDropdownProps}. Destructured in the body so this
+ *   JSDoc stays a single reference to the props type — every field's own contract lives on
+ *   the interface, and repeating the whole list here would drift.
+ * @returns The filter control JSX — a members select, a date drill-in, a calendar, a range
+ *   picker, a Condition builder, or a Time Frame dropdown, depending on the resolved mode.
  */
-export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> = ({
-  attribute,
-  dataSource,
-  isMultiselect = true,
-  filter: filterFromProps = null,
-  filterType = 'members',
-  onFilterUpdate: updateFilterFromProps,
-  parentFilters = [],
-  dimensionFilters,
-  onDateLevelChange,
-  onReady,
-  excludedDateLevels,
-  controlStyleOptions,
-  emptyState,
-  onSetup,
-}) => {
+export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> = (props) => {
+  const {
+    attribute,
+    dataSource,
+    isMultiselect = true,
+    filter: filterFromProps = null,
+    filterType = 'members',
+    onFilterUpdate: updateFilterFromProps,
+    parentFilters = [],
+    dimensionFilters,
+    onDateLevelChange,
+    onReady,
+    excludedDateLevels,
+    controlStyleOptions,
+    emptyState,
+    onSetup,
+    timeFrames,
+  } = props;
   const { t } = useTranslation();
   /* Days are read and written in the reader's own format, so the same mask the calendar
      control renders with is the one this converts through. The member it stores stays
@@ -193,6 +226,19 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
    * the same graceful degradation Calendar already has.
    */
   const isRangeMode = isDateAttribute && filterType === 'range';
+  /**
+   * The numeric Range control — Minimum / Maximum fields with a dual-handle slider.
+   * The same `'range'` type as the date control above, on a numeric attribute. It publishes a
+   * numeric filter, never members, and carries no level. A text attribute falls through to
+   * the members list, the same graceful degradation as a date-only type on a non-date field.
+   */
+  const isNumberRangeMode = attributeValueType === 'numeric' && filterType === 'range';
+  /**
+   * Time Frame — a one-click list of ready-made relative windows (Today, Last 7 days,
+   * This month, …), datetime attributes only. Gated exactly like Calendar and Range: a
+   * live dimension swap off datetime falls through to the plain members list below.
+   */
+  const isTimeFrameMode = isDateAttribute && filterType === 'period';
   /*
    * A linked filter Range cannot read (relative, exclusive Before/After, members —
    * anything `isEditableRangeFilter` rejects) must not silently render as two empty
@@ -207,6 +253,11 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     isMembersFilter(filterFromProps);
   const rangeFilterUnsupported =
     isRangeMode && !rangeBlankBackground && !isEditableRangeFilter(filterFromProps);
+  /* The numeric Range shows only an inclusive `between` / `≥` / `≤`; anything else on the
+     linked filter (an AND / OR chain, `<`, `=`, …) gets the same stub, never two empty
+     fields over a filtered dashboard. */
+  const numberRangeFilterUnsupported =
+    isNumberRangeMode && !rangeBlankBackground && !isEditableNumberRangeFilter(filterFromProps);
 
   /**
    * The level the host is on, which is the FILTER's whenever it has one.
@@ -234,6 +285,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     filterFromProps.attribute.expression === attribute.expression &&
     (isConditionMode ||
       isRangeMode ||
+      isTimeFrameMode ||
       isMembersFilter(filterFromProps) ||
       isIncludeAllMembersFilter(filterFromProps))
       ? filterFromProps
@@ -413,6 +465,31 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     [resolvedGranularity, attribute, onDateLevelChange, t, updateFilterFromProps],
   );
 
+  /**
+   * Time Frame's one publish — a picked frame becomes a `RelativeDateFilter` at the
+   * frame's grain (or `null` for a cleared trigger, published as include-all by the
+   * host wrapper). Like Range, the widget's own granularity is realigned before the
+   * filter goes out so a host that discards a selection captured against the old
+   * level on `dateLevel/changed` sees the level move first. Unlike Range (Days
+   * only), the target grain here is whichever grain the picked frame belongs to.
+   */
+  const publishTimeFrameFilter = useCallback(
+    (spec: RelativeSpec | null) => {
+      if (spec === null) {
+        updateFilterFromProps?.(null);
+        return;
+      }
+      const nextFilter = timeFrameToFilter(spec, attribute, t);
+      const nextLevel = (nextFilter.attribute as DimensionalLevelAttribute).granularity;
+      if (nextLevel !== resolvedGranularity) {
+        onDateLevelChange?.(nextFilter.attribute);
+        setDateGranularity(nextLevel);
+      }
+      updateFilterFromProps?.(nextFilter);
+    },
+    [attribute, resolvedGranularity, onDateLevelChange, t, updateFilterFromProps],
+  );
+
   // Cast rationale for the seed: see the note above about same-dim override semantics.
   const { filter, updateFilter: publishFilter } = useSynchronizedFilter<MembersFilter>(
     membersFilterFromProps,
@@ -459,13 +536,15 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   // select-all when createLevelAttribute briefly differs from filter.attribute.
   useEffect(() => {
     if (!updateFilterFromProps) return;
-    /* Condition and Range publish Text/Numeric/DateRange filters, not members. Rebuilding a
-       MembersFilter here when the grain moves (Before → Days) overwrote the Apply
-       payload, so the host stored include-all and the trigger came back as Set filter. Range
-       hits this exact path via its own `publishRangeFilter`'s `setDateGranularity` call —
-       without this guard that grain move would fire right back through here and clobber the
-       DateRangeFilter it just published with an empty MembersFilter. */
-    if (isConditionMode || isRangeMode) return;
+    /* Condition, Range and Time Frame publish Text/Numeric/DateRange/RelativeDate filters,
+       not members. Rebuilding a MembersFilter here when the grain moves (Before → Days, or
+       a Time Frame pick that re-levels) overwrote the Apply payload, so the host stored
+       include-all and the trigger came back as Set filter. Range hits this exact path via
+       its own `publishRangeFilter`'s `setDateGranularity` call, and Time Frame hits it via
+       `publishTimeFrameFilter` the same way — without this guard the grain move would fire
+       right back through here and clobber the just-published relative filter with an empty
+       MembersFilter. */
+    if (isConditionMode || isRangeMode || isNumberRangeMode || isTimeFrameMode) return;
     if (isSameAttribute(filter.attribute, effectiveAttribute)) return;
     updateFilter(
       // Cast rationale: filterFactory.members returns the base Filter type but always
@@ -484,6 +563,8 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     isMultiselect,
     isConditionMode,
     isRangeMode,
+    isNumberRangeMode,
+    isTimeFrameMode,
     updateFilter,
     updateFilterFromProps,
   ]);
@@ -501,6 +582,8 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   const membersQueryAligned =
     !isConditionMode &&
     !isRangeMode &&
+    !isNumberRangeMode &&
+    !isTimeFrameMode &&
     Boolean(effectiveAttribute.expression) &&
     isSameAttribute(filter.attribute, effectiveAttribute);
 
@@ -642,7 +725,10 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   );
 
   useFireOnReady(
-    isConditionMode || isRangeMode || (!membersLoading && alignedMembersData !== undefined),
+    isConditionMode ||
+      isRangeMode ||
+      isNumberRangeMode ||
+      (!membersLoading && alignedMembersData !== undefined),
     onReady,
   );
 
@@ -858,7 +944,8 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
      Earliest / Latest chips and greys the days beyond the data; it never blocks a pick,
      because the base can be queried past its current edges. Only asked for while the
      calendar is the control on screen. */
-  const needsDayStats = isCalendarMode || isRangeMode || (isConditionMode && isDateAttribute);
+  const needsDayStats =
+    isCalendarMode || isRangeMode || isTimeFrameMode || (isConditionMode && isDateAttribute);
   const { data: dayStats } = useGetAttributeStats<DatetimeAttributeStats>({
     /* Day-span stats aim Earliest / Latest chips on the calendar, on Range's own fields,
        and on date Condition anchors. Text/numeric Condition never asks, so the query stays
@@ -872,6 +959,17 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     ),
     filters: parentFilters,
     enabled: needsDayStats && Boolean(attribute.expression),
+    ...(dataSource && { defaultDataSource: dataSource }),
+  });
+
+  /* The numeric column's own min / max — the numeric Range's placeholders and slider span.
+     Same lookup and the same `parentFilters` the day span above uses, so
+     the widget's Dimension Filters narrow it and dashboard filters count only when the widget
+     opts in (invariant #12). */
+  const { data: numberStats } = useGetAttributeStats<NumericAttributeStats>({
+    attribute,
+    filters: parentFilters,
+    enabled: isNumberRangeMode && Boolean(attribute.expression),
     ...(dataSource && { defaultDataSource: dataSource }),
   });
 
@@ -1033,6 +1131,27 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     />
   );
 
+  /**
+   * The Time Frame curated set, read through the guard: unknown keys dropped, order
+   * canonical, fewer than 2 valid keys falls back to the default 11. Computed
+   * unconditionally so its identity is stable — the branch below reads it only in
+   * Time Frame mode.
+   */
+  const timeFrameOffered = useMemo(() => readTimeFramesInput(timeFrames), [timeFrames]);
+
+  /**
+   * The linked filter as a frame from the offered set — `undefined` if the filter
+   * is not a `RelativeDateFilter`, or matches no offered frame. A picked frame
+   * withdrawn from the set resets to `Set filter`, and a stored clause that matches
+   * no offered frame seeds as nothing-selected rather than an invented row.
+   * MembersFilter and include-all read as no selection.
+   */
+  const timeFrameSelectedKey = useMemo(() => {
+    if (!isTimeFrameMode) return undefined;
+    const frame = filterToTimeFrame(filterFromProps, timeFrameOffered);
+    return frame ? specKey(frame) : undefined;
+  }, [isTimeFrameMode, filterFromProps, timeFrameOffered]);
+
   if (!attribute.expression) {
     const showSetup = emptyState === 'setupButton' || typeof onSetup === 'function';
     if (showSetup) {
@@ -1141,14 +1260,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
           }}
         >
           {attributeUnsupported || filterUnsupported ? (
-            <div
-              data-testid="filter-widget-condition-unsupported"
-              style={{
-                fontSize: 13,
-                lineHeight: '16px',
-                color: 'var(--secondary-text-color, #9ea2ae)',
-              }}
-            >
+            <div data-testid="filter-widget-condition-unsupported" style={UNSUPPORTED_NOTE_STYLE}>
               {attributeUnsupported
                 ? t(
                     'filterWidget.conditionUnsupported',
@@ -1163,7 +1275,10 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
             <ConditionFilter
               attribute={effectiveAttribute}
               conditionKind={conditionKind}
-              filter={conditionFilter}
+              /* The date Condition keys its unfinished draft by the linked filter's guid, so it
+                 gets the blank background as is (read as an empty seed) instead of null —
+                 the guid then survives a clear. Text / numeric keep the null seed. */
+              filter={isDateCondition && blankBackground ? filterFromProps : conditionFilter}
               onFilterUpdate={publishConditionFilter}
               dataSource={dataSource}
               parentFilters={parentFilters}
@@ -1233,14 +1348,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
         ) : isRangeMode ? (
           <div data-testid="filter-widget-date-range-picker">
             {rangeFilterUnsupported ? (
-              <div
-                data-testid="filter-widget-range-unsupported"
-                style={{
-                  fontSize: 13,
-                  lineHeight: '16px',
-                  color: 'var(--secondary-text-color, #9ea2ae)',
-                }}
-              >
+              <div data-testid="filter-widget-range-unsupported" style={UNSUPPORTED_NOTE_STYLE}>
                 {t('filterWidget.rangeNotRepresentable', 'This range cannot be edited here')}
               </div>
             ) : (
@@ -1256,6 +1364,45 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
                 controlStyle={controlStyleOptions}
               />
             )}
+          </div>
+        ) : isNumberRangeMode ? (
+          <div data-testid="filter-widget-number-range-picker">
+            {numberRangeFilterUnsupported ? (
+              <div data-testid="filter-widget-range-unsupported" style={UNSUPPORTED_NOTE_STYLE}>
+                {t('filterWidget.rangeNotRepresentable', 'This range cannot be edited here')}
+              </div>
+            ) : (
+              <NumberRangeFilter
+                attribute={attribute}
+                filter={rangeBlankBackground ? null : filterFromProps}
+                onFilterUpdate={updateFilterFromProps}
+                dataMin={numberStats?.min}
+                dataMax={numberStats?.max}
+                dataCount={numberStats?.count}
+                /* One line from a 400px widget up: inside the container's padding that is the
+                   content width the control gets. Stacked below it. */
+                stackBelow={layout.maxWidth - layout.padding.left - layout.padding.right}
+                width="100%"
+                size={tokens.size}
+                radius={tokens.cornerRadius}
+                controlStyle={controlStyleOptions}
+              />
+            )}
+          </div>
+        ) : isTimeFrameMode ? (
+          <div data-testid="filter-widget-time-frame">
+            <TimeFrameFilter
+              offered={timeFrameOffered}
+              selectedKey={timeFrameSelectedKey}
+              onPick={publishTimeFrameFilter}
+              earliestData={dayStats?.min ? new Date(dayStats.min) : undefined}
+              latestData={dayStats?.max ? new Date(dayStats.max) : undefined}
+              placeholder={placeholder}
+              width="100%"
+              size={tokens.size}
+              radius={tokens.cornerRadius}
+              controlStyle={controlStyleOptions}
+            />
           </div>
         ) : isDateAttribute ? (
           <div data-testid="filter-widget-date-select">

@@ -1,4 +1,4 @@
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getDataSourceName } from '@sisense/sdk-data';
@@ -12,7 +12,10 @@ import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-s
 import { withErrorBoundary } from '@/infra/decorators/component-decorators/with-error-boundary';
 import ErrorBoundaryBox from '@/infra/error-boundary/error-boundary-box';
 import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
-import type { CustomVisualizationProps } from '@/infra/plugins/widget-plugins/types';
+import type {
+  CustomVisualizationProps,
+  VisualizationStateUpdate,
+} from '@/infra/plugins/widget-plugins/types';
 import {
   DynamicSizeContainer,
   getWidgetDefaultSize,
@@ -66,13 +69,21 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
   }, [CustomVisualizationToRender]);
 
   const dataSource = widgetProps.dataSource ?? app?.defaultDataSource;
-  const { description, ...widgetPropsForVisualization } = widgetProps;
+  // The widget `onChange` carries change events; the plugin gets an adapter instead.
+  const { description, onChange, ...widgetPropsForVisualization } = widgetProps;
+  const handleVisualizationStateChange = useCallback(
+    (update: VisualizationStateUpdate) =>
+      onChange?.({ type: 'visualizationState/changed', payload: update }),
+    [onChange],
+  );
   const visualizationProps: CustomVisualizationProps<
     GenericDataOptions,
     CustomWidgetStyleOptions,
     AbstractDataPointWithEntries
   > = {
     ...widgetPropsForVisualization,
+    // Keep the documented contract: absent when no one listens (standalone use).
+    ...(onChange && { onChange: handleVisualizationStateChange }),
     dataSource,
     dataOptions: widgetProps.dataOptions,
     styleOptions: widgetProps.styleOptions,
@@ -111,6 +122,7 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
   const headerConfigWithTitle = useWidgetHeaderTitle(headerConfigWithExcelDownload, {
     title: widgetProps.title,
     styleOptions: widgetProps.styleOptions?.header,
+    onChange,
   });
   const headerConfigWithInfoButton = useWidgetHeaderInfoButton(headerConfigWithTitle, {
     styleOptions: widgetProps.styleOptions?.header,

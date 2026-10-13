@@ -4,9 +4,8 @@ import {
   type DataSourceDimensionsState,
   type DataSourceDimensionsSuccessState,
   type GetDataSourceDimensionsParams,
-  HookAdapter,
-  useGetDataSourceDimensionsInternal,
 } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useGetDataSourceDimensionsInternal } from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, toRefs, watch } from 'vue';
 
 import { createSisenseContextConnector } from '../helpers/context-connectors';

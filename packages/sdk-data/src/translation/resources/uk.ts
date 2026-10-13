@@ -29,6 +29,12 @@ export const translation: TranslationDictionary = {
       unsupportedConditionFilter:
         'Jaql для {{attributeName}} містить непідтримуваний condition фільтр: {{filter}}',
       invalidDateValue: 'Значення дати фільтра є недійсним Date',
+      dateMeasure: {
+        notADateMeasure:
+          "'{{measure}}' не є мірою дати, тому рівень '{{level}}', потрібний цьому фільтру, не має для нього сенсу. Використовуйте measureGreaterThan та його родину, щоб фільтрувати числову міру за значенням.",
+        levelDimensionMismatch:
+          "Рівень '{{level}}' належить до {{levelDimension}}, але '{{measure}}' повертає дату з {{measureDimension}}. Фільтр буде застосовано до {{measureDimension}} і поверне рядки, які виглядають правильно, але для іншого виміру. Передайте рівень із {{measureDimension}}.",
+      },
       unexpectedFilterRelationsModelNode: 'Неочікуваний вузол моделі зв’язків фільтрів: {{node}}',
     },
     unsupportedDimensionalElement: 'Непідтримуваний тип елемента',

@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.37.0",
+  "version": "2.38.0",
   "type": "module",
   "exports": {
     ".": {
@@ -44,6 +44,18 @@
       "import": "./dist/analytics-composer/node.js",
       "default": "./dist/analytics-composer/node.js"
     },
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "require": "./dist/internal.cjs",
+      "import": "./dist/internal.js",
+      "default": "./dist/internal.js"
+    },
+    "./sisense-internal": {
+      "types": "./dist/sisense-internal.d.ts",
+      "require": "./dist/sisense-internal.cjs",
+      "import": "./dist/sisense-internal.js",
+      "default": "./dist/sisense-internal.js"
+    },
     "./translations/*": {
       "types": "./dist/translations/*.d.ts",
       "require": "./dist/translations/*.cjs",
@@ -67,6 +79,12 @@
       ],
       "analytics-composer/node": [
         "./dist/analytics-composer/node.d.ts"
+      ],
+      "internal": [
+        "./dist/internal.d.ts"
+      ],
+      "sisense-internal": [
+        "./dist/sisense-internal.d.ts"
       ],
       "translations/*": [
         "./dist/translations/*.d.ts"

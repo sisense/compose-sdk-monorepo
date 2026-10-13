@@ -3,7 +3,7 @@ import {
   type CustomWidgetComponent as CustomWidgetComponentPreact,
   type GenericDataOptions,
 } from '@sisense/sdk-ui-preact';
-import { TabberButtonsWidget } from '@sisense/sdk-ui-preact';
+import { TabberButtonsWidget } from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject } from 'rxjs';
 
 import type { CustomWidgetComponentProps } from '../types';

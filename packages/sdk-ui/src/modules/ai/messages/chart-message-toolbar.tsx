@@ -5,9 +5,9 @@ import styled from '@emotion/styled';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-import { CompleteThemeSettingsInternal } from '@/index';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
+import type { CompleteThemeSettingsInternal } from '@/types';
 
 import { colors } from '../../../infra/themes/colors';
 import IconButton from '../common/icon-button';

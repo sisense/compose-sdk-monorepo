@@ -169,17 +169,13 @@ const Link = styled.button`
 /**
  * Lighter than a field's border: this rule only separates the two links from the rows
  * beneath them, and at full border strength it reads as a second edge inside the list.
- * Mixed down from the border rather than given a hex, so it stays a fixed fraction of
- * whatever the border becomes.
+ * The panel's own divider role — a tint of the primary ink — so it follows Filter Style
+ * like every other rule in the panel.
  */
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  background: color-mix(
-    in srgb,
-    ${fwVar('border', fwFallback.border)} 55%,
-    ${fwVar('panelBg', fwFallback.panelBg)}
-  );
+  background: ${fwVar('divider', fwFallback.divider)};
 `;
 
 /**

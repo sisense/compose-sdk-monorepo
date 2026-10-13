@@ -17,7 +17,12 @@ import {
   Measure,
   MembersFilterConfig,
 } from '../interfaces.js';
-import { isDimensionalBaseMeasure, isDimensionalCalculatedMeasure } from '../measures/measures.js';
+import {
+  getDateMeasureAttribute,
+  isDateMeasure,
+  isDimensionalBaseMeasure,
+  isDimensionalCalculatedMeasure,
+} from '../measures/measures.js';
 import { AnyObject, DateLevels, JSONObject, JSONValue, MetadataTypes } from '../types.js';
 import {
   getDefaultBaseFilterConfig,
@@ -101,6 +106,8 @@ export const FilterTypes = {
   measure: 'measure',
   ranking: 'ranking',
   measureRanking: 'measure-ranking',
+  dateMeasureMembers: 'date-measure-members',
+  dateMeasureRelative: 'date-measure-relative',
   text: 'text',
   empty: 'empty',
   numeric: 'numeric',
@@ -320,8 +327,9 @@ export class MembersFilter extends AbstractFilter {
     members?: string[],
     config?: MembersFilterConfig,
     composeCode?: string,
+    filterType: string = FilterTypes.members,
   ) {
-    super(attribute, FilterTypes.members, undefined, composeCode);
+    super(attribute, filterType, undefined, composeCode);
     this.members = members ?? [];
 
     if (this.members.filter((m) => m === null || m === undefined).length > 0) {
@@ -618,6 +626,63 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
 }
 
 /**
+ * Puts a measure's own jaql keys onto a filter item.
+ *
+ * Every filter that carries a measure copies the measure's jaql keys onto its item. Kept in one
+ * place so the copies cannot drift.
+ *
+ * @param item - Filter item to write onto.
+ * @param measure - Measure whose jaql keys are copied.
+ * @internal
+ */
+function applyMeasureJaqlKeys(item: AnyObject, measure: Measure): void {
+  if (!isDimensionalBaseMeasure(measure) && !isDimensionalCalculatedMeasure(measure)) {
+    return;
+  }
+
+  Object.entries(measure.jaql().jaql).forEach(([key, value]) => {
+    item.jaql[key] = value;
+  });
+}
+
+/**
+ * Puts the level a measure filter matches at back onto the item.
+ *
+ * The measure keys carry its own operand's level, `days` for a max over days, so the level the
+ * caller asked for has to be written after them.
+ *
+ * @param item - Filter item to write onto.
+ * @param level - Level the filter matches at, from the level attribute.
+ * @param dateTimeLevel - Datetime level the filter matches at, when the granularity uses one.
+ * @param bucket - Bucket the filter matches at, when the granularity uses one.
+ * @internal
+ */
+function applyFilterLevel(
+  item: AnyObject,
+  level?: string,
+  dateTimeLevel?: string,
+  bucket?: string,
+): void {
+  // The measure's level, dateTimeLevel and bucket are dropped and the filter's written back: a
+  // stored sub-day measure carries a bucket that would group at a granularity nobody asked for
+  delete item.jaql.level;
+  delete item.jaql.dateTimeLevel;
+  delete item.jaql.bucket;
+
+  if (level !== undefined) {
+    item.jaql.level = level;
+  }
+
+  if (dateTimeLevel !== undefined) {
+    item.jaql.dateTimeLevel = dateTimeLevel;
+  }
+
+  if (bucket !== undefined) {
+    item.jaql.bucket = bucket;
+  }
+}
+
+/**
  * @internal
  */
 export class MeasureFilter extends DoubleOperatorFilter<number | string | Date> {
@@ -687,11 +752,7 @@ export class MeasureFilter extends DoubleOperatorFilter<number | string | Date> 
 
     const result = super.jaql(nested);
 
-    if (isDimensionalBaseMeasure(this.measure) || isDimensionalCalculatedMeasure(this.measure)) {
-      Object.entries(this.measure.jaql().jaql).forEach(([key, value]) => {
-        result.jaql[key] = value;
-      });
-    }
+    applyMeasureJaqlKeys(result, this.measure);
 
     return result;
   }
@@ -826,11 +887,7 @@ export class MeasureRankingFilter extends AbstractFilter {
 
     const result = super.jaql(nested);
 
-    if (isDimensionalBaseMeasure(this.measure) || isDimensionalCalculatedMeasure(this.measure)) {
-      Object.entries(this.measure.jaql().jaql).forEach(([key, value]) => {
-        result.jaql[key] = value;
-      });
-    }
+    applyMeasureJaqlKeys(result, this.measure);
 
     // Add type: 'measure' for measure-based filters
     result.jaql.type = 'measure';
@@ -1101,8 +1158,9 @@ export class RelativeDateFilter extends AbstractFilter {
     anchor?: Date | string,
     config?: BaseFilterConfig,
     composeCode?: string,
+    filterType: string = FilterTypes.relativeDate,
   ) {
-    super(levelAttribute, FilterTypes.relativeDate, config, composeCode);
+    super(levelAttribute, filterType, config, composeCode);
 
     if (!operator) {
       operator = DateOperators.Next;
@@ -1175,6 +1233,252 @@ export class RelativeDateFilter extends AbstractFilter {
   }
 }
 
+/* A member is matched against what the measure answers with, a datetime, so a `Date` goes on the
+   wire exactly as a measure filter bound does: local calendar, no `Z`, no day shift. */
+function toMeasureMember(member: string | Date): string {
+  return member instanceof Date ? toLocalIsoDateTime(member) : member;
+}
+
+/* A measure period is anchored on a calendar day, so the anchor is normalised before the base class
+   stores it: `toISOString` would both add a time and shift the day into UTC. */
+function toMeasureAnchor(anchor?: Date | string): string | undefined {
+  if (anchor === undefined) {
+    return undefined;
+  }
+
+  return anchor instanceof Date ? toLocalIsoDateTime(anchor).slice(0, 10) : anchor;
+}
+
+/**
+ * Builds the item for `DateMeasureMembersFilter` and `DateMeasureRelativeFilter`: the measure keys
+ * plus the filter's own level.
+ *
+ * @param item - Item the base filter produced.
+ * @param measure - Measure this filter carries.
+ * @returns The same item, carrying the measure keys and the filter's own level.
+ * @internal
+ */
+function withMeasureOnFilterItem(item: AnyObject, measure: Measure): AnyObject {
+  // `jaql(true)` returns the inner object with no `jaql` wrapper. Re-wrap it so the writes below
+  // use one path, then hand back what the caller passed.
+  const wrapper = item.jaql ? item : { jaql: item };
+  const { level, dateTimeLevel, bucket } = wrapper.jaql;
+
+  applyMeasureJaqlKeys(wrapper, measure);
+  applyFilterLevel(wrapper, level, dateTimeLevel, bucket);
+
+  return item;
+}
+
+/**
+ * Refuses a measure that is not a date measure, and a level from a different dimension than the
+ * measure's.
+ *
+ * @param measure - Measure this filter carries.
+ * @param levelAttribute - Level the caller asked the filter to match at.
+ * @throws TranslatableError `errors.filter.dateMeasure.notADateMeasure` when the measure is not a
+ * date measure.
+ * @throws TranslatableError `errors.filter.dateMeasure.levelDimensionMismatch` when the level
+ * belongs to a different dimension than the measure.
+ * @internal
+ */
+function guardMeasureFilterLevel(measure: Measure, levelAttribute: LevelAttribute): void {
+  if (!isDateMeasure(measure)) {
+    throw new TranslatableError('errors.filter.dateMeasure.notADateMeasure', {
+      measure: measure.name,
+      level: levelAttribute.granularity,
+    });
+  }
+
+  const measureDimension = getDateMeasureAttribute(measure)?.expression;
+  const levelDimension = levelAttribute.expression;
+
+  // skipped, not refused, when either side is unresolvable, so a custom dimension cannot start
+  // throwing; the measure side is unreachable today because isDateMeasure already resolved it
+  if (!measureDimension || !levelDimension || measureDimension === levelDimension) {
+    return;
+  }
+
+  throw new TranslatableError('errors.filter.dateMeasure.levelDimensionMismatch', {
+    measure: measure.name,
+    level: levelAttribute.granularity,
+    levelDimension,
+    measureDimension,
+  });
+}
+
+/**
+ * The shape `measureFilterJaql` needs, satisfied by `DateMeasureMembersFilter` and
+ * `DateMeasureRelativeFilter`.
+ */
+type MeasureBearingFilter = { config: CompleteBaseFilterConfig; measure: Measure };
+
+/**
+ * Builds the jaql both measure filters answer with.
+ *
+ * @param filter - Filter being serialized.
+ * @param baseItem - Returns the item the dimension class it extends would produce; a callback
+ * because only the subclass can call its own `super`.
+ * @param nested - Whether the item is nested inside another filter.
+ * @returns The scope item, or the empty one when the filter is disabled.
+ * @internal
+ */
+function measureFilterJaql(
+  filter: MeasureBearingFilter,
+  baseItem: () => AnyObject,
+  nested?: boolean,
+): AnyObject {
+  return filter.config.disabled
+    ? AbstractFilter.disabledJaql(nested)
+    : withMeasureOnFilterItem(baseItem(), filter.measure);
+}
+
+/**
+ * A members filter on the values a measure answers with, rather than on a dimension's own values.
+ *
+ * @internal
+ */
+export class DateMeasureMembersFilter extends MembersFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DateMeasureMembersFilter';
+
+  readonly measure: Measure;
+
+  constructor(
+    measure: Measure,
+    levelAttribute: LevelAttribute,
+    members?: (string | Date)[],
+    config?: MembersFilterConfig,
+    composeCode?: string,
+    skipGuards = false,
+  ) {
+    super(
+      levelAttribute,
+      members?.map(toMeasureMember),
+      config,
+      composeCode,
+      FilterTypes.dateMeasureMembers,
+    );
+
+    if (!skipGuards) {
+      guardMeasureFilterLevel(measure, levelAttribute);
+    }
+
+    this.measure = measure;
+  }
+
+  /**
+   * Level the members are matched at, which is not the measure's own operand level.
+   *
+   * @returns The level attribute the filter matches at.
+   */
+  get level(): LevelAttribute {
+    return this.attribute as LevelAttribute;
+  }
+
+  /**
+   * Gets the element's ID.
+   *
+   * @returns The id, prefixed with the measure so two filters on one level stay distinct.
+   */
+  get id(): string {
+    return `${this.measure.id}_${super.id}`;
+  }
+
+  /**
+   * Gets a serializable representation of the element.
+   *
+   * @returns The serialized filter, carrying the measure it holds.
+   */
+  serialize(): JSONObject {
+    return { ...super.serialize(), measure: this.measure.serialize() };
+  }
+
+  /**
+   * Gets JAQL representing this Filter instance.
+   *
+   * @param nested - Whether the item is nested inside another filter.
+   * @returns The scope item this filter produces.
+   */
+  jaql(nested?: boolean | undefined) {
+    return measureFilterJaql(this, () => super.jaql(nested), nested);
+  }
+}
+
+/**
+ * A relative period filter on the values a measure answers with, rather than on a dimension's own
+ * values.
+ *
+ * @internal
+ */
+export class DateMeasureRelativeFilter extends RelativeDateFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DateMeasureRelativeFilter';
+
+  readonly measure: Measure;
+
+  constructor(
+    measure: Measure,
+    levelAttribute: LevelAttribute,
+    offset: number,
+    count: number,
+    operator?: typeof DateOperators.Last | typeof DateOperators.Next,
+    anchor?: Date | string,
+    config?: BaseFilterConfig,
+    composeCode?: string,
+    skipGuards = false,
+  ) {
+    super(
+      levelAttribute,
+      offset,
+      count,
+      operator,
+      toMeasureAnchor(anchor),
+      config,
+      composeCode,
+      FilterTypes.dateMeasureRelative,
+    );
+
+    if (!skipGuards) {
+      guardMeasureFilterLevel(measure, levelAttribute);
+    }
+
+    this.measure = measure;
+  }
+
+  /**
+   * Gets the element's ID.
+   *
+   * @returns The id, prefixed with the measure so two filters on one level stay distinct.
+   */
+  get id(): string {
+    return `${this.measure.id}_${super.id}`;
+  }
+
+  /**
+   * Gets a serializable representation of the element.
+   *
+   * @returns The serialized filter, carrying the measure it holds.
+   */
+  serialize(): JSONObject {
+    return { ...super.serialize(), measure: this.measure.serialize() };
+  }
+
+  /**
+   * Gets JAQL representing this Filter instance.
+   *
+   * @param nested - Whether the item is nested inside another filter.
+   * @returns The scope item this filter produces.
+   */
+  jaql(nested?: boolean | undefined) {
+    return measureFilterJaql(this, () => super.jaql(nested), nested);
+  }
+}
+
 /**
  * @internal
  */
@@ -1194,7 +1498,9 @@ export class CustomFilter extends AbstractFilter {
   }
 
   /**
-   * gets the element's ID
+   * Gets the element's ID.
+   *
+   * @returns The id of this filter.
    */
   get id(): string {
     return `custom_${this.attribute.id}_${this.config.guid}`;
@@ -1247,6 +1553,32 @@ export function isMembersFilter(filter: Filter & AnyObject): filter is MembersFi
  */
 export function isNumericFilter(filter: Filter & AnyObject): filter is NumericFilter {
   return filter && filter.__serializable === 'NumericFilter';
+}
+
+/**
+ * Checks if a filter is a DateMeasureMembersFilter.
+ *
+ * @param filter - The filter to check.
+ * @returns Whether the filter is a DateMeasureMembersFilter.
+ * @internal
+ */
+export function isDateMeasureMembersFilter(
+  filter: Filter & AnyObject,
+): filter is DateMeasureMembersFilter {
+  return filter && filter.__serializable === 'DateMeasureMembersFilter';
+}
+
+/**
+ * Checks if a filter is a DateMeasureRelativeFilter.
+ *
+ * @param filter - The filter to check.
+ * @returns Whether the filter is a DateMeasureRelativeFilter.
+ * @internal
+ */
+export function isDateMeasureRelativeFilter(
+  filter: Filter & AnyObject,
+): filter is DateMeasureRelativeFilter {
+  return filter && filter.__serializable === 'DateMeasureRelativeFilter';
 }
 
 /**
@@ -1346,6 +1678,27 @@ export function isDateRangeFilter(filter: Filter & AnyObject): filter is DateRan
   return filter && filter.__serializable === 'DateRangeFilter';
 }
 
+/* A saved config keeps its backgroundFilter as plain JSON, and `jaql()` calls `filterJaql()` on it,
+   so it has to be a Filter again before the rebuilt filter is ever used. `createFilter` reads no
+   config for a members filter, so the saved one is laid back on, or an exclude would turn include.
+   That saved config is JSON too, so a background filter of its own is rebuilt the same way. */
+function withRebuiltBackgroundFilter(config: AnyObject | undefined): AnyObject | undefined {
+  if (!config?.backgroundFilter) {
+    return config;
+  }
+
+  const saved = config.backgroundFilter;
+  const backgroundFilter = createFilter(saved);
+  if (saved.config) {
+    backgroundFilter.config = {
+      ...backgroundFilter.config,
+      ...withRebuiltBackgroundFilter(saved.config),
+    };
+  }
+
+  return { ...config, backgroundFilter };
+}
+
 /**
  * @param json - Filter JSON representation
  * @internal
@@ -1411,6 +1764,29 @@ export function createFilter(json: any): Filter {
         json.count,
         json.operator,
         json.anchor,
+      );
+
+    case FilterTypes.dateMeasureMembers:
+      return new DateMeasureMembersFilter(
+        create(json.measure) as Measure,
+        create(json.attribute) as LevelAttribute,
+        json.members,
+        withRebuiltBackgroundFilter(json.config),
+        undefined,
+        true,
+      );
+
+    case FilterTypes.dateMeasureRelative:
+      return new DateMeasureRelativeFilter(
+        create(json.measure) as Measure,
+        create(json.attribute) as LevelAttribute,
+        json.offset,
+        json.count,
+        json.operator,
+        json.anchor,
+        json.config,
+        undefined,
+        true,
       );
 
     case FilterTypes.dateRange:

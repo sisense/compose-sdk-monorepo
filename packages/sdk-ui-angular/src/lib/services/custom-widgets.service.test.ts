@@ -1,11 +1,11 @@
 /** @vitest-environment jsdom */
 import { Type } from '@angular/core';
-import { createElement } from '@sisense/sdk-ui-preact';
 import type {
   CustomWidgetComponent as CustomWidgetComponentPreact,
   CustomWidgetComponentProps,
-  ExternalComponentAdapterElementProps,
 } from '@sisense/sdk-ui-preact';
+import { createElement } from '@sisense/sdk-ui-preact/internal';
+import type { ExternalComponentAdapterElementProps } from '@sisense/sdk-ui-preact/internal';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { AngularComponentAdapter } from './angular-component-adapter';
@@ -14,8 +14,8 @@ import { CustomWidgetsService } from './custom-widgets.service';
 import { DynamicRenderer } from './dynamic-renderer.service';
 
 // Mock the Preact dependencies
-vi.mock('@sisense/sdk-ui-preact', async () => {
-  const actual = await vi.importActual('@sisense/sdk-ui-preact');
+vi.mock('@sisense/sdk-ui-preact/internal', async () => {
+  const actual = await vi.importActual('@sisense/sdk-ui-preact/internal');
   return {
     ...actual,
     createElement: vi.fn(),

@@ -1,13 +1,10 @@
+import type { Attribute, Filter, JaqlDataSourceForDto, Measure } from '@sisense/sdk-data';
 import {
-  Attribute,
   convertDataSource,
   convertJaqlDataSourceForDto,
   createAttribute,
   DateLevels,
   DimensionalLevelAttribute,
-  Filter,
-  JaqlDataSourceForDto,
-  Measure,
   MetadataTypes,
 } from '@sisense/sdk-data';
 
@@ -16,7 +13,10 @@ import type {
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types.js';
-import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/domains/query-execution/index.js';
+import type {
+  ExecutePivotQueryParams,
+  ExecuteQueryParams,
+} from '@/domains/query-execution/index.js';
 import { getPivotQueryOptions } from '@/domains/visualizations/components/pivot-table/hooks/use-get-pivot-table-query.js';
 import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data.js';
 import {
@@ -29,7 +29,7 @@ import {
   translatePivotTableDataOptions,
   translateTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
-import {
+import type {
   AreamapChartDataOptions,
   BoxplotChartDataOptions,
   CalendarHeatmapChartDataOptions,
@@ -45,17 +45,20 @@ import {
   TableDataOptions,
   TableDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
-import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
-import { CommonWidgetProps } from '@/domains/widgets/components/common-widget/types';
-import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
+import type { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import type { CommonWidgetProps } from '@/domains/widgets/components/common-widget/types';
+import type { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 import { extractFilterWidgetControlStyle } from '@/domains/widgets/components/filter-widget/filter-widget-design';
-import { FilterWidgetFilterType } from '@/domains/widgets/components/filter-widget/types';
-import {
+import type {
+  FilterWidgetFilterType,
+  FilterWidgetProps,
+} from '@/domains/widgets/components/filter-widget/types';
+import type {
   NarrativeWidgetProps,
   NarrativeWidgetStyleOptions,
 } from '@/domains/widgets/components/narrative-widget/types';
-import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
-import { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
+import type { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
+import type { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
 import {
   attachDataSourceToPanels,
   createDataOptionsFromPanels,
@@ -94,7 +97,7 @@ import {
   extractWidgetNarrativeConfigFromDto,
   mergeWidgetStyleWithNarrativeForDto,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/widget-narrative-style.js';
-import {
+import type {
   FilterWidgetDtoStyle,
   FusionWidgetType,
   IndicatorWidgetStyle,
@@ -111,6 +114,7 @@ import {
   isChartWidgetProps,
   isCustomWidget,
   isCustomWidgetProps,
+  isFilterWidgetProps,
   isNarrativeWidget,
   isNarrativeWidgetProps,
   isPivotTableWidgetProps,
@@ -122,12 +126,12 @@ import {
   isTextWidget,
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils.js';
-import { WidgetProps } from '@/domains/widgets/components/widget/types';
-import { AppSettings } from '@/infra/app/settings/settings.js';
+import type { WidgetProps } from '@/domains/widgets/components/widget/types';
+import type { AppSettings } from '@/infra/app/settings/settings.js';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
 import { TranslatableError } from '@/infra/translation/translatable-error';
-import { ChartProps, PivotTableProps, TableProps } from '@/props';
-import {
+import type { ChartProps, PivotTableProps, TableProps } from '@/props';
+import type {
   AreamapStyleOptions,
   AreaStyleOptions,
   BoxplotStyleOptions,
@@ -158,7 +162,7 @@ import {
   WidgetStyleOptions,
 } from '@/types.js';
 
-import { WidgetDataOptions, WidgetModel } from '../widget-model';
+import type { WidgetDataOptions, WidgetModel } from '../widget-model';
 import { processTabberWidget } from './process-tabber-widget';
 import {
   isSerializableKpiTarget,
@@ -169,6 +173,7 @@ import {
   toCalendarHeatmapPanels,
   toColumnPanels,
   toCustomWidgetPanels,
+  toFilterWidgetPanels,
   toFunnelPanels,
   toIndicatorPanels,
   toKpiPanels,
@@ -216,8 +221,13 @@ export function toExecuteQueryParams(widgetModel: WidgetModel): ExecuteQueryPara
     // monotonically-sorted-by-date query.
     ungroup = !hasAdvancedAnalyticsMeasure(tableMeasures);
   } else {
+    // The else branch is entered only when isTableWidgetModel(widgetModel) is false, and
+    // every non-table WidgetModel carries a chartType — vite's stricter type-check refuses
+    // to narrow through the isTableWidgetModel guard, so the non-null assertion has to
+    // stay explicit (the eslint auto-fix would otherwise remove it and the build fails).
     const { attributes: chartAttributes, measures: chartMeasures } = getTranslatedDataOptions(
       widgetModel.dataOptions as ChartDataOptions,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       widgetModel.chartType!,
     );
     dimensions = chartAttributes;
@@ -399,16 +409,16 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
 }
 
 /**
-   * Translates a {@link WidgetModel} to the props for rendering a pivot table widget.
-   *
-   * @example
-   * ```tsx
-   * <PivotTableWidget {...widgetModelTranslator.toPivotTableWidgetProps(widgetModel)} />
-   * ```
+ * Translates a {@link WidgetModel} to the props for rendering a pivot table widget.
+ *
+ * @example
+ * ```tsx
+ * <PivotTableWidget {...widgetModelTranslator.toPivotTableWidgetProps(widgetModel)} />
+ * ```
 
-   * Note: this method is not supported for chart or table widgets.
-   * Use {@link toChartWidgetProps} instead for getting props for the <ChartWidget> component.
-   */
+ * Note: this method is not supported for chart or table widgets.
+ * Use {@link toChartWidgetProps} instead for getting props for the <ChartWidget> component.
+ */
 export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWidgetProps {
   if (!isPivotWidget(widgetModel.widgetType)) {
     throw new TranslatableError('errors.widgetModel.onlyPivotWidgetSupported', {
@@ -452,9 +462,9 @@ export function toTextWidgetProps(widgetModel: WidgetModel): TextWidgetProps {
 /**
  * Translates a {@link WidgetModel} to the props for rendering the dashboard narrative widget.
  *
- * @param widgetModel - Widget model of a `narrative` widget
- * @returns Dashboard narrative widget props
- * @throws If the widget model is not a `narrative` widget
+ * @param widgetModel - Widget model of a `narrative` widget.
+ * @returns Dashboard narrative widget props.
+ * @throws If the widget model is not a `narrative` widget.
  * @internal
  */
 export function toNarrativeWidgetProps(widgetModel: WidgetModel): NarrativeWidgetProps {
@@ -528,14 +538,7 @@ function normalizeFilterWidgetType(
   if (raw === 'list') return 'members';
   // Handle subtype format: 'filter/members' → 'members'
   const value = raw?.startsWith('filter/') ? raw.slice('filter/'.length) : raw;
-  const known: FilterWidgetFilterType[] = [
-    'members',
-    'calendar',
-    'range',
-    'period',
-    'numericRange',
-    'condition',
-  ];
+  const known: FilterWidgetFilterType[] = ['members', 'calendar', 'range', 'period', 'condition'];
   const isKnownFilterType = (v: string | undefined): v is FilterWidgetFilterType =>
     v !== undefined && (known as string[]).includes(v);
   return isKnownFilterType(value) ? value : 'members';
@@ -589,11 +592,23 @@ function extractFilterWidgetData(
     : createAttribute({ name: '', expression: '', type: MetadataTypes.TextAttribute });
 
   const normalizedFilterType = normalizeFilterWidgetType(style?.filterType ?? style?.subtype);
-  // 'range' is datetime-only, same as 'calendar' — a non-datetime attribute paired with a
-  // stale/API-provided 'range' DTO falls back to 'members', the same way the legacy 'list'
-  // value normalises regardless of the string alone.
+  // 'range' fits a datetime attribute (two date fields) or a numeric one (Minimum / Maximum
+  // and a slider) — never text. A text attribute paired with a stale/API-provided
+  // 'range' DTO falls back to 'members', the same way the legacy 'list' value normalises
+  // regardless of the string alone.
+  const isNumeric = !isDatetime && jaql?.datatype === 'numeric';
   const filterType: FilterWidgetFilterType =
-    normalizedFilterType === 'range' && !isDatetime ? 'members' : normalizedFilterType;
+    normalizedFilterType === 'range' && !isDatetime && !isNumeric
+      ? 'members'
+      : normalizedFilterType;
+
+  // Time Frame curated set — carry the array through only when the designer has flipped
+  // `customizeTimeFrames` on. Off (or missing) leaves the widget on sdk-ui's default 11
+  // frames via the `readTimeFramesInput` guard — same semantics as omitting the prop.
+  const timeFrames =
+    style?.customizeTimeFrames === true && Array.isArray(style?.timeFrames)
+      ? [...style.timeFrames]
+      : undefined;
 
   return {
     attribute,
@@ -602,6 +617,50 @@ function extractFilterWidgetData(
     isMultiselect: style?.allowMultiselect !== false && style?.multiSelection !== false,
     // `style.filterDesign` is the host's persisted key for the control's styling.
     controlStyleOptions: extractFilterWidgetControlStyle(style?.filterDesign),
+    ...(timeFrames ? { timeFrames } : {}),
+  };
+}
+
+/**
+ * Returns the typed filter widget data of a filter widget model.
+ *
+ * `filterWidgetData` is always set when the model is built from a DTO
+ * ({@link extractFilterWidgetData}) or from props ({@link fromFilterWidgetProps}); the fallback
+ * handles programmatically-constructed models that carry neither.
+ *
+ * @param widgetModel - A filter widget model.
+ * @returns The filter widget data, or the read-side defaults.
+ */
+function getFilterWidgetData(
+  widgetModel: WidgetModel,
+): NonNullable<WidgetModel['filterWidgetData']> {
+  return (
+    widgetModel.filterWidgetData ?? {
+      attribute: createAttribute({ name: '', expression: '', type: 'text' }),
+      filterType: 'members',
+      isMultiselect: true,
+    }
+  );
+}
+
+/**
+ * Translates filter widget data to the filter widget DTO style — the inverse of the style part
+ * of {@link extractFilterWidgetData}.
+ *
+ * Writes the canonical `filterType`, the current `multiSelection` flag, the control styling under
+ * `filterDesign`, and the Time Frame set (with `customizeTimeFrames` on) only when one is curated.
+ *
+ * @param data - The filter widget data of the model.
+ * @returns The filter widget DTO style.
+ */
+function toFilterWidgetDtoStyle(
+  data: NonNullable<WidgetModel['filterWidgetData']>,
+): FilterWidgetDtoStyle {
+  return {
+    filterType: data.filterType,
+    multiSelection: data.isMultiselect,
+    ...(data.controlStyleOptions ? { filterDesign: { ...data.controlStyleOptions } } : {}),
+    ...(data.timeFrames ? { customizeTimeFrames: true, timeFrames: [...data.timeFrames] } : {}),
   };
 }
 
@@ -610,13 +669,7 @@ function extractFilterWidgetData(
  * Reads from the typed filterWidgetData extracted during model building.
  */
 function toFilterWidgetProps(widgetModel: WidgetModel): CommonWidgetProps {
-  // filterWidgetData is always set by extractFilterWidgetData when building from a DTO.
-  // The fallback here handles programmatically-constructed WidgetModels (no DTO).
-  const data = widgetModel.filterWidgetData ?? {
-    attribute: createAttribute({ name: '', expression: '', type: 'text' }),
-    filterType: 'members' as FilterWidgetFilterType,
-    isMultiselect: true,
-  };
+  const data = getFilterWidgetData(widgetModel);
 
   // Cast rationale: this object is a FilterWidgetProps but the function's declared
   // return is the wider CommonWidgetProps union; TS cannot infer the discriminated
@@ -634,6 +687,10 @@ function toFilterWidgetProps(widgetModel: WidgetModel): CommonWidgetProps {
     // The same filters again, as the restriction the published filter has to encode. Kept
     // separate because only `parentFilters` goes on to collect the dashboard's own filters.
     dimensionFilters: widgetModel.filters,
+    // Time Frame's curated set (only present when the designer flipped
+    // `style.customizeTimeFrames` on) — omitted otherwise so the widget falls back to
+    // sdk-ui's default 11 frames via the readTimeFramesInput guard.
+    ...(data.timeFrames ? { timeFrames: data.timeFrames } : {}),
     // Carry the widget-design container style (space around, corner radius, shadow,
     // border, background, header) so the CSDK-rendered FilterWidget's WidgetContainer
     // applies the same Widget Style as every other widget type. (`styleOptions` is
@@ -661,7 +718,7 @@ export function toWidgetProps(widgetModel: WidgetModel): WidgetProps {
  * Returns Jump to Dashboard configuration for a {@link WidgetModel} that was built from
  * Fusion via {@link fromWidgetDto}.
  *
- * @param widgetModel - The {@link WidgetModel} built from Fusion via {@link fromWidgetDto};
+ * @param widgetModel - The {@link WidgetModel} built from Fusion via {@link fromWidgetDto};.
  *
  * @returns `JumpToDashboardConfig`, `JumpToDashboardConfigForPivot`, or `null` when the model is not
  * Fusion-sourced, or the widget has no versioned JTD.
@@ -703,7 +760,7 @@ const DEFAULT_WIDGET_MODEL: WidgetModel = {
 };
 
 /**
- * Widget category discriminated union for type-safe processing
+ * Widget category discriminated union for type-safe processing.
  */
 type WidgetCategory =
   | { type: 'unsupported-custom'; originalType: string }
@@ -714,8 +771,8 @@ type WidgetCategory =
  * Determines the category of a widget based on its type.
  * Pure function that classifies widgets into three categories.
  *
- * @param fusionWidgetType - The fusion widget type string from DTO
- * @returns The widget category
+ * @param fusionWidgetType - The fusion widget type string from DTO.
+ * @returns The widget category.
  */
 const categorizeWidget = (fusionWidgetType: string): WidgetCategory => {
   // Check for officially supported custom widgets (e.g., 'WidgetsTabber' from DTO)
@@ -734,8 +791,8 @@ const categorizeWidget = (fusionWidgetType: string): WidgetCategory => {
  * Extracts variant colors from theme settings.
  * Pure function with default fallback that filters out null values.
  *
- * @param themeSettings - Optional theme settings
- * @returns Array of variant colors as strings (nulls filtered out)
+ * @param themeSettings - Optional theme settings.
+ * @returns Array of variant colors as strings (nulls filtered out).
  */
 const getVariantColors = (themeSettings?: CompleteThemeSettingsInternal): string[] => {
   const colors = themeSettings?.palette.variantColors ?? [];
@@ -746,8 +803,8 @@ const getVariantColors = (themeSettings?: CompleteThemeSettingsInternal): string
  * Processes unsupported custom widgets.
  * Pure function that creates data and style options for unknown widget types.
  *
- * @param params - Parameters for processing unsupported custom widget
- * @returns Object containing fusion type, custom type, data options, and style options
+ * @param params - Parameters for processing unsupported custom widget.
+ * @returns Object containing fusion type, custom type, data options, and style options.
  */
 const processUnsupportedCustomWidget = (params: {
   originalType: string;
@@ -781,8 +838,8 @@ const processUnsupportedCustomWidget = (params: {
  * These widgets use the custom widget infrastructure but have official support.
  * Maps from DTO widget type (e.g., 'WidgetsTabber') to CSDK widget type (e.g., 'tabber-buttons').
  *
- * @param params - Parameters for processing official custom widget
- * @returns Object containing fusion type, custom type, data options, and style options
+ * @param params - Parameters for processing official custom widget.
+ * @returns Object containing fusion type, custom type, data options, and style options.
  */
 const processOfficialCustomWidget = (params: {
   originalType: string;
@@ -809,8 +866,8 @@ const processOfficialCustomWidget = (params: {
  * Processes standard supported widgets.
  * Pure function that extracts data and style options for standard widgets.
  *
- * @param params - Parameters for processing standard widget
- * @returns Object containing fusion type, custom type, data options, and style options
+ * @param params - Parameters for processing standard widget.
+ * @returns Object containing fusion type, custom type, data options, and style options.
  */
 const processStandardWidget = (params: {
   fusionType: FusionWidgetType;
@@ -853,8 +910,8 @@ const processStandardWidget = (params: {
  * Applies widget design to style options based on feature flag.
  * Pure function that conditionally merges widget design.
  *
- * @param params - Parameters for applying widget design
- * @returns Updated style options
+ * @param params - Parameters for applying widget design.
+ * @returns Updated style options.
  */
 const applyWidgetDesign = (params: {
   styleOptions:
@@ -875,8 +932,8 @@ const applyWidgetDesign = (params: {
  * Processes widget based on its category.
  * Pure function that delegates to category-specific processors.
  *
- * @param params - Parameters for processing widget
- * @returns Processed widget data
+ * @param params - Parameters for processing widget.
+ * @returns Processed widget data.
  */
 const processWidgetByCategory = (params: {
   category: WidgetCategory;
@@ -948,8 +1005,8 @@ const processWidgetByCategory = (params: {
  * Builds the final widget model from processed data.
  * Pure function that constructs the widget model.
  *
- * @param params - Parameters for building widget model
- * @returns Complete widget model
+ * @param params - Parameters for building widget model.
+ * @returns Complete widget model.
  */
 const buildWidgetModel = (params: {
   widgetDto: WidgetDto;
@@ -1034,10 +1091,10 @@ const buildWidgetModel = (params: {
 /**
  * Creates a {@link WidgetModel} from a widget DTO.
  *
- * @param widgetDto - The widget DTO to be converted to a widget model
- * @param themeSettings - The theme settings to be used for the widget model
- * @param appSettings - The application settings to be used for the widget model
- * @returns The widget model
+ * @param widgetDto - The widget DTO to be converted to a widget model.
+ * @param themeSettings - The theme settings to be used for the widget model.
+ * @param appSettings - The application settings to be used for the widget model.
+ * @returns The widget model.
  * @internal
  */
 export function fromWidgetDto(
@@ -1069,8 +1126,8 @@ export function fromWidgetDto(
 /**
  * Creates a {@link WidgetModel} from a {@link ChartWidgetProps}.
  *
- * @param chartWidgetProps - The ChartWidgetProps to be converted to a widget model
- * @returns WidgetModel
+ * @param chartWidgetProps - The ChartWidgetProps to be converted to a widget model.
+ * @returns WidgetModel.
  * @internal
  */
 export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): WidgetModel {
@@ -1087,8 +1144,8 @@ export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): Widget
 /**
  * Creates a {@link WidgetModel} from a {@link PivotTableWidgetProps}.
  *
- * @param pivotTableWidgetProps - The PivotTableWidgetProps to be converted to a widget model
- * @returns WidgetModel
+ * @param pivotTableWidgetProps - The PivotTableWidgetProps to be converted to a widget model.
+ * @returns WidgetModel.
  * @internal
  */
 export function fromPivotTableWidgetProps(
@@ -1107,8 +1164,8 @@ export function fromPivotTableWidgetProps(
 /**
  * Creates a {@link WidgetModel} from a {@link TextWidgetProps}.
  *
- * @param textWidgetProps - The TextWidgetProps to be converted to a widget model
- * @returns WidgetModel
+ * @param textWidgetProps - The TextWidgetProps to be converted to a widget model.
+ * @returns WidgetModel.
  * @internal
  */
 export function fromTextWidgetProps(textWidgetProps: TextWidgetProps): WidgetModel {
@@ -1124,8 +1181,8 @@ export function fromTextWidgetProps(textWidgetProps: TextWidgetProps): WidgetMod
 /**
  * Creates a {@link WidgetModel} from a {@link NarrativeWidgetProps}.
  *
- * @param narrativeWidgetProps - The NarrativeWidgetProps to be converted to a widget model
- * @returns WidgetModel
+ * @param narrativeWidgetProps - The NarrativeWidgetProps to be converted to a widget model.
+ * @returns WidgetModel.
  * @internal
  */
 export function fromNarrativeWidgetProps(narrativeWidgetProps: NarrativeWidgetProps): WidgetModel {
@@ -1138,10 +1195,44 @@ export function fromNarrativeWidgetProps(narrativeWidgetProps: NarrativeWidgetPr
 }
 
 /**
+ * Creates a {@link WidgetModel} from a {@link FilterWidgetProps} — the inverse of
+ * {@link toFilterWidgetProps}.
+ *
+ * The widget's own dimension filters become the model `filters` (the DTO `filters` panel);
+ * `parentFilters` is used only when `dimensionFilters` is not set. The control styling moves from
+ * `styleOptions.control` to `filterWidgetData`, leaving the container style in `styleOptions`.
+ * Runtime-only props (`filter`, `onChange`, `excludedDateLevels`, …) are not part of the model.
+ *
+ * @param filterWidgetProps - The FilterWidgetProps to be converted to a widget model.
+ * @returns WidgetModel.
+ * @internal
+ */
+export function fromFilterWidgetProps(filterWidgetProps: FilterWidgetProps): WidgetModel {
+  const { control, ...containerStyleOptions } = filterWidgetProps.styleOptions ?? {};
+  const ownFilters = filterWidgetProps.dimensionFilters ?? filterWidgetProps.parentFilters ?? [];
+
+  return {
+    ...DEFAULT_WIDGET_MODEL,
+    title: filterWidgetProps.title ?? '',
+    dataSource: filterWidgetProps.dataSource ?? DEFAULT_WIDGET_MODEL.dataSource,
+    filters: [...ownFilters],
+    styleOptions: containerStyleOptions,
+    widgetType: 'filter',
+    filterWidgetData: {
+      attribute: filterWidgetProps.attribute,
+      filterType: filterWidgetProps.filterType ?? 'members',
+      isMultiselect: filterWidgetProps.isMultiselect ?? true,
+      ...(control ? { controlStyleOptions: control } : {}),
+      ...(filterWidgetProps.timeFrames ? { timeFrames: [...filterWidgetProps.timeFrames] } : {}),
+    },
+  };
+}
+
+/**
  * Creates a {@link WidgetModel} from a {@link CustomWidgetProps}.
  *
- * @param customWidgetProps - The CustomWidgetProps to be converted to a widget model
- * @returns WidgetModel
+ * @param customWidgetProps - The CustomWidgetProps to be converted to a widget model.
+ * @returns WidgetModel.
  * @internal
  */
 export function fromCustomWidgetProps(customWidgetProps: CustomWidgetProps): WidgetModel {
@@ -1158,8 +1249,8 @@ export function fromCustomWidgetProps(customWidgetProps: CustomWidgetProps): Wid
 /**
  * Creates a {@link WidgetModel} from a {@link WidgetProps}.
  *
- * @param widgetProps - The WidgetProps to be converted to a widget model
- * @returns WidgetModel
+ * @param widgetProps - The WidgetProps to be converted to a widget model.
+ * @returns WidgetModel.
  * @internal
  */
 export function fromWidgetProps(widgetProps: WidgetProps): WidgetModel {
@@ -1178,6 +1269,9 @@ export function fromWidgetProps(widgetProps: WidgetProps): WidgetModel {
   if (isCustomWidgetProps(widgetProps)) {
     return withOid(widgetProps.id)(fromCustomWidgetProps(widgetProps));
   }
+  if (isFilterWidgetProps(widgetProps)) {
+    return withOid(widgetProps.id)(fromFilterWidgetProps(widgetProps));
+  }
 
   throw new TranslatableError('errors.otherWidgetTypesNotSupported');
 }
@@ -1192,11 +1286,11 @@ function withOid(oid: string): (widgetModel: WidgetModel) => WidgetModel {
 /**
  * Translates a {@link WidgetModel} to {@link WidgetDto}.
  *
- * @param widgetModel - The WidgetModel to be converted to a widgetDto
- * @param dataSource - The full datasource details
- * @param themeSettings - The theme settings to be used for the widget design
- * @param appSettings - The application settings to be used for the widget design
- * @returns WidgetDto
+ * @param widgetModel - The WidgetModel to be converted to a widgetDto.
+ * @param dataSource - The full datasource details.
+ * @param themeSettings - The theme settings to be used for the widget design.
+ * @param appSettings - The application settings to be used for the widget design.
+ * @returns WidgetDto.
  *
  * @sisenseInternal
  */
@@ -1262,6 +1356,13 @@ export function toWidgetDto(
       // Custom-widget styles are plugin-defined; pass through opaquely.
       style = (widgetModel.styleOptions as unknown as WidgetStyle) ?? {};
     }
+  } else if (widgetModel.widgetType === 'filter') {
+    // Inverse of the filter branch of fromWidgetDto: the attribute is the single
+    // `dimension` panel item, the rest of filterWidgetData lives in the DTO style.
+    const filterWidgetData = getFilterWidgetData(widgetModel);
+    panels.push(...toFilterWidgetPanels(filterWidgetData.attribute));
+    subtype = 'filter';
+    style = toFilterWidgetDtoStyle(filterWidgetData);
   } else if (!chartType) {
     throw new Error('Chart type is required');
   } else if (chartType === 'line') {

@@ -1,4 +1,4 @@
-import {
+import type {
   AreamapDataPoint,
   BoxplotDataPoint,
   CalendarHeatmapDataPoint,
@@ -8,8 +8,8 @@ import {
   PivotTableDataPoint,
   ScatterDataPoint,
   ScattermapDataPoint,
-  TextWidgetDataPoint,
 } from '@sisense/sdk-ui-preact';
+import type { TextWidgetDataPoint } from '@sisense/sdk-ui-preact/internal';
 
 export type DataPointEvent = {
   /** Data point that was clicked */

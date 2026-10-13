@@ -1,7 +1,7 @@
 import {
   type CompleteThemeSettingsInternal,
   getDefaultThemeSettings,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { inject, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
 

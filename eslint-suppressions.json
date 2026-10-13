@@ -7,9 +7,6 @@
   "scripts/demo-features/env-switcher/env-switcher.js": {
     "@typescript-eslint/no-unused-vars": {
       "count": 2
-    },
-    "no-var": {
-      "count": 40
     }
   },
   "scripts/demo-features/source-link.js": {

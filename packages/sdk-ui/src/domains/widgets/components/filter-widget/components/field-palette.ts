@@ -25,6 +25,7 @@ import { applyOpacity } from '@/shared/utils/color/color-interpolation';
 
 import {
   FIELD_BORDER_TINT,
+  FIELD_DIVIDER_TINT,
   FIELD_SURFACE_TINT,
   FILTER_WIDGET_ERROR_COLOR,
   type FilterWidgetPalette,
@@ -58,6 +59,7 @@ const VAR = {
   textSecondary: '--csdk-fw-text-secondary',
   textLabel: '--csdk-fw-text-label',
   border: '--csdk-fw-border',
+  divider: '--csdk-fw-divider',
   surfaceMuted: '--csdk-fw-surface-muted',
   accent: '--csdk-fw-accent',
   error: '--csdk-fw-error',
@@ -97,6 +99,7 @@ export const fwFallback: Record<keyof FieldPalette, string> = {
   textSecondary: '#666666',
   textLabel: DESIGN_INK,
   border: applyOpacity(DESIGN_INK, FIELD_BORDER_TINT),
+  divider: applyOpacity(DESIGN_INK, FIELD_DIVIDER_TINT),
   surfaceMuted: applyOpacity(DESIGN_INK, FIELD_SURFACE_TINT),
   accent: '#94f5f0',
   error: FILTER_WIDGET_ERROR_COLOR,

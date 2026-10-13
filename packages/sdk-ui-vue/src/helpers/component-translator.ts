@@ -4,7 +4,7 @@ import {
   ExternalComponentAdapterElement,
   type ExternalComponentAdapterElementProps,
   type PreactNode,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import {
   type Component,
   defineComponent,

@@ -76,6 +76,28 @@ const BAND = `color-mix(in srgb, ${fwVar('accent', fwFallback.accent)} 30%, ${fw
   fwFallback.bg,
 )})`;
 
+/* The panel's rule colour — the same hairline the footer draws above Clear / Cancel /
+   Apply — so every divider in the panel reads as one. */
+const RULE = fwVar('divider', fwFallback.divider);
+
+/* The hairline under the quick chips, separating them from the grids. The panel's own
+   flex gap sits on both sides of it, so it needs no margin of its own. */
+const ChipDivider = styled.div`
+  align-self: stretch;
+  height: ${spacing.borderWidth};
+  background: ${RULE};
+`;
+
+/* The hairline in the gutter between the two months. It runs their full height — header
+   band to the last week — so it meets the chip rule above and the pair reads as one
+   divided calendar rather than a line floating beside a few weeks. */
+const MonthSeparator = styled.div`
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: ${spacing.borderWidth};
+  background: ${RULE};
+`;
+
 const Root = styled.div`
   display: flex;
   flex-direction: column;
@@ -181,10 +203,15 @@ const NavButton = styled.button`
   align-items: center;
   justify-content: center;
   padding: 0;
-  color: ${fwVar('textPrimary', fwFallback.textPrimary)};
   cursor: pointer;
   background: none;
   border: 0;
+
+  /* Doubled so a host \`button\` reset cannot keep its own ink on this native button —
+     the same reasoning \`FieldInput\` doubles its own color rule for (field.tsx). */
+  && {
+    color: ${fwVar('textPrimary', fwFallback.textPrimary)};
+  }
 
   &:disabled {
     visibility: hidden;
@@ -257,10 +284,14 @@ const Cell = styled.button<CellStyleProps>`
   padding: 0;
   font-family: inherit;
   font-size: ${typography.paragraph.size};
-  color: ${(p) =>
-    p.$beyondData || p.$outside
-      ? fwVar('textSecondary', fwFallback.textSecondary)
-      : fwVar('textPrimary', fwFallback.textPrimary)};
+  /* Doubled so a host \`button\` reset cannot keep its own ink on this native button —
+     the same reasoning \`FieldInput\` doubles its own color rule for (field.tsx). */
+  && {
+    color: ${(p) =>
+      p.$beyondData || p.$outside
+        ? fwVar('textSecondary', fwFallback.textSecondary)
+        : fwVar('textPrimary', fwFallback.textPrimary)};
+  }
   cursor: pointer;
   opacity: ${(p) => (p.$beyondData && !p.$inBand ? 0.45 : 1)};
   background: ${(p) => (p.$inBand ? BAND : 'none')};
@@ -389,8 +420,16 @@ export function DateRangeCalendarGrid(props: DateRangeCalendarGridProps) {
   const leftMonth = month ? startOfMonth(month) : uncontrolledMonth;
   const rightMonth = addMonths(leftMonth, 1);
 
+  /** The day under the pointer, which previews the end being picked. */
+  const [hoverDay, setHoverDay] = useState<Date | null>(null);
+
+  /* Paging drops the hover preview: the pointer that pressed an arrow or a chip is still
+     inside the month pair, so no leave fires, and the band would keep previewing a day
+     from the pair just paged away. Crossing between the two grids does not page, so a
+     sweep across the seam keeps its preview. */
   const goToMonth = (next: Date) => {
     if (!month) setUncontrolledMonth(next);
+    setHoverDay(null);
     onMonthChange?.(next);
   };
 
@@ -439,7 +478,29 @@ export function DateRangeCalendarGrid(props: DateRangeCalendarGridProps) {
     );
   };
 
-  const { start: bandStart, end: bandEnd } = orderedBounds(value);
+  /* The day under the pointer stands in for the end being picked (`activeEnd`), so the band
+     paints ahead of the click and follows the cursor; the other end holds the band's far
+     side. Never collapses to one day: right after a pick hands editing to the other end the
+     pointer still rests on the day just chosen — the preview's own anchor — and a one-day
+     span would blank the committed band, so the real range stays lit until the pointer
+     moves on (the prototype's own `previewRange`). */
+  const bandAnchor = hoverDay ? (activeEnd === 'to' ? value.from : value.to) : null;
+  const previewRange: DateRangeValue | null =
+    hoverDay && bandAnchor && dayKey(hoverDay) !== dayKey(bandAnchor)
+      ? { from: bandAnchor, to: hoverDay }
+      : null;
+
+  /* What the grid paints: the previewed span on hover, else the committed range. Only the
+     committed range reaches `aria-selected` — a previewed day is not selected. */
+  const { start: bandStart, end: bandEnd } = orderedBounds(previewRange ?? value);
+  const { start: chosenStart, end: chosenEnd } = orderedBounds(value);
+  const isChosen = (day: Date) => {
+    if (!chosenStart || !chosenEnd) {
+      return isSameDay(day, chosenStart) || isSameDay(day, chosenEnd);
+    }
+    const key = dayKey(day);
+    return key >= dayKey(chosenStart) && key <= dayKey(chosenEnd);
+  };
   const inBand = (day: Date) => {
     if (!bandStart || !bandEnd) return isSameDay(day, bandStart) || isSameDay(day, bandEnd);
     const key = dayKey(day);
@@ -612,57 +673,65 @@ export function DateRangeCalendarGrid(props: DateRangeCalendarGridProps) {
             ))}
           </DayNames>
 
-          {weeks.map((week, weekIndex) => (
-            <Week key={weekIndex} role="row">
-              {week.map((day, dayIndex) => {
-                const outside = !isSameMonth(day, visibleMonth);
-                /* A blanked spillover cell is never banded: the band's row ends land on the
-                   last VISIBLE cell instead, so a rounded band edge never sits on an invisible
-                   day (the prototype's own `hideOutsideDays` reasoning). */
-                const chosen = !outside && inBand(day);
-                const isBandStart = chosen && (isSameDay(day, bandStart) || dayIndex === 0);
-                const isBandEnd =
-                  chosen && (isSameDay(day, bandEnd) || dayIndex === week.length - 1);
-                const isEndpoint = isSameDay(day, bandStart) || isSameDay(day, bandEnd);
+          {weeks.map((week, weekIndex) => {
+            /* A blanked spillover cell is never banded, so the band's row ends land on the
+               first and last VISIBLE banded cell — not the week's own edge. A month that
+               starts or ends mid-week otherwise left a square corner on its 1st or last
+               day (the prototype's own `firstBanded` / `lastBanded`). */
+            const banded = week.map((day) => isSameMonth(day, visibleMonth) && inBand(day));
+            const firstBanded = banded.indexOf(true);
+            const lastBanded = banded.lastIndexOf(true);
 
-                return (
-                  <Cell
-                    key={dayIndex}
-                    type="button"
-                    data-testid="filter-widget-date-range-day"
-                    role="gridcell"
-                    tabIndex={outside ? -1 : 0}
-                    aria-hidden={outside || undefined}
-                    data-tabstop={!outside && isSameDay(day, homeDay) ? '' : undefined}
-                    data-edge={
-                      weekIndex === 0
-                        ? 'top'
-                        : weekIndex === weeks.length - 1
-                        ? 'bottom'
-                        : undefined
-                    }
-                    $outside={outside}
-                    $today={isSameDay(day, now)}
-                    $inBand={chosen}
-                    $bandStart={isBandStart}
-                    $bandEnd={isBandEnd}
-                    $beyondData={beyondData(day)}
-                    data-beyond-data={!outside && beyondData(day) ? '' : undefined}
-                    aria-selected={chosen}
-                    aria-label={day.toLocaleDateString(resolvedLocale, { dateStyle: 'long' })}
-                    aria-current={isSameDay(day, now) ? 'date' : undefined}
-                    onClick={() => {
-                      if (!outside) pickDay(day);
-                    }}
-                    onKeyDown={(event) => onCellKeyDown(event, day)}
-                    onFocus={() => setFocusDay(day)}
-                  >
-                    {isEndpoint ? <Endpoint>{pad(day.getDate())}</Endpoint> : pad(day.getDate())}
-                  </Cell>
-                );
-              })}
-            </Week>
-          ))}
+            return (
+              <Week key={weekIndex} role="row">
+                {week.map((day, dayIndex) => {
+                  const outside = !isSameMonth(day, visibleMonth);
+                  const chosen = banded[dayIndex];
+                  const isBandStart = chosen && dayIndex === firstBanded;
+                  const isBandEnd = chosen && dayIndex === lastBanded;
+                  const isEndpoint = isSameDay(day, bandStart) || isSameDay(day, bandEnd);
+
+                  return (
+                    <Cell
+                      key={dayIndex}
+                      type="button"
+                      data-testid="filter-widget-date-range-day"
+                      role="gridcell"
+                      tabIndex={outside ? -1 : 0}
+                      aria-hidden={outside || undefined}
+                      data-tabstop={!outside && isSameDay(day, homeDay) ? '' : undefined}
+                      data-edge={
+                        weekIndex === 0
+                          ? 'top'
+                          : weekIndex === weeks.length - 1
+                          ? 'bottom'
+                          : undefined
+                      }
+                      $outside={outside}
+                      $today={isSameDay(day, now)}
+                      $inBand={chosen}
+                      $bandStart={isBandStart}
+                      $bandEnd={isBandEnd}
+                      $beyondData={beyondData(day)}
+                      data-beyond-data={!outside && beyondData(day) ? '' : undefined}
+                      aria-selected={!outside && isChosen(day)}
+                      data-preview={previewRange && chosen ? '' : undefined}
+                      aria-label={day.toLocaleDateString(resolvedLocale, { dateStyle: 'long' })}
+                      aria-current={isSameDay(day, now) ? 'date' : undefined}
+                      onClick={() => {
+                        if (!outside) pickDay(day);
+                      }}
+                      onKeyDown={(event) => onCellKeyDown(event, day)}
+                      onFocus={() => setFocusDay(day)}
+                      onMouseEnter={() => setHoverDay(outside ? null : day)}
+                    >
+                      {isEndpoint ? <Endpoint>{pad(day.getDate())}</Endpoint> : pad(day.getDate())}
+                    </Cell>
+                  );
+                })}
+              </Week>
+            );
+          })}
         </GridBody>
       </Calendar>
     );
@@ -717,8 +786,13 @@ export function DateRangeCalendarGrid(props: DateRangeCalendarGridProps) {
         </Readout>
       </Chips>
 
-      <Months>
+      <ChipDivider aria-hidden="true" />
+
+      {/* The hover is dropped on leaving the pair, not each grid: crossing the seam between
+          the two months must not drop the preview mid-sweep. */}
+      <Months onMouseLeave={() => setHoverDay(null)}>
         {renderMonth(leftMonth, leftRoving, 'left')}
+        <MonthSeparator aria-hidden="true" />
         {renderMonth(rightMonth, rightRoving, 'right')}
       </Months>
     </Root>

@@ -7,7 +7,7 @@ import {
   isDateRangeFilter,
   isRelativeDateFilter,
 } from '@sisense/sdk-data';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   type DateConditionDraft,
@@ -132,6 +132,62 @@ describe('condition-date', () => {
     forgetAllIncompleteDateDrafts();
     sessionStorage.setItem(storageKey, raw!);
     expect(readIncompleteDateDraft(years.expression)?.op).toBe('before');
+  });
+
+  /* The dashboard and the widget editor can each run their own copy of this module, and so
+     their own in-memory Map; sessionStorage is the only thing they share. A write straight
+     to sessionStorage below stands in for the other copy. */
+  describe('another copy of the module sharing the session', () => {
+    const storageKey = `csdk.filterWidget.dateCondition.incomplete:${years.expression}`;
+
+    it('reads the draft the other copy stored last, not this copy’s stale one', () => {
+      rememberIncompleteDateDraft(years.expression, draft({ op: 'before' }));
+
+      sessionStorage.setItem(storageKey, JSON.stringify(draft({ op: 'after' })));
+
+      expect(readIncompleteDateDraft(years.expression)?.op).toBe('after');
+    });
+
+    it('drops a draft the other copy removed', () => {
+      rememberIncompleteDateDraft(years.expression, draft({ op: 'before' }));
+
+      sessionStorage.removeItem(storageKey);
+
+      expect(readIncompleteDateDraft(years.expression)).toBeUndefined();
+    });
+
+    it('keeps the latest draft when only the write to sessionStorage fails', () => {
+      rememberIncompleteDateDraft(years.expression, draft({ op: 'before' }));
+      const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+        throw new Error('quota');
+      });
+      try {
+        rememberIncompleteDateDraft(years.expression, draft({ op: 'after' }));
+      } finally {
+        setItem.mockRestore();
+      }
+
+      // The store still holds Before; the newer After lives only in memory.
+      expect(readIncompleteDateDraft(years.expression)?.op).toBe('after');
+
+      // Once a write lands again, the store is the truth again.
+      rememberIncompleteDateDraft(years.expression, draft({ op: 'on-before' }));
+      sessionStorage.setItem(storageKey, JSON.stringify(draft({ op: 'on-after' })));
+      expect(readIncompleteDateDraft(years.expression)?.op).toBe('on-after');
+    });
+
+    it('falls back to memory when sessionStorage cannot be read', () => {
+      rememberIncompleteDateDraft(years.expression, draft({ op: 'before' }));
+      const getItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+        throw new Error('blocked');
+      });
+
+      try {
+        expect(readIncompleteDateDraft(years.expression)?.op).toBe('before');
+      } finally {
+        getItem.mockRestore();
+      }
+    });
   });
 
   it('summarises Last / This / Next and including current', () => {

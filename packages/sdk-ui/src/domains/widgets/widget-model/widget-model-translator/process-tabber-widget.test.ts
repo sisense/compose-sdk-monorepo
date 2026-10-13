@@ -1,5 +1,5 @@
 import { TabberWidgetDtoStyle } from '@/domains/widgets/components/widget-by-id/types';
-import { WidgetDto } from '@/index';
+import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 
 import { processTabberWidget } from './process-tabber-widget.js';
 

@@ -128,7 +128,7 @@ export function getMeasureLabel(measure: Measure, t?: TFunction): string {
  * Pill label from filter attribute and operator/value; empty when the filter should render no chip.
  *
  * @param filter - Filter to label.
- * @param t - Optional i18n translate function for date-level attributes.
+ * @param t - Optional i18n translate function for the attribute label and the chip value.
  * @returns Readable chip text, or an empty string when the filter should render no chip.
  * @internal
  */
@@ -137,7 +137,7 @@ export function getFilterLabel(filter: Filter, t?: TFunction): string {
     return '';
   }
   const attributeLabel = getAttributeLabel(filter.attribute, t);
-  return toReadableFilterLabel(filter, attributeLabel);
+  return toReadableFilterLabel(filter, attributeLabel, t);
 }
 
 /**
@@ -145,11 +145,11 @@ export function getFilterLabel(filter: Filter, t?: TFunction): string {
  * Order: Measures → "by" → Dimensions → "for"/"where" → Filters.
  * Operators (comparison/sort) are not derived from base query fields in v1.
  *
- * @param params - Base query fields from chart or query; accepts {@link ExecuteQueryParams} (execution-only fields are ignored).
+ * @param params - Base query fields from chart or query; accepts `ExecuteQueryParams` (execution-only fields are ignored).
  * @param t - Optional i18n translate function. When provided, date-level (`DimensionalLevelAttribute`)
  *   dimensions and filters use `attribute.datetimeName.*` strings (e.g. "Months in Date"). When omitted,
  *   the field label follows the chip-label rule on `title`/`name`.
- * @returns QueryDefinitionViewModel (pills and connectors)
+ * @returns QueryDefinitionViewModel (pills and connectors).
  * @sisenseInternal
  */
 export function baseQueryParamsToViewModel(

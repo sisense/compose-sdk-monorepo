@@ -51,12 +51,23 @@ export type DashboardNarrativeMeasureFormat = Record<string, unknown>;
  * Request body of {@link DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}.
  * @internal
  */
-export type DashboardNarrativeQueriesRequest = {
+export type DashboardNarrativeQueriesRequest = DashboardNarrativeRequestOptions & {
   /** 1 to {@link DASHBOARD_NARRATIVE_MAX_QUERIES} entries. */
   queries: readonly DashboardNarrativeQuery[];
-  /** See {@link DashboardNarrativeRequestOptions.cacheOnly}. */
-  cacheOnly?: boolean;
 };
+
+/**
+ * Whether a generation is the widget's first narrative or a repeat of one it has shown, reported
+ * for the service's usage tracking.
+ * @internal
+ */
+export type DashboardNarrativeSubActionType = 'generate' | 'regenerate';
+
+/**
+ * The control that asked for a generation, reported for the service's usage tracking.
+ * @sisenseInternal
+ */
+export type DashboardNarrativeTriggerType = 'widgetButton' | 'assistantCard';
 
 /**
  * Options shared by every dashboard narrative route.
@@ -69,6 +80,22 @@ export type DashboardNarrativeRequestOptions = {
    * The widgets' queries still run, since the cache key is derived from their results.
    */
   cacheOnly?: boolean;
+  /** Sent as the `tracking.subActionType` body field, for the service's usage tracking. */
+  subActionType?: DashboardNarrativeSubActionType;
+  /** Sent as the `tracking.triggerType` body field, for the service's usage tracking. */
+  triggerType?: DashboardNarrativeTriggerType;
+};
+
+/**
+ * Request body fields every dashboard narrative route shares, as the service reads them.
+ * @internal
+ */
+export type DashboardNarrativeRequestBody = {
+  cacheOnly?: true;
+  tracking?: {
+    subActionType?: DashboardNarrativeSubActionType;
+    triggerType?: DashboardNarrativeTriggerType;
+  };
 };
 
 /**
@@ -86,6 +113,11 @@ export type DashboardNarrativeByIdOptions = DashboardNarrativeRequestOptions & {
    * Sent as the `adminAccess=true` query parameter, and only when true.
    */
   adminAccess?: boolean;
+  /**
+   * Whether the dashboard's active filters are merged into each widget's query. The service
+   * merges them by default; sent as the `includeFilters=false` query parameter, and only when false.
+   */
+  includeFilters?: boolean;
 };
 
 /**
@@ -176,6 +208,23 @@ function withQueryBy(query: DashboardNarrativeQuery): DashboardNarrativeQuery {
 }
 
 /**
+ * The body fields every dashboard narrative route shares, each sent only when set. The usage
+ * tracking fields go under `tracking`, where the service reads them.
+ * @param options - Request options.
+ * @returns The fields to merge into the request body.
+ */
+function toRequestFields(options: DashboardNarrativeRequestOptions): DashboardNarrativeRequestBody {
+  const tracking = {
+    ...(options.subActionType && { subActionType: options.subActionType }),
+    ...(options.triggerType && { triggerType: options.triggerType }),
+  };
+  return {
+    ...(options.cacheOnly && { cacheOnly: true }),
+    ...(Object.keys(tracking).length > 0 && { tracking }),
+  };
+}
+
+/**
  * Requests a dashboard narrative for a set of widget queries.
  * @param httpClient - HttpClient instance.
  * @param request - Queries to narrate, at most {@link DASHBOARD_NARRATIVE_MAX_QUERIES}.
@@ -189,7 +238,7 @@ export function getDashboardNarrative(
 ): Promise<DashboardNarrativeResponseDto | undefined> {
   const payload: DashboardNarrativeQueriesRequest = {
     queries: request.queries.map(withQueryBy),
-    ...(request.cacheOnly && { cacheOnly: true }),
+    ...toRequestFields(request),
   };
   return httpClient.post<DashboardNarrativeResponseDto>(
     DASHBOARD_NARRATIVE_QUERIES_ENDPOINT,
@@ -214,11 +263,12 @@ export function getDashboardNarrativeByDashboardId(
   const params = new URLSearchParams();
   if (options.sharedMode) params.set('sharedMode', 'true');
   if (options.adminAccess) params.set('adminAccess', 'true');
+  if (options.includeFilters === false) params.set('includeFilters', 'false');
   const query = params.toString();
   return httpClient.post<DashboardNarrativeResponseDto>(
     `${DASHBOARD_NARRATIVE_DASHBOARDS_ENDPOINT}/${encodeURIComponent(dashboardId)}${
       query ? `?${query}` : ''
     }`,
-    options.cacheOnly ? { cacheOnly: true } : {},
+    toRequestFields(options),
   );
 }

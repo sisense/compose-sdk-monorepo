@@ -1,10 +1,18 @@
 import { measureFactory } from '@sisense/sdk-data';
 
 import { Commerce } from '@/__test-helpers__/sample-ecommerce';
-import { SankeyChartDataOptions } from '@/domains/visualizations/core/chart-data-options/types.js';
+import type {
+  SankeyChartDataOptions,
+  TableDataOptionsInternal,
+} from '@/domains/visualizations/core/chart-data-options/types.js';
 import type { GenericDataOptions, KpiChartDataOptions } from '@/types';
 
-import { toCustomWidgetPanels, toKpiPanels, toSankeyPanels } from './to-widget-dto-panels';
+import {
+  toCustomWidgetPanels,
+  toKpiPanels,
+  toSankeyPanels,
+  toTablePanels,
+} from './to-widget-dto-panels';
 
 describe('toCustomWidgetPanels', () => {
   it('returns an empty array when dataOptions is undefined', () => {
@@ -85,6 +93,64 @@ describe('toCustomWidgetPanels', () => {
     const panels = toCustomWidgetPanels(dataOptions);
 
     expect(panels).toEqual([{ name: 'category', items: [] }]);
+  });
+});
+
+describe('toTablePanels', () => {
+  it('writes jaql.sort from measure sortType', () => {
+    const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+    const dataOptions: TableDataOptionsInternal = {
+      columns: [{ column: Commerce.AgeRange }, { column: sumRevenue, sortType: 'sortDesc' }],
+    };
+
+    const [panel] = toTablePanels(dataOptions);
+
+    expect(panel.name).toBe('columns');
+    expect(panel.items).toHaveLength(2);
+    expect(panel.items[0].jaql.sort).toBeUndefined();
+    expect(panel.items[1].jaql.sort).toBe('desc');
+  });
+
+  it('writes jaql.sort from attribute sortType', () => {
+    const dataOptions: TableDataOptionsInternal = {
+      columns: [{ column: Commerce.AgeRange, sortType: 'sortAsc' }],
+    };
+
+    const [panel] = toTablePanels(dataOptions);
+
+    expect(panel.items[0].jaql.sort).toBe('asc');
+  });
+
+  it('preserves display column order when a measure precedes an attribute', () => {
+    const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+    const dataOptions: TableDataOptionsInternal = {
+      columns: [
+        { column: sumRevenue, sortType: 'sortDesc', width: 180 },
+        { column: Commerce.AgeRange },
+      ],
+    };
+
+    const [panel] = toTablePanels(dataOptions);
+    const dims = panel.items.map((item) => (item.jaql as { dim?: string }).dim);
+
+    expect(dims).toEqual(['[Commerce.Revenue]', '[Commerce.Age Range]']);
+    expect(panel.items[0].jaql.sort).toBe('desc');
+    expect(panel.items[0].format?.width).toBe(180);
+  });
+
+  it('skips derived result columns', () => {
+    const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+    const dataOptions: TableDataOptionsInternal = {
+      columns: [
+        { column: Commerce.AgeRange },
+        { column: sumRevenue },
+        { name: '$measure0_$forecast_Revenue_upper', title: 'Upper Bound' },
+      ],
+    };
+
+    const [panel] = toTablePanels(dataOptions);
+
+    expect(panel.items).toHaveLength(2);
   });
 });
 

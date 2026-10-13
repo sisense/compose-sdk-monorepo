@@ -114,8 +114,6 @@ const Input = styled.input`
   /* Digits keep one advance width, so a value never reflows as its digits change. */
   font-variant-numeric: tabular-nums;
   line-height: ${typography.label.lineHeight};
-  /* The glyphs live in the ghost; this carries only the caret over them. */
-  color: transparent;
   caret-color: ${fwVar('textPrimary', fwFallback.textPrimary)};
   background: transparent;
   border: 0;
@@ -132,8 +130,18 @@ const Input = styled.input`
     outline: none;
   }
 
-  &:disabled {
+  /* The glyphs live in the ghost; this carries only the caret over them. Doubled so a
+     host \`input\` rule cannot paint its own ink here — the input holds the same template
+     text as the ghost, so a visible input covered the ghost's Filter Style colours with
+     the host's grey. \`-webkit-text-fill-color\` too, which some hosts set instead. */
+  && {
     color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &&:disabled {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
     caret-color: transparent;
     cursor: not-allowed;
   }

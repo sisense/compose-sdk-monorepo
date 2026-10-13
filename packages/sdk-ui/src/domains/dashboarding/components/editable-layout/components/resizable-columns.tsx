@@ -114,6 +114,9 @@ export const ResizableColumns = ({
 
   const onDragMoveHandler = useCallback(
     (event: DragMoveEvent, columnIndex: number) => {
+      // No width measured yet: every percentage below would divide by zero and store
+      // Infinity as a column width.
+      if (!totalWidth) return;
       const x = event.delta.x;
       const coefficient = totalWidth / 100;
 
@@ -192,6 +195,11 @@ export const ResizableColumns = ({
                 <DndContext
                   modifiers={[restrictToHorizontalAxis]}
                   onDragStart={() => {
+                    // The observer can miss a container that had no width when it mounted
+                    // (e.g. inside a panel that was still opening); measure it now instead.
+                    if (!totalWidth && containerRef.current) {
+                      setTotalWidth(containerRef.current.getBoundingClientRect().width);
+                    }
                     setCurrentlyResizingColumnIndex(columnIndex);
                   }}
                   onDragMove={(event) => onDragMoveHandler(event, columnIndex)}

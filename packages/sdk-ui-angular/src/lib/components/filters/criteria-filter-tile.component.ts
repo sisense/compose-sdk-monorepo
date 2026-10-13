@@ -10,10 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   CriteriaFilterTile as CriteriaFilterTilePreact,
   type CriteriaFilterTileProps as CriteriaFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

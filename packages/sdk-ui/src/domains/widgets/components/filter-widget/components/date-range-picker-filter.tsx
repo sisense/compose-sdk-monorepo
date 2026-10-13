@@ -46,7 +46,7 @@ import type { DateRangePickResult } from './date-range-calendar-grid.js';
 import { formatDateInput, parseDateInput } from './date-text.js';
 import type { DateMask } from './date-text.js';
 import { FIELD_HEIGHT, spacing, typography } from './design-tokens.js';
-import { fwFallback, fwVar } from './field-palette.js';
+import { fieldPaletteVars, fwFallback, fwVar, useFieldPalette } from './field-palette.js';
 import { Field, IconButton, resolveFieldState, Trailing } from './field.js';
 import type { FieldOwnProps, FieldRadius, FieldSize } from './field.js';
 import {
@@ -254,6 +254,7 @@ function RangeEndField(props: RangeEndFieldProps) {
       error={fieldError}
       errorId={`${fieldId}-error`}
       clickable
+      focusRing
       popover={popover}
       popoverRef={popoverRef}
       boxProps={{
@@ -381,6 +382,10 @@ export function DateRangePickerFilter(props: DateRangePickerFilterProps) {
   const toFieldId = `${fieldId}-to`;
   const hasLabel = label !== undefined && label !== null;
   const labelId = `${fieldId}-label`;
+  /* Each end's own Field publishes the palette on its own root — but the label above the
+     pair and the dash between the ends sit outside both, so without the palette here too
+     they kept the default ink whatever Filter Style says. */
+  const palette = useFieldPalette(controlStyle);
 
   const fromInputRef = useRef<HTMLInputElement>(null);
   const toInputRef = useRef<HTMLInputElement>(null);
@@ -739,6 +744,7 @@ export function DateRangePickerFilter(props: DateRangePickerFilterProps) {
       ref={anchorRef}
       $width={width}
       className={className}
+      style={fieldPaletteVars(palette)}
       onKeyDown={rowKeyDown}
       onBlur={rowBlur}
     >

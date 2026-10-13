@@ -1,3 +1,8 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys (a calendar `nextMonth` glyph label and a Time Frame frame name can hold
+   the same word), and CLDR plural forms English does not distinguish (`_few`, `_many` on
+   `Last N months`) intentionally mirror `_other`. Extracting them to constants would
+   fragment the translations for a reviewer walking one section. */
 export const translation = {
   errors: {
     noSisenseContext: 'Sisense context is not initialized',
@@ -257,6 +262,15 @@ export const translation = {
       invertedFrom: 'Must be earlier than end date',
       invertedTo: 'Must be later than start date',
     },
+    /** Numeric Range: accessible names, an unset handle, the field's clear button. */
+    numberRange: {
+      minimum: 'Minimum',
+      maximum: 'Maximum',
+      /** Screen-reader value of a handle whose end is empty. */
+      notSet: 'Not set',
+      /** The field's ✕ button; `field` is Minimum or Maximum. */
+      clear: 'Clear {{field}}',
+    },
     selectedCount: '{{count}} selected',
     allExceptCount: 'All except {{count}}',
     setupTitle: 'Set up a filter widget',
@@ -268,9 +282,12 @@ export const translation = {
       onOrAfter: 'On or after',
       includingCurrent: 'including current',
       includingCurrentLabel: 'Including current',
+      countMin: 'Enter a whole number of 1 or more',
       /**
-       * One interpolated key per shape — word order and pluralised {{grain}} both come from
+       * One interpolated key per shape — word order and pluralised `{{grain}}` both come from
        * this template, not from concatenating separately-translated words in code.
+       * The double braces are i18next placeholders, wrapped in backticks so TSDoc leaves them
+       * alone rather than reading them as inline tags.
        */
       // The `-` keeps values unescaped — without it, `/` in a typed date renders as `&#x2F;`.
       summary: {
@@ -305,6 +322,93 @@ export const translation = {
       /** Accessible names for the Last / Next count stepper. */
       increaseCount: 'Increase',
       decreaseCount: 'Decrease',
+    },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: 'Time frame options',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to a plural
+       * suffix (`_one` / `_few` / `_many` / `_other`) by CLDR rules for the active locale.
+       * English uses only `_one` and `_other`, but every plural category CLDR defines for
+       * any supported locale must exist on this schema — locales like Russian
+       * (`_one` / `_few` / `_many` / `_other`) do not fall back to `_other` within-language
+       * when their category is missing, and would resolve through to the English text.
+       * `_few` and `_many` here repeat the English `_other` value; per-locale files
+       * override them with the grammatically correct form for that language.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: 'Today',
+        yesterday: 'Yesterday',
+        tomorrow: 'Tomorrow',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: 'This week',
+          month: 'This month',
+          quarter: 'This quarter',
+          year: 'This year',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         */
+        last: {
+          week_one: 'Last week',
+          week_few: 'Last {{count}} weeks',
+          week_many: 'Last {{count}} weeks',
+          week_other: 'Last {{count}} weeks',
+          month_one: 'Last month',
+          month_few: 'Last {{count}} months',
+          month_many: 'Last {{count}} months',
+          month_other: 'Last {{count}} months',
+          quarter_one: 'Last quarter',
+          quarter_few: 'Last {{count}} quarters',
+          quarter_many: 'Last {{count}} quarters',
+          quarter_other: 'Last {{count}} quarters',
+          year_one: 'Last year',
+          year_few: 'Last {{count}} years',
+          year_many: 'Last {{count}} years',
+          year_other: 'Last {{count}} years',
+          day_few: 'Last {{count}} days',
+          day_many: 'Last {{count}} days',
+          day_other: 'Last {{count}} days',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: 'Next week',
+          week_few: 'Next {{count}} weeks',
+          week_many: 'Next {{count}} weeks',
+          week_other: 'Next {{count}} weeks',
+          month_one: 'Next month',
+          month_few: 'Next {{count}} months',
+          month_many: 'Next {{count}} months',
+          month_other: 'Next {{count}} months',
+          quarter_one: 'Next quarter',
+          quarter_few: 'Next {{count}} quarters',
+          quarter_many: 'Next {{count}} quarters',
+          quarter_other: 'Next {{count}} quarters',
+          year_one: 'Next year',
+          year_few: 'Next {{count}} years',
+          year_many: 'Next {{count}} years',
+          year_other: 'Next {{count}} years',
+          day_few: 'Next {{count}} days',
+          day_many: 'Next {{count}} days',
+          day_other: 'Next {{count}} days',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: 'This & last week',
+          month: 'This & last month',
+          quarter: 'This & last quarter',
+          year: 'This & last year',
+        },
+        thisAndNext: {
+          week: 'This & next week',
+          month: 'This & next month',
+          quarter: 'This & next quarter',
+          year: 'This & next year',
+        },
+      },
     },
     calendar: {
       /** Multi-select trigger, before anything is chosen. */
@@ -690,6 +794,83 @@ export const translation = {
     tooltipType: 'Type',
     tooltipColumn: 'Column',
     tooltipFormula: 'Formula',
+    /**
+     * Filter pill values (the part after `Label: `). Placeholders carry already-formatted
+     * values, so each language can reorder them. Date units are pluralized by `count`;
+     * `_few` and `_many` repeat the English `_other` value.
+     */
+    filterPill: {
+      customFilter: 'custom filter',
+      empty: 'empty',
+      notEmpty: 'not empty',
+      not: 'not {{value}}',
+      and: 'and',
+      or: 'or',
+      moreValues: '{{values}} +{{count}} more',
+      range: '{{from}} to {{to}}',
+      fromToLatest: '{{from}} to latest date',
+      earliestTo: 'earliest date to {{to}}',
+      dependentOn: 'dependent on {{parents}}',
+      dependentFilter: 'dependent filter',
+      text: {
+        contains: 'contains {{value}}',
+        startsWith: 'starts with {{value}}',
+        endsWith: 'ends with {{value}}',
+        doesntEqual: "doesn't equal {{value}}",
+        doesntStartWith: "doesn't start with {{value}}",
+        doesntContain: "doesn't contain {{value}}",
+        doesntEndWith: "doesn't end with {{value}}",
+        like: 'like {{value}}',
+      },
+      ranking: {
+        top: 'Top {{count}}',
+        bottom: 'Bottom {{count}}',
+        by: '{{rank}} by {{measure}}',
+      },
+      relative: {
+        last: 'last {{count}} {{unit}}',
+        next: 'next {{count}} {{unit}}',
+        lastTo: 'last {{count}} {{unit}} to {{date}}',
+        nextFrom: 'next {{count}} {{unit}} from {{date}}',
+        includingCurrent: '{{period}} including current',
+        withOffset: '{{period}}, offset {{offset}}',
+        today: 'today',
+        thisWeek: 'this week',
+        thisMonth: 'this month',
+        thisQuarter: 'this quarter',
+        thisYear: 'this year',
+      },
+      units: {
+        year_one: 'year',
+        year_few: 'years',
+        year_many: 'years',
+        year_other: 'years',
+        quarter_one: 'quarter',
+        quarter_few: 'quarters',
+        quarter_many: 'quarters',
+        quarter_other: 'quarters',
+        month_one: 'month',
+        month_few: 'months',
+        month_many: 'months',
+        month_other: 'months',
+        week_one: 'week',
+        week_few: 'weeks',
+        week_many: 'weeks',
+        week_other: 'weeks',
+        day_one: 'day',
+        day_few: 'days',
+        day_many: 'days',
+        day_other: 'days',
+        hour_one: 'hour',
+        hour_few: 'hours',
+        hour_many: 'hours',
+        hour_other: 'hours',
+        minute_one: 'minute',
+        minute_few: 'minutes',
+        minute_many: 'minutes',
+        minute_other: 'minutes',
+      },
+    },
   },
   measures: {
     countShort: '# of {{level}}',

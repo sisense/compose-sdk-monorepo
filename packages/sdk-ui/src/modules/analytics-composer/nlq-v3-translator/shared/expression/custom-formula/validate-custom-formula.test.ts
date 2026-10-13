@@ -9,6 +9,7 @@ import { getXDiffFormulaFunctions } from '../formula-function-schemas.js';
 import {
   extractFunctionArgs,
   extractParenFunctionCalls,
+  findUnaggregatedReferences,
   parseXDiffCalls,
   validateCustomFormula,
   validateFormulaReferences,
@@ -412,13 +413,183 @@ describe('formula-validation', () => {
         expect(result.errors.filter((e) => e.includes('aggregate function calls'))).toHaveLength(0);
       });
 
-      it('should pass for SUM([revenue]) + [cost] - has function call', () => {
+      it('should fail for SUM([revenue]) + [cost] - [cost] is outside the aggregation', () => {
         const formula = 'SUM([revenue]) + [cost]';
         const context = { revenue: 'DM.Commerce.Revenue', cost: 'DM.Commerce.Cost' };
         const result = validateFormulaReferences(formula, context);
 
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('[cost] point to raw attributes');
+        expect(result.errors[0]).not.toContain('[revenue]');
+      });
+
+      it('should fail for [revenue] - SUM([qty] * [cost]) - un-aggregated raw ref mixed with an aggregation', () => {
+        const formula = '[revenue] - SUM([qty] * [cost])';
+        const context = {
+          revenue: 'DM.Commerce.Revenue',
+          qty: 'DM.Commerce.Quantity',
+          cost: 'DM.Commerce.Cost',
+        };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('[revenue] point to raw attributes');
+      });
+
+      it('should fail when a raw ref is aggregated in one place but not another', () => {
+        const formula = '(SUM([revenue]) - [revenue]) / SUM([revenue])';
+        const context = { revenue: 'DM.Commerce.Revenue' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors[0]).toContain('[revenue] point to raw attributes');
+      });
+
+      it('should pass for SUM([revenue]) - SUM([qty] * [cost]) - every raw ref aggregated', () => {
+        const formula = 'SUM([revenue]) - SUM([qty] * [cost])';
+        const context = {
+          revenue: 'DM.Commerce.Revenue',
+          qty: 'DM.Commerce.Quantity',
+          cost: 'DM.Commerce.Cost',
+        };
+        const result = validateFormulaReferences(formula, context);
+
         expect(result.isValid).toBe(true);
-        expect(result.errors.filter((e) => e.includes('aggregate function calls'))).toHaveLength(0);
+      });
+
+      it('should pass for [totalRevenue] - SUM([cost]) - un-aggregated ref is a nested measure', () => {
+        const formula = '[totalRevenue] - SUM([cost])';
+        const context = {
+          totalRevenue: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
+          cost: 'DM.Commerce.Cost',
+        };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(true);
+      });
+
+      it('should pass for CONTRIBUTION(SUM([revenue])) - aggregation nested in a scalar function', () => {
+        const formula = 'CONTRIBUTION(SUM([revenue]))';
+        const context = { revenue: 'DM.Commerce.Revenue' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(true);
+      });
+
+      it('should pass for ANYVALUE([x]) - schema-registered aggregative function', () => {
+        const result = validateFormulaReferences('SUM([y]) + ANYVALUE([x])', {
+          x: 'DM.Commerce.X',
+          y: 'DM.Commerce.Y',
+        });
+
+        expect(result.isValid).toBe(true);
+      });
+
+      it('should flag an un-aggregated time-diff call - the engine requires an aggregation around it', () => {
+        expect([...findUnaggregatedReferences('DDIFF([a], [b])')]).toEqual(['a', 'b']);
+        expect([...findUnaggregatedReferences('SUM([y]) / DDIFF([a], [b])')]).toEqual(['a', 'b']);
+        expect([...findUnaggregatedReferences('AVG(DDIFF([a], [b]))')]).toEqual([]);
+      });
+
+      it('should pass for RANK partition attributes - raw groupBy args are valid', () => {
+        const result = validateFormulaReferences('RANK(SUM([rev]), "ASC", "1224", [category])', {
+          rev: 'DM.Commerce.Revenue',
+          category: 'DM.Category.Category',
+        });
+
+        expect(result.isValid).toBe(true);
+      });
+
+      it('should still flag a raw RANK measure argument', () => {
+        expect([...findUnaggregatedReferences('RANK([rev], "ASC", "1224", [category])')]).toEqual([
+          'rev',
+        ]);
+      });
+
+      it('should flag a RANK partition ref that is also used raw elsewhere', () => {
+        expect([
+          ...findUnaggregatedReferences('RANK(SUM([rev]), "ASC", "1224", [cat]) + [cat]'),
+        ]).toEqual(['cat']);
+      });
+
+      it('should pass measured-value filters - ALL, PREV and tuple filter arguments are dimensions', () => {
+        const rev = 'DM.Commerce.Revenue';
+        const cases = [
+          { formula: '(SUM([rev]), ALL([cat]))', context: { rev, cat: 'DM.Category.Category' } },
+          { formula: '(SUM([rev]), PREV([yr], 1))', context: { rev, yr: 'DM.Commerce.Date' } },
+          { formula: '(SUM([rev]), [cat])', context: { rev, cat: 'DM.Category.Category' } },
+        ];
+        for (const { formula, context } of cases) {
+          expect(validateFormulaReferences(formula, context).errors).toEqual([]);
+        }
+      });
+
+      it('should still flag a raw measure inside a measured-value tuple', () => {
+        expect([...findUnaggregatedReferences('([rev], [cat])')]).toEqual(['rev']);
+      });
+
+      it('should not count NOAGGFUNCTION as an aggregation', () => {
+        const result = validateFormulaReferences('NOAGGFUNCTION([x])', { x: 'DM.Commerce.X' });
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors[0]).toContain('[x] point to raw attributes');
+      });
+
+      it('should not blame other functions when the formula already aggregates', () => {
+        const result = validateFormulaReferences('SUM([y]) / ABS([a])', {
+          y: 'DM.Commerce.Y',
+          a: 'DM.Commerce.A',
+        });
+
+        expect(result.errors[0]).not.toContain('ABS is not an aggregative function');
+        expect(result.errors[0]).toContain('[a] point to raw attributes');
+      });
+
+      // Shapes taken from real dashboard formulas: measured values must keep passing, and raw refs
+      // outside an aggregation must keep failing (the engine returns no rows for them)
+      it.each([
+        ['([m], [d])', []],
+        ['([m], ALL([d]))', []],
+        ['([m], ALL([d]), [e])', []],
+        ['([m]) / ([m], ALL([d]), [e]) * 100', []],
+        ['([m], Next([d], 2))', []],
+        ['([m], Prev([d], 2))', []],
+        ['([m], Now([d]))', []],
+        ['(PastYear([m]), [d])', []],
+        ['RANK([m], "ASC", "1224", [d], [e])', []],
+        ['[x] - SUM([y])', ['x']],
+        ['[x] / [y]', ['x', 'y']],
+        ['IF([x] > 100, 1, 0)', ['x']],
+        ['DDIFF([x], [y])', ['x', 'y']],
+      ])(
+        'should validate dashboard formula shape %s (raw refs flagged: %j)',
+        (formula, expectedRawRefs) => {
+          const all = {
+            m: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
+            d: 'DM.Category.Category',
+            e: 'DM.Commerce.Gender',
+            x: 'DM.Commerce.Revenue',
+            y: 'DM.Commerce.Cost',
+          };
+          const used = new Set([...formula.matchAll(/\[(\w+)\]/g)].map((match) => match[1]));
+          const context = Object.fromEntries(Object.entries(all).filter(([key]) => used.has(key)));
+          const result = validateFormulaReferences(formula, context);
+          const rawError = result.errors.find((error) => error.includes('point to raw attributes'));
+          const flaggedRefs = [
+            ...((rawError ?? '').split('Bracket reference(s)')[1]?.matchAll(/\[(\w+)\]/g) ?? []),
+          ].map((match) => match[1]);
+
+          expect(flaggedRefs.sort()).toEqual(expectedRawRefs);
+          expect(result.isValid).toBe(expectedRawRefs.length === 0);
+          // A raw-ref failure must be the only error, and a passing shape must have none
+          expect(result.errors).toHaveLength(expectedRawRefs.length === 0 ? 0 : 1);
+        },
+      );
+
+      it('should ignore bracket text inside quoted strings when checking aggregation', () => {
+        expect([...findUnaggregatedReferences("SUM([revenue]) + '[cost]'")]).toEqual([]);
       });
 
       it('should pass for SUM([revenue]) / COUNT([date]) - has function calls', () => {

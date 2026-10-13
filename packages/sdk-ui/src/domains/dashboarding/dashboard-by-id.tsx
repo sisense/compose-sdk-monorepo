@@ -4,7 +4,7 @@ import { withoutUndefinedDerivedFlags } from '@/domains/dashboarding/dashboard-m
 import * as dashboardModelTranslator from '@/domains/dashboarding/dashboard-model/dashboard-model-translator';
 import { useDashboardModelInternal } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboard-model';
 import { dashboardChangeEventToUseDashboardModelAction } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboard-model-utils';
-import { withNarrativeSharedMode } from '@/domains/narrative/core/with-narrative-shared-mode.js';
+import { withNarrativeRequestOptions } from '@/domains/narrative/core/with-narrative-request-options.js';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { LoadingOverlay } from '@/shared/components/loading-overlay';
@@ -80,7 +80,7 @@ export const DashboardById = asSisenseComponent({
     if (!dashboard) return dashboard;
     const props = dashboardModelTranslator.toDashboardProps(dashboard);
     // Narrative widgets request the dashboard by id, so they must ask for the copy loaded here.
-    return { ...props, widgets: withNarrativeSharedMode(sharedMode)(props.widgets) };
+    return { ...props, widgets: withNarrativeRequestOptions({ sharedMode })(props.widgets) };
   }, [dashboard, sharedMode]);
 
   // This is the props layer of the config merge below, so anything set here wins over the defaults

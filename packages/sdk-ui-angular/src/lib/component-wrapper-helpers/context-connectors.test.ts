@@ -4,7 +4,7 @@ import {
   CustomSisenseContext,
   CustomSisenseContextProvider,
   CustomThemeProvider,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject, of } from 'rxjs';
 import { Mocked } from 'vitest';
 

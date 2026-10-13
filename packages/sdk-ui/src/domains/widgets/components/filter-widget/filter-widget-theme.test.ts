@@ -6,6 +6,7 @@ import type { LegacyDesignSettings, LegacyPalette } from '@/infra/themes/legacy-
 
 import {
   FIELD_BORDER_TINT,
+  FIELD_DIVIDER_TINT,
   FIELD_SURFACE_TINT,
   filterWidgetThemeColors,
   filterWidgetThemeColorsFromDesignSettings,
@@ -218,6 +219,45 @@ describe('resolveFilterWidgetPalette', () => {
     expect(palette.border).toBe('#0000ff');
   });
 
+  it('re-derives a border the style panel only echoed back, so it follows the new text ink', () => {
+    const colors = filterWidgetThemeColors(themeFrom(DARK));
+    // What the panel saves alongside a text change: every swatch it showed, the theme's
+    // own derived border included.
+    const echoed = getFilterWidgetControlDefaults(colors).borderColor;
+
+    const palette = resolveFilterWidgetPalette(colors, {
+      primaryText: '#000000',
+      borderColor: echoed,
+    });
+
+    expect(palette.border).toBe('#00000026');
+  });
+
+  it('keeps a border colour the reader actually chose', () => {
+    const palette = resolveFilterWidgetPalette(filterWidgetThemeColors(themeFrom(DARK)), {
+      primaryText: '#000000',
+      borderColor: '#0000ff',
+    });
+
+    expect(palette.border).toBe('#0000ff');
+  });
+
+  it('draws the panel rules from the text ink, independently of the border', () => {
+    const colors = filterWidgetThemeColors(themeFrom(DARK));
+
+    expect(resolveFilterWidgetPalette(colors, { primaryText: '#000000' }).divider).toBe(
+      '#00000014',
+    );
+    // A border switched off or recoloured outlines the fields only — the rules stay.
+    expect(
+      resolveFilterWidgetPalette(colors, {
+        primaryText: '#000000',
+        borderEnabled: false,
+        borderColor: '#0000ff',
+      }).divider,
+    ).toBe('#00000014');
+  });
+
   it('keeps the border’s 1px invisible when the style switches it off', () => {
     const palette = resolveFilterWidgetPalette(filterWidgetThemeColors(themeFrom(DARK)), {
       borderEnabled: false,
@@ -318,5 +358,6 @@ describe('tint ratios', () => {
   it('are the ones the control design states', () => {
     expect(FIELD_BORDER_TINT).toBe(0.15);
     expect(FIELD_SURFACE_TINT).toBe(0.04);
+    expect(FIELD_DIVIDER_TINT).toBe(0.08);
   });
 });

@@ -2,13 +2,16 @@
 import { Attribute } from '@sisense/sdk-data';
 
 import { Hierarchy } from '../../../../domains/drilldown/hierarchy-model';
-import { CartesianChartDataOptions } from '../../../../types.js';
+import {
+  CartesianChartDataOptions,
+  PivotTableSelectableDrilldownOptions,
+} from '../../../../types.js';
 import { jaqlMock } from './__mocks__/jaql-mock.js';
 import { extractDataOptions } from './translate-widget-data-options.js';
 import { verifyColumn } from './translate-widget-data-options.test.js';
 import { extractDrilldownOptions } from './translate-widget-drilldown-options.js';
 import { DatetimeMask } from './types.js';
-import { Panel } from './types.js';
+import { Panel, PanelItem } from './types.js';
 
 describe('translate widget drilldown options', () => {
   describe('extractDrilldownOptions', () => {
@@ -357,6 +360,51 @@ describe('translate widget drilldown options', () => {
       expect(drilldownOptions.drilldownSelections![0].points).toEqual([
         { categoryValue: 'Cell Phones' },
       ]);
+    });
+
+    describe.each(['pivot', 'pivot2'] as const)('pivot table widget of type "%s"', (widgetType) => {
+      const drilledFromItem: PanelItem = {
+        jaql: jaqlMock.category,
+        hierarchies: ['rows-hierarchy'],
+      };
+      const drilledRowsItem: PanelItem = {
+        jaql: jaqlMock.ageRange,
+        parent: drilledFromItem,
+        through: {
+          jaql: { ...jaqlMock.category, filter: { members: ['Cell Phones'] } },
+        },
+      };
+      const panels: Panel[] = [
+        { name: 'rows', items: [drilledRowsItem] },
+        {
+          name: 'columns',
+          items: [{ jaql: jaqlMock.cost, hierarchies: ['columns-hierarchy'] }],
+        },
+        {
+          name: 'values',
+          items: [{ jaql: jaqlMock.costAggregated }],
+        },
+      ];
+
+      it('should extract drilldown paths from both rows and columns panels', () => {
+        const drilldownOptions = extractDrilldownOptions(widgetType, panels);
+
+        expect(drilldownOptions.drilldownPaths).toContain('rows-hierarchy');
+        expect(drilldownOptions.drilldownPaths).toContain('columns-hierarchy');
+      });
+
+      it('should return the drilled rows item as the pivot drilldown target', () => {
+        const drilldownOptions = extractDrilldownOptions(
+          widgetType,
+          panels,
+        ) as PivotTableSelectableDrilldownOptions;
+
+        verifyColumn(drilldownOptions.drilldownTarget as Attribute, drilledFromItem);
+        expect(drilldownOptions.drilldownSelections).toHaveLength(1);
+        const [selection] = drilldownOptions.drilldownSelections;
+        verifyColumn(selection.nextDimension, drilledRowsItem);
+        expect(selection.points).toEqual([{ categoryValue: 'Cell Phones' }]);
+      });
     });
   });
 });

@@ -1,9 +1,4 @@
 {
-  "scripts/public-api-check/validate-public-api-entries.cjs": {
-    "no-undef": {
-      "count": 7
-    }
-  },
   "scripts/vite-plugins/replace-react18-hooks.ts": {
     "security/detect-non-literal-regexp": {
       "count": 1
@@ -661,19 +656,6 @@
       "count": 1
     }
   },
-  "src/__demo__/pages/filters/filters-demo/filter-widget-dashboard-demo.tsx": {
-    "react/no-unescaped-entities": {
-      "count": 1
-    }
-  },
-  "src/__demo__/pages/filters/filters-demo/filter-widget-demo.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
-    "react/no-unescaped-entities": {
-      "count": 4
-    }
-  },
   "src/__demo__/pages/filters/filters-demo/filters-demo.tsx": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 1
@@ -1081,15 +1063,6 @@
   },
   "src/domains/dashboarding/common-filters/common-filters-connector.tsx": {
     "@typescript-eslint/consistent-type-assertions": {
-      "count": 2
-    },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 8
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
       "count": 1
     },
     "jsdoc/require-param": {
@@ -1100,17 +1073,8 @@
     }
   },
   "src/domains/dashboarding/common-filters/filter-widget-connector.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "@typescript-eslint/no-non-null-assertion": {
-      "count": 3
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 4
+      "count": 2
     },
     "jsdoc/require-param": {
       "count": 9
@@ -1169,9 +1133,6 @@
     }
   },
   "src/domains/dashboarding/common-filters/use-common-filters.test.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 6
-    },
     "@typescript-eslint/no-explicit-any": {
       "count": 2
     },
@@ -1187,17 +1148,6 @@
       "count": 5
     },
     "jsdoc/require-returns": {
-      "count": 1
-    }
-  },
-  "src/domains/dashboarding/common-filters/use-convert-filter-relations.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    },
-    "jsdoc/require-param": {
       "count": 1
     }
   },
@@ -1733,14 +1683,8 @@
     "@typescript-eslint/consistent-type-assertions": {
       "count": 1
     },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 6
-    },
     "jsdoc/no-undefined-types": {
       "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 7
     },
     "jsdoc/require-jsdoc": {
       "count": 6
@@ -1885,12 +1829,6 @@
     }
   },
   "src/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboard-model.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 5
-    },
     "jsdoc/require-jsdoc": {
       "count": 2
     },
@@ -2238,25 +2176,6 @@
       "count": 1
     }
   },
-  "src/domains/dashboarding/hooks/rename-widget/use-widget-renaming.test.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 2
-    },
-    "@typescript-eslint/no-non-null-assertion": {
-      "count": 14
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 6
-    }
-  },
-  "src/domains/dashboarding/hooks/rename-widget/use-widget-renaming.ts": {
-    "jsdoc/require-param": {
-      "count": 2
-    },
-    "jsdoc/require-returns": {
-      "count": 1
-    }
-  },
   "src/domains/dashboarding/hooks/use-dashboard-header-menu-item.test.tsx": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 1
@@ -2414,10 +2333,10 @@
       "count": 1
     },
     "jsdoc/require-param": {
-      "count": 11
+      "count": 10
     },
     "jsdoc/require-returns": {
-      "count": 8
+      "count": 7
     },
     "react-hooks/refs": {
       "count": 1
@@ -2988,14 +2907,8 @@
     }
   },
   "src/domains/filters/components/cascading-filter-tile/cascading-filter-tile.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
-    },
     "jsdoc/require-description-complete-sentence": {
-      "count": 9
+      "count": 5
     }
   },
   "src/domains/filters/components/cascading-filter-tile/cascading-level-filter.tsx": {
@@ -9580,12 +9493,12 @@
   },
   "src/domains/visualizations/core/chart-options-processor/common-highcharts-option-service.test.ts": {
     "@typescript-eslint/consistent-type-imports": {
-      "count": 2
+      "count": 1
     }
   },
   "src/domains/visualizations/core/chart-options-processor/common-highcharts-option-service.ts": {
     "@typescript-eslint/consistent-type-imports": {
-      "count": 2
+      "count": 1
     },
     "jsdoc/require-jsdoc": {
       "count": 1
@@ -9966,17 +9879,6 @@
       "count": 2
     }
   },
-  "src/domains/visualizations/core/chart-options-processor/translations/number-format-config.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
-    "jsdoc/require-jsdoc": {
-      "count": 3
-    },
-    "jsdoc/require-returns": {
-      "count": 1
-    }
-  },
   "src/domains/visualizations/core/chart-options-processor/translations/pie-plot-options.test.ts": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 2
@@ -10350,11 +10252,6 @@
       "count": 5
     }
   },
-  "src/domains/visualizations/core/query-definition/filter-to-readable-label.ts": {
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    }
-  },
   "src/domains/visualizations/core/query-definition/format-chip-label.ts": {
     "jsdoc/require-description-complete-sentence": {
       "count": 1
@@ -10395,12 +10292,6 @@
   },
   "src/domains/visualizations/core/query-definition/query-params-to-view-model.ts": {
     "@typescript-eslint/no-use-before-define": {
-      "count": 1
-    },
-    "jsdoc/no-undefined-types": {
-      "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
       "count": 1
     }
   },
@@ -10454,14 +10345,8 @@
     }
   },
   "src/domains/widgets/change-events.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
     "jsdoc/no-undefined-types": {
       "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 11
     }
   },
   "src/domains/widgets/chart-table-toggle/chart-table-toggle-button.tsx": {
@@ -10667,9 +10552,6 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
-    "jsdoc/no-undefined-types": {
-      "count": 1
-    },
     "jsdoc/require-description-complete-sentence": {
       "count": 9
     }
@@ -10753,12 +10635,6 @@
   "src/domains/widgets/components/filter-widget/components/condition-filter-date.tsx": {
     "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    },
-    "jsdoc/require-param": {
-      "count": 18
     }
   },
   "src/domains/widgets/components/filter-widget/components/condition-filter-numeric.tsx": {
@@ -10794,14 +10670,6 @@
   "src/domains/widgets/components/filter-widget/components/condition-filter.test.tsx": {
     "@typescript-eslint/no-non-null-assertion": {
       "count": 4
-    }
-  },
-  "src/domains/widgets/components/filter-widget/components/condition-filter.tsx": {
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    },
-    "jsdoc/require-param": {
-      "count": 7
     }
   },
   "src/domains/widgets/components/filter-widget/components/condition-member-hints.ts": {
@@ -10942,10 +10810,10 @@
   },
   "src/domains/widgets/components/filter-widget/components/field.tsx": {
     "jsdoc/require-description-complete-sentence": {
-      "count": 10
+      "count": 8
     },
     "jsdoc/require-param": {
-      "count": 25
+      "count": 1
     },
     "jsdoc/require-returns": {
       "count": 1
@@ -11114,20 +10982,6 @@
       "count": 3
     }
   },
-  "src/domains/widgets/components/filter-widget/filter-widget-dropdown.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 2
-    },
-    "jsdoc/require-param": {
-      "count": 17
-    },
-    "jsdoc/require-returns": {
-      "count": 2
-    }
-  },
   "src/domains/widgets/components/filter-widget/filter-widget-setup.tsx": {
     "jsdoc/require-param": {
       "count": 5
@@ -11144,22 +10998,6 @@
   "src/domains/widgets/components/filter-widget/filter-widget.test.tsx": {
     "@typescript-eslint/no-explicit-any": {
       "count": 6
-    }
-  },
-  "src/domains/widgets/components/filter-widget/filter-widget.tsx": {
-    "@typescript-eslint/no-unused-vars": {
-      "count": 2
-    },
-    "jsdoc/no-undefined-types": {
-      "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    }
-  },
-  "src/domains/widgets/components/filter-widget/types.ts": {
-    "jsdoc/require-description-complete-sentence": {
-      "count": 4
     }
   },
   "src/domains/widgets/components/narrative-widget/narrative-widget.stories.tsx": {
@@ -11659,9 +11497,6 @@
     }
   },
   "src/domains/widgets/components/widget-by-id/types.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 5
-    },
     "@typescript-eslint/no-explicit-any": {
       "count": 7
     },
@@ -11669,7 +11504,7 @@
       "count": 2
     },
     "jsdoc/require-description-complete-sentence": {
-      "count": 5
+      "count": 3
     },
     "jsdoc/require-jsdoc": {
       "count": 45
@@ -11722,12 +11557,6 @@
   "src/domains/widgets/components/widget-by-id/utils.ts": {
     "@typescript-eslint/consistent-type-assertions": {
       "count": 1
-    },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 14
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 18
     },
     "jsdoc/require-jsdoc": {
       "count": 22
@@ -12231,7 +12060,7 @@
   },
   "src/domains/widgets/widget-model/widget-model-translator/process-tabber-widget.test.ts": {
     "@typescript-eslint/consistent-type-imports": {
-      "count": 2
+      "count": 1
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 4
@@ -12252,9 +12081,6 @@
     }
   },
   "src/domains/widgets/widget-model/widget-model-translator/to-widget-dto-panels.test.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 5
     }
@@ -12273,7 +12099,7 @@
       "count": 6
     },
     "jsdoc/require-description-complete-sentence": {
-      "count": 32
+      "count": 31
     },
     "jsdoc/require-jsdoc": {
       "count": 1
@@ -12295,7 +12121,7 @@
   },
   "src/domains/widgets/widget-model/widget-model-translator/widget-model-translator.test.ts": {
     "@typescript-eslint/consistent-type-imports": {
-      "count": 5
+      "count": 4
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 29
@@ -12311,26 +12137,17 @@
     "@typescript-eslint/consistent-type-assertions": {
       "count": 1
     },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 16
-    },
     "@typescript-eslint/no-explicit-any": {
       "count": 3
     },
     "@typescript-eslint/no-non-null-assertion": {
-      "count": 4
+      "count": 3
     },
     "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 1
     },
     "@typescript-eslint/no-use-before-define": {
       "count": 9
-    },
-    "jsdoc/check-alignment": {
-      "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 20
     },
     "jsdoc/require-param": {
       "count": 43
@@ -12348,16 +12165,10 @@
     }
   },
   "src/domains/widgets/widget-model/widget-model.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    },
     "@typescript-eslint/no-explicit-any": {
       "count": 2
     },
     "jsdoc/no-undefined-types": {
-      "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
       "count": 1
     },
     "jsdoc/require-jsdoc": {
@@ -13344,31 +13155,6 @@
       "count": 1
     }
   },
-  "src/infra/translation/resources/__external__/ja-jp.ts": {
-    "jsdoc/multiline-blocks": {
-      "count": 1
-    }
-  },
-  "src/infra/translation/resources/__external__/ko-kr.ts": {
-    "jsdoc/multiline-blocks": {
-      "count": 1
-    }
-  },
-  "src/infra/translation/resources/__external__/tr-tr.ts": {
-    "jsdoc/multiline-blocks": {
-      "count": 1
-    }
-  },
-  "src/infra/translation/resources/__external__/zh-cn.ts": {
-    "jsdoc/multiline-blocks": {
-      "count": 1
-    }
-  },
-  "src/infra/translation/resources/en.ts": {
-    "tsdoc/syntax": {
-      "count": 4
-    }
-  },
   "src/infra/translation/resources/index.ts": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 1
@@ -13443,11 +13229,6 @@
       "count": 1
     }
   },
-  "src/modules/ai/__stories__/data-topic-item.stories.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    }
-  },
   "src/modules/ai/__stories__/data-topic-list.stories.tsx": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 1
@@ -13504,7 +13285,7 @@
   },
   "src/modules/ai/ai-disclaimer.tsx": {
     "@typescript-eslint/consistent-type-imports": {
-      "count": 2
+      "count": 1
     },
     "jsdoc/require-jsdoc": {
       "count": 1
@@ -13942,9 +13723,6 @@
     }
   },
   "src/modules/ai/messages/chart-message-toolbar.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "jsdoc/require-jsdoc": {
       "count": 1
     }
@@ -14597,12 +14375,6 @@
     }
   },
   "src/modules/analytics-composer/nlq-v3-translator/constructs/filters/translate-filters-to-json.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 2
-    },
     "tsdoc/syntax": {
       "count": 4
     }
@@ -14665,14 +14437,6 @@
     },
     "jsdoc/require-returns": {
       "count": 1
-    }
-  },
-  "src/modules/analytics-composer/nlq-v3-translator/dashboard/translate-dashboard-to-json.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 2
     }
   },
   "src/modules/analytics-composer/nlq-v3-translator/pivot-table/helpers/translate-data-options.ts": {
@@ -14859,7 +14623,7 @@
       "count": 1
     },
     "security/detect-non-literal-regexp": {
-      "count": 4
+      "count": 3
     },
     "tsdoc/syntax": {
       "count": 2
@@ -15228,14 +14992,6 @@
       "count": 1
     }
   },
-  "src/modules/analytics-composer/nlq-v3-translator/widget/translate-widget-to-json.ts": {
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 2
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    }
-  },
   "src/modules/analytics-composer/query/fix-ranking-filter-jaql.test.ts": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 1
@@ -15351,7 +15107,7 @@
   },
   "src/modules/analytics-composer/widget/widget-composer.test.ts": {
     "@typescript-eslint/consistent-type-imports": {
-      "count": 4
+      "count": 3
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 2
@@ -15391,19 +15147,6 @@
     },
     "tsdoc/syntax": {
       "count": 11
-    }
-  },
-  "src/public-api/index.ts": {
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    }
-  },
-  "src/public-api/internal.ts": {
-    "jsdoc/empty-tags": {
-      "count": 1
-    },
-    "jsdoc/valid-types": {
-      "count": 1
     }
   },
   "src/public-api/public.ts": {

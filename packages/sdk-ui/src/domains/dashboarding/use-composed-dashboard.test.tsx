@@ -9,9 +9,13 @@ import { chartMocksManager } from '@/__test-helpers__/mock-chart-component';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { DashboardModule } from '@/domains/dashboarding/dashboard-module';
 import { FilterTile } from '@/domains/filters/index.js';
+import type { CustomWidgetChangeEvent } from '@/domains/widgets/change-events';
 import type { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { isTextWidgetProps } from '@/domains/widgets/components/text-widget/text-widget.js';
-import { isNarrativeWidgetProps } from '@/domains/widgets/components/widget-by-id/utils.js';
+import {
+  isCustomWidgetProps,
+  isNarrativeWidgetProps,
+} from '@/domains/widgets/components/widget-by-id/utils.js';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { Widget } from '@/domains/widgets/components/widget/widget';
 import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
@@ -200,6 +204,65 @@ describe('useComposedDashboard', () => {
 
       expect(menuItemIds(widget)).not.toContain(WidgetHeaderMenuTargets.DuplicateWidget);
       expect(isTitleEditable(widget)).toBeUndefined();
+    });
+
+    describe('custom widget onChange', () => {
+      const renderCustomWidget = () => {
+        const persistence = {
+          addWidget: vi.fn(),
+          updateWidget: vi.fn().mockResolvedValue(undefined),
+        };
+        const customWidget = {
+          id: 'custom-1',
+          widgetType: 'custom',
+          customWidgetType: 'my-plugin',
+          dataOptions: {},
+          title: 'Old Title',
+        } as WidgetProps;
+        const { result } = renderHook(
+          () =>
+            useComposedDashboard(
+              { widgets: [customWidget], config: editModeConfig(true) },
+              { persistence },
+            ),
+          { wrapper: CombinedProvider },
+        );
+        /** Fires an event through the fully composed custom widget `onChange`. */
+        const emit = (event: CustomWidgetChangeEvent) => {
+          const composed = result.current.dashboard.widgets[0];
+          if (!isCustomWidgetProps(composed)) throw new Error('Expected a custom widget');
+          act(() => composed.onChange?.(event));
+        };
+        return { result, persistence, emit };
+      };
+
+      it('renames a custom widget: applies the title locally and persists it', () => {
+        const { result, persistence, emit } = renderCustomWidget();
+        expect(isTitleEditable(result.current.dashboard.widgets[0])).toBe(true);
+
+        emit({ type: 'title/changed', payload: { title: 'New Title' } });
+
+        expect(result.current.dashboard.widgets[0]).toMatchObject({ title: 'New Title' });
+        expect(persistence.updateWidget).toHaveBeenCalledTimes(1);
+        expect(persistence.updateWidget).toHaveBeenCalledWith('custom-1', { title: 'New Title' });
+      });
+
+      it('applies and persists a plugin state update without treating it as a rename', async () => {
+        const { result, persistence, emit } = renderCustomWidget();
+
+        emit({ type: 'visualizationState/changed', payload: { customOptions: { lastPage: 3 } } });
+
+        expect(result.current.dashboard.widgets[0]).toMatchObject({
+          title: 'Old Title',
+          customOptions: { lastPage: 3 },
+        });
+        await waitFor(() =>
+          expect(persistence.updateWidget).toHaveBeenCalledWith('custom-1', {
+            customOptions: { lastPage: 3 },
+          }),
+        );
+        expect(persistence.updateWidget).toHaveBeenCalledTimes(1);
+      });
     });
   });
 
@@ -586,6 +649,139 @@ describe('useComposedDashboard', () => {
       expect(w1.styleOptions?.navigator?.onScrollerChange).not.toBe(
         w2.styleOptions?.navigator?.onScrollerChange,
       );
+    });
+  });
+
+  describe('consumer callbacks chained through widget updates persistence', () => {
+    const makePersistence = () => ({
+      addWidget: vi.fn(),
+      updateWidget: vi.fn().mockResolvedValue(undefined),
+    });
+
+    it('calls a navigator onScrollerChange and persists the scroller location', async () => {
+      const persistence = makePersistence();
+      const onScrollerChange = vi.fn();
+      const widget: WidgetProps = {
+        id: 'nav-widget',
+        widgetType: 'chart',
+        chartType: 'line',
+        dataOptions: { category: [DM.Commerce.AgeRange], value: [], breakBy: [] },
+        styleOptions: { navigator: { enabled: true, onScrollerChange } },
+      };
+
+      const { result } = renderHook(
+        () => useComposedDashboard({ widgets: [widget] }, { persistence }),
+        { wrapper: CombinedProvider },
+      );
+
+      act(() => {
+        (
+          result.current.dashboard.widgets[0] as {
+            styleOptions: { navigator: { onScrollerChange: (min: number, max: number) => void } };
+          }
+        ).styleOptions.navigator.onScrollerChange(10, 90);
+      });
+
+      expect(onScrollerChange).toHaveBeenCalledWith(10, 90);
+      await waitFor(() =>
+        expect(persistence.updateWidget).toHaveBeenCalledWith('nav-widget', {
+          styleOptions: { navigator: { scrollerLocation: { min: 10, max: 90 } } },
+        }),
+      );
+    });
+
+    it('calls a table onColumnsResize and persists the column widths', async () => {
+      const persistence = makePersistence();
+      const onColumnsResize = vi.fn();
+      const widget: WidgetProps = {
+        id: 'table-widget',
+        widgetType: 'chart',
+        chartType: 'table',
+        dataOptions: { columns: [DM.Commerce.AgeRange] },
+        styleOptions: { columns: { onColumnsResize } },
+      };
+
+      const { result } = renderHook(
+        () => useComposedDashboard({ widgets: [widget] }, { persistence }),
+        { wrapper: CombinedProvider },
+      );
+
+      act(() => {
+        (
+          result.current.dashboard.widgets[0] as {
+            styleOptions: { columns: { onColumnsResize: (widths: number[]) => void } };
+          }
+        ).styleOptions.columns.onColumnsResize([120, 200]);
+      });
+
+      expect(onColumnsResize).toHaveBeenCalledWith([120, 200]);
+      await waitFor(() =>
+        expect(persistence.updateWidget).toHaveBeenCalledWith('table-widget', {
+          styleOptions: { columns: { widths: [120, 200] } },
+        }),
+      );
+    });
+
+    it('calls a custom widget onChange with a visualization state event and persists it', async () => {
+      const persistence = makePersistence();
+      const onChange = vi.fn();
+      const onWidgetChangeEvent = vi.fn();
+      const widget: WidgetProps = {
+        id: 'custom-widget',
+        widgetType: 'custom',
+        customWidgetType: 'my-plugin',
+        dataOptions: {},
+        onChange,
+      };
+      const update = { customOptions: { lastPage: 3 } };
+      const event: CustomWidgetChangeEvent = {
+        type: 'visualizationState/changed',
+        payload: update,
+      };
+
+      const { result } = renderHook(
+        () => useComposedDashboard({ widgets: [widget] }, { persistence, onWidgetChangeEvent }),
+        { wrapper: CombinedProvider },
+      );
+
+      act(() => {
+        const composed = result.current.dashboard.widgets[0];
+        if (!isCustomWidgetProps(composed)) throw new Error('Expected a custom widget');
+        composed.onChange?.(event);
+      });
+
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith(event);
+      expect(onWidgetChangeEvent).toHaveBeenCalledWith('custom-widget', event);
+      await waitFor(() =>
+        expect(persistence.updateWidget).toHaveBeenCalledWith('custom-widget', update),
+      );
+      expect(persistence.updateWidget).toHaveBeenCalledTimes(1);
+    });
+
+    it('still routes chart widget change events through change detection', () => {
+      const onChange = vi.fn();
+      const onWidgetChangeEvent = vi.fn();
+      const event = { type: 'title/changed', payload: { title: 'Renamed' } } as const;
+
+      const { result } = renderHook(
+        () =>
+          useComposedDashboard(
+            { widgets: [{ ...widgetPropsMock, onChange }] },
+            { onWidgetChangeEvent },
+          ),
+        { wrapper: CombinedProvider },
+      );
+
+      act(() => {
+        (result.current.dashboard.widgets[0] as { onChange: (e: typeof event) => void }).onChange(
+          event,
+        );
+      });
+
+      expect(onChange).toHaveBeenCalledWith(event);
+      expect(onWidgetChangeEvent).toHaveBeenCalledWith('widget-1', event);
+      expect(getProperty(result.current.dashboard.widgets[0], 'title')).toBe('Renamed');
     });
   });
 

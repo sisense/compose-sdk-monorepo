@@ -16,6 +16,12 @@ vi.mock(
   },
 );
 
+// Resolve data source labels to their titles without fetching display names.
+vi.mock('@/shared/hooks/use-data-source-label-resolver', async () => {
+  const { getDataSourceLabel } = await import('@/shared/utils/data-sources-utils');
+  return { useDataSourceLabelResolver: () => getDataSourceLabel };
+});
+
 const mockUseGetDataSourceFields = useGetDataSourceFields as Mock;
 
 const sampleECommerceDataSource = 'Sample ECommerce';

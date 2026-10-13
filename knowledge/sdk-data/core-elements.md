@@ -23,7 +23,7 @@ Defines the common shape of every dimensional-model element (attribute, dimensio
 | Factory              | `createDimensionalElementFromMetadataItem` — packages/sdk-data/src/dimensional-model/jaql-element.ts:139                                             |
 | Helpers              | `normalizeName` — packages/sdk-data/src/dimensional-model/base.ts:157, `resolveElementNames` — base.ts:144, `wrapIfNeedsNormalization` — base.ts:202 |
 | JAQL type shapes     | `BaseJaql` — types.ts:506, `FormulaJaql` — types.ts:543, `MetadataItem` — types.ts:714, `MetadataItemJaql` — types.ts:763                            |
-| Query-result types   | `QueryResultData` — packages/sdk-data/src/interfaces.ts:228, `DataSource` — src/interfaces.ts:209 (union of string \| `DataSourceInfo`)              |
+| Query-result types   | `QueryResultData` — packages/sdk-data/src/interfaces.ts:231, `DataSource` — src/interfaces.ts:212 (union of string \| `DataSourceInfo`)              |
 
 # Contract
 

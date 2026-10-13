@@ -34,6 +34,14 @@ export const FIELD_BORDER_TINT = 0.15;
  */
 export const FIELD_SURFACE_TINT = 0.04;
 
+/**
+ * Opacity of the primary ink used for the rules inside a panel — under a header, above a
+ * footer, between two months. Lighter than a field's border: they separate regions of one
+ * surface rather than outline a control.
+ * @internal
+ */
+export const FIELD_DIVIDER_TINT = 0.08;
+
 /** A border switched off in the design panel still occupies its 1px, invisibly. */
 const NO_BORDER = 'transparent';
 
@@ -221,6 +229,8 @@ export type FilterWidgetPalette = {
   textSecondary: string;
   textLabel: string;
   border: string;
+  /** The rules inside a panel — the primary ink at {@link FIELD_DIVIDER_TINT}. */
+  divider: string;
   surfaceMuted: string;
   accent: string;
   error: string;
@@ -262,6 +272,15 @@ export function resolveFilterWidgetPalette(
   const textSecondary = overrides.secondaryText || colors.widgetSecondaryText;
   const background = overrides.background || colors.widgetBackground;
   const surfaceMuted = applyOpacity(textPrimary, FIELD_SURFACE_TINT);
+  /* The style panel saves every swatch it shows, the border included — so restyling the
+     text also stored the theme's own derived border, pinning it to the theme's ink. A
+     border that is still exactly that derived default was never chosen by the reader:
+     derive it again from the ink actually in use. A border they did pick is kept. */
+  const themeBorder = applyOpacity(colors.widgetPrimaryText, FIELD_BORDER_TINT);
+  const chosenBorder =
+    overrides.borderColor && overrides.borderColor.toLowerCase() !== themeBorder.toLowerCase()
+      ? overrides.borderColor
+      : undefined;
 
   return {
     bg: background,
@@ -273,7 +292,10 @@ export function resolveFilterWidgetPalette(
     border:
       overrides.borderEnabled === false
         ? NO_BORDER
-        : overrides.borderColor || applyOpacity(textPrimary, FIELD_BORDER_TINT),
+        : chosenBorder || applyOpacity(textPrimary, FIELD_BORDER_TINT),
+    /* Always from the ink, never from the border: a border switched off or recoloured
+       outlines the fields, and must not take the panel's own rules with it. */
+    divider: applyOpacity(textPrimary, FIELD_DIVIDER_TINT),
     surfaceMuted,
     accent: overrides.accentColor || colors.brandColor,
     error: FILTER_WIDGET_ERROR_COLOR,

@@ -1,17 +1,18 @@
-import { CascadingFilter, DataSource, Filter } from '@sisense/sdk-data';
+import type { CascadingFilter, DataSource, Filter } from '@sisense/sdk-data';
+import { filterFactory, isCascadingFilter } from '@sisense/sdk-data';
 
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter.js';
 import { clearMembersFilter, cloneFilterAndToggleDisabled } from '@/shared/utils/filters.js';
 
 import { asSisenseComponent } from '../../../../infra/decorators/component-decorators/as-sisense-component.js';
-import { FilterVariant } from '../common/filter-utils.js';
+import type { FilterVariant } from '../common/filter-utils.js';
 import { FilterTileContainer } from '../filter-tile-container.js';
 import type { FilterTileConfig } from '../filter-tile/types.js';
 import { CascadingLevelFilterTile } from './cascading-level-filter.js';
 import { useCascadingFilterTileMenuItems } from './use-cascadding-filter-tile-menu-items/use-cascadding-filter-tile-menu-items.js';
 
 /**
- * Props for {@link CascadingFilterTile}
+ * Props for {@link CascadingFilterTile}.
  *
  * @alpha
  */
@@ -19,7 +20,7 @@ export interface CascadingFilterTileProps {
   /** Cascading filter object to initialize filter type and default values */
   filter: Filter;
   /**
-   * Data source the query is run against - e.g. `Sample ECommerce`
+   * Data source the query is run against - e.g. `Sample ECommerce`.
    *
    * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    */
@@ -37,7 +38,7 @@ export interface CascadingFilterTileProps {
    */
   config?: FilterTileConfig;
   /**
-   * Render header title (first cascading level filter only)
+   * Render header title (first cascading level filter only).
    *
    * @internal
    */
@@ -47,8 +48,8 @@ export interface CascadingFilterTileProps {
 /**
  * UI component representing group of cascading (dependent) filters.
  *
- * @param props - Cascading filter tile props
- * @returns Cascading filter tile component
+ * @param props - Cascading filter tile props.
+ * @returns Cascading filter tile component.
  * @group Filter Tiles
  * @alpha
  */
@@ -65,8 +66,10 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
       renderHeaderTitle,
     } = props;
 
+    // The public prop is the base `Filter`; this tile is only ever given a cascading one
+    const cascadingFilterFromProps = filterFromProps as CascadingFilter;
     const { filter, updateFilter } = useSynchronizedFilter<CascadingFilter>(
-      filterFromProps as CascadingFilter,
+      cascadingFilterFromProps,
       updateFilterFromProps,
     );
 
@@ -90,9 +93,11 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
 
       const { guid, disabled } = filter.config;
 
-      const newCascadingFilter = new CascadingFilter(newLevelFilters, { guid, disabled });
+      const newCascadingFilter = filterFactory.cascading(newLevelFilters, { guid, disabled });
 
-      updateFilter(newCascadingFilter);
+      if (isCascadingFilter(newCascadingFilter)) {
+        updateFilter(newCascadingFilter);
+      }
     };
 
     const handleToggleDisabled = () => {

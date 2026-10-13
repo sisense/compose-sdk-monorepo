@@ -23,6 +23,8 @@ export const filterWidgetDesign = {
     iconSize: 16,
     iconGap: 4,
     paddingInline: 8,
+    /** The border is the primary ink at this alpha (Figma: `rgba(38, 46, 61, 0.55)`). */
+    borderOpacity: 0.55,
   },
   /** Empty state shown before a dimension is configured (editor / new widget). */
   noDimPlaceholder: {

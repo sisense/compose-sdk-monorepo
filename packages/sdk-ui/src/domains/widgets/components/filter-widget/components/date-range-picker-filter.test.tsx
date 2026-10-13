@@ -198,7 +198,9 @@ describe('DateRangePickerFilter — fields as the trigger (no separate closed su
 });
 
 describe('DateRangePickerFilter — Apply / Cancel', () => {
-  it('publishes an inclusive both-bounds range on Apply and does not publish on Cancel', async () => {
+  /* Cancel and Apply are separate tests: one test typing both ends twice (32 keystrokes, a
+     two-month calendar re-rendered on each) ran past the 5s limit on a slow CI runner. */
+  it('does not publish a typed range on Cancel', async () => {
     const user = userEvent.setup();
     const { onFilterUpdate } = setup();
 
@@ -206,9 +208,15 @@ describe('DateRangePickerFilter — Apply / Cancel', () => {
     await user.type(fromInput(), '01142026');
     await user.type(toInput(), '04102026');
     await user.click(screen.getByTestId('filter-widget-panel-cancel'));
+
     expect(onFilterUpdate).not.toHaveBeenCalled();
     expect(fromInput()).toHaveValue('');
     expect(screen.queryByTestId('filter-widget-date-range-panel')).not.toBeInTheDocument();
+  });
+
+  it('publishes an inclusive both-bounds range on Apply', async () => {
+    const user = userEvent.setup();
+    const { onFilterUpdate } = setup();
 
     await openPanel(user);
     await user.type(fromInput(), '01142026');
@@ -459,5 +467,24 @@ describe('DateRangePickerFilter — forced external error reaches the input, not
 
     expect(fromInput()).toHaveAttribute('aria-invalid', 'true');
     expect(fromInput()).not.toHaveAttribute('aria-describedby');
+  });
+});
+
+describe('DateRangePickerFilter — Filter Style reaches what sits outside the two fields', () => {
+  it('publishes the palette on the pair, so the dash between the ends follows Secondary Text', () => {
+    setup({ controlStyle: { primaryText: '#0000ff', secondaryText: '#ff0000' } });
+
+    const row = screen.getByTestId('filter-widget-date-range-row');
+    // The dash is the row's only aria-hidden child that is not a field.
+    const dash = Array.from(row.children).find(
+      (child) => child.getAttribute('aria-hidden') === 'true',
+    );
+    expect(dash).toBeDefined();
+
+    // Walk up from the dash: the nearest published palette must be the Filter Style one.
+    let el: HTMLElement | null = dash as HTMLElement;
+    while (el && !el.style.getPropertyValue('--csdk-fw-text-secondary')) el = el.parentElement;
+    expect(el?.style.getPropertyValue('--csdk-fw-text-secondary')).toBe('#ff0000');
+    expect(el?.style.getPropertyValue('--csdk-fw-text-primary')).toBe('#0000ff');
   });
 });

@@ -63,6 +63,25 @@ describe('getDashboardNarrative', () => {
     expect(post.mock.calls[1][1]).not.toHaveProperty('cacheOnly');
   });
 
+  it('sends the usage-tracking fields only when they are set', async () => {
+    const post = vi.fn().mockResolvedValue(response);
+    const httpClient = { post } as unknown as HttpClient;
+
+    await getDashboardNarrative(httpClient, {
+      ...request,
+      subActionType: 'regenerate',
+      triggerType: 'widgetButton',
+    });
+    await getDashboardNarrative(httpClient, request);
+
+    expect(post.mock.calls[0][1]).toMatchObject({
+      tracking: { subActionType: 'regenerate', triggerType: 'widgetButton' },
+    });
+    expect(post.mock.calls[0][1]).not.toHaveProperty('subActionType');
+    expect(post.mock.calls[0][1]).not.toHaveProperty('triggerType');
+    expect(post.mock.calls[1][1]).not.toHaveProperty('tracking');
+  });
+
   it('does not mutate the caller request', async () => {
     const post = vi.fn().mockResolvedValue(response);
     const httpClient = { post } as unknown as HttpClient;
@@ -127,6 +146,35 @@ describe('getDashboardNarrativeByDashboardId', () => {
       `${DASHBOARD_NARRATIVE_DASHBOARDS_ENDPOINT}/d1?sharedMode=true`,
       { cacheOnly: true },
     ]);
+    expect(post.mock.calls[1][0]).toBe(`${DASHBOARD_NARRATIVE_DASHBOARDS_ENDPOINT}/d1`);
+  });
+
+  it('posts the usage-tracking fields in the body when they are set', async () => {
+    const post = vi.fn().mockResolvedValue(response);
+    const httpClient = { post } as unknown as HttpClient;
+
+    await getDashboardNarrativeByDashboardId(httpClient, 'd1', {
+      subActionType: 'generate',
+      triggerType: 'widgetButton',
+    });
+    await getDashboardNarrativeByDashboardId(httpClient, 'd1', { subActionType: 'generate' });
+
+    expect(post.mock.calls[0][1]).toEqual({
+      tracking: { subActionType: 'generate', triggerType: 'widgetButton' },
+    });
+    expect(post.mock.calls[1][1]).toEqual({ tracking: { subActionType: 'generate' } });
+  });
+
+  it('adds includeFilters=false to the query only when filters are excluded', async () => {
+    const post = vi.fn().mockResolvedValue(response);
+    const httpClient = { post } as unknown as HttpClient;
+
+    await getDashboardNarrativeByDashboardId(httpClient, 'd1', { includeFilters: false });
+    await getDashboardNarrativeByDashboardId(httpClient, 'd1', { includeFilters: true });
+
+    expect(post.mock.calls[0][0]).toBe(
+      `${DASHBOARD_NARRATIVE_DASHBOARDS_ENDPOINT}/d1?includeFilters=false`,
+    );
     expect(post.mock.calls[1][0]).toBe(`${DASHBOARD_NARRATIVE_DASHBOARDS_ENDPOINT}/d1`);
   });
 

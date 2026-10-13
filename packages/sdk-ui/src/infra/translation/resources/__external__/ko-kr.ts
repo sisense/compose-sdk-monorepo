@@ -1,3 +1,6 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys and across CLDR plural forms this language does not distinguish (Time
+   Frame's `_few`/`_many` mirroring `_other`). Constants would fragment the translations. */
 import type { TranslationDictionary } from '../index';
 import { PACKAGE_NAMESPACE as SDK_UI_NAMESPACE } from '../index';
 
@@ -187,19 +190,19 @@ const translation: TranslationDictionary = {
     by: '별',
   },
   dateFilter: {
-    last: '마지막',
+    last: '지난',
     next: '다음',
     from: '시작',
     to: '종료',
-    count: '개수',
+    count: '카운트',
     select: '선택',
     today: '오늘',
     days: '일',
     weeks: '주',
     months: '월',
     quarters: '분기',
-    years: '년',
-    earliestDate: '가장 이른 날짜',
+    years: '연',
+    earliestDate: '가장 빠른 날짜',
     latestDate: '가장 늦은 날짜',
     todayOutOfRange: '오늘은 사용 가능한 날짜 범위를 벗어났습니다',
     dateRange: {
@@ -227,7 +230,7 @@ const translation: TranslationDictionary = {
     tooltip: {
       min: '하한',
       max: '상한',
-      forecastValue: '예측값',
+      forecastValue: '예측 값',
       forecast: '예측',
       trend: '추세',
       trendLocalValue: '로컬 값',
@@ -258,6 +261,12 @@ const translation: TranslationDictionary = {
       invertedFrom: '종료일보다 이전이어야 합니다',
       invertedTo: '시작일보다 이후여야 합니다',
     },
+    numberRange: {
+      minimum: '최소',
+      maximum: '최대',
+      notSet: '설정 안 됨',
+      clear: '{{field}} 지우기',
+    },
     selectedCount: '{{count}}개 선택됨',
     allExceptCount: '{{count}}개 제외한 모두',
     setupTitle: '필터 위젯 설정',
@@ -269,8 +278,11 @@ const translation: TranslationDictionary = {
       onOrAfter: '당일 또는 이후',
       includingCurrent: '현재 포함',
       includingCurrentLabel: '현재 포함',
-      /** Korean is postpositional — the date comes before the operator (이전/이후 etc.),
-       *  the opposite of English word order. */
+      countMin: '1 이상의 정수를 입력하세요',
+      /**
+       * Korean is postpositional — the date comes before the operator (이전/이후 etc.),
+       *  the opposite of English word order.
+       */
       summary: {
         current: '{{- operator}} {{- grain}}',
         relative: '{{- operator}} {{- count}}{{- grain}}',
@@ -300,6 +312,89 @@ const translation: TranslationDictionary = {
       selectValues: '{{level}} 선택',
       clear: '지우기',
     },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: '기간 옵션',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to the
+       * `_one` (singular) or `_other` (plural) key by CLDR plural rules. Locales
+       * with more plural forms — Russian's `_few`/`_many`, Polish's `_many` — add
+       * more suffixes in their own resources; English needs only the two.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: '오늘',
+        yesterday: '어제',
+        tomorrow: '내일',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: '이번 주',
+          month: '이번 달',
+          quarter: '이번 분기',
+          year: '올해',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         */
+        last: {
+          week_one: '지난주',
+          week_few: '지난 {{count}}주',
+          week_many: '지난 {{count}}주',
+          week_other: '지난 {{count}}주',
+          month_one: '지난달',
+          month_few: '지난 {{count}}개월',
+          month_many: '지난 {{count}}개월',
+          month_other: '지난 {{count}}개월',
+          quarter_one: '지난 분기',
+          quarter_few: '지난 {{count}}분기',
+          quarter_many: '지난 {{count}}분기',
+          quarter_other: '지난 {{count}}분기',
+          year_one: '작년',
+          year_few: '지난 {{count}}년',
+          year_many: '지난 {{count}}년',
+          year_other: '지난 {{count}}년',
+          day_few: '지난 {{count}}일',
+          day_many: '지난 {{count}}일',
+          day_other: '지난 {{count}}일',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: '다음 주',
+          week_few: '다음 {{count}}주',
+          week_many: '다음 {{count}}주',
+          week_other: '다음 {{count}}주',
+          month_one: '다음 달',
+          month_few: '다음 {{count}}개월',
+          month_many: '다음 {{count}}개월',
+          month_other: '다음 {{count}}개월',
+          quarter_one: '다음 분기',
+          quarter_few: '다음 {{count}}분기',
+          quarter_many: '다음 {{count}}분기',
+          quarter_other: '다음 {{count}}분기',
+          year_one: '내년',
+          year_few: '다음 {{count}}년',
+          year_many: '다음 {{count}}년',
+          year_other: '다음 {{count}}년',
+          day_few: '다음 {{count}}일',
+          day_many: '다음 {{count}}일',
+          day_other: '다음 {{count}}일',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: '이번 주 및 지난주',
+          month: '이번 달 및 지난달',
+          quarter: '이번 분기 및 지난 분기',
+          year: '올해 및 작년',
+        },
+        thisAndNext: {
+          week: '이번 주 및 다음 주',
+          month: '이번 달 및 다음 달',
+          quarter: '이번 분기 및 다음 분기',
+          year: '올해 및 내년',
+        },
+      },
+    },
     calendar: {
       selectDates: '날짜 선택',
       multipleDaysHint: '여러 날짜를 선택할 수 있습니다',
@@ -318,14 +413,14 @@ const translation: TranslationDictionary = {
   unsupportedFilterMessage: '지원되지 않는 필터(데이터 쿼리에 적용됨)',
   unsupportedFilter: '지원되지 않는 필터 {{filter}}',
   commonFilter: {
-    clearSelectionButton: '선택 해제',
+    clearSelectionButton: '선택 항목 지우기',
     selectMenuItem: '선택',
-    unselectMenuItem: '선택 해제',
+    unselectMenuItem: '선택 취소',
   },
   customFilterTileMessage: '사용자 지정 필터로 필터링됨',
   filterRelations: {
-    and: 'AND',
-    or: 'OR',
+    and: '및',
+    or: '또는',
     andOrFormulaApplied: 'AND/OR 수식 적용됨',
   },
   drilldown: {
@@ -334,7 +429,7 @@ const translation: TranslationDictionary = {
     breadcrumbsPrev: '이전',
     breadcrumbsNext: '다음',
     popover: {
-      members: '멤버',
+      members: '구성원',
       table: '테이블',
       column: '열',
     },
@@ -353,11 +448,11 @@ const translation: TranslationDictionary = {
       deleteWidget: '위젯 삭제',
       duplicateWidget: '위젯 복제',
       renameWidget: '위젯 이름 바꾸기',
-      distributeEqualWidth: '이 행에서 균등하게 배포',
+      distributeEqualWidth: '이 행에 균등하게 분배',
       download: '다운로드',
       csvFile: 'CSV 파일',
       excelFile: 'Excel 파일',
-      repeatRowsRecommended: '행 반복 (권장)',
+      repeatRowsRecommended: '행 반복(추천됨)',
       mergeRows: '행 병합',
     },
   },
@@ -556,7 +651,7 @@ const translation: TranslationDictionary = {
     addMeasure: '측정값 추가',
   },
   pivotTable: {
-    grandTotal: '합계',
+    grandTotal: '총계',
     subTotal: '{{value}} 합계',
     limits: {
       baseNote:
@@ -659,13 +754,85 @@ const translation: TranslationDictionary = {
     tooltipType: '유형',
     tooltipColumn: '열',
     tooltipFormula: '수식',
+    filterPill: {
+      customFilter: '사용자 지정 필터',
+      empty: '비어 있음',
+      notEmpty: '비어 있지 않음',
+      not: '{{value}} 제외',
+      and: '및',
+      or: '또는',
+      moreValues: '{{values}} 외 {{count}}개',
+      range: '{{from}} ~ {{to}}',
+      fromToLatest: '{{from}} ~ 가장 늦은 날짜',
+      earliestTo: '가장 이른 날짜 ~ {{to}}',
+      dependentOn: '{{parents}}에 종속',
+      dependentFilter: '종속 필터',
+      text: {
+        contains: '{{value}} 포함',
+        startsWith: '{{value}}(으)로 시작',
+        endsWith: '{{value}}(으)로 끝남',
+        doesntEqual: '{{value}}와(과) 같지 않음',
+        doesntStartWith: '{{value}}(으)로 시작하지 않음',
+        doesntContain: '{{value}} 포함하지 않음',
+        doesntEndWith: '{{value}}(으)로 끝나지 않음',
+        like: '{{value}}와(과) 유사',
+      },
+      ranking: {
+        top: '상위 {{count}}',
+        bottom: '하위 {{count}}',
+        by: '{{measure}} 기준 {{rank}}',
+      },
+      relative: {
+        last: '지난 {{count}}{{unit}}',
+        next: '다음 {{count}}{{unit}}',
+        lastTo: '{{date}}까지 지난 {{count}}{{unit}}',
+        nextFrom: '{{date}}부터 다음 {{count}}{{unit}}',
+        includingCurrent: '{{period}}(현재 포함)',
+        withOffset: '{{period}}, 오프셋 {{offset}}',
+        today: '오늘',
+        thisWeek: '이번 주',
+        thisMonth: '이번 달',
+        thisQuarter: '이번 분기',
+        thisYear: '올해',
+      },
+      units: {
+        year_one: '년',
+        year_few: '년',
+        year_many: '년',
+        year_other: '년',
+        quarter_one: '분기',
+        quarter_few: '분기',
+        quarter_many: '분기',
+        quarter_other: '분기',
+        month_one: '개월',
+        month_few: '개월',
+        month_many: '개월',
+        month_other: '개월',
+        week_one: '주',
+        week_few: '주',
+        week_many: '주',
+        week_other: '주',
+        day_one: '일',
+        day_few: '일',
+        day_many: '일',
+        day_other: '일',
+        hour_one: '시간',
+        hour_few: '시간',
+        hour_many: '시간',
+        hour_other: '시간',
+        minute_one: '분',
+        minute_few: '분',
+        minute_many: '분',
+        minute_other: '분',
+      },
+    },
   },
   measures: {
     countShort: '{{level}} 개수',
-    countDistinct: '고유 개수',
-    count: '전체 개수',
+    countDistinct: '고유 카운트',
+    count: '모두 카운트',
     average: '평균',
-    sum: '합계',
+    sum: '합',
     min: '최소',
     max: '최대',
     stdev: '표준 편차',
@@ -675,7 +842,7 @@ const translation: TranslationDictionary = {
   measuresAgg: {
     countDistinct: '고유 개수',
     count: '개수',
-    sum: '합계',
+    sum: '총',
     average: '평균',
     min: '최소',
     max: '최대',

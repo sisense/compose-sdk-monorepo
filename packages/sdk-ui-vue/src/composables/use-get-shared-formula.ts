@@ -1,9 +1,5 @@
-import {
-  HookAdapter,
-  type SharedFormulaState,
-  useGetSharedFormulaInternal,
-  type UseGetSharedFormulaParams,
-} from '@sisense/sdk-ui-preact';
+import { type SharedFormulaState, type UseGetSharedFormulaParams } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useGetSharedFormulaInternal } from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, toRefs, watch } from 'vue';
 
 import { createSisenseContextConnector } from '../helpers/context-connectors';

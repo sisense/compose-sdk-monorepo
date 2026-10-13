@@ -1,16 +1,17 @@
-import { TFunction } from '@sisense/sdk-common';
-import { Attribute, type Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
+import type { TFunction } from '@sisense/sdk-common';
+import type { Attribute, MembersFilter } from '@sisense/sdk-data';
+import { type Filter, isMembersFilter } from '@sisense/sdk-data';
 import partition from 'lodash-es/partition';
 import { merge } from 'ts-deepmerge';
 
-import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
-import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import type { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
+import type { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { mergeFilters } from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetTypeInternal } from '@/domains/widgets/widget-model/types';
+import type { WidgetTypeInternal } from '@/domains/widgets/widget-model/types';
 import { MenuIds } from '@/infra/contexts/menu-provider/menu-ids';
-import { OpenMenuFn } from '@/infra/contexts/menu-provider/types';
+import type { OpenMenuFn } from '@/infra/contexts/menu-provider/types';
 import { clearMembersFilter, isIncludeAllFilter, isSameAttribute } from '@/shared/utils/filters';
-import { ChartDataOptions, DataPoint } from '@/types';
+import type { ChartDataOptions, DataPoint } from '@/types';
 
 import { withCascadingFiltersConversion } from './cascading-utils.js';
 import {
@@ -20,12 +21,8 @@ import {
   getWidgetSelections,
   getWidgetSelectionsTitleMenuItem,
 } from './selection-utils.js';
-import {
-  CommonFiltersApplyMode,
-  CommonFiltersOptions,
-  CompleteCommonFiltersOptions,
-  PureFilter,
-} from './types.js';
+import type { CommonFiltersOptions, CompleteCommonFiltersOptions, PureFilter } from './types.js';
+import { CommonFiltersApplyMode } from './types.js';
 import { getAllowedFilters } from './utils.js';
 
 type CommonFiltersConnectionProps = Pick<
@@ -51,21 +48,29 @@ function normalizeCommonFiltersOptions(
   widgetType: WidgetTypeInternal,
   options: CommonFiltersOptions,
 ): CompleteCommonFiltersOptions {
+  // `ts-deepmerge` builds a new object and never mutates its arguments, so the defaults stay intact.
+  const normalizedOptions = merge(
+    defaultCommonFiltersOptions,
+    options,
+  ) as CompleteCommonFiltersOptions;
   if (widgetType === 'table') {
+    // Tables render neither highlights nor data-point selection (no selectable attributes), so
+    // dashboard filters always slice the table and the table never acts as a cross-filter source —
+    // matching Fusion, where highlight applies only to slicer columns.
     return {
+      ...normalizedOptions,
       applyMode: CommonFiltersApplyMode.FILTER,
       shouldAffectFilters: false,
-      ignoreFilters: merge(defaultCommonFiltersOptions.ignoreFilters, options.ignoreFilters || {}),
-    } as CompleteCommonFiltersOptions;
+    };
   }
-  return merge(defaultCommonFiltersOptions, options) as CompleteCommonFiltersOptions;
+  return normalizedOptions;
 }
 
 /**
- * Prepares common filters for connection to widget props
+ * Prepares common filters for connection to widget props.
  *
- * @param filters - Pure filters (non-cascading)
- * @param setFilters - Function to set updated pure filters (non-cascading)
+ * @param filters - Pure filters (non-cascading).
+ * @param setFilters - Function to set updated pure filters (non-cascading).
  */
 export function prepareCommonFiltersConnectionProps(
   commonFilters: Filter[],
@@ -237,7 +242,7 @@ export function prepareCommonFiltersConnectionProps(
 function getBackgroundFilters(filters: PureFilter[]): PureFilter[] {
   return filters
     .map((filter) => (filter as MembersFilter).config?.backgroundFilter)
-    .filter((filter) => !!filter) as MembersFilter[];
+    .filter((filter) => !!filter);
 }
 
 function splitToSliceAndHighlightFilters(

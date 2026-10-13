@@ -6,7 +6,7 @@ export type NarrativeInsightStatus = 'positive' | 'negative' | 'neutral';
 
 /**
  * A single metric insight rendered as a status card below the overview.
- * @internal
+ * @sisenseInternal
  */
 export type NarrativeInsight = {
   /** Sentiment classification, resolved upstream — never derived from `text`. */
@@ -20,7 +20,7 @@ export type NarrativeInsight = {
  * @remarks
  * View model owned by the UI. Anything fetched from a service is mapped into this type by a single
  * transformer, so a contract change stays confined to that transformer.
- * @internal
+ * @sisenseInternal
  */
 export type NarrativeData = {
   /** Summary paragraph. Supports `**bold**` and nothing else. */

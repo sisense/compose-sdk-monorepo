@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { HttpClient } from '@sisense/sdk-rest-client';
-import { Mocked } from 'vitest';
+import type { HttpClient } from '@sisense/sdk-rest-client';
+import type { Mocked } from 'vitest';
 
-import { JaqlQueryPayload } from '../types.js';
+import type { JaqlQueryPayload } from '../types.js';
 import { QueryApiDispatcher } from './query-api-dispatcher.js';
 
 describe('QueryApiDispatcher', () => {
@@ -435,6 +435,30 @@ describe('QueryApiDispatcher', () => {
       // Assert
       expect(httpClient.get).toHaveBeenCalledWith(expectedUrl);
       expect(result).toEqual(expectedResponse);
+    });
+
+    it('should keep a non-blank displayName', async () => {
+      const item = { title: 'ECommerce', fullname: 'localhost/ECommerce', live: false };
+      httpClient.get.mockResolvedValueOnce([{ ...item, displayName: 'Online Store' }]);
+
+      const result = await queryApi.getDataSourceList();
+
+      expect(result).toStrictEqual([{ ...item, displayName: 'Online Store' }]);
+    });
+
+    it.each([null, '', '   '])('should drop a blank displayName (%j)', async (displayName) => {
+      const item = { title: 'ECommerce', fullname: 'localhost/ECommerce', live: false };
+      httpClient.get.mockResolvedValueOnce([{ ...item, displayName }]);
+
+      const result = await queryApi.getDataSourceList();
+
+      expect(result).toStrictEqual([item]);
+    });
+
+    it('should pass through a non-array response unchanged', async () => {
+      httpClient.get.mockResolvedValueOnce(undefined);
+
+      await expect(queryApi.getDataSourceList()).resolves.toBeUndefined();
     });
   });
 

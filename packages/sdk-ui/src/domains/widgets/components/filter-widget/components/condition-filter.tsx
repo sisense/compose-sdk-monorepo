@@ -47,27 +47,28 @@ export type ConditionFilterProps = FieldOwnProps & {
 };
 
 /**
- * @param props - Attribute, linked filter, condition kind, and publish callback
- * @returns The Condition trigger and its drill-in panel
+ * @param props - Attribute, linked filter, condition kind, and publish callback.
+ * @returns The Condition trigger and its drill-in panel.
  * @internal
  */
-export function ConditionFilter({
-  conditionKind = 'text',
-  dataSource,
-  parentFilters,
-  today,
-  earliestData,
-  latestData,
-  excludedDateLevels,
-  ...props
-}: ConditionFilterProps) {
+export function ConditionFilter(props: ConditionFilterProps) {
+  const {
+    conditionKind = 'text',
+    dataSource,
+    parentFilters,
+    today,
+    earliestData,
+    latestData,
+    excludedDateLevels,
+    ...rest
+  } = props;
   switch (conditionKind) {
     case 'numeric':
-      return <ConditionFilterNumeric {...props} />;
+      return <ConditionFilterNumeric {...rest} />;
     case 'date':
       return (
         <ConditionFilterDate
-          {...props}
+          {...rest}
           today={today}
           earliestData={earliestData}
           latestData={latestData}
@@ -76,7 +77,7 @@ export function ConditionFilter({
       );
     case 'text':
       return (
-        <ConditionFilterText {...props} dataSource={dataSource} parentFilters={parentFilters} />
+        <ConditionFilterText {...rest} dataSource={dataSource} parentFilters={parentFilters} />
       );
   }
 }

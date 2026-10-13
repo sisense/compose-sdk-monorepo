@@ -1,18 +1,15 @@
 /** @vitest-environment jsdom */
 import type { CalculatedMeasure } from '@sisense/sdk-data';
-import {
-  HookAdapter,
-  type SharedFormulaState,
-  useGetSharedFormulaInternal,
-} from '@sisense/sdk-ui-preact';
+import { type SharedFormulaState } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useGetSharedFormulaInternal } from '@sisense/sdk-ui-preact/internal';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick, ref } from 'vue';
 
 import { useGetSharedFormula } from './use-get-shared-formula';
 
 // Mock dependencies
-vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
   return {
     ...actual,
     useGetSharedFormulaInternal: vi.fn(),

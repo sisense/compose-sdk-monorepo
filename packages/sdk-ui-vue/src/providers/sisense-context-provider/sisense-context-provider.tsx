@@ -1,5 +1,8 @@
 import type { SisenseContextProviderProps as SisenseContextProviderPropsPreact } from '@sisense/sdk-ui-preact';
-import { createClientApplication, type CustomSisenseContext } from '@sisense/sdk-ui-preact';
+import {
+  createClientApplication,
+  type CustomSisenseContext,
+} from '@sisense/sdk-ui-preact/internal';
 import { computed, defineComponent, provide, ref } from 'vue';
 import type { PropType, Ref } from 'vue';
 

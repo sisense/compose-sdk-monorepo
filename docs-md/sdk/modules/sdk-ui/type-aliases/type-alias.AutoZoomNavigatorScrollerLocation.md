@@ -6,7 +6,7 @@ title: AutoZoomNavigatorScrollerLocation
 
 > **AutoZoomNavigatorScrollerLocation**: `object`
 
-The scroll location of the navigator scroller / auto zoom feature
+The scroll location of the navigator scroller / auto zoom feature.
 
 ## Type declaration
 

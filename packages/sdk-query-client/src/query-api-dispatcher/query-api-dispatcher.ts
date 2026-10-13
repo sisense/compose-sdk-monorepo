@@ -1,27 +1,40 @@
-import {
+import type {
   DataSource,
   DataSourceField,
   DataSourceMetadata,
   DataSourceSchema,
+} from '@sisense/sdk-data';
+import {
   encodeDataSourcePath,
   getDataSourceFullName,
   getDataSourceName,
   isDataSourceInfo,
 } from '@sisense/sdk-data';
-import { HttpClient } from '@sisense/sdk-rest-client';
+import type { HttpClient } from '@sisense/sdk-rest-client';
 
 import { TranslatableError } from '../translation/translatable-error.js';
-import {
+import type {
   CalculatedDimensionParseResponse,
   CountRowsResponse,
   JaqlQueryPayload,
   JaqlResponse,
   QueryGuid,
 } from '../types.js';
-import { DisplayNameConfig, GetDataSourceFieldsOptions } from './types.js';
+import type { DisplayNameConfig, GetDataSourceFieldsOptions } from './types.js';
 
 const API_DATASOURCES_BASE_PATH = 'api/datasources';
 const API_DATAMODELS_BASE_PATH = 'api/v2/datamodels';
+
+/**
+ * Drops a `displayName` that carries no label (`null`, empty or whitespace-only).
+ *
+ * @param dataSource - Data source metadata from the server.
+ * @returns The metadata without a blank `displayName`.
+ */
+const withoutBlankDisplayName = (dataSource: DataSourceMetadata): DataSourceMetadata => {
+  const { displayName, ...rest } = dataSource;
+  return typeof displayName === 'string' && displayName.trim() ? dataSource : rest;
+};
 
 /**
  * Thin HttpClient-backed datasource/query REST dispatcher.
@@ -42,8 +55,8 @@ export class QueryApiDispatcher {
    *   (from `DataSourceInfo` or the viewer-safe list), encoding path segments while
    *   preserving `/` — required for EC, EC perspectives, live, and live perspectives.
    *
-   * @param dataSource - Datasource title or info object
-   * @param options - Paging, search term, live flag, and displayNameConfig
+   * @param dataSource - Datasource title or info object.
+   * @param options - Paging, search term, live flag, and displayNameConfig.
    */
   public async getDataSourceFields(
     dataSource: DataSource,
@@ -98,11 +111,17 @@ export class QueryApiDispatcher {
    * Uses `sharedWith=r,w` so viewers (read share) and editors (write share) both
    * appear. Do not confuse this with manage/schema permissions — see
    * {@link getDataSourceByTitle}.
+   *
+   * A `null`, empty or whitespace-only `displayName` is dropped, so consumers can
+   * fall back to `title` whenever `displayName` is absent.
+   *
+   * @returns The data source list, or `undefined` when the server returns no body.
    */
-  public getDataSourceList() {
+  public async getDataSourceList() {
     // sharedWith=r,w = datasources the user may query (viewer role or above), not only manage.
     const url = `${API_DATASOURCES_BASE_PATH}/?sharedWith=r,w`;
-    return this.httpClient.get<DataSourceMetadata[]>(url);
+    const list = await this.httpClient.get<DataSourceMetadata[]>(url);
+    return Array.isArray(list) ? list.map(withoutBlankDisplayName) : list;
   }
 
   /**
@@ -114,8 +133,8 @@ export class QueryApiDispatcher {
    * @param context - The formula context (map of placeholders to their JAQL definitions).
    * @returns The parse response — `dataType` on success, `error`/`message` for an invalid formula,
    * or `undefined` when the server returns no body.
-   * @throws A translatable error when the parse endpoint is unavailable (e.g. on Sisense versions
-   * that predate calculated-dimension support).
+   * @throws A translatable error when the parse endpoint is unavailable (for example, on Sisense
+   * versions that predate calculated-dimension support).
    */
   public parseCalculatedDimension(
     dataSource: DataSource,
@@ -142,8 +161,8 @@ export class QueryApiDispatcher {
    * still query the cube. Listing with `sharedWith=r,w` and filtering locally
    * works for those users and already includes the `live` flag needed for field search.
    *
-   * @param title - Datasource title
-   * @returns Matching metadata, or null if not in the user's queryable list
+   * @param title - Datasource title.
+   * @returns Matching metadata, or null if not in the user's queryable list.
    */
   public async getDataSourceByTitle(title: string): Promise<DataSourceMetadata | null> {
     const list = await this.getDataSourceList();

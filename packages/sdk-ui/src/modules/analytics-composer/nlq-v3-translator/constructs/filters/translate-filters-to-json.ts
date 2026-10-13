@@ -1,12 +1,11 @@
+import type { Filter, FilterRelations } from '@sisense/sdk-data';
 import {
-  Filter,
-  FilterRelations,
   type FunctionCall,
   isFilterRelations,
   parseComposeCodeToFunctionCall,
 } from '@sisense/sdk-data';
 
-import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
+import type { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
 
 const UNKNOWN_ERROR_MESSAGE = 'Unknown error';
 
@@ -16,9 +15,9 @@ const UNKNOWN_ERROR_MESSAGE = 'Unknown error';
  * Parses composeCode directly to FunctionCall format. The composeCode contains [[delimiters]]
  * around names that need normalization, which are stripped at the final step in translateQueryToJSON.
  *
- * @param filters - Filter array or FilterRelations object
- * @returns NlqTranslationResult<FunctionCall[]> with array of FunctionCall objects or structured errors
- * @internal
+ * @param filters - Filter array or FilterRelations object.
+ * @returns NlqTranslationResult<FunctionCall[]> with array of FunctionCall objects or structured errors.
+ * @sisenseInternal
  */
 export function translateFiltersToJSON(
   filters: Filter[] | FilterRelations | undefined,
@@ -103,8 +102,8 @@ export function translateFiltersToJSON(
  * around names that need normalization, which are stripped at the final step in translateQueryToJSON.
  * Same as translateFiltersToJSON but specifically for highlights array.
  *
- * @param highlights - Array of CSDK Filter objects
- * @returns NlqTranslationResult<FunctionCall[]> with array of FunctionCall objects or structured errors
+ * @param highlights - Array of CSDK Filter objects.
+ * @returns NlqTranslationResult<FunctionCall[]> with array of FunctionCall objects or structured errors.
  * @internal
  */
 export function translateHighlightsToJSON(

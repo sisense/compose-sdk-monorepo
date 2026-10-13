@@ -1,3 +1,7 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys (a calendar `nextMonth` glyph label and a Time Frame frame name can hold
+   the same word). Extracting them to constants would fragment the translations for a
+   reviewer walking one section. */
 import type { TranslationDictionary } from '../index';
 import { PACKAGE_NAMESPACE as SDK_UI_NAMESPACE } from '../index';
 
@@ -201,8 +205,8 @@ const translation: TranslationDictionary = {
     months: 'Maanden',
     quarters: 'Kwartalen',
     years: 'Jaren',
-    earliestDate: 'Eerste datum',
-    latestDate: 'Laatste datum',
+    earliestDate: 'Vroegste datum',
+    latestDate: 'Uiterste datum',
     todayOutOfRange: 'Vandaag valt buiten het beschikbare datumbereik',
     dateRange: {
       fromTo: '{{from}} tot {{to}}',
@@ -213,7 +217,7 @@ const translation: TranslationDictionary = {
   boxplot: {
     tooltip: {
       whiskers: 'Snorharen',
-      box: 'Doos',
+      box: 'Box',
       min: 'Min',
       median: 'Mediaan',
       max: 'Max',
@@ -229,7 +233,7 @@ const translation: TranslationDictionary = {
     tooltip: {
       min: 'Ondergrens',
       max: 'Bovengrens',
-      forecastValue: 'Prognosewaarde',
+      forecastValue: 'Waarde prognose',
       forecast: 'Prognose',
       trend: 'Trend',
       trendLocalValue: 'Lokale waarde',
@@ -260,6 +264,12 @@ const translation: TranslationDictionary = {
       invertedFrom: 'Moet vóór de einddatum liggen',
       invertedTo: 'Moet na de startdatum liggen',
     },
+    numberRange: {
+      minimum: 'Minimum',
+      maximum: 'Maximum',
+      notSet: 'Niet ingesteld',
+      clear: '{{field}} wissen',
+    },
     selectedCount: '{{count}} geselecteerd',
     allExceptCount: 'Alles behalve {{count}}',
     setupTitle: 'Filterwidget instellen',
@@ -271,6 +281,7 @@ const translation: TranslationDictionary = {
       onOrAfter: 'Op of na',
       includingCurrent: 'inclusief huidige',
       includingCurrentLabel: 'Inclusief huidige',
+      countMin: 'Voer een geheel getal van 1 of hoger in',
       summary: {
         current: '{{- operator}} {{- grain}}',
         relative: '{{- operator}} {{- count}} {{- grain}}',
@@ -299,6 +310,89 @@ const translation: TranslationDictionary = {
       selectValues: '{{level}} selecteren',
       clear: 'Wissen',
     },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: 'Periodeopties',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to the
+       * `_one` (singular) or `_other` (plural) key by CLDR plural rules. Locales
+       * with more plural forms — Russian's `_few`/`_many`, Polish's `_many` — add
+       * more suffixes in their own resources; English needs only the two.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: 'Vandaag',
+        yesterday: 'Gisteren',
+        tomorrow: 'Morgen',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: 'Deze week',
+          month: 'Deze maand',
+          quarter: 'Dit kwartaal',
+          year: 'Dit jaar',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         */
+        last: {
+          week_one: 'Vorige week',
+          week_few: 'Laatste {{count}} weken',
+          week_many: 'Laatste {{count}} weken',
+          week_other: 'Laatste {{count}} weken',
+          month_one: 'Vorige maand',
+          month_few: 'Laatste {{count}} maanden',
+          month_many: 'Laatste {{count}} maanden',
+          month_other: 'Laatste {{count}} maanden',
+          quarter_one: 'Vorig kwartaal',
+          quarter_few: 'Laatste {{count}} kwartalen',
+          quarter_many: 'Laatste {{count}} kwartalen',
+          quarter_other: 'Laatste {{count}} kwartalen',
+          year_one: 'Vorig jaar',
+          year_few: 'Laatste {{count}} jaar',
+          year_many: 'Laatste {{count}} jaar',
+          year_other: 'Laatste {{count}} jaar',
+          day_few: 'Laatste {{count}} dagen',
+          day_many: 'Laatste {{count}} dagen',
+          day_other: 'Laatste {{count}} dagen',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: 'Volgende week',
+          week_few: 'Volgende {{count}} weken',
+          week_many: 'Volgende {{count}} weken',
+          week_other: 'Volgende {{count}} weken',
+          month_one: 'Volgende maand',
+          month_few: 'Volgende {{count}} maanden',
+          month_many: 'Volgende {{count}} maanden',
+          month_other: 'Volgende {{count}} maanden',
+          quarter_one: 'Volgend kwartaal',
+          quarter_few: 'Volgende {{count}} kwartalen',
+          quarter_many: 'Volgende {{count}} kwartalen',
+          quarter_other: 'Volgende {{count}} kwartalen',
+          year_one: 'Volgend jaar',
+          year_few: 'Volgende {{count}} jaar',
+          year_many: 'Volgende {{count}} jaar',
+          year_other: 'Volgende {{count}} jaar',
+          day_few: 'Volgende {{count}} dagen',
+          day_many: 'Volgende {{count}} dagen',
+          day_other: 'Volgende {{count}} dagen',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: 'Deze & vorige week',
+          month: 'Deze & vorige maand',
+          quarter: 'Dit & vorig kwartaal',
+          year: 'Dit & vorig jaar',
+        },
+        thisAndNext: {
+          week: 'Deze & volgende week',
+          month: 'Deze & volgende maand',
+          quarter: 'Dit & volgend kwartaal',
+          year: 'Dit & volgend jaar',
+        },
+      },
+    },
     calendar: {
       selectDates: 'Datums selecteren',
       multipleDaysHint: 'U kunt meerdere dagen selecteren',
@@ -317,7 +411,7 @@ const translation: TranslationDictionary = {
   unsupportedFilterMessage: 'Niet-ondersteund filter (toegepast op de gegevensquery)',
   unsupportedFilter: 'Niet-ondersteund filter {{filter}}',
   commonFilter: {
-    clearSelectionButton: 'Selectie wissen',
+    clearSelectionButton: 'Selectie verwijderen',
     selectMenuItem: 'Selecteren',
     unselectMenuItem: 'Deselecteren',
   },
@@ -328,8 +422,8 @@ const translation: TranslationDictionary = {
     andOrFormulaApplied: 'EN/OF-formule toegepast',
   },
   drilldown: {
-    drillMenuItem: 'Boren',
-    breadcrumbsAllSuffix: 'Alles',
+    drillMenuItem: 'Inzoomen',
+    breadcrumbsAllSuffix: 'Alle',
     breadcrumbsPrev: 'Vorige',
     breadcrumbsNext: 'Volgende',
     popover: {
@@ -341,7 +435,7 @@ const translation: TranslationDictionary = {
   widgetHeader: {
     addTitle: 'Titel toevoegen',
     info: {
-      details: 'Widgetdetails',
+      details: 'Details van de widget',
       tooltip: 'Klik om volledige details te bekijken',
     },
     chartTableToggle: {
@@ -349,7 +443,7 @@ const translation: TranslationDictionary = {
       switchToChart: 'Overschakelen naar grafiek',
     },
     menu: {
-      deleteWidget: 'Widget verwijderen',
+      deleteWidget: 'Widget wissen',
       duplicateWidget: 'Widget dupliceren',
       renameWidget: 'Widget hernoemen',
       distributeEqualWidth: 'Gelijkmatig verdelen in deze rij',
@@ -662,22 +756,94 @@ const translation: TranslationDictionary = {
     tooltipType: 'Type',
     tooltipColumn: 'Kolom',
     tooltipFormula: 'Formule',
+    filterPill: {
+      customFilter: 'aangepast filter',
+      empty: 'leeg',
+      notEmpty: 'niet leeg',
+      not: 'niet {{value}}',
+      and: 'en',
+      or: 'of',
+      moreValues: '{{values}} +{{count}} meer',
+      range: '{{from}} tot {{to}}',
+      fromToLatest: '{{from}} tot laatste datum',
+      earliestTo: 'eerste datum tot {{to}}',
+      dependentOn: 'afhankelijk van {{parents}}',
+      dependentFilter: 'afhankelijk filter',
+      text: {
+        contains: 'bevat {{value}}',
+        startsWith: 'begint met {{value}}',
+        endsWith: 'eindigt met {{value}}',
+        doesntEqual: 'niet gelijk aan {{value}}',
+        doesntStartWith: 'begint niet met {{value}}',
+        doesntContain: 'bevat niet {{value}}',
+        doesntEndWith: 'eindigt niet met {{value}}',
+        like: 'zoals {{value}}',
+      },
+      ranking: {
+        top: 'Top {{count}}',
+        bottom: 'Laatste {{count}}',
+        by: '{{rank}} op {{measure}}',
+      },
+      relative: {
+        last: 'afgelopen {{count}} {{unit}}',
+        next: 'volgende {{count}} {{unit}}',
+        lastTo: 'afgelopen {{count}} {{unit}} tot {{date}}',
+        nextFrom: 'volgende {{count}} {{unit}} vanaf {{date}}',
+        includingCurrent: '{{period}} inclusief huidige',
+        withOffset: '{{period}}, verschuiving {{offset}}',
+        today: 'vandaag',
+        thisWeek: 'deze week',
+        thisMonth: 'deze maand',
+        thisQuarter: 'dit kwartaal',
+        thisYear: 'dit jaar',
+      },
+      units: {
+        year_one: 'jaar',
+        year_few: 'jaar',
+        year_many: 'jaar',
+        year_other: 'jaar',
+        quarter_one: 'kwartaal',
+        quarter_few: 'kwartalen',
+        quarter_many: 'kwartalen',
+        quarter_other: 'kwartalen',
+        month_one: 'maand',
+        month_few: 'maanden',
+        month_many: 'maanden',
+        month_other: 'maanden',
+        week_one: 'week',
+        week_few: 'weken',
+        week_many: 'weken',
+        week_other: 'weken',
+        day_one: 'dag',
+        day_few: 'dagen',
+        day_many: 'dagen',
+        day_other: 'dagen',
+        hour_one: 'uur',
+        hour_few: 'uur',
+        hour_many: 'uur',
+        hour_other: 'uur',
+        minute_one: 'minuut',
+        minute_few: 'minuten',
+        minute_many: 'minuten',
+        minute_other: 'minuten',
+      },
+    },
   },
   measures: {
     countShort: 'Aantal {{level}}',
-    countDistinct: 'Unieke waarden tellen',
+    countDistinct: 'Unieke telling',
     count: 'Alles tellen',
     average: 'Gemiddelde',
     sum: 'Som',
     min: 'Min',
     max: 'Max',
-    stdev: 'Standaardafwijking',
+    stdev: 'Standaarddeviatie',
     median: 'Mediaan',
     variance: 'Variantie',
   },
   measuresAgg: {
     countDistinct: '# unieke',
-    count: '# van',
+    count: '#',
     sum: 'Totaal',
     average: 'Gemiddelde',
     min: 'Min',

@@ -1,12 +1,12 @@
 // useConvertFilterRelations.spec.tsx
 import { act } from 'react';
 
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory, splitFiltersAndRelations } from '@sisense/sdk-data';
 import { renderHook } from '@testing-library/react';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
-import { useConvertFilterRelations } from './use-convert-filter-relations.js';
+import { connectWidgetFilters, useConvertFilterRelations } from './use-convert-filter-relations.js';
 
 describe('useConvertFilterRelations', () => {
   const filter1 = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '25-34']);
@@ -394,5 +394,62 @@ describe('useConvertFilterRelations', () => {
         filterFactory.logic.and(filterFactory.logic.or(filter1, filter2), filter3),
       );
     });
+  });
+});
+
+describe('connectWidgetFilters', () => {
+  const c = filterFactory.members(DM.Commerce.AgeRange, ['0-18']);
+  const d = filterFactory.members(DM.Commerce.Gender, ['Female']);
+  const dOverride = filterFactory.members(DM.Commerce.Gender, ['Male']);
+  const e = filterFactory.members(DM.Commerce.Condition, ['New']);
+  const f = filterFactory.members(DM.Country.Country, ['France']);
+  const connect = (
+    dashboardFiltersOrRelations: Parameters<typeof splitFiltersAndRelations>[0],
+    widgetFilters: Parameters<typeof connectWidgetFilters>[3],
+  ) => {
+    const { filters, relations } = splitFiltersAndRelations(dashboardFiltersOrRelations);
+    return connectWidgetFilters(filters, relations, filters, widgetFilters);
+  };
+
+  it('should merge a plain widget into the dashboard relations, replacing an overridden filter in place', () => {
+    expect(connect(filterFactory.logic.or(c, d), [dOverride, e])).toEqual(
+      filterFactory.logic.and(filterFactory.logic.or(c, dOverride), e),
+    );
+  });
+
+  it('should AND the widget relations with the dashboard filters', () => {
+    expect(connect([c, d], filterFactory.logic.or(e, f))).toEqual(
+      filterFactory.logic.and([c, d], filterFactory.logic.or(e, f)),
+    );
+  });
+
+  it('should AND the widget relations with the dashboard relations without an override', () => {
+    expect(connect(filterFactory.logic.or(c, d), filterFactory.logic.or(e, f))).toEqual(
+      filterFactory.logic.and(filterFactory.logic.or(c, d), filterFactory.logic.or(e, f)),
+    );
+  });
+
+  it('should put an override in place of the dashboard filter in the dashboard relations', () => {
+    expect(connect(filterFactory.logic.or(c, d), filterFactory.logic.or(dOverride, e))).toEqual(
+      filterFactory.logic.and(filterFactory.logic.or(c, dOverride), [e]),
+    );
+  });
+
+  it('should keep the dashboard relations when the widget relations consist of overrides only', () => {
+    const cOverride = filterFactory.members(DM.Commerce.AgeRange, ['19-24']);
+    expect(
+      connect(filterFactory.logic.or(c, d), filterFactory.logic.or(cOverride, dOverride)),
+    ).toEqual(filterFactory.logic.or(cOverride, dOverride));
+  });
+
+  it('should drop an overridden dashboard filter and keep the widget relations whole without dashboard relations', () => {
+    expect(connect([c, d], filterFactory.logic.or(dOverride, e))).toEqual(
+      filterFactory.logic.and([c], filterFactory.logic.or(dOverride, e)),
+    );
+  });
+
+  it('should return the widget relations when they override every dashboard filter', () => {
+    const widgetRelations = filterFactory.logic.or(dOverride, e);
+    expect(connect([d], widgetRelations)).toEqual(widgetRelations);
   });
 });

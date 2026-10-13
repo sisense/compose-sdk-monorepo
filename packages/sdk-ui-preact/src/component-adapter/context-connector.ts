@@ -1,4 +1,4 @@
-import { type CustomContextProviderProps } from '@sisense/sdk-ui';
+import { type CustomContextProviderProps } from '@sisense/sdk-ui/internal';
 
 import { AnyComponentFunction } from './types';
 import { DataObserver } from './utils/data-observer';

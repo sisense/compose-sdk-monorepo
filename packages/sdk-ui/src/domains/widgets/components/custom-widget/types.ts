@@ -1,6 +1,6 @@
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
-import type { VisualizationStateUpdate } from '@/infra/plugins/widget-plugins/types';
+import type { CustomWidgetChangeEvent } from '@/domains/widgets/change-events';
 import { CustomWidgetEventProps, CustomWidgetStyleOptions, GenericDataOptions } from '@/types';
 
 import { CustomWidgetConfig } from '../widget/widget-config';
@@ -91,13 +91,15 @@ export interface CustomWidgetProps extends CustomWidgetEventProps {
   customOptions?: Record<string, any>;
 
   /**
-   * Emit a partial state update to be persisted through the dashboard
-   * persistence layer. Injected by the dashboard composition layer
-   * (`useWidgetUpdatesPersistence`) and forwarded to the plugin visualization
-   * component as {@link CustomVisualizationProps.onChange}.
+   * Callback for widget change events, the same channel as the other widget types.
+   *
+   * Emits `title/changed` from the header's inline title editor, and
+   * `visualizationState/changed` wrapping each state update the plugin visualization
+   * pushes through `CustomVisualizationProps.onChange`. The plugin itself never sees
+   * this callback — it gets an adapter that keeps its `VisualizationStateUpdate` API.
    *
    * @category Widget
    * @internal
    */
-  onChange?: (update: VisualizationStateUpdate) => void;
+  onChange?: (event: CustomWidgetChangeEvent) => void;
 }

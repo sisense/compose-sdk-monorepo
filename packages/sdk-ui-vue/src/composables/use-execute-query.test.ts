@@ -1,12 +1,12 @@
 /** @vitest-environment jsdom */
-import { executeQuery, executeQueryWithRowCount } from '@sisense/sdk-ui-preact';
+import { executeQuery, executeQueryWithRowCount } from '@sisense/sdk-ui-preact/internal';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick, ref } from 'vue';
 
 import { useExecuteQuery } from './use-execute-query';
 
-vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
   return {
     ...actual,
     executeQuery: vi.fn(),

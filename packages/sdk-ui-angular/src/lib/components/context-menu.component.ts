@@ -9,12 +9,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {
-  ComponentAdapter,
-  ContextMenu as ContextMenuPreact,
-  type ContextMenuProps,
-  createWrapperElement,
-} from '@sisense/sdk-ui-preact';
+import { ContextMenu as ContextMenuPreact, type ContextMenuProps } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter, createWrapperElement } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

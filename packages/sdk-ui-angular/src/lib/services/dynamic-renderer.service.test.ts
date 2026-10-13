@@ -1,6 +1,6 @@
 /** @vitest-environment jsdom */
 import { ApplicationRef, EnvironmentInjector, Injector } from '@angular/core';
-import { type PreactNode } from '@sisense/sdk-ui-preact';
+import { type PreactNode } from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject, of } from 'rxjs';
 import { beforeEach, describe, expect, it, type Mocked, vi } from 'vitest';
 

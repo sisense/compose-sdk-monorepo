@@ -1,3 +1,7 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys (a calendar `nextMonth` glyph label and a Time Frame frame name can hold
+   the same word). Extracting them to constants would fragment the translations for a
+   reviewer walking one section. */
 import type { TranslationDictionary } from '../index';
 import { PACKAGE_NAMESPACE as SDK_UI_NAMESPACE } from '../index';
 
@@ -158,10 +162,10 @@ const translation: TranslationDictionary = {
   formatting: {
     number: {
       abbreviations: {
-        thousand: 'К',
-        million: 'М',
-        billion: 'Млрд',
-        trillion: 'Т',
+        thousand: 'тыс.',
+        million: 'млн',
+        billion: 'млрд',
+        trillion: 'трлн',
       },
     },
   },
@@ -190,10 +194,10 @@ const translation: TranslationDictionary = {
     by: 'по',
   },
   dateFilter: {
-    last: 'Последний',
+    last: 'Последние',
     next: 'Следующий',
-    from: 'С',
-    to: 'По',
+    from: 'От',
+    to: 'До',
     count: 'Количество',
     select: 'Выбрать',
     today: 'Сегодня',
@@ -203,7 +207,7 @@ const translation: TranslationDictionary = {
     quarters: 'Кварталы',
     years: 'Годы',
     earliestDate: 'Самая ранняя дата',
-    latestDate: 'Самая поздняя дата',
+    latestDate: 'Последняя дата',
     todayOutOfRange: 'Сегодня находится вне доступного диапазона дат',
     dateRange: {
       fromTo: '{{from}} по {{to}}',
@@ -214,15 +218,15 @@ const translation: TranslationDictionary = {
   boxplot: {
     tooltip: {
       whiskers: 'Усы',
-      box: 'Коробка',
-      min: 'Мин',
+      box: 'Ящик',
+      min: 'Минимум',
       median: 'Медиана',
-      max: 'Макс',
+      max: 'Максимум',
     },
   },
   treemap: {
     tooltip: {
-      ofTotal: 'от общего',
+      ofTotal: 'от общего числа',
       of: 'из',
     },
   },
@@ -238,8 +242,8 @@ const translation: TranslationDictionary = {
       trendType: 'Тип',
       trendDataKey: 'Данные тренда',
       trendData: {
-        min: 'Мин',
-        max: 'Макс',
+        min: 'Минимум',
+        max: 'Максимум',
         median: 'Медиана',
         average: 'Среднее',
       },
@@ -247,8 +251,8 @@ const translation: TranslationDictionary = {
   },
   arearange: {
     tooltip: {
-      min: 'Мин',
-      max: 'Макс',
+      min: 'Минимум',
+      max: 'Максимум',
     },
   },
   filterWidget: {
@@ -261,6 +265,12 @@ const translation: TranslationDictionary = {
       invertedFrom: 'Должно быть раньше конечной даты',
       invertedTo: 'Должно быть позже начальной даты',
     },
+    numberRange: {
+      minimum: 'Минимум',
+      maximum: 'Максимум',
+      notSet: 'Не задано',
+      clear: 'Очистить {{field}}',
+    },
     selectedCount: 'Выбрано: {{count}}',
     allExceptCount: 'Все, кроме {{count}}',
     setupTitle: 'Настройте виджет фильтр',
@@ -272,6 +282,7 @@ const translation: TranslationDictionary = {
       onOrAfter: 'После включительно',
       includingCurrent: 'включая текущий',
       includingCurrentLabel: 'Включая текущий',
+      countMin: 'Введите целое число от 1',
       summary: {
         current: '{{- operator}} {{- grain}}',
         relative: '{{- operator}} {{- count}} {{- grain}}',
@@ -302,6 +313,96 @@ const translation: TranslationDictionary = {
       selectValues: 'Выберите {{level}}',
       clear: 'Очистить',
     },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: 'Варианты периода',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to the
+       * `_one` (singular) or `_other` (plural) key by CLDR plural rules. Locales
+       * with more plural forms — Russian's `_few`/`_many`, Polish's `_many` — add
+       * more suffixes in their own resources; English needs only the two.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: 'Сегодня',
+        yesterday: 'Вчера',
+        tomorrow: 'Завтра',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: 'Эта неделя',
+          month: 'Этот месяц',
+          quarter: 'Этот квартал',
+          year: 'Этот год',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         *
+         * Russian requires four plural forms — `_one` (n=1, 21, 31 …), `_few` (n=2–4, 22–24 …),
+         * `_many` (n=0, 5–20, 25–30 …) and `_other` (fractional) — and i18next does NOT fall
+         * back to `_other` within the language if the CLDR-selected form is missing, so a
+         * catalogue count of 6 (which selects `_many`) reaches English through the fallback
+         * chain when only `_one`/`_other` are defined. Abbreviated units (нед., мес., кв., г.,
+         * дн.) read grammatically for every form, so `_few`/`_many` reuse the `_other` text.
+         */
+        last: {
+          week_one: 'Прошлая неделя',
+          week_few: 'Последние {{count}} нед.',
+          week_many: 'Последние {{count}} нед.',
+          week_other: 'Последние {{count}} нед.',
+          month_one: 'Прошлый месяц',
+          month_few: 'Последние {{count}} мес.',
+          month_many: 'Последние {{count}} мес.',
+          month_other: 'Последние {{count}} мес.',
+          quarter_one: 'Прошлый квартал',
+          quarter_few: 'Последние {{count}} кв.',
+          quarter_many: 'Последние {{count}} кв.',
+          quarter_other: 'Последние {{count}} кв.',
+          year_one: 'Прошлый год',
+          year_few: 'Последние {{count}} г.',
+          year_many: 'Последние {{count}} г.',
+          year_other: 'Последние {{count}} г.',
+          day_few: 'Последние {{count}} дн.',
+          day_many: 'Последние {{count}} дн.',
+          day_other: 'Последние {{count}} дн.',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: 'Следующая неделя',
+          week_few: 'Следующие {{count}} нед.',
+          week_many: 'Следующие {{count}} нед.',
+          week_other: 'Следующие {{count}} нед.',
+          month_one: 'Следующий месяц',
+          month_few: 'Следующие {{count}} мес.',
+          month_many: 'Следующие {{count}} мес.',
+          month_other: 'Следующие {{count}} мес.',
+          quarter_one: 'Следующий квартал',
+          quarter_few: 'Следующие {{count}} кв.',
+          quarter_many: 'Следующие {{count}} кв.',
+          quarter_other: 'Следующие {{count}} кв.',
+          year_one: 'Следующий год',
+          year_few: 'Следующие {{count}} г.',
+          year_many: 'Следующие {{count}} г.',
+          year_other: 'Следующие {{count}} г.',
+          day_few: 'Следующие {{count}} дн.',
+          day_many: 'Следующие {{count}} дн.',
+          day_other: 'Следующие {{count}} дн.',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: 'Эта и прошлая неделя',
+          month: 'Этот и прошлый месяц',
+          quarter: 'Этот и прошлый квартал',
+          year: 'Этот и прошлый год',
+        },
+        thisAndNext: {
+          week: 'Эта и следующая неделя',
+          month: 'Этот и следующий месяц',
+          quarter: 'Этот и следующий квартал',
+          year: 'Этот и следующий год',
+        },
+      },
+    },
     calendar: {
       selectDates: 'Выберите даты',
       multipleDaysHint: 'Можно выбрать несколько дней',
@@ -320,9 +421,9 @@ const translation: TranslationDictionary = {
   unsupportedFilterMessage: 'Неподдерживаемый фильтр (применен к запросу данных)',
   unsupportedFilter: 'Неподдерживаемый фильтр {{filter}}',
   commonFilter: {
-    clearSelectionButton: 'Очистить выбор',
+    clearSelectionButton: 'Очистить выделение',
     selectMenuItem: 'Выбрать',
-    unselectMenuItem: 'Снять выбор',
+    unselectMenuItem: 'Отменить выбор',
   },
   customFilterTileMessage: 'отфильтровано пользовательским фильтром',
   filterRelations: {
@@ -333,7 +434,7 @@ const translation: TranslationDictionary = {
   drilldown: {
     drillMenuItem: 'Детализация',
     breadcrumbsAllSuffix: 'Все',
-    breadcrumbsPrev: 'Предыдущий',
+    breadcrumbsPrev: 'Назад',
     breadcrumbsNext: 'Следующий',
     popover: {
       members: 'Участники',
@@ -342,9 +443,9 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
-    addTitle: 'Добавить заголовок',
+    addTitle: 'Добавить название',
     info: {
-      details: 'Детали виджета',
+      details: 'Сведения о виджете',
       tooltip: 'Нажмите, чтобы просмотреть полные детали',
     },
     chartTableToggle: {
@@ -355,9 +456,9 @@ const translation: TranslationDictionary = {
       deleteWidget: 'Удалить виджет',
       duplicateWidget: 'Дублировать виджет',
       renameWidget: 'Переименовать виджет',
-      distributeEqualWidth: 'Равномерно распределить в этой строке',
-      download: 'Скачать',
-      csvFile: 'CSV-файл',
+      distributeEqualWidth: 'Распределить равномерно в этой строке',
+      download: 'Загрузить',
+      csvFile: 'Файл CSV',
       excelFile: 'Файл Excel',
       repeatRowsRecommended: 'Повторять строки (Рекомендуется)',
       mergeRows: 'Объединить строки',
@@ -601,14 +702,14 @@ const translation: TranslationDictionary = {
   },
   filterTile: {
     menu: {
-      lock: 'Заблокировать',
+      lock: 'Блокировать',
       unlock: 'Разблокировать',
-      lockGroup: 'Заблокировать группу',
+      lockGroup: 'Блокировать группу',
       unlockGroup: 'Разблокировать группу',
     },
     toggleSwitch: 'Включить/отключить фильтр',
     linkedToWidget: {
-      label: 'Связано с виджет фильтром',
+      label: 'Связано с виджетом фильтра',
       tooltip:
         'Этот фильтр нельзя изменить на панели фильтров. Изменяйте значения непосредственно на панели.',
       infoAriaLabel: 'Сведения о связи с виджетом фильтра',
@@ -664,26 +765,98 @@ const translation: TranslationDictionary = {
     tooltipType: 'Тип',
     tooltipColumn: 'Столбец',
     tooltipFormula: 'Формула',
+    filterPill: {
+      customFilter: 'пользовательский фильтр',
+      empty: 'пусто',
+      notEmpty: 'не пусто',
+      not: 'не {{value}}',
+      and: 'и',
+      or: 'или',
+      moreValues: '{{values}} +{{count}} ещё',
+      range: '{{from}} – {{to}}',
+      fromToLatest: '{{from}} – самая поздняя дата',
+      earliestTo: 'самая ранняя дата – {{to}}',
+      dependentOn: 'зависит от {{parents}}',
+      dependentFilter: 'зависимый фильтр',
+      text: {
+        contains: 'содержит {{value}}',
+        startsWith: 'начинается с {{value}}',
+        endsWith: 'заканчивается на {{value}}',
+        doesntEqual: 'не равно {{value}}',
+        doesntStartWith: 'не начинается с {{value}}',
+        doesntContain: 'не содержит {{value}}',
+        doesntEndWith: 'не заканчивается на {{value}}',
+        like: 'похоже на {{value}}',
+      },
+      ranking: {
+        top: 'Топ {{count}}',
+        bottom: 'Последние {{count}}',
+        by: '{{rank}} по {{measure}}',
+      },
+      relative: {
+        last: 'последние {{count}} {{unit}}',
+        next: 'следующие {{count}} {{unit}}',
+        lastTo: 'последние {{count}} {{unit}} до {{date}}',
+        nextFrom: 'следующие {{count}} {{unit}} с {{date}}',
+        includingCurrent: '{{period}}, включая текущий',
+        withOffset: '{{period}}, смещение {{offset}}',
+        today: 'сегодня',
+        thisWeek: 'эта неделя',
+        thisMonth: 'этот месяц',
+        thisQuarter: 'этот квартал',
+        thisYear: 'этот год',
+      },
+      units: {
+        year_one: 'год',
+        year_few: 'года',
+        year_many: 'лет',
+        year_other: 'года',
+        quarter_one: 'квартал',
+        quarter_few: 'квартала',
+        quarter_many: 'кварталов',
+        quarter_other: 'квартала',
+        month_one: 'месяц',
+        month_few: 'месяца',
+        month_many: 'месяцев',
+        month_other: 'месяца',
+        week_one: 'неделя',
+        week_few: 'недели',
+        week_many: 'недель',
+        week_other: 'недели',
+        day_one: 'день',
+        day_few: 'дня',
+        day_many: 'дней',
+        day_other: 'дня',
+        hour_one: 'час',
+        hour_few: 'часа',
+        hour_many: 'часов',
+        hour_other: 'часа',
+        minute_one: 'минута',
+        minute_few: 'минуты',
+        minute_many: 'минут',
+        minute_other: 'минуты',
+      },
+    },
   },
   measures: {
     countShort: 'Кол-во {{level}}',
-    countDistinct: 'Количество уникальных',
-    count: 'Количество',
+    countDistinct: 'Подсчет уникальных',
+    count: 'Подсчет всех',
     average: 'Среднее',
     sum: 'Сумма',
-    min: 'Мин',
-    max: 'Макс',
+    min: 'Минимум',
+    max: 'Максимум',
     stdev: 'Стандартное отклонение',
     median: 'Медиана',
     variance: 'Дисперсия',
   },
   measuresAgg: {
     countDistinct: '# уникальных',
-    count: '#',
+    count: 'Кол-во',
     sum: 'Итого',
     average: 'Среднее',
-    min: 'Мин',
-    max: 'Макс',
+    min: 'Минимум',
+    max: 'Максимум',
     median: 'Медиана',
     variance: 'Дисперсия',
     stdev: 'Стандартное отклонение',

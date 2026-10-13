@@ -31,9 +31,15 @@ const DataTopicsContainer = styled.div<Themable>`
 type ChatHomeProps = {
   dataTopicsList: string[];
   onDataTopicClick: (title: string) => void;
+  /** Resolves the user-visible label of a data topic by its title; defaults to the title. */
+  getDataTopicLabel?: (title: string) => string;
 };
 
-export default function ChatHome({ dataTopicsList, onDataTopicClick }: ChatHomeProps) {
+export default function ChatHome({
+  dataTopicsList,
+  onDataTopicClick,
+  getDataTopicLabel,
+}: ChatHomeProps) {
   const { enableHeader } = useChatConfig();
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
@@ -41,9 +47,10 @@ export default function ChatHome({ dataTopicsList, onDataTopicClick }: ChatHomeP
   const dataTopics = useMemo(() => {
     return dataTopicsList?.map((title) => ({
       title,
+      label: getDataTopicLabel?.(title),
       onClick: () => onDataTopicClick(title),
     }));
-  }, [dataTopicsList, onDataTopicClick]);
+  }, [dataTopicsList, onDataTopicClick, getDataTopicLabel]);
 
   const isDarkBackground =
     getDarkFactor(toColor(themeSettings.aiChat.header.backgroundColor)) > 0.5;

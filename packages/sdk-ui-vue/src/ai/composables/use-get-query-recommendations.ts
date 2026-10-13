@@ -1,4 +1,3 @@
-import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
 import {
   type ChatRestApi,
   DEFAULT_RECOMMENDATIONS_COUNT,
@@ -7,6 +6,7 @@ import {
   type UseGetQueryRecommendationsState as UseGetQueryRecommendationsStatePreact,
   widgetComposer,
 } from '@sisense/sdk-ui-preact/ai';
+import { dataLoadStateReducer } from '@sisense/sdk-ui-preact/internal';
 import { type Ref, toRefs, watch } from 'vue';
 
 import type { WidgetProps } from '../../components/widgets';

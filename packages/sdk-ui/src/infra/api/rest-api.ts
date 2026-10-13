@@ -376,6 +376,15 @@ export class RestApi {
   };
 
   /**
+   * Get the data sources the current user can query.
+   *
+   * @returns The data source list, with blank display names dropped.
+   */
+  public getDataSourceList = () => {
+    return this.queryApi.getDataSourceList();
+  };
+
+  /**
    * Export JAQL query results as an XLSX file (binary response).
    *
    * @param body - JSON payload for the JAQL export API

@@ -9,11 +9,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {
-  Chart as ChartPreact,
-  type ChartProps as ChartPropsPreact,
-  ComponentAdapter,
-} from '@sisense/sdk-ui-preact';
+import { Chart as ChartPreact, type ChartProps as ChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

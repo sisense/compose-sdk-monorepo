@@ -1,7 +1,8 @@
 import { MetadataItemJaql } from '@sisense/sdk-data';
 import { Meta, StoryObj } from '@storybook/react-vite';
 
-import { getDefaultThemeSettings, ThemeProvider } from '@/index';
+import { ThemeProvider } from '@/index';
+import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
 import { AiContextProvider } from '@/modules/ai';
 
 import { SisenseContextProvider } from '../../../infra/contexts/sisense-context/sisense-context-provider';

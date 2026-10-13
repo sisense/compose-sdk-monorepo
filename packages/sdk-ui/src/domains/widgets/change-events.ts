@@ -1,6 +1,7 @@
-import { Attribute, Filter } from '@sisense/sdk-data';
+import type { Attribute, Filter } from '@sisense/sdk-data';
 
-import { DataOptionLocation, DrilldownSelection } from '@/types';
+import type { VisualizationStateUpdate } from '@/infra/plugins/widget-plugins/types';
+import type { DataOptionLocation, DrilldownSelection } from '@/types';
 
 /**
  * Event triggered when chart widget drilldown selections change.
@@ -11,14 +12,14 @@ import { DataOptionLocation, DrilldownSelection } from '@/types';
  * ```
  */
 export interface ChartWidgetDrilldownSelectionsChangedEvent {
-  /** Event type */
+  /** Event type. */
   type: 'drilldownSelections/changed';
-  /** The new drilldown selections */
+  /** The new drilldown selections. */
   payload: DrilldownSelection[];
 }
 
 /**
- * Event triggered when widget title changes (e.g. inline rename).
+ * Event triggered when widget title changes, for example on an inline rename.
  *
  * @example
  * ```ts
@@ -28,9 +29,9 @@ export interface ChartWidgetDrilldownSelectionsChangedEvent {
  * @internal
  */
 export interface WidgetTitleChangedEvent {
-  /** Event type */
+  /** Event type. */
   type: 'title/changed';
-  /** The new title */
+  /** The new title. */
   payload: { title: string };
 }
 
@@ -50,9 +51,9 @@ export type ChartWidgetChangeEvent =
  * ```
  */
 export interface PivotTableWidgetDrilldownSelectionsChangedEvent {
-  /** Event type */
+  /** Event type. */
   type: 'drilldownSelections/changed';
-  /** The drilldown target and new selections */
+  /** The drilldown target and new selections. */
   payload: {
     target: Attribute | DataOptionLocation;
     selections: DrilldownSelection[];
@@ -78,9 +79,9 @@ export type PivotTableWidgetChangeEvent =
  * @internal
  */
 export interface FilterWidgetDateLevelChangedEvent {
-  /** Event type */
+  /** Event type. */
   type: 'dateLevel/changed';
-  /** The attribute at the newly selected granularity (a LevelAttribute) */
+  /** The attribute at the newly selected granularity (a LevelAttribute). */
   payload: { attribute: Attribute };
 }
 
@@ -96,9 +97,9 @@ export interface FilterWidgetDateLevelChangedEvent {
  * @internal
  */
 export interface FilterWidgetFilterChangedEvent {
-  /** Event type */
+  /** Event type. */
   type: 'filter/changed';
-  /** The new filter state (`null` when the selection is cleared) */
+  /** The new filter state (`null` when the selection is cleared). */
   payload: { filter: Filter | null };
 }
 
@@ -121,9 +122,40 @@ export type FilterWidgetChangeEvent =
 export type NarrativeWidgetChangeEvent = WidgetTitleChangedEvent;
 
 /**
+ * Event triggered when a custom widget's plugin visualization pushes a state update
+ * through `CustomVisualizationProps.onChange`.
+ *
+ * The payload is the plugin's {@link VisualizationStateUpdate} as-is; the dashboard
+ * composition layer (`useWidgetUpdatesPersistence`) translates it into a persistable
+ * `WidgetPropsUpdate`.
+ *
+ * @example
+ * ```ts
+ * { type: 'visualizationState/changed', payload: { customOptions: { lastPage: 3 } } }
+ * ```
+ *
+ * @internal
+ */
+export interface CustomWidgetVisualizationStateChangedEvent {
+  /** Event type. */
+  type: 'visualizationState/changed';
+  /** The plugin's partial state update. */
+  payload: VisualizationStateUpdate;
+}
+
+/**
+ * Events that can be triggered by the CustomWidget component.
+ *
+ * @internal
+ */
+export type CustomWidgetChangeEvent =
+  | CustomWidgetVisualizationStateChangedEvent
+  | WidgetTitleChangedEvent;
+
+/**
  * Events that can be triggered by widget components.
  *
- * Union of all widget-specific change events. Extensible for TextWidget, CustomWidget future events.
+ * Union of all widget-specific change events. Extensible for TextWidget future events.
  *
  * @example
  * ```ts
@@ -135,14 +167,16 @@ export type NarrativeWidgetChangeEvent = WidgetTitleChangedEvent;
  * }}
  * ```
  *
- * Persistable state changes (e.g. scroll position, future title/customOptions)
- * flow through {@link WidgetPropsUpdate} and `DashboardPersistenceManager.updateWidget`,
- * NOT through this channel. Use `WidgetChangeEvent` for transient/interactive
- * events; use `WidgetPropsUpdate` for "if this is lost on reload, the user
- * notices."
+ * A change event reports what happened; it is not itself the persisted shape.
+ * Persisting is done by the composition-layer middleware that observes the event and
+ * calls `DashboardPersistenceManager.updateWidget` (e.g. `useWidgetRenaming` for
+ * `title/changed`, `useWidgetUpdatesPersistence` translating
+ * `visualizationState/changed` into a {@link WidgetPropsUpdate}). State that no widget
+ * event reports (e.g. navigator scroll position) is wired to `WidgetPropsUpdate` directly.
  */
 export type WidgetChangeEvent =
   | ChartWidgetChangeEvent
   | PivotTableWidgetChangeEvent
   | FilterWidgetChangeEvent
-  | NarrativeWidgetChangeEvent;
+  | NarrativeWidgetChangeEvent
+  | CustomWidgetChangeEvent;

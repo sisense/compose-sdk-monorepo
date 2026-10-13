@@ -3,9 +3,9 @@ import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import type { QueryExecutionConfig } from '@sisense/sdk-query-client';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { type ClientApplication } from '@/infra/app/types';
 import { translation } from '@/infra/translation/resources/en';
 
-import { type ClientApplication } from '../../../index.js';
 import {
   clearRowCountQueryCache,
   createExecuteQueryCacheKey,

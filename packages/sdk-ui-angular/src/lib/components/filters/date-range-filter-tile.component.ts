@@ -10,10 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   DateRangeFilterTile as DateRangeFilterTilePreact,
   type DateRangeFilterTileProps as DateRangeFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

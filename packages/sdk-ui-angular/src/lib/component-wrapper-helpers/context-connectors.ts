@@ -9,7 +9,7 @@ import {
   CustomWidgetsProviderAdapter,
   CustomWidgetsProviderAdapterProps,
   DataObserver,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 
 import { CustomWidgetsService } from '../services/custom-widgets.service';
 import { SisenseContextService } from '../services/sisense-context.service';

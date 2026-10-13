@@ -370,7 +370,9 @@ export function ConditionFilterNumeric({
                         }}
                       />
                     ) : (
-                      <ConnectorText>{connectorLabel(draft.connector)}</ConnectorText>
+                      <ConnectorText $radius={radius}>
+                        {connectorLabel(draft.connector)}
+                      </ConnectorText>
                     )}
                   </ConnectorSlot>
                   <RowGrow>
@@ -412,7 +414,12 @@ export function ConditionFilterNumeric({
           })}
 
           {allowChaining && (
-            <AddCondition type="button" data-testid="filter-widget-condition-add" onClick={addRow}>
+            <AddCondition
+              type="button"
+              $radius={radius}
+              data-testid="filter-widget-condition-add"
+              onClick={addRow}
+            >
               {t('filterWidget.controls.addCondition', '+ Add condition')}
             </AddCondition>
           )}

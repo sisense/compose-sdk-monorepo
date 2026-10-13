@@ -1,21 +1,21 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { ChartSubtype } from '@/domains/visualizations/core/chart-options-processor/subtype-to-design-options.js';
-import { WidgetModel } from '@/domains/widgets/widget-model';
-import { WidgetTypeInternal } from '@/domains/widgets/widget-model/types.js';
+import type { ChartSubtype } from '@/domains/visualizations/core/chart-options-processor/subtype-to-design-options.js';
+import type { WidgetModel } from '@/domains/widgets/widget-model';
+import type { WidgetTypeInternal } from '@/domains/widgets/widget-model/types.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
-import { ChartProps, PivotTableProps } from '@/props';
+import type { ChartProps, PivotTableProps } from '@/props';
 import { combineHandlers } from '@/shared/utils/combine-handlers';
-import { ChartType, CustomWidgetEventProps } from '@/types.js';
+import type { ChartType, CustomWidgetEventProps } from '@/types.js';
 
-import { ChartWidgetProps } from '../chart-widget/types';
-import { CommonWidgetProps } from '../common-widget/types';
-import { CustomWidgetProps } from '../custom-widget/types';
-import { FilterWidgetProps } from '../filter-widget/types';
-import { NarrativeWidgetProps } from '../narrative-widget/types';
-import { PivotTableWidgetProps } from '../pivot-table-widget/types';
-import { TextWidgetProps } from '../text-widget/types';
-import { WidgetProps, WidgetType, WithCommonWidgetProps } from '../widget/types';
-import {
+import type { ChartWidgetProps } from '../chart-widget/types';
+import type { CommonWidgetProps } from '../common-widget/types';
+import type { CustomWidgetProps } from '../custom-widget/types';
+import type { FilterWidgetProps } from '../filter-widget/types';
+import type { NarrativeWidgetProps } from '../narrative-widget/types';
+import type { PivotTableWidgetProps } from '../pivot-table-widget/types';
+import type { TextWidgetProps } from '../text-widget/types';
+import type { WidgetProps, WidgetType, WithCommonWidgetProps } from '../widget/types';
+import type {
   CsdkPluginWidgetType,
   FusionPluginWidgetType,
   FusionWidgetType,
@@ -78,7 +78,7 @@ export function isMeasurePanelItem(item: PanelItem): boolean {
 }
 
 /**
- * Returns the corresponding chart type for a given widget type
+ * Returns the corresponding chart type for a given widget type.
  *
  * @internal
  */
@@ -116,6 +116,9 @@ export function getFusionWidgetType(
   }
   if (widgetType === 'narrative') {
     return 'dashboardnarrative';
+  }
+  if (widgetType === 'filter') {
+    return 'filter';
   }
   throw new TranslatableError('errors.widgetModel.unsupportedWidgetType', {
     widgetType,
@@ -208,8 +211,8 @@ export function isSupportedWidgetType(
 
 /**
  * Check if the given fusion widget type is a supported plugin widget (in DTO format).
- * @param fusionWidgetType - The fusion widget type from DTO
- * @returns True if it's a supported plugin widget
+ * @param fusionWidgetType - The fusion widget type from DTO.
+ * @returns True if it's a supported plugin widget.
  * @internal
  */
 export function isSupportedPluginFusionWidget(fusionWidgetType: string): boolean {
@@ -218,8 +221,8 @@ export function isSupportedPluginFusionWidget(fusionWidgetType: string): boolean
 
 /**
  * Check if the given CSDK widget type is a supported plugin widget (in CSDK format).
- * @param csdkWidgetType - The CSDK custom widget type
- * @returns True if it's a supported plugin widget
+ * @param csdkWidgetType - The CSDK custom widget type.
+ * @returns True if it's a supported plugin widget.
  * @internal
  */
 export function isSupportedPluginCsdkWidget(csdkWidgetType: string): boolean {
@@ -228,8 +231,8 @@ export function isSupportedPluginCsdkWidget(csdkWidgetType: string): boolean {
 
 /**
  * Map a Fusion plugin widget type (DTO) to CSDK plugin widget type.
- * @param fusionType - The Fusion plugin widget type from DTO
- * @returns The corresponding CSDK plugin widget type
+ * @param fusionType - The Fusion plugin widget type from DTO.
+ * @returns The corresponding CSDK plugin widget type.
  * @internal
  */
 export function fusionPluginWidgetTypeToCsdk(
@@ -247,8 +250,8 @@ export function fusionPluginWidgetTypeToCsdk(
 
 /**
  * Map a CSDK plugin widget type to Fusion plugin widget type (DTO).
- * @param csdkType - The CSDK plugin widget type
- * @returns The corresponding Fusion plugin widget type for DTO
+ * @param csdkType - The CSDK plugin widget type.
+ * @returns The corresponding Fusion plugin widget type for DTO.
  * @internal
  */
 export function csdkPluginWidgetTypeToFusion(
@@ -265,7 +268,7 @@ export function csdkPluginWidgetTypeToFusion(
 }
 
 /**
- * Widget types that support Jump To Dashboard (JTD) functionality
+ * Widget types that support Jump To Dashboard (JTD) functionality.
  *
  * Supported types:
  * - Pie chart with no categories, Pie chart
@@ -274,7 +277,7 @@ export function csdkPluginWidgetTypeToFusion(
  * - Column chart, Bar chart, Line chart, Area chart
  * - Pivot
  * - Scatter chart, Polar chart
- * - Blox
+ * - Blox.
  *
  * @internal
  */
@@ -293,10 +296,10 @@ export const JTD_SUPPORTED_WIDGET_TYPES: FusionWidgetType[] = [
 ];
 
 /**
- * Check if the widget type supports Jump To Dashboard (JTD)
+ * Check if the widget type supports Jump To Dashboard (JTD).
  *
- * @param fusionWidgetType - The fusion widget type
- * @returns True if the widget type supports JTD, false otherwise
+ * @param fusionWidgetType - The fusion widget type.
+ * @returns True if the widget type supports JTD, false otherwise.
  * @internal
  */
 export function widgetTypeSupportsJtd(fusionWidgetType: FusionWidgetType): boolean {
@@ -344,6 +347,16 @@ export function isNarrativeWidget(widgetType: WidgetType) {
   return widgetType === 'narrative';
 }
 
+/**
+ * Checks whether a widget type is the filter widget.
+ * @param widgetType - The widget type.
+ * @returns `true` for `filter`.
+ * @internal
+ */
+export function isFilterWidget(widgetType: WidgetType) {
+  return widgetType === 'filter';
+}
+
 export function isTextWidgetDtoStyle(widgetStyle: WidgetStyle): widgetStyle is TextWidgetDtoStyle {
   return 'content' in widgetStyle && 'html' in widgetStyle.content;
 }
@@ -380,7 +393,7 @@ export function isChartWidget(widgetType: WidgetType) {
  * Type guard for checking if the widget props is for a text widget.
  *
  * @param widgetProps - The widget props to check.
- * @returns whether the widget props is for a text widget
+ * @returns Whether the widget props is for a text widget.
  * @internal
  */
 export function isTextWidgetProps(
@@ -392,7 +405,7 @@ export function isTextWidgetProps(
 /**
  * Type guard for checking if the widget props is for the dashboard narrative widget.
  * @param widgetProps - The widget props to check.
- * @returns whether the widget props is for the dashboard narrative widget
+ * @returns Whether the widget props is for the dashboard narrative widget.
  * @internal
  */
 export function isNarrativeWidgetProps(
@@ -405,7 +418,7 @@ export function isNarrativeWidgetProps(
  * Type guard for checking if the widget props is for a pivot table widget.
  *
  * @param widgetProps - The widget props to check.
- * @returns whether the widget props is for a pivot table widget
+ * @returns Whether the widget props is for a pivot table widget.
  *
  * @sisenseInternal
  */
@@ -416,11 +429,12 @@ export function isPivotTableWidgetProps(
 }
 
 /**
- * Type guard for checking if the widget props is for a custom widget
+ * Type guard for checking if the widget props is for a custom widget.
  *
  * @param widgetProps - The widget props to check.
- * @returns whether the widget props is for a custom widget
+ * @returns Whether the widget props is for a custom widget.
  * @internal
+ * @sisenseInternal
  */
 export function isCustomWidgetProps(
   widgetProps: CommonWidgetProps,
@@ -442,10 +456,10 @@ export function isFilterWidgetProps(
 }
 
 /**
- * Type guard for checking if the widget props is for a chart widget
+ * Type guard for checking if the widget props is for a chart widget.
  *
  * @param widgetProps - The widget props to check.
- * @returns whether the widget props is for a chart widget
+ * @returns Whether the widget props is for a chart widget.
  * @sisenseInternal
  */
 export function isChartWidgetProps(
@@ -469,7 +483,7 @@ export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTyp
 }
 
 /**
- * Registers new "onDataPointClick" handler for the Widget component
+ * Registers new "onDataPointClick" handler for the Widget component.
  *
  * @internal
  */
@@ -491,7 +505,7 @@ export function registerDataPointClickHandler(
 }
 
 /**
- * Registers new "onDataPointContextMenu" handler for the Widget component
+ * Registers new "onDataPointContextMenu" handler for the Widget component.
  *
  * @internal
  */
@@ -516,7 +530,7 @@ export function registerDataPointContextMenuHandler(
 }
 
 /**
- * Registers new "onDataPointsSelected" handler for the Widget component
+ * Registers new "onDataPointsSelected" handler for the Widget component.
  *
  * @internal
  */

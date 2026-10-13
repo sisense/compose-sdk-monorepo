@@ -216,6 +216,31 @@ describe('translateWidgetFromJSON — text', () => {
   });
 });
 
+describe('translateWidgetFromJSON — narrative', () => {
+  it('passes title, styleOptions, config and dashboardId through without data translation', () => {
+    const narrativeWidgetJSON: Extract<WidgetJSON, { widgetType: 'narrative' }> = {
+      widgetType: 'narrative',
+      id: 'w-n',
+      title: 'Dashboard Narrative',
+      styleOptions: { isAutoHeight: true },
+      config: { header: { menu: { enabled: false } } },
+      dashboardId: 'dash-1',
+    };
+    const result = translateWidgetFromJSON({ data: narrativeWidgetJSON, context });
+    expect(result.success).toBe(true);
+    expect(getSuccessData(result)).toEqual(narrativeWidgetJSON);
+  });
+
+  it('accepts a narrative with only widgetType and id', () => {
+    const result = translateWidgetFromJSON({
+      data: { widgetType: 'narrative', id: 'w-n' },
+      context,
+    });
+    expect(result.success).toBe(true);
+    expect(getSuccessData(result)).toEqual({ widgetType: 'narrative', id: 'w-n' });
+  });
+});
+
 describe('translateWidgetFromJSON — custom', () => {
   it('passes dataOptions through and translates filters', () => {
     const result = translateWidgetFromJSON({

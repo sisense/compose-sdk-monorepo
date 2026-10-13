@@ -96,9 +96,15 @@ export type FilterWidgetControlStyleOptions = {
    * for any selection highlight the design fills with the brand color.
    */
   accentColor?: string;
-  /** Height of the control. Rows in the open list stay 30px. @defaultValue 's' (28px) */
+  /**
+   * Height of the control. Rows in the open list stay 30px.
+   * @defaultValue 's' (28px)
+   */
   size?: FilterWidgetControlSize;
-  /** Corner roundness of the control and of the open list. @defaultValue 's' (4px) */
+  /**
+   * Corner roundness of the control and of the open list.
+   * @defaultValue 's' (4px)
+   */
   cornerRadius?: FilterWidgetControlCornerRadius;
   /** @defaultValue 'left' */
   alignHorizontal?: FilterWidgetControlAlignHorizontal;
@@ -129,9 +135,9 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
  *
  * - `'members'`      — searchable member-select dropdown. Implemented.
  * - `'calendar'`     — calendar taking one date or several, for datetime attributes only. Implemented.
- * - `'range'`        — two-field From/To date-range picker, for datetime attributes only. Implemented.
- * - `'period'`       — relative-period picker. Planned.
- * - `'numericRange'` — numeric range slider. Planned.
+ * - `'range'`        — range picker for date (From/To fields with a shared calendar) and numeric (Minimum / Maximum fields with a slider) attributes. Implemented.
+ * - `'period'`       — Time Frame: one-click list of ready-made relative windows (Today,
+ *                     Last 7 days, This month, …) for datetime attributes only. Implemented.
  * - `'condition'`    — condition builder for text (with optional AND/OR chaining), numeric, and date attributes. Implemented.
  *
  * @example
@@ -142,13 +148,7 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
  *
  * @beta
  */
-export type FilterWidgetFilterType =
-  | 'members'
-  | 'calendar'
-  | 'range'
-  | 'period'
-  | 'numericRange'
-  | 'condition';
+export type FilterWidgetFilterType = 'members' | 'calendar' | 'range' | 'period' | 'condition';
 
 /**
  * Human-readable UI labels for each {@link FilterWidgetFilterType}.
@@ -166,8 +166,7 @@ export const filterWidgetFilterTypeLabels: Record<FilterWidgetFilterType, string
   members: 'List',
   calendar: 'Calendar',
   range: 'Range',
-  period: 'Period',
-  numericRange: 'Numeric Range',
+  period: 'Time Frame',
   condition: 'Condition',
 };
 
@@ -203,14 +202,36 @@ export interface FilterWidgetProps {
   /**
    * How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
    * `'condition'` renders a condition control for text, numeric, or datetime attributes,
-   * `'calendar'` a calendar for datetime attributes, and `'range'` a two-field From/To
-   * date-range picker for datetime attributes.
+   * `'calendar'` a calendar for datetime attributes, `'range'` a two-field From/To
+   * date-range picker for datetime attributes, and `'period'` a Time Frame dropdown —
+   * a one-click list of ready-made relative windows (Today, Last 7 days, This month, …)
+   * for datetime attributes.
    * Additional types will be added as they are implemented.
    *
    * @defaultValue 'members'
    * @category Widget
    */
   filterType?: FilterWidgetFilterType;
+  /**
+   * The frames a `'period'` (Time Frame) filter offers, given as an array of canonical
+   * frame keys (`tense:count:grain[:c]`, e.g. `'last:7:Day'`, `'last:2:Month:c'`).
+   *
+   * When omitted, the filter offers the default 11: Today · Yesterday · This week ·
+   * Last week · This month · Last month · Last 6 months · This quarter · Last quarter ·
+   * This year · Last year — the common set for a fresh widget.
+   *
+   * A key not in the 47-frame catalogue is dropped on read, and a set of fewer than two
+   * valid keys reads as the default 11 — a defensive guard so a saved dashboard can
+   * never present an unusable list. Order is canonical (Days → Weeks → Months →
+   * Quarters → Years, and within each grain the row order of the catalogue), not the
+   * caller's order.
+   *
+   * Ignored for every filter type other than `'period'`.
+   *
+   * @category Widget
+   * @beta
+   */
+  timeFrames?: string[];
   /**
    * If true, the dropdown allows selecting multiple members.
    *
@@ -227,11 +248,11 @@ export interface FilterWidgetProps {
   filter?: Filter | null;
   /**
    * Called when a widget change event occurs — the unified widget change
-   * channel (same pattern as ChartWidget / PivotTableWidget):
+   * channel (same pattern as ChartWidget / PivotTableWidget).
    *
-   * - `'filter/changed'` — the user changed the filter selection
-   * - `'dateLevel/changed'` — the user picked a different date granularity
-   * - `'title/changed'` — the widget title was renamed inline
+   * - `'filter/changed'` — the user changed the filter selection.
+   * - `'dateLevel/changed'` — the user picked a different date granularity.
+   * - `'title/changed'` — the widget title was renamed inline.
    *
    * Injected automatically when placed inside a Dashboard.
    *
@@ -287,8 +308,8 @@ export interface FilterWidgetProps {
   /**
    * Calls the provided callback each time the widget finishes rendering with
    * fetched data — on initial load and again whenever it re-enters a ready
-   * state after a reload (e.g. dimension change, refetch). Use this to signal
-   * to a host application that the widget content is committed to the DOM.
+   * state after a reload (for example a dimension change or refetch).
+   * Use this to signal to a host application that the widget content is committed to the DOM.
    *
    * @category Widget
    * @internal

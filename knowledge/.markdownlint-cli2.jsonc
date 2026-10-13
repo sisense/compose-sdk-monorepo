@@ -1,0 +1,7 @@
+{
+  // OKF concept docs (.claude/rules/okf-knowledge.md) carry the title in frontmatter and use
+  // top-level `# Purpose`, `# Entry point`, `# Contract`, … sections, so the single-H1 rule cannot hold.
+  "config": {
+    "MD025": false
+  }
+}

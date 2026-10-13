@@ -1,6 +1,8 @@
 import {
   CascadingFilter,
   CustomFilter,
+  DateMeasureMembersFilter,
+  DateMeasureRelativeFilter,
   DateRangeFilter,
   DimensionalAttribute,
   DimensionalBaseMeasure,
@@ -12,6 +14,8 @@ import {
   ExcludeFilter,
   isCascadingFilter,
   isCustomFilter,
+  isDateMeasureMembersFilter,
+  isDateMeasureRelativeFilter,
   isDateRangeFilter,
   isDimensionalAttribute,
   isDimensionalBaseMeasure,
@@ -177,6 +181,8 @@ const deserializeDimensionalCalculatedMeasure = (v: any) => {
           case 'MeasureFilter':
           case 'RankingFilter':
           case 'MeasureRankingFilter':
+          case 'DateMeasureMembersFilter':
+          case 'DateMeasureRelativeFilter':
           case 'NumericFilter':
           case 'TextFilter':
           case 'DateRangeFilter':
@@ -243,6 +249,29 @@ const deserializeFilter = (v: any): any => {
           ? { ...v.config, backgroundFilter: deserializeFilter(v.config.backgroundFilter) }
           : v.config,
         v.composeCode,
+      );
+    case 'DateMeasureMembersFilter':
+      return new DateMeasureMembersFilter(
+        deserializeMeasure(v.measure),
+        deserializeAttribute(v.attribute) as DimensionalLevelAttribute,
+        v.members,
+        v.config?.backgroundFilter
+          ? { ...v.config, backgroundFilter: deserializeFilter(v.config.backgroundFilter) }
+          : v.config,
+        v.composeCode,
+        true,
+      );
+    case 'DateMeasureRelativeFilter':
+      return new DateMeasureRelativeFilter(
+        deserializeMeasure(v.measure),
+        deserializeAttribute(v.attribute) as DimensionalLevelAttribute,
+        v.offset,
+        v.count,
+        v.operator,
+        v.anchor,
+        v.config,
+        v.composeCode,
+        true,
       );
     case 'LogicalAttributeFilter':
       return new LogicalAttributeFilter(
@@ -422,6 +451,28 @@ SuperJSON.registerCustom<MembersFilter, any>(
     deserialize: (v) => deserializeFilter(v),
   },
   'MembersFilter',
+);
+
+/* superjson's JSONValue constraint rejects our JSONObject, so every registration in this file
+   passes `any`, and these two pass `any` like every other registration in this file. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+SuperJSON.registerCustom<DateMeasureMembersFilter, any>(
+  {
+    isApplicable: isDateMeasureMembersFilter,
+    serialize: (v) => v.serialize(),
+    deserialize: (v) => deserializeFilter(v),
+  },
+  'DateMeasureMembersFilter',
+);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+SuperJSON.registerCustom<DateMeasureRelativeFilter, any>(
+  {
+    isApplicable: isDateMeasureRelativeFilter,
+    serialize: (v) => v.serialize(),
+    deserialize: (v) => deserializeFilter(v),
+  },
+  'DateMeasureRelativeFilter',
 );
 
 SuperJSON.registerCustom<LogicalAttributeFilter, any>(

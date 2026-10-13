@@ -1,8 +1,10 @@
-import { createAttribute } from '../attributes/attributes.js';
+import { createAttribute, DimensionalLevelAttribute } from '../attributes/attributes.js';
 import * as attributeFactory from '../attributes/factory.js';
 import { createDateDimension } from '../dimensions/index.js';
 import { Filter } from '../interfaces.js';
 import * as measureFactory from '../measures/factory.js';
+import { DimensionalBaseMeasure } from '../measures/measures.js';
+import { DateLevels } from '../types.js';
 import * as filterFactory from './factory.js';
 import {
   createFilter,
@@ -1049,5 +1051,326 @@ describe('measure filters over a formula measure', () => {
     expect(() => filterFactory.measureEquals(empty, 1)).toThrow(
       'Cannot determine attribute from measure',
     );
+  });
+});
+
+/* The filter level and the measure's own operand level are different inputs. Getting that wrong
+   returns zero rows from the server rather than an error, so every case here asserts both. */
+describe('measure filters on a date measure', () => {
+  const lastOrder = measureFactory.max(dateDim.Days, 'Last Order');
+  const revenue = measureFactory.sum(numAttr, 'Revenue');
+  const shipDim = createDateDimension({ name: 'ship', expression: '[Table.ShipDate]' });
+  const itemOf = (filter: Filter) => filter.jaql().jaql;
+
+  it('matches members at the level given, not at the level inside the measure', () => {
+    const item = itemOf(
+      filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00']),
+    );
+
+    expect(item.level).toBe('years');
+    expect(lastOrder.jaql().jaql.level).toBe('days');
+  });
+
+  it('carries the measure keys, the datatype and the scope panel', () => {
+    const filter = filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, [
+      '2013-01-01T00:00:00',
+    ]);
+
+    expect(itemOf(filter)).toMatchObject({
+      dim: '[Table.Date]',
+      agg: 'max',
+      datatype: 'datetime',
+      filter: { members: ['2013-01-01T00:00:00'] },
+    });
+    expect(filter.jaql().panel).toBe('scope');
+  });
+
+  it('negates the members through the config, in the exclude shape Fusion uses', () => {
+    const item = itemOf(
+      filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00'], {
+        excludeMembers: true,
+      }),
+    );
+
+    expect(item.filter).toStrictEqual({ exclude: { members: ['2013-01-01T00:00:00'] } });
+  });
+
+  it('writes a Date member as a local datetime, with no Z to shift the day', () => {
+    const item = itemOf(
+      filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, [new Date(2012, 0, 1)]),
+    );
+
+    expect(item.filter.members).toStrictEqual(['2012-01-01T00:00:00']);
+  });
+
+  it.each([
+    ['dateMeasureRelativeFrom', filterFactory.dateMeasureRelativeFrom, 'next'],
+    ['dateMeasureRelativeTo', filterFactory.dateMeasureRelativeTo, 'last'],
+  ])('%s puts the period on the measure at the level given', (_name, build, operator) => {
+    const item = itemOf(build(lastOrder, dateDim.Years, 0, 1, '2013-06-01'));
+
+    expect(item.level).toBe('years');
+    expect(item.agg).toBe('max');
+    expect(item.filter).toStrictEqual({
+      [operator]: { offset: 0, count: 1, anchor: '2013-06-01' },
+    });
+  });
+
+  it('writes a Date anchor as a bare date, not as a timestamp', () => {
+    const item = itemOf(
+      filterFactory.dateMeasureRelativeTo(lastOrder, dateDim.Years, 0, 1, new Date(2013, 5, 1)),
+    );
+
+    expect(item.filter.last.anchor).toBe('2013-06-01');
+  });
+
+  it('offset 0 includes the anchor period and offset 1 excludes it', () => {
+    const including = itemOf(filterFactory.dateMeasureRelativeTo(lastOrder, dateDim.Years, 0, 1));
+    const excluding = itemOf(filterFactory.dateMeasureRelativeTo(lastOrder, dateDim.Years, 1, 1));
+
+    expect(including.filter.last.offset).toBe(0);
+    expect(excluding.filter.last.offset).toBe(1);
+  });
+
+  it.each([
+    [
+      'dateMeasureMembers',
+      () => filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00']),
+    ],
+    [
+      'dateMeasureRelativeFrom',
+      () => filterFactory.dateMeasureRelativeFrom(lastOrder, dateDim.Years, 0, 1, '2013-06-01'),
+    ],
+    [
+      'dateMeasureRelativeTo',
+      () => filterFactory.dateMeasureRelativeTo(lastOrder, dateDim.Years, 0, 1, '2013-06-01'),
+    ],
+  ])('%s stamps compose code that names it', (name, build) => {
+    expect(build().composeCode).toContain(`filterFactory.${name}(`);
+  });
+
+  it.each([
+    [
+      'dateMeasureMembers',
+      () => filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, [new Date(2012, 0, 1)]),
+    ],
+    [
+      'dateMeasureRelativeTo',
+      () =>
+        filterFactory.dateMeasureRelativeTo(lastOrder, dateDim.Years, 0, 1, new Date(2013, 5, 1)),
+    ],
+  ])('%s survives serialize and createFilter with the same jaql', (_name, build) => {
+    const filter = build();
+
+    expect(createFilter(filter.serialize()).jaql()).toStrictEqual(filter.jaql());
+  });
+
+  /* A measure that answers with a number cannot mean anything at a granularity, and this family
+     forces the caller to pass one: datatype 'numeric' beside level 'years' contradicts itself. */
+  it.each([
+    [
+      'dateMeasureMembers',
+      () => filterFactory.dateMeasureMembers(revenue, dateDim.Years, ['2013-01-01T00:00:00']),
+    ],
+    [
+      'dateMeasureRelativeTo',
+      () => filterFactory.dateMeasureRelativeTo(revenue, dateDim.Years, 0, 1),
+    ],
+  ])('%s refuses a measure that is not a date measure', (_name, build) => {
+    expect(build).toThrow(/is not a date measure/);
+  });
+
+  it('names the measure and the level it could not apply', () => {
+    expect(() =>
+      filterFactory.dateMeasureMembers(revenue, dateDim.Years, ['2013-01-01T00:00:00']),
+    ).toThrow(/'Revenue'.*'Years'/);
+  });
+
+  /* The filter is built on the measure's own dim, so a level from elsewhere is silently discarded and
+     the filter acts on the measure's dimension while still looking correct. */
+  it.each([
+    [
+      'dateMeasureMembers',
+      () => filterFactory.dateMeasureMembers(lastOrder, shipDim.Years, ['2013-01-01T00:00:00']),
+    ],
+    [
+      'dateMeasureRelativeTo',
+      () => filterFactory.dateMeasureRelativeTo(lastOrder, shipDim.Years, 0, 1),
+    ],
+  ])('%s refuses a level from another dimension', (_name, build) => {
+    expect(build).toThrow(/\[Table\.ShipDate\][\s\S]*\[Table\.Date\]/);
+  });
+
+  it('allows a level from the measure own dimension', () => {
+    expect(() =>
+      filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00']),
+    ).not.toThrow();
+  });
+
+  /* An unresolvable dimension is skipped, not refused: a custom dimension or an
+     alias must not start throwing on code the compiler never warned about. */
+  it('says nothing when the level dimension cannot be resolved', () => {
+    const unresolvable = new DimensionalLevelAttribute('Years', '', 'Years');
+
+    expect(() =>
+      filterFactory.dateMeasureMembers(lastOrder, unresolvable, ['2013-01-01T00:00:00']),
+    ).not.toThrow();
+  });
+
+  /* A saved config keeps its backgroundFilter as plain JSON, and jaql() calls filterJaql() on it,
+     so a rebuild that leaves it as JSON kills the whole widget query on reload. */
+  it('rebuilds the background filter inside a saved config', () => {
+    const filter = filterFactory.dateMeasureMembers(
+      lastOrder,
+      dateDim.Years,
+      ['2013-01-01T00:00:00'],
+      {
+        backgroundFilter: filterFactory.members(textAttr, ['text1']),
+      },
+    );
+
+    expect(() => createFilter(filter.serialize()).jaql()).not.toThrow();
+  });
+
+  /* The rebuild of a members filter reads no config, so an exclude background filter would come
+     back as an include one and flip which rows the widget keeps. */
+  it('keeps the background filter config through a round trip', () => {
+    const filter = filterFactory.dateMeasureMembers(
+      lastOrder,
+      dateDim.Years,
+      ['2013-01-01T00:00:00'],
+      {
+        backgroundFilter: filterFactory.members(textAttr, ['text1'], {
+          excludeMembers: true,
+          deactivatedMembers: ['text2'],
+          guid: 'background-guid',
+        }),
+      },
+    );
+
+    const rebuilt = createFilter(filter.serialize()) as MembersFilter;
+    const background = rebuilt.config.backgroundFilter as MembersFilter;
+
+    expect(background.config.excludeMembers).toBe(true);
+    expect(background.config.deactivatedMembers).toEqual(['text2']);
+    expect(background.config.guid).toBe('background-guid');
+    expect(background.filterJaql()).toEqual({ exclude: { members: ['text1'] } });
+  });
+
+  /* The saved config is plain JSON all the way down, so a background filter that has its own
+     would be laid back on as JSON and filterJaql() would call a method it does not have. */
+  it('rebuilds a nested background filter inside a saved config', () => {
+    const filter = filterFactory.dateMeasureMembers(
+      lastOrder,
+      dateDim.Years,
+      ['2013-01-01T00:00:00'],
+      {
+        backgroundFilter: filterFactory.members(textAttr, ['text1'], {
+          backgroundFilter: filterFactory.members(numAttr, ['1']),
+        }),
+      },
+    );
+
+    const rebuilt = createFilter(filter.serialize()) as MembersFilter;
+    const background = rebuilt.config.backgroundFilter as MembersFilter;
+
+    expect(background.config.backgroundFilter).toBeInstanceOf(MembersFilter);
+    expect(background.filterJaql()).toEqual({
+      and: [{ members: ['text1'] }, { members: ['1'] }],
+    });
+  });
+
+  /* Losing config turns a filter the user switched OFF back ON after a reload, and guid is the
+     identity filter relations match on. */
+  it('keeps disabled, locked and guid through a relative-period round trip', () => {
+    const filter = filterFactory.dateMeasureRelativeTo(
+      lastOrder,
+      dateDim.Years,
+      0,
+      1,
+      '2013-06-01',
+      {
+        disabled: true,
+        locked: true,
+      },
+    );
+
+    const rebuilt = createFilter(filter.serialize());
+
+    expect(rebuilt.config.disabled).toBe(true);
+    expect(rebuilt.config.locked).toBe(true);
+    expect(rebuilt.config.guid).toBe(filter.config.guid);
+  });
+
+  /* A stored sub-day measure carries a bucket. Left beside the filter's own level the server groups
+     at a granularity nobody asked for and answers zero rows with a 200. */
+  it.each([DateLevels.AggHours, DateLevels.Hours])(
+    'drops the bucket a stored %s measure brings with it',
+    (granularity) => {
+      const stored = new DimensionalBaseMeasure(
+        'Stored',
+        dateDim.Years.setGranularity(granularity),
+        'max',
+      );
+
+      const item = itemOf(
+        filterFactory.dateMeasureMembers(stored, dateDim.Years, ['2013-01-01T00:00:00']),
+      );
+
+      expect(item.bucket).toBeUndefined();
+      expect(item.level).toBe('years');
+    },
+  );
+
+  it('answers a nested jaql request the way the dimension filters do', () => {
+    const filter = filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, [
+      '2013-01-01T00:00:00',
+    ]);
+
+    expect(filter.jaql(true).level).toBe('years');
+    expect(filter.jaql(true).agg).toBe('max');
+  });
+
+  /* Deserialization stays unguarded, like `aggregateWithoutDateGuards`: a dashboard saved before
+     the guard existed must keep rendering. */
+  it.each([
+    ['a level from another dimension', 'attribute', () => shipDim.Years.serialize()],
+    ['a measure that answers with a number', 'measure', () => revenue.serialize()],
+  ])('rebuilds a saved filter holding %s', (_name, key, value) => {
+    const saved = filterFactory
+      .dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00'])
+      .serialize();
+
+    expect(() => createFilter({ ...saved, [key]: value() })).not.toThrow();
+  });
+});
+
+/* The existing dimension filters must serialize exactly as they did before the measure
+   variants were added. */
+describe('date dimension filters are untouched by the measure variants', () => {
+  it('members on a dimension carries no agg and keeps its own level', () => {
+    const item = filterFactory.members(dateDim.Years, ['2013-01-01T00:00:00']).jaql().jaql;
+
+    expect(item.agg).toBeUndefined();
+    expect(item.level).toBe('years');
+    expect(item.filter).toStrictEqual({ members: ['2013-01-01T00:00:00'] });
+  });
+
+  it('dateRelativeTo on a dimension keeps its own toISOString anchor', () => {
+    const item = filterFactory
+      .dateRelativeTo(dateDim.Years, 0, 1, new Date(Date.UTC(2013, 5, 1)))
+      .jaql().jaql;
+
+    expect(item.agg).toBeUndefined();
+    expect(item.filter.last.anchor).toBe('2013-06-01T00:00:00.000Z');
+  });
+
+  it('a numeric measure comparison filter is unchanged', () => {
+    const item = filterFactory
+      .measureGreaterThanOrEqual(measureFactory.sum(numAttr, 'Revenue'), 100)
+      .jaql().jaql;
+
+    expect(item.agg).toBe('sum');
+    expect(item.filter).toStrictEqual({ from: 100 });
   });
 });

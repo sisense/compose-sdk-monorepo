@@ -1,11 +1,11 @@
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { type ExecuteQueryParams } from '@sisense/sdk-ui-preact';
 import {
   type ClientApplication,
   executeQuery,
-  type ExecuteQueryParams,
   executeQueryWithRowCount,
   queryStateReducer,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { ref, toRefs, watch } from 'vue';
 
 import { useReducer } from '../helpers/use-reducer';

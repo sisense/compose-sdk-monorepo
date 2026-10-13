@@ -1,9 +1,8 @@
 import {
   type CustomWidgetQueryState,
   type ExecuteCustomWidgetQueryParams as ExecuteCustomWidgetQueryParamsPreact,
-  HookAdapter,
-  useExecuteCustomWidgetQueryInternal,
 } from '@sisense/sdk-ui-preact';
+import { HookAdapter, useExecuteCustomWidgetQueryInternal } from '@sisense/sdk-ui-preact/internal';
 import { onBeforeUnmount, toRefs, watch } from 'vue';
 
 import { createSisenseContextConnector } from '../helpers/context-connectors';

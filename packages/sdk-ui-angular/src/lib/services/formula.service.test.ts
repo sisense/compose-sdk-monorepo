@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/unbound-method */
 import type { CalculatedMeasure } from '@sisense/sdk-data';
-import { HookAdapter } from '@sisense/sdk-ui-preact';
+import { HookAdapter } from '@sisense/sdk-ui-preact/internal';
 import { of } from 'rxjs';
 
 import { FormulaService, GetSharedFormulaParams } from './formula.service';
@@ -12,8 +12,8 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
   return {
     ...actual,
     useGetSharedFormulaInternal: vi.fn(),

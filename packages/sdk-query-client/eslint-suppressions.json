@@ -136,26 +136,15 @@
       "count": 3
     }
   },
-  "src/query-api-dispatcher/query-api-dispatcher.test.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 3
-    }
-  },
   "src/query-api-dispatcher/query-api-dispatcher.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    },
     "jsdoc/no-undefined-types": {
       "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 3
     },
     "jsdoc/require-param": {
       "count": 1
     },
     "jsdoc/require-returns": {
-      "count": 10
+      "count": 9
     }
   },
   "src/query-api-dispatcher/types.ts": {

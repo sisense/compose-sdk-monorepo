@@ -135,6 +135,38 @@ describe('translateDashboardToJSON — round-trip', () => {
     expect(roundTripped.filters).toHaveLength(1);
   });
 
+  it('round-trips a dashboard that holds a narrative widget next to query widgets', () => {
+    const withNarrative: DashboardJSON = {
+      ...dashboardJSON,
+      widgets: [
+        {
+          widgetType: 'narrative',
+          id: 'w-narrative',
+          title: 'Dashboard Narrative',
+          styleOptions: { isAutoHeight: true },
+          config: { header: { menu: { enabled: false } } },
+          dashboardId: 'dash-1',
+        },
+        ...dashboardJSON.widgets,
+      ],
+    };
+    const dashboardProps = getSuccessData(
+      translateDashboardFromJSON({ data: withNarrative, context }),
+    );
+    const toResult = translateDashboardToJSON(dashboardProps);
+    expect(toResult.success).toBe(true);
+    const roundTripped = getSuccessData(toResult);
+    expect(roundTripped.widgets.map((w) => w.widgetType)).toEqual(['narrative', 'chart', 'pivot']);
+    expect(roundTripped.widgets[0]).toEqual({
+      widgetType: 'narrative',
+      id: 'w-narrative',
+      title: 'Dashboard Narrative',
+      styleOptions: { isAutoHeight: true },
+      config: { header: { menu: { enabled: false } } },
+      dashboardId: 'dash-1',
+    });
+  });
+
   it('handles empty widgets array', () => {
     const result = translateDashboardToJSON({ id: 'empty-dash', widgets: [], title: 'Empty' });
     expect(result.success).toBe(true);

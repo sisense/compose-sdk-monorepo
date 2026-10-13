@@ -1,4 +1,4 @@
-import '../../index.css';
+import '../../styles';
 
 export {
   default as AiContextProvider,

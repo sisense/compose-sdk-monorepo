@@ -1015,9 +1015,6 @@
     }
   },
   "src/lib/types/data-point.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "jsdoc/require-description-complete-sentence": {
       "count": 30
     },

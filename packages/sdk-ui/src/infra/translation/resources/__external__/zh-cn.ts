@@ -1,3 +1,6 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys and across CLDR plural forms this language does not distinguish (Time
+   Frame's `_few`/`_many` mirroring `_other`). Constants would fragment the translations. */
 import type { TranslationDictionary } from '../index';
 import { PACKAGE_NAMESPACE as SDK_UI_NAMESPACE } from '../index';
 
@@ -132,19 +135,19 @@ const translation: TranslationDictionary = {
   chartNoData: '无结果',
   filters: '筛选器',
   cancel: '取消',
-  includeAll: '包含全部',
+  includeAll: '全部包括',
   formatting: {
     number: {
       abbreviations: {
-        thousand: 'K',
-        million: 'M',
-        billion: 'B',
-        trillion: 'T',
+        thousand: '千',
+        million: '百万',
+        billion: '十亿',
+        trillion: '万亿',
       },
     },
   },
   criteriaFilter: {
-    displayModePrefix: '所有项目',
+    displayModePrefix: '全部项目',
     equals: '等于{{val}}',
     notEquals: '不等于{{val}}',
     lessThan: '小于{{val}}',
@@ -168,7 +171,7 @@ const translation: TranslationDictionary = {
     by: '按',
   },
   dateFilter: {
-    last: '最后',
+    last: '过去',
     next: '下一个',
     from: '从',
     to: '到',
@@ -181,7 +184,7 @@ const translation: TranslationDictionary = {
     quarters: '季度',
     years: '年',
     earliestDate: '最早日期',
-    latestDate: '最晚日期',
+    latestDate: '最近的日期',
     todayOutOfRange: '今天超出可用日期范围',
     dateRange: {
       fromTo: '{{from}}到{{to}}',
@@ -194,7 +197,7 @@ const translation: TranslationDictionary = {
       whiskers: '须线',
       box: '箱',
       min: '最小值',
-      median: '中位数',
+      median: '中值',
       max: '最大值',
     },
   },
@@ -206,8 +209,8 @@ const translation: TranslationDictionary = {
   },
   advanced: {
     tooltip: {
-      min: '下限',
-      max: '上限',
+      min: '下界',
+      max: '上界',
       forecastValue: '预测值',
       forecast: '预测',
       trend: '趋势',
@@ -216,9 +219,9 @@ const translation: TranslationDictionary = {
       trendType: '类型',
       trendDataKey: '趋势数据',
       trendData: {
-        min: '最小',
-        max: '最大',
-        median: '中位数',
+        min: '最小值',
+        max: '最大值',
+        median: '中值',
         average: '平均值',
       },
     },
@@ -239,6 +242,12 @@ const translation: TranslationDictionary = {
       invertedFrom: '必须早于结束日期',
       invertedTo: '必须晚于开始日期',
     },
+    numberRange: {
+      minimum: '最小值',
+      maximum: '最大值',
+      notSet: '未设置',
+      clear: '清除{{field}}',
+    },
     selectedCount: '已选择 {{count}} 项',
     allExceptCount: '除 {{count}} 项以外的全部',
     setupTitle: '设置筛选器小部件',
@@ -250,8 +259,11 @@ const translation: TranslationDictionary = {
       onOrAfter: '当天或之后',
       includingCurrent: '包括当前',
       includingCurrentLabel: '包括当前',
-      /** Chinese is postpositional — the date comes before the operator (之前/之后 etc.),
-       *  the opposite of English word order. */
+      countMin: '请输入大于或等于 1 的整数',
+      /**
+       * Chinese is postpositional — the date comes before the operator (之前/之后 etc.),
+       *  the opposite of English word order.
+       */
       summary: {
         current: '{{- operator}}{{- grain}}',
         relative: '{{- operator}}{{- count}}{{- grain}}',
@@ -281,6 +293,89 @@ const translation: TranslationDictionary = {
       selectValues: '选择{{level}}',
       clear: '清除',
     },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: '时间范围选项',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to the
+       * `_one` (singular) or `_other` (plural) key by CLDR plural rules. Locales
+       * with more plural forms — Russian's `_few`/`_many`, Polish's `_many` — add
+       * more suffixes in their own resources; English needs only the two.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: '今天',
+        yesterday: '昨天',
+        tomorrow: '明天',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: '本周',
+          month: '本月',
+          quarter: '本季度',
+          year: '今年',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         */
+        last: {
+          week_one: '上周',
+          week_few: '过去 {{count}} 周',
+          week_many: '过去 {{count}} 周',
+          week_other: '过去 {{count}} 周',
+          month_one: '上个月',
+          month_few: '过去 {{count}} 个月',
+          month_many: '过去 {{count}} 个月',
+          month_other: '过去 {{count}} 个月',
+          quarter_one: '上季度',
+          quarter_few: '过去 {{count}} 个季度',
+          quarter_many: '过去 {{count}} 个季度',
+          quarter_other: '过去 {{count}} 个季度',
+          year_one: '去年',
+          year_few: '过去 {{count}} 年',
+          year_many: '过去 {{count}} 年',
+          year_other: '过去 {{count}} 年',
+          day_few: '过去 {{count}} 天',
+          day_many: '过去 {{count}} 天',
+          day_other: '过去 {{count}} 天',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: '下周',
+          week_few: '未来 {{count}} 周',
+          week_many: '未来 {{count}} 周',
+          week_other: '未来 {{count}} 周',
+          month_one: '下个月',
+          month_few: '未来 {{count}} 个月',
+          month_many: '未来 {{count}} 个月',
+          month_other: '未来 {{count}} 个月',
+          quarter_one: '下季度',
+          quarter_few: '未来 {{count}} 个季度',
+          quarter_many: '未来 {{count}} 个季度',
+          quarter_other: '未来 {{count}} 个季度',
+          year_one: '明年',
+          year_few: '未来 {{count}} 年',
+          year_many: '未来 {{count}} 年',
+          year_other: '未来 {{count}} 年',
+          day_few: '未来 {{count}} 天',
+          day_many: '未来 {{count}} 天',
+          day_other: '未来 {{count}} 天',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: '本周和上周',
+          month: '本月和上个月',
+          quarter: '本季度和上季度',
+          year: '今年和去年',
+        },
+        thisAndNext: {
+          week: '本周和下周',
+          month: '本月和下个月',
+          quarter: '本季度和下季度',
+          year: '今年和明年',
+        },
+      },
+    },
     calendar: {
       selectDates: '选择日期',
       multipleDaysHint: '您可以选择多个日期',
@@ -299,20 +394,20 @@ const translation: TranslationDictionary = {
   unsupportedFilterMessage: '不支持的筛选器（已应用于数据查询）',
   unsupportedFilter: '不支持的筛选器{{filter}}',
   commonFilter: {
-    clearSelectionButton: '清除选择',
+    clearSelectionButton: '清除所选项',
     selectMenuItem: '选择',
     unselectMenuItem: '取消选择',
   },
   customFilterTileMessage: '已使用自定义筛选器筛选',
   filterRelations: {
-    and: 'AND',
-    or: 'OR',
+    and: '和',
+    or: '或',
     andOrFormulaApplied: '已应用AND/OR公式',
   },
   drilldown: {
-    drillMenuItem: '下钻',
+    drillMenuItem: '钻取',
     breadcrumbsAllSuffix: '全部',
-    breadcrumbsPrev: '上一个',
+    breadcrumbsPrev: '前一个',
     breadcrumbsNext: '下一个',
     popover: {
       members: '成员',
@@ -323,7 +418,7 @@ const translation: TranslationDictionary = {
   widgetHeader: {
     addTitle: '添加标题',
     info: {
-      details: '小部件详细信息',
+      details: '小部件详情',
       tooltip: '单击以查看完整详细信息',
     },
     chartTableToggle: {
@@ -338,7 +433,7 @@ const translation: TranslationDictionary = {
       download: '下载',
       csvFile: 'CSV 文件',
       excelFile: 'Excel 文件',
-      repeatRowsRecommended: '重复行（推荐）',
+      repeatRowsRecommended: '重复行（建议）',
       mergeRows: '合并行',
     },
   },
@@ -569,8 +664,8 @@ const translation: TranslationDictionary = {
     menu: {
       lock: '锁定',
       unlock: '解锁',
-      lockGroup: '锁定组',
-      unlockGroup: '解锁组',
+      lockGroup: '锁定分组',
+      unlockGroup: '解锁分组',
     },
     toggleSwitch: '启用/禁用筛选器',
     linkedToWidget: {
@@ -629,22 +724,94 @@ const translation: TranslationDictionary = {
     tooltipType: '类型',
     tooltipColumn: '列',
     tooltipFormula: '公式',
+    filterPill: {
+      customFilter: '自定义筛选器',
+      empty: '为空',
+      notEmpty: '不为空',
+      not: '非 {{value}}',
+      and: '且',
+      or: '或',
+      moreValues: '{{values}} +{{count}} 项',
+      range: '{{from}} 至 {{to}}',
+      fromToLatest: '{{from}} 至最晚日期',
+      earliestTo: '最早日期至 {{to}}',
+      dependentOn: '依赖于 {{parents}}',
+      dependentFilter: '依赖筛选器',
+      text: {
+        contains: '包含 {{value}}',
+        startsWith: '以 {{value}} 开头',
+        endsWith: '以 {{value}} 结尾',
+        doesntEqual: '不等于 {{value}}',
+        doesntStartWith: '不以 {{value}} 开头',
+        doesntContain: '不包含 {{value}}',
+        doesntEndWith: '不以 {{value}} 结尾',
+        like: '类似 {{value}}',
+      },
+      ranking: {
+        top: '前 {{count}}',
+        bottom: '后 {{count}}',
+        by: '按{{measure}}排序的{{rank}}',
+      },
+      relative: {
+        last: '过去 {{count}} {{unit}}',
+        next: '未来 {{count}} {{unit}}',
+        lastTo: '截至 {{date}} 的过去 {{count}} {{unit}}',
+        nextFrom: '自 {{date}} 起的未来 {{count}} {{unit}}',
+        includingCurrent: '{{period}}（含当前）',
+        withOffset: '{{period}}，偏移 {{offset}}',
+        today: '今天',
+        thisWeek: '本周',
+        thisMonth: '本月',
+        thisQuarter: '本季度',
+        thisYear: '今年',
+      },
+      units: {
+        year_one: '年',
+        year_few: '年',
+        year_many: '年',
+        year_other: '年',
+        quarter_one: '季度',
+        quarter_few: '季度',
+        quarter_many: '季度',
+        quarter_other: '季度',
+        month_one: '个月',
+        month_few: '个月',
+        month_many: '个月',
+        month_other: '个月',
+        week_one: '周',
+        week_few: '周',
+        week_many: '周',
+        week_other: '周',
+        day_one: '天',
+        day_few: '天',
+        day_many: '天',
+        day_other: '天',
+        hour_one: '小时',
+        hour_few: '小时',
+        hour_many: '小时',
+        hour_other: '小时',
+        minute_one: '分钟',
+        minute_few: '分钟',
+        minute_many: '分钟',
+        minute_other: '分钟',
+      },
+    },
   },
   measures: {
     countShort: '{{level}}数量',
     countDistinct: '唯一计数',
     count: '全部计数',
     average: '平均值',
-    sum: '求和',
+    sum: '和值',
     min: '最小值',
     max: '最大值',
-    stdev: '标准差',
-    median: '中位数',
+    stdev: '标准偏差',
+    median: '中值',
     variance: '方差',
   },
   measuresAgg: {
     countDistinct: '唯一',
-    count: '数量',
+    count: '数目',
     sum: '总计',
     average: '平均值',
     min: '最小值',

@@ -6,7 +6,8 @@ import { screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { server } from '@/__mocks__/msw';
+import * as mockGlobals from '@/__mocks__/data/mock-globals.json';
+import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { NarrativeTestWrapper } from '@/domains/narrative/__test-helpers__/narrative-test-wrapper';
@@ -16,6 +17,7 @@ import {
   type DashboardNarrativeResponseDto,
 } from '@/infra/api/narrative/dashboard-narrative-endpoints.js';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
+import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense-context-provider';
 
 import { NarrativeWidget } from './narrative-widget.js';
 
@@ -63,6 +65,18 @@ function respondWithNarrative() {
       const { cacheOnly } = (await request.json()) as { cacheOnly?: boolean };
       return HttpResponse.json(cacheOnly ? cacheMissBody : narrativeBody);
     }),
+  );
+}
+
+/** The tenant holds the credit-based narrative entitlement instead of the unlimited one. */
+function onCreditLicence() {
+  server.use(
+    http.get('*/api/globals', () =>
+      HttpResponse.json({
+        ...mockGlobals,
+        props: { ...mockGlobals.props, isNarration: false, aiNarrative: true },
+      }),
+    ),
   );
 }
 
@@ -145,6 +159,7 @@ describe('NarrativeWidget', () => {
   });
 
   it('surfaces the quota warning beside the idle action, from the live credit balance', async () => {
+    onCreditLicence();
     // 13 of 100 credits left is 87 % used — past the hook's 85 % warning threshold.
     server.use(
       http.get('*/api/v1/credits/get-balance', () =>
@@ -168,6 +183,7 @@ describe('NarrativeWidget', () => {
   });
 
   it('presents the spent allowance as the error state when nothing is generated yet', async () => {
+    onCreditLicence();
     server.use(
       http.get('*/api/v1/credits/get-balance', () =>
         HttpResponse.json({
@@ -193,6 +209,7 @@ describe('NarrativeWidget', () => {
   });
 
   it('keeps a generated narrative on screen and disables regenerate once the allowance is spent', async () => {
+    onCreditLicence();
     server.use(
       http.get('*/api/v1/credits/get-balance', () =>
         HttpResponse.json({
@@ -221,6 +238,7 @@ describe('NarrativeWidget', () => {
   });
 
   it('shows no quota warning while the balance is comfortable', async () => {
+    onCreditLicence();
     server.use(
       http.get('*/api/v1/credits/get-balance', () =>
         HttpResponse.json({
@@ -239,6 +257,51 @@ describe('NarrativeWidget', () => {
     );
 
     expect(await screen.findByTestId('csdk-narrative-idle')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-quota-warning')).toBeNull();
+  });
+
+  it('ignores the credit balance under the unlimited narrative entitlement', async () => {
+    server.use(
+      http.get('*/api/v1/credits/get-balance', () =>
+        HttpResponse.json({
+          balance: 0,
+          initialBalance: 0,
+          sequenceNumber: '1',
+          date: '2026-10-08T00:00:00.000Z',
+        }),
+      ),
+    );
+
+    setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget />
+      </NarrativeTestWrapper>,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-idle')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-quota-warning')).toBeNull();
+    expect(screen.getByTestId('csdk-narrative-generate')).toBeEnabled();
+  });
+
+  it('ignores a spent balance another consumer already cached, under the unlimited entitlement', async () => {
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    client.setQueryData(['creditBalance'], {
+      balance: 0,
+      initialBalance: 100,
+      sequenceNumber: '1',
+      date: '2026-10-08T00:00:00.000Z',
+    });
+
+    setup(
+      <SisenseContextProvider url={mockUrl} token={mockToken}>
+        <QueryClientProvider client={client}>
+          <NarrativeWidget />
+        </QueryClientProvider>
+      </SisenseContextProvider>,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-idle')).toBeTruthy();
+    expect(screen.queryByTestId('csdk-narrative-error')).toBeNull();
     expect(screen.queryByTestId('csdk-narrative-quota-warning')).toBeNull();
   });
 

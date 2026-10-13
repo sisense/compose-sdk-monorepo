@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.38.0] - 2026-10-13
+
+### Added
+- Add `filterFactory.dateMeasureMembers`, `dateMeasureRelativeFrom` and `dateMeasureRelativeTo` utilities for filtering date measures
+- Support data model `displayName` in the filter editor, data browser and AI Chatbot components
+
+### Changed
+- Align localization with Fusion for all supported languages, including number separators, number abbreviations, and UI translations
+- Fix dashboard and widget filter merging to preserve widget-level filter relations
+- Fix missing background filter of a disabled or ignored dashboard filter in table widget
+- Fix legacy Fusion pivot widgets losing drilldown hierarchies and incorrectly applying highlights as filters
+- Fix custom widget renaming
+- Fix duplicated table widgets losing their sorting and column order when persisted to a Fusion dashboard
+- Fix duplicate CSS injection when importing both `@sisense/sdk-ui` and `@sisense/sdk-ui/ai`
+- Change `FilterWidget` (internal testing):
+  - Add numeric range support to the `range` filter type, replacing the unused `numericRange` type
+  - Add Time Frame filter type for date attributes
+  - Fix incomplete date conditions being lost when reopening the condition panel
+
+
 ## [2.37.0] - 2026-09-29
 
 ### Added

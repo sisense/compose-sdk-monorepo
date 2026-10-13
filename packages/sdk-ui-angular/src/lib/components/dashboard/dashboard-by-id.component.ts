@@ -8,11 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   type DashboardByIdConfig as DashboardByIdConfigPreact,
   DashboardById as DashboardByIdPreact,
   type DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createCustomWidgetsContextConnector,

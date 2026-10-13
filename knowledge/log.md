@@ -1,5 +1,59 @@
 # Log
 
+## 2026-10-12
+
+- **Update**: the two non-public `sdk-ui` API levels are served only by entry points of their own. The barrels moved from `src/public-api/{internal,sisense-internal}.ts` to `src/modules/internal/public-api/internal.ts` (`@sisense/sdk-ui/internal`) and `src/modules/sisense-internal/public-api/sisense-internal.ts` (`@sisense/sdk-ui/sisense-internal`). The package root and the `./query` subpath no longer export either level; the in-company UMD entry re-exports both, so its global is unchanged. `./internal` also re-exports the `query` module's internal tier, for now; per-module internal sub-entries (e.g. `@sisense/sdk-ui/query/internal`) are the long-term plan. Added invariant 9 (each entry exports only its own level, checked by `yarn public-api-check`; the rules for these entries are in the structure guideline, §9), extended invariants 3 and 7, and re-anchored invariant 4, which pointed at a stale `eslint.config.mjs` line. `useDashboardModel` is now also `@sisenseInternal`. Re-anchored the barrel references in the dashboarding docs, plus the shifted `use-dashboard-model.ts` anchors. Recorded in [architecture overview](./architecture/overview.md) and [sdk-ui dashboarding overview](./sdk-ui-dashboarding/overview.md).
+
+## 2026-10-08
+
+- **Update**: `DashboardById` now marks narrative widgets with `withNarrativeRequestOptions({ sharedMode })`, which replaces `withNarrativeSharedMode` and also carries `adminAccess`. Recorded in [dashboard components](./sdk-ui-dashboarding/dashboard-components.md).
+- **Update**: the dashboard narrative builder now connects widget filters through `connectWidgetFilters`, like `connectToWidgetProps`. Recorded in [common filters](./sdk-ui-dashboarding/common-filters.md).
+- **Fix**: a widget filter that overrides a dashboard filter inside dashboard relations now takes its place in them, as for a plain widget, instead of dropping the dashboard filter's relation — `C OR D` with a widget `D' OR E` gives `(C OR D') AND E`, not `C AND (D' OR E)`. Recorded in [common filters](./sdk-ui-dashboarding/common-filters.md).
+
+## 2026-10-07
+
+- **Fix**: a widget's own filter relations now survive the dashboard filters. `connectToWidgetProps` used to flatten them, so a widget filtered by `A OR B` was queried as `A AND B`; it now gets `C AND (A OR B)` under a dashboard filter `C`. The relation logic of `useConvertFilterRelations` is now the pure `applyFilterRelationsToOtherFilters`, and the shifted `use-common-filters.tsx` and `use-convert-filter-relations.ts` anchors are refreshed. Recorded in [common filters](./sdk-ui-dashboarding/common-filters.md).
+- **Update**: re-anchored the dashboarding docs after rebasing onto master. Two behaviour changes from master are now recorded. First, `useWidgetRenaming` wraps custom widgets too, because their `onChange` is now a `CustomWidgetChangeEvent` channel. Second, every `useWidgetUpdatesPersistence` handler chains to the widget's original callback instead of replacing it. Also noted that table widgets keep the merged common-filters options (so `forceApplyBackgroundFilters` applies), and refreshed the shifted `common-filters-connector.tsx`, `use-widget-renaming.ts`, `use-widget-updates-persistence.ts`, `rest-api.ts` and `query-api-dispatcher.ts` anchors. Recorded in [persistence manager](./sdk-ui-dashboarding/persistence-manager.md), [widget actions](./sdk-ui-dashboarding/widget-actions.md) and [common filters](./sdk-ui-dashboarding/common-filters.md).
+
+## 2026-10-05
+
+- **Creation**: extended the bundle to the `sdk-ui` dashboarding domain
+  (`packages/sdk-ui/src/domains/dashboarding`) — 11 concept docs plus an overview under
+  `sdk-ui-dashboarding/`, covering the `Dashboard` / `DashboardById` components and their config and
+  event contracts, `useComposedDashboard`, the dashboard model with its DTO translation, reducer and
+  persistence paths, and the per-dashboard features (common filters, editable layout, header,
+  jump-to-dashboard, widget actions, the `dashboard` module). Registered in the root index and the
+  two coverage sentences. Recorded in [sdk-ui dashboarding overview](./sdk-ui-dashboarding/overview.md).
+
+## 2026-10-02
+
+- **Removed**: the `@internal` `displayName` on `DataSourceInfo`. Data source labels now come only
+  from the server data source list, with `title` as the fallback, so a stored copy can't go stale.
+  `DataSourceMetadata.displayName` stays. Refreshed the shifted
+  `packages/sdk-data/src/interfaces.ts` anchors. Recorded in
+  [data model generation](./sdk-data/data-model-generation.md).
+
+## 2026-09-30
+
+- **Update**: `DataSourceInfo` gains an optional `@internal` `displayName`, a user-visible label
+  only; `title` stays the identity name for queries, JAQL and matching. `DataSourceMetadata` gains
+  a nullable `displayName` read from the data source list. Refreshed the shifted
+  `packages/sdk-data/src/interfaces.ts` anchors. Recorded in
+  [data model generation](./sdk-data/data-model-generation.md).
+- **Fix**: `isDataSourceInfo` lives in `packages/sdk-data/src/utils.ts`, not `interfaces.ts`.
+  Recorded in [data model generation](./sdk-data/data-model-generation.md).
+
+## 2026-09-28
+
+- **Update**: renamed the date-measure filters to the `dateMeasure` prefix after review, because they
+  only ever apply to a date measure (every builder takes a date level). `filterFactory.measureMembers`,
+  `measureDateRelativeFrom` and `measureDateRelativeTo` are now `dateMeasureMembers`,
+  `dateMeasureRelativeFrom` and `dateMeasureRelativeTo`, and the `measureDateRelative` alias of `From`
+  is removed. Internally `MeasureMembersFilter` / `MeasureRelativeDateFilter` are now
+  `DateMeasureMembersFilter` / `DateMeasureRelativeFilter`, their guards follow, and the `filterType`
+  values are `date-measure-members` / `date-measure-relative`. Refreshed the shifted anchors.
+  Recorded in [filters](./sdk-data/filters.md).
+
 ## 2026-09-24
 
 - **Update**: `isDateMeasure` no longer counts a date PART such as week-of-year, which answers an
@@ -12,6 +66,28 @@
   `datatype: 'datetime'`, without a level-keyed mask. Recorded in [measures](./sdk-data/measures.md).
 
 ## 2026-09-22
+
+- **Fix**: wording pass over the measure-filter docs and comments, no behaviour change. Invariant 10
+  was split into items 10, 11 and 12 (the level argument and write order, the two guards and when
+  they are skipped, the compare id and the bucket rule), the bucket sentence now says the measure's
+  bucket is dropped and the filter's own is kept, and the `filters.ts` line references were
+  refreshed after the comment rewrites moved them.
+  Recorded in [filters](./sdk-data/filters.md).
+
+- **Creation**: measure members and relative-period filters. `MeasureMembersFilter` and
+  `MeasureRelativeDateFilter` extend the dimension classes so the `filter` block stays one rule and
+  only `jaql()` differs, and `filterFactory.measureMembers`, `measureDateRelative`,
+  `measureDateRelativeFrom` and `measureDateRelativeTo` build them. The level the filter matches at
+  is an explicit argument, not the measure's own operand level, which is the whole design: the
+  server answers 200 with zero rows when it is wrong. Extracted the measure-key loop that MeasureFilter
+  and MeasureRankingFilter each held a copy of. Added item 10 to Invariants and traps and the two new
+  classes to the Entry point table. Both constructors refuse a non-date measure and a level from
+  another dimension, through `guardMeasureFilterLevel`, with two new `errors.filter.dateMeasure.*`
+  keys in en and uk; the deserialization path passes `skipGuards` so saved filters keep rebuilding.
+  The filter level also clears `bucket`, `getFilterCompareId` includes the measure so two measure
+  filters on one level no longer merge to one, deserialization rebuilds a saved `backgroundFilter`
+  and keeps the relative-period config, and `CustomSuperJSON` gained an entry for each new class.
+  Recorded in [filters](./sdk-data/filters.md).
 
 - **Fix**: the measure-filter attribute search decides what to recurse into by TYPE, not by shape.
   A calculated attribute carries a `context` just like a calculated measure, so the old check

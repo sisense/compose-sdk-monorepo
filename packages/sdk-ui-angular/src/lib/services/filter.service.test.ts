@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/unbound-method */
 import { DimensionalAttribute, filterFactory } from '@sisense/sdk-data';
-import { HookAdapter } from '@sisense/sdk-ui-preact';
+import { HookAdapter } from '@sisense/sdk-ui-preact/internal';
 import { of } from 'rxjs';
 
 import { FilterService, GetFilterMembersParams } from './filter.service';
@@ -17,6 +17,13 @@ vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
   return {
     ...actual,
     useGetFilterMembers: vi.fn(),
+  };
+});
+
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
+  return {
+    ...actual,
     HookAdapter: vi.fn().mockImplementation(() => ({
       subscribe: vi.fn(),
       run: vi.fn(),

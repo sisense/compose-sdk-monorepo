@@ -1,6 +1,8 @@
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes/attributes.js';
+import { createDateDimension } from '../dimensions/index.js';
 import { FilterRelations, FilterRelationsJaql, FilterRelationsModel } from '../interfaces.js';
+import * as measureFactory from '../measures/factory.js';
 import { DateLevels } from '../types.js';
 import * as filterFactory from './factory.js';
 import {
@@ -907,5 +909,48 @@ describe('filter-relations', () => {
         right: { instanceid: 'gender' },
       });
     });
+  });
+});
+
+/* A measure filter holds the LEVEL in `attribute`, so without the measure in the identity a
+   min-date and a max-date filter on one dimension merge down to one. */
+describe('measure filters keep their own identity', () => {
+  const dim = createDateDimension({ name: 'date', expression: '[Table.Date]' });
+  const minDate = filterFactory.dateMeasureMembers(
+    measureFactory.min(dim.Days, 'First Order'),
+    dim.Years,
+    ['2012-01-01T00:00:00'],
+  );
+  const maxDate = filterFactory.dateMeasureMembers(
+    measureFactory.max(dim.Days, 'Last Order'),
+    dim.Years,
+    ['2013-01-01T00:00:00'],
+  );
+  const plainYears = filterFactory.members(dim.Years, ['2013-01-01T00:00:00']);
+
+  it('gives a min-date and a max-date filter different compare ids', () => {
+    expect(getFilterCompareId(minDate)).not.toBe(getFilterCompareId(maxDate));
+  });
+
+  it('keeps both a min-date and a max-date filter when they are merged', () => {
+    expect(mergeFilters([minDate], [maxDate])).toHaveLength(2);
+  });
+
+  it('does not let a dimension filter replace a measure filter on the same level', () => {
+    expect(mergeFilters([maxDate], [plainYears])).toHaveLength(2);
+  });
+
+  it('leaves the dimension path identity unchanged', () => {
+    expect(getFilterCompareId(plainYears)).toBe('[Table.Date]Years');
+  });
+
+  it('still merges two filters built from the same measure and level', () => {
+    const sameAgain = filterFactory.dateMeasureMembers(
+      measureFactory.max(dim.Days, 'Last Order'),
+      dim.Years,
+      ['2009-01-01T00:00:00'],
+    );
+
+    expect(mergeFilters([maxDate], [sameAgain])).toHaveLength(1);
   });
 });

@@ -129,6 +129,7 @@ export const FILTER_CHIP_CHART_CASES: Record<string, ChartJSON> = {
       function: 'filterFactory.exclude',
       args: [members('DM.Commerce.Condition', ['Used', 'Refurbished'])],
     },
+    { function: 'filterFactory.equals', args: ['DM.Commerce.Gender', 'Female'] },
     { function: 'filterFactory.contains', args: ['DM.Brand.Brand', 'Sony'] },
     { function: 'filterFactory.doesntContain', args: ['DM.Category.Category', 'Accessories'] },
     { function: 'filterFactory.startsWith', args: ['DM.Commerce.Condition', 'Refurb'] },

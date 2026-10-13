@@ -9,7 +9,7 @@
  *
  * localStorage keys:
  *   'csdk_demo_active_env'  { url, token } | absent — active override.
- *       Read by: demo-app-config.ts · App.vue · app.module.ts · react-ts-demo/main.tsx
+ *       Read by: demo-app-config.ts (sdk-ui and Angular) · App.vue · react-ts-demo/main.tsx
  *   'csdk_demo_envs'  [{ id, label, url, token }] — saved envs list (widget only).
  *
  * Injected via:
@@ -21,14 +21,14 @@
 (function () {
   'use strict';
 
-  var KEY_ACTIVE = 'csdk_demo_active_env';
-  var KEY_ENVS = 'csdk_demo_envs';
+  const KEY_ACTIVE = 'csdk_demo_active_env';
+  const KEY_ENVS = 'csdk_demo_envs';
 
   /* ── Storage ────────────────────────────────────────────────────────────── */
 
   function loadEnvs() {
     try {
-      var v = JSON.parse(localStorage.getItem(KEY_ENVS) || '[]');
+      const v = JSON.parse(localStorage.getItem(KEY_ENVS) || '[]');
       return Array.isArray(v) ? v : [];
     } catch (e) {
       return [];
@@ -60,20 +60,20 @@
   /* ── DOM helpers ────────────────────────────────────────────────────────── */
 
   function el(tag, css) {
-    var e = document.createElement(tag);
+    const e = document.createElement(tag);
     if (css) e.style.cssText = css;
     return e;
   }
 
   /** Labeled input group. Returns { wrap, input }. */
   function inp(labelText, type, placeholder) {
-    var wrap = el('div', 'margin-bottom:.45rem;');
-    var label = el(
+    const wrap = el('div', 'margin-bottom:.45rem;');
+    const label = el(
       'label',
       'display:block;font-size:.72rem;font-weight:600;color:#3f3f46;margin-bottom:.15rem;',
     );
     label.textContent = labelText;
-    var input = el(
+    const input = el(
       'input',
       'width:100%;box-sizing:border-box;padding:.35rem .5rem;border:1px solid #d4d4d8;' +
         'border-radius:4px;font-size:.78rem;outline:none;',
@@ -87,7 +87,7 @@
 
   /* ── Environment-switcher ─────────────────────────────────────────────────────────────── */
 
-  var PRIORITY = 10; // toolbar slot — rightmost
+  const PRIORITY = 10; // toolbar slot — rightmost
 
   // ── Shared demo toolbar ─────────────────────────────────────────────────
   // One fixed container (bottom-right). Each feature self-registers with a
@@ -95,7 +95,7 @@
   //   env-switcher=10  ·  source-link=20  ·  back-nav=30
   // Features may run in any order; the container is lazy-created on first use.
   function addToToolbar(element, priority) {
-    var t = document.getElementById('csdk-demo-toolbar');
+    let t = document.getElementById('csdk-demo-toolbar');
     if (!t) {
       t = document.createElement('div');
       t.id = 'csdk-demo-toolbar';
@@ -105,8 +105,8 @@
       document.body.appendChild(t);
     }
     element.dataset.csdkPriority = String(priority);
-    var sibling = null;
-    for (var i = 0; i < t.children.length; i++) {
+    let sibling = null;
+    for (let i = 0; i < t.children.length; i++) {
       if (Number(t.children[i].dataset.csdkPriority || 0) > priority) {
         sibling = t.children[i];
         break;
@@ -122,11 +122,14 @@
     if (document.getElementById('csdk-env-switcher')) return;
 
     // position:relative so the absolute-positioned panel opens relative to this wrapper.
-    var wrapper = el('div', 'position:relative;font-family:system-ui,sans-serif;font-size:.8rem;');
+    const wrapper = el(
+      'div',
+      'position:relative;font-family:system-ui,sans-serif;font-size:.8rem;',
+    );
     wrapper.id = 'csdk-env-switcher';
 
     /* Button — label is always "⚙ Env"; only background changes */
-    var btn = el(
+    const btn = el(
       'button',
       'padding:.45rem .85rem;border:none;border-radius:6px;cursor:pointer;' +
         'font-family:system-ui,sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.01em;' +
@@ -137,21 +140,21 @@
     btn.innerHTML = '&#9881; Env';
 
     /* Panel */
-    var panel = el(
+    const panel = el(
       'div',
       'display:none;position:absolute;bottom:calc(100% + .6rem);right:0;width:300px;' +
         'background:#fff;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.18);' +
         'border:1px solid #e4e4e7;overflow:hidden;',
     );
 
-    var hdr = el(
+    const hdr = el(
       'div',
       'display:flex;align-items:center;justify-content:space-between;' +
         'padding:.5rem .8rem;background:#f4f4f5;border-bottom:1px solid #e4e4e7;',
     );
-    var hdrTitle = el('strong', 'font-size:.78rem;color:#18181b;');
+    const hdrTitle = el('strong', 'font-size:.78rem;color:#18181b;');
     hdrTitle.textContent = 'Sisense Environment';
-    var closeBtn = el(
+    const closeBtn = el(
       'button',
       'background:none;border:none;cursor:pointer;color:#71717a;font-size:1rem;line-height:1;padding:.1rem;',
     );
@@ -162,8 +165,8 @@
     hdr.appendChild(hdrTitle);
     hdr.appendChild(closeBtn);
 
-    var listEl = el('div', 'max-height:240px;overflow-y:auto;border-bottom:1px solid #e4e4e7;');
-    var addEl = el('div', 'padding:.45rem .75rem .6rem;');
+    const listEl = el('div', 'max-height:240px;overflow-y:auto;border-bottom:1px solid #e4e4e7;');
+    const addEl = el('div', 'padding:.45rem .75rem .6rem;');
 
     panel.appendChild(hdr);
     panel.appendChild(listEl);
@@ -175,7 +178,7 @@
     /* ── makeRow ─────────────────────────────────────────────────────────── */
 
     function makeRow(label, env, isActive, onDelete) {
-      var row = el(
+      const row = el(
         'div',
         'display:flex;align-items:center;gap:.45rem;padding:.45rem .7rem;cursor:pointer;' +
           'border-bottom:1px solid #f4f4f5;' +
@@ -204,8 +207,8 @@
       );
 
       /* Name + URL hint */
-      var text = el('div', 'flex:1;min-width:0;');
-      var name = el(
+      const text = el('div', 'flex:1;min-width:0;');
+      const name = el(
         'span',
         'display:block;font-size:.78rem;font-weight:' +
           (isActive ? '700' : '500') +
@@ -214,7 +217,7 @@
       name.textContent = label;
       text.appendChild(name);
       if (env && env.url) {
-        var hint = el(
+        const hint = el(
           'span',
           'display:block;font-size:.69rem;color:#71717a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;',
         );
@@ -225,7 +228,7 @@
 
       /* Delete button (custom envs only) */
       if (onDelete) {
-        var del = el(
+        const del = el(
           'button',
           'flex-shrink:0;background:none;border:none;cursor:pointer;color:#d4d4d8;font-size:.8rem;line-height:1;padding:0 .2rem;transition:color .1s;',
         );
@@ -250,10 +253,10 @@
     /* ── makeAddSection ──────────────────────────────────────────────────── */
 
     function makeAddSection(onSave) {
-      var arrow = el('span', 'font-size:.65rem;display:inline-block;transition:transform .15s;');
+      const arrow = el('span', 'font-size:.65rem;display:inline-block;transition:transform .15s;');
       arrow.innerHTML = '&#9654;';
 
-      var toggle = el(
+      const toggle = el(
         'button',
         'display:flex;align-items:center;gap:.3rem;width:100%;background:none;border:none;' +
           'cursor:pointer;font-size:.77rem;font-weight:500;color:#18181b;padding:.3rem 0;text-align:left;',
@@ -261,14 +264,14 @@
       toggle.appendChild(arrow);
       toggle.appendChild(document.createTextNode('Add environment'));
 
-      var form = el(
+      const form = el(
         'div',
         'display:none;padding-top:.4rem;border-top:1px solid #e4e4e7;margin-top:.3rem;',
       );
-      var nameF = inp('Name', 'text', 'Production');
-      var urlF = inp('URL', 'url', 'https://your-instance.sisense.com');
-      var tokF = inp('Token', 'password', 'Paste API token');
-      var saveBtn = el(
+      const nameF = inp('Name', 'text', 'Production');
+      const urlF = inp('URL', 'url', 'https://your-instance.sisense.com');
+      const tokF = inp('Token', 'password', 'Paste API token');
+      const saveBtn = el(
         'button',
         'width:100%;margin-top:.3rem;padding:.4rem;background:#18181b;color:#fff;border:none;' +
           'border-radius:5px;cursor:pointer;font-size:.77rem;font-weight:500;',
@@ -279,7 +282,7 @@
       });
       form.appendChild(saveBtn);
 
-      var open = false;
+      let open = false;
       toggle.addEventListener('click', function () {
         open = !open;
         form.style.display = open ? 'block' : 'none';
@@ -287,7 +290,7 @@
       });
 
       saveBtn.addEventListener('click', function () {
-        var n = nameF.input.value.trim(),
+        const n = nameF.input.value.trim(),
           u = urlF.input.value.trim(),
           t = tokF.input.value.trim();
         nameF.input.style.borderColor = n ? '' : '#ef4444';
@@ -303,7 +306,7 @@
         onSave({ id: genId(), label: n, url: u, token: t });
       });
 
-      var wrap = el('div', '');
+      const wrap = el('div', '');
       wrap.appendChild(toggle);
       wrap.appendChild(form);
       return wrap;
@@ -312,13 +315,13 @@
     /* ── renderPanel ─────────────────────────────────────────────────────── */
 
     function renderPanel() {
-      var active = loadActive();
-      var envs = loadEnvs();
+      const active = loadActive();
+      const envs = loadEnvs();
 
       /* Find which stored env matches the active override (by url + token). */
-      var activeId = null;
+      let activeId = null;
       if (active) {
-        for (var i = 0; i < envs.length; i++) {
+        for (let i = 0; i < envs.length; i++) {
           if (envs[i].url === active.url && envs[i].token === active.token) {
             activeId = envs[i].id;
             break;
@@ -330,7 +333,7 @@
       while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
       listEl.appendChild(makeRow('Default', null, !active, null));
       envs.forEach(function (env) {
-        var isActive = env.id === activeId;
+        const isActive = env.id === activeId;
         listEl.appendChild(
           makeRow(env.label, env, isActive, function () {
             saveEnvs(
@@ -348,7 +351,7 @@
       while (addEl.firstChild) addEl.removeChild(addEl.firstChild);
       addEl.appendChild(
         makeAddSection(function (newEnv) {
-          var list = loadEnvs();
+          const list = loadEnvs();
           list.push(newEnv);
           saveEnvs(list);
           activate(newEnv); // reloads

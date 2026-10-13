@@ -13,10 +13,7 @@ import { fwFallback, fwFieldShadow, fwVar } from './field-palette';
  * Every rule inside the panel, lighter than a field's border: these separate regions of
  * one surface rather than holding a control together.
  */
-const RULE = `color-mix(in srgb, ${fwVar('border', fwFallback.border)} 55%, ${fwVar(
-  'panelBg',
-  fwFallback.panelBg,
-)})`;
+const RULE = fwVar('divider', fwFallback.divider);
 
 /** English / default layout width — grow past this when footer labels need more room. */
 const PANEL_MIN_WIDTH = '260px';
@@ -53,14 +50,21 @@ export const Head = styled.button`
   font-family: inherit;
   font-size: ${typography.label.size};
   line-height: ${typography.label.lineHeight};
-  color: ${fwVar('textSecondary', fwFallback.textSecondary)};
   text-align: left;
   cursor: pointer;
   background: none;
   border: 0;
   border-bottom: ${spacing.borderWidth} solid ${RULE};
 
-  &:hover {
+  /* "‹ Select Year" / "‹ Select condition": the secondary text at rest, the primary on
+     hover. Doubled so a host \`button\` rule cannot keep its own ink on this native
+     button (see \`FieldInput\`, field.tsx) — the hover is doubled too, or the resting rule
+     would now outrank it. */
+  && {
+    color: ${fwVar('textSecondary', fwFallback.textSecondary)};
+  }
+
+  &&:hover {
     color: ${fwVar('textPrimary', fwFallback.textPrimary)};
   }
 `;

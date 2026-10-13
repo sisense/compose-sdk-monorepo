@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { FilterJaql } from '@sisense/sdk-data';
 
+import { sampleHealthcareDashboard } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-healthcare-dashboard.js';
+
 import {
   CascadingFilterDto,
   DashboardDto,
@@ -257,6 +259,38 @@ describe('extractDashboardFiltersForWidget', () => {
     expect(highlights[1].jaql().jaql.dim).toEqual(
       (dummyDashboard.filters![1] as FilterDto).jaql.dim,
     );
+  });
+
+  it.each(['pivot', 'pivot2'] as const)(
+    'should treat matching dashboard filters as highlights for "%s" rows and columns panels',
+    (widgetType) => {
+      dummyWidget.type = widgetType;
+      dummyWidget.metadata.panels = [
+        { name: 'rows', items: [{ jaql: { dim: '[Commerce.Age Range]' } }] },
+        { name: 'columns', items: [{ jaql: { dim: '[Commerce.Gender]' } }] },
+      ] as Panel[];
+
+      const { filters, highlights } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
+
+      expect(filters).toHaveLength(0);
+      expect(highlights.map((h) => h.jaql().jaql.dim)).toEqual([
+        '[Commerce.Age Range]',
+        '[Commerce.Gender]',
+      ]);
+    },
+  );
+
+  it('should extract highlights for the legacy "pivot" widget of the healthcare dashboard', () => {
+    const pivotWidget = sampleHealthcareDashboard.widgets?.find(({ type }) => type === 'pivot');
+    if (!pivotWidget) throw new Error('Fixture is missing its legacy "pivot" widget');
+
+    const { filters, highlights } = extractDashboardFiltersForWidget(
+      sampleHealthcareDashboard,
+      pivotWidget,
+    );
+
+    expect(highlights.map((h) => h.jaql().jaql.dim)).toEqual(['[Diagnosis.Description]']);
+    expect(filters.map((f) => f.jaql().jaql.dim)).not.toContain('[Diagnosis.Description]');
   });
 
   it('should extract "slice" filters that not disabled in widget options', () => {

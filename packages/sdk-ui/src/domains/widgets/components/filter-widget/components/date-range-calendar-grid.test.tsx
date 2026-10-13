@@ -314,3 +314,88 @@ describe('DateRangeCalendarGrid — keyboard paging bridges more than one month'
     );
   });
 });
+
+describe('DateRangeCalendarGrid — hover preview follows the pointer (prototype parity)', () => {
+  const previewed = () =>
+    screen
+      .getAllByTestId('filter-widget-date-range-day')
+      .filter((cell) => cell.hasAttribute('data-preview'))
+      .map((cell) => cell.textContent);
+
+  it('bands from the fixed From to the day under the pointer while To is being picked', async () => {
+    const user = userEvent.setup();
+    setup({ value: { from: new Date(2026, 8, 20), to: null }, activeEnd: 'to' });
+
+    await user.hover(dayCell('left', 23, 8));
+    expect(previewed()).toEqual(['20', '21', '22', '23']);
+
+    // The band follows the pointer, across the seam into the right month too.
+    await user.hover(dayCell('right', 2, 9));
+    expect(previewed()).toEqual([
+      ...['20', '21', '22', '23', '24', '25'],
+      ...['26', '27', '28', '29', '30'],
+      '01',
+      '02',
+    ]);
+  });
+
+  it('moves the edited end of an applied range, leaving the other end as the anchor', async () => {
+    const user = userEvent.setup();
+    setup({ value: { from: new Date(2026, 8, 10), to: new Date(2026, 8, 20) }, activeEnd: 'from' });
+
+    await user.hover(dayCell('left', 17, 8));
+    expect(previewed()).toEqual(['17', '18', '19', '20']);
+    // A previewed day is not selected — only the committed range is.
+    expect(dayCell('left', 12, 8)).toHaveAttribute('aria-selected', 'true');
+    expect(dayCell('left', 12, 8)).not.toHaveAttribute('data-preview');
+  });
+
+  it('keeps the committed band while the pointer rests on the anchor, and drops the preview on leave', async () => {
+    const user = userEvent.setup();
+    setup({ value: { from: new Date(2026, 8, 10), to: new Date(2026, 8, 20) }, activeEnd: 'to' });
+
+    await user.hover(dayCell('left', 10, 8));
+    expect(previewed()).toEqual([]);
+    expect(dayCell('left', 15, 8)).toHaveAttribute('aria-selected', 'true');
+
+    await user.hover(dayCell('left', 25, 8));
+    expect(previewed()).toHaveLength(16);
+    await user.unhover(dayCell('left', 25, 8));
+    expect(previewed()).toEqual([]);
+  });
+
+  it('drops the preview when the pair is paged, though the pointer never left it', () => {
+    setup({ value: { from: new Date(2026, 8, 10), to: null }, activeEnd: 'to' });
+
+    // A day in the right month: after paging forward that month is on the left, so a
+    // stale preview would still paint Oct 1–15 there. `fireEvent`, not `user.hover`:
+    // in jsdom user-event's pointer move to the arrow reports no `relatedTarget`, which
+    // React reads as leaving the window — it would clear the preview by itself and hide
+    // exactly the case a real pointer hits (it stays inside the pair, no leave fires).
+    fireEvent.mouseEnter(dayCell('right', 15, 9));
+    expect(previewed()).toContain('15');
+
+    fireEvent.click(screen.getByTestId('filter-widget-date-range-next-right'));
+
+    expect(screen.getByTestId('filter-widget-date-range-label-left')).toHaveTextContent('Oct 2026');
+    expect(previewed()).toEqual([]);
+  });
+});
+
+describe('DateRangeCalendarGrid — band rounds at the month edge, not the week edge', () => {
+  /** `TL TR BR BL` — the band cell's one radius shorthand, split into its four corners. */
+  const corners = (cell: HTMLElement) => getComputedStyle(cell).borderRadius.split(/ (?![^(]*\))/);
+  const ROUND = 'calc(36px / 2)';
+
+  it("rounds a month's first and last day when the band crosses the seam mid-week", () => {
+    // Sep 30 2026 is a Wednesday, Oct 1 a Thursday — both mid-week.
+    setup({ value: { from: new Date(2026, 8, 10), to: new Date(2026, 9, 20) }, activeEnd: 'to' });
+
+    // Last banded day of September: square on the left, round on the right.
+    expect(corners(dayCell('left', 30, 8))).toEqual(['0', ROUND, ROUND, '0']);
+    // First banded day of October: round on the left, square on the right.
+    expect(corners(dayCell('right', 1, 9))).toEqual([ROUND, '0', '0', ROUND]);
+    // A day mid-row keeps square corners on both sides.
+    expect(corners(dayCell('right', 6, 9))).toEqual(['0', '0', '0', '0']);
+  });
+});

@@ -1,47 +1,48 @@
-import {
-  CascadingFilter,
-  createDimensionalElementFromJaql,
-  createFilterFromJaql,
+import type {
   Dimension,
   Filter,
-  filterFactory,
   FilterRelations,
   FormulaContext,
   FormulaJaql,
-  isMembersFilter,
   Measure,
+} from '@sisense/sdk-data';
+import {
+  createDimensionalElementFromJaql,
+  createFilterFromJaql,
+  filterFactory,
+  isMembersFilter,
   MetadataTypes,
 } from '@sisense/sdk-data';
 import flow from 'lodash-es/flow';
 
 import { CommonFiltersApplyMode } from '@/domains/dashboarding/common-filters/types';
 import { dimensionToPivotDimId } from '@/domains/dashboarding/hooks/jtd/jtd-config-transformers';
-import {
-  isJumpTargetWithId,
+import { isJumpTargetWithId } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type {
+  JtdConfigDto,
+  JtdPivotTargetDto,
   JtdTarget,
+  JtdTargetDto,
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
   TriggerMethod,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import type {
-  JtdConfigDto,
-  JtdPivotTargetDto,
-  JtdTargetDto,
-} from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import { TabberConfig, TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
+import type { TabberConfig, TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import {
   applyPartialDtoStyle,
   extractUnsupportedStyleOptions,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
-import {
-  isJaqlWithFormula,
-  isSharedFormulaReferenceContext,
+import type {
   Panel,
   PanelItem,
   SharedFormulaReferenceContext,
   TabberWidgetDto,
-  WidgetDashboardFilterMode,
   WidgetDto,
+} from '@/domains/widgets/components/widget-by-id/types';
+import {
+  isJaqlWithFormula,
+  isSharedFormulaReferenceContext,
+  WidgetDashboardFilterMode,
 } from '@/domains/widgets/components/widget-by-id/types';
 import {
   isChartTypeFusionWidget,
@@ -51,10 +52,10 @@ import {
   isTextFusionWidget,
   widgetTypeSupportsJtd,
 } from '@/domains/widgets/components/widget-by-id/utils';
-import { RestApi } from '@/infra/api/rest-api';
+import type { RestApi } from '@/infra/api/rest-api';
+import type { DashboardDto } from '@/infra/api/types/dashboard-dto';
 import {
   type CascadingFilterDto,
-  DashboardDto,
   type FilterDto,
   isCascadingFilterDto,
   type LayoutDto,
@@ -120,8 +121,8 @@ const createFilterFromFilterDto = (filterDto: FilterDto): Filter => {
 /**
  * Converts a cleared-include MembersFilter into FilterWidget select-all
  * (`excludeMembers: true`, empty list). No-op for non-members / non-empty filters.
- * @param filter - Filter produced by JAQL translation
- * @returns Select-all MembersFilter when the input was a cleared include; otherwise `filter`
+ * @param filter - Filter produced by JAQL translation.
+ * @returns Select-all MembersFilter when the input was a cleared include; otherwise `filter`.
  * @internal
  */
 function asFilterWidgetSelectAll(filter: Filter): Filter {
@@ -139,17 +140,17 @@ function asFilterWidgetSelectAll(filter: Filter): Filter {
   });
 }
 
-const createFilterFromCascadingFilterDto = (
-  cascadingFilterDto: CascadingFilterDto,
-): CascadingFilter => {
-  const { levels, instanceid, disabled, locked } = cascadingFilterDto;
+const createFilterFromCascadingFilterDto = (cascadingFilterDto: CascadingFilterDto): Filter => {
+  // Defaults match `createFilterFromJaql`, so the compose code carries booleans, not `undefined`
+  const { levels, instanceid, disabled = false, locked = false } = cascadingFilterDto;
 
   const innerFilters = levels.map((level) => {
     const filter = createFilterFromJaql(level, level.instanceid);
     const clause = level.filter as { all?: boolean } | undefined;
     return clause?.all ? asFilterWidgetSelectAll(filter) : filter;
   });
-  return new CascadingFilter(innerFilters, { guid: instanceid, disabled, locked });
+  // Built through the factory, not the class constructor, so the filter carries compose code.
+  return filterFactory.cascading(innerFilters, { guid: instanceid, disabled, locked });
 };
 
 export function extractDashboardFilters(
@@ -324,9 +325,9 @@ const translateToJtdConfig = (
 };
 
 /**
- * Extract pivot targets configuration from widget DTO and build Map-based targets
- * @param widget - Widget DTO with drillToDashboardConfig
- * @returns Map of dimensions/measures to their targets or undefined if no targets found
+ * Extract pivot targets configuration from widget DTO and build Map-based targets.
+ * @param widget - Widget DTO with drillToDashboardConfig.
+ * @returns Map of dimensions/measures to their targets or undefined if no targets found.
  * @internal
  */
 export function extractPivotTargetsConfigFromWidgetDto(widget: WidgetJtdDtoSlice):
@@ -417,9 +418,9 @@ function jumpToDashboardConfigFromJtdDtoSlice(
 
 /**
  * Converts a Fusion {@link WidgetDto}'s `drillToDashboardConfig` into Compose SDK JumpToDashboardConfig | JumpToDashboardConfigForPivot
- * {@link JumpToDashboardConfig} {@link JumpToDashboardConfigForPivot} for use with {@link useJtdWidget}
- * @param widget - Fusion widget DTO (or the subset of fields used for JTD translation)
- * @returns JTD config, or `undefined` when there is no versioned JTD DTO or the widget type does not support JTD
+ * {@link JumpToDashboardConfig} {@link JumpToDashboardConfigForPivot} for use with {@link useJtdWidget}.
+ * @param widget - Fusion widget DTO (or the subset of fields used for JTD translation).
+ * @returns JTD config, or `undefined` when there is no versioned JTD DTO or the widget type does not support JTD.
  * @internal
  */
 export function jumpToDashboardConfigFromWidgetDto(
@@ -769,9 +770,9 @@ export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersConfi
 
 /**
  * Replace all shared formulas, which defined by id references, in the dashboard with their actual values.
- * @param dashboard - The dashboard DTO to replace shared formulas in
- * @param api - The REST API instance
- * @returns The dashboard DTO with shared formulas, defined by id references, replaced
+ * @param dashboard - The dashboard DTO to replace shared formulas in.
+ * @param api - The REST API instance.
+ * @returns The dashboard DTO with shared formulas, defined by id references, replaced.
  * @internal
  */
 export async function withSharedFormulas(
@@ -795,9 +796,9 @@ export async function withSharedFormulas(
 }
 
 /**
- * Extracts unique shared formulas ids from widgets
- * @param widgets - An array of widgets to extract shared formulas from
- * @returns An array of unique shared formulas ids
+ * Extracts unique shared formulas ids from widgets.
+ * @param widgets - An array of widgets to extract shared formulas from.
+ * @returns An array of unique shared formulas ids.
  * @internal
  */
 function getSharedFormulas(widgets: WidgetDto[]): string[] {
@@ -817,10 +818,10 @@ function getSharedFormulas(widgets: WidgetDto[]): string[] {
 }
 
 /**
- * Applies shared formulas to a widget
- * @param widget - The widget to apply shared formulas to
- * @param sharedFormulasDictionary - A dictionary of shared formulas
- * @returns The widget with shared formulas applied
+ * Applies shared formulas to a widget.
+ * @param widget - The widget to apply shared formulas to.
+ * @param sharedFormulasDictionary - A dictionary of shared formulas.
+ * @returns The widget with shared formulas applied.
  * @internal
  */
 function applySharedFormulas(
@@ -864,10 +865,10 @@ function applySharedFormulas(
 }
 
 /**
- * Find dimension or measure by instanceId in widget panels and convert to proper type
- * @param panels - Widget metadata panels to search
- * @param pivotDimension - Instance ID to find, this is not a PivotDimId, it is the instanceId of the dimension or measure
- * @returns Dimension/Measure object with optional location info or undefined if not found
+ * Find dimension or measure by instanceId in widget panels and convert to proper type.
+ * @param panels - Widget metadata panels to search.
+ * @param pivotDimension - Instance ID to find, this is not a PivotDimId, it is the instanceId of the dimension or measure.
+ * @returns Dimension/Measure object with optional location info or undefined if not found.
  * @internal
  */
 export function findDimensionByInstanceId(

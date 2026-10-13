@@ -1,12 +1,12 @@
 /** @vitest-environment jsdom */
-import { executeQueryByWidgetId } from '@sisense/sdk-ui-preact';
+import { executeQueryByWidgetId } from '@sisense/sdk-ui-preact/internal';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick, ref } from 'vue';
 
 import { useExecuteQueryByWidgetId } from './use-execute-query-by-widget-id';
 
-vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
   return {
     ...actual,
     executeQueryByWidgetId: vi.fn(),

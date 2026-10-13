@@ -2,17 +2,14 @@
   "de-de": [
     "advanced.tooltip.trend",
     "advanced.tooltip.trendData.max",
-    "advanced.tooltip.trendData.median",
     "advanced.tooltip.trendData.min",
     "arearange.tooltip.max",
     "arearange.tooltip.min",
     "boxplot.tooltip.box",
     "boxplot.tooltip.max",
-    "boxplot.tooltip.median",
     "boxplot.tooltip.min",
     "boxplot.tooltip.whiskers",
     "dataBrowser.filter",
-    "drilldown.drillMenuItem",
     "filterEditor.conditions.top",
     "filterWidget.controls.betweenMax",
     "filterWidget.controls.betweenMin",
@@ -21,13 +18,14 @@
     "filterWidget.dateCondition.summary.date",
     "filterWidget.dateCondition.summary.relative",
     "filterWidget.dateCondition.summary.relativeIncludingCurrent",
-    "formatting.number.abbreviations.million",
+    "filterWidget.numberRange.maximum",
+    "filterWidget.numberRange.minimum",
     "kpi.comparison.withBaseline",
     "measures.max",
-    "measures.median",
     "measures.min",
     "measuresAgg.max",
-    "measuresAgg.min"
+    "measuresAgg.min",
+    "queryDefinition.filterPill.ranking.top"
   ],
   "es-ar": [
     "ai.buttons.no",
@@ -37,12 +35,11 @@
     "filterWidget.dateCondition.summary.relative",
     "filterWidget.dateCondition.summary.relativeIncludingCurrent",
     "formatting.number.abbreviations.billion",
-    "formatting.number.abbreviations.million",
-    "formatting.number.abbreviations.thousand",
     "formatting.number.abbreviations.trillion",
     "kpi.comparison.vsBaseline",
     "kpi.comparison.withBaseline",
-    "measuresAgg.sum"
+    "measuresAgg.sum",
+    "queryDefinition.filterPill.ranking.top"
   ],
   "es-es": [
     "ai.buttons.no",
@@ -52,12 +49,11 @@
     "filterWidget.dateCondition.summary.relative",
     "filterWidget.dateCondition.summary.relativeIncludingCurrent",
     "formatting.number.abbreviations.billion",
-    "formatting.number.abbreviations.million",
-    "formatting.number.abbreviations.thousand",
     "formatting.number.abbreviations.trillion",
     "kpi.comparison.vsBaseline",
     "kpi.comparison.withBaseline",
-    "measuresAgg.sum"
+    "measuresAgg.sum",
+    "queryDefinition.filterPill.ranking.top"
   ],
   "fr-fr": [
     "advanced.tooltip.trendData.max",
@@ -67,6 +63,7 @@
     "arearange.tooltip.min",
     "boxplot.tooltip.max",
     "boxplot.tooltip.min",
+    "drilldown.popover.table",
     "filterEditor.conditions.top",
     "filterWidget.controls.betweenMax",
     "filterWidget.controls.betweenMin",
@@ -75,6 +72,8 @@
     "filterWidget.dateCondition.summary.date",
     "filterWidget.dateCondition.summary.relative",
     "filterWidget.dateCondition.summary.relativeIncludingCurrent",
+    "filterWidget.numberRange.maximum",
+    "filterWidget.numberRange.minimum",
     "formatting.number.abbreviations.billion",
     "formatting.number.abbreviations.million",
     "formatting.number.abbreviations.thousand",
@@ -87,6 +86,11 @@
     "measuresAgg.max",
     "measuresAgg.min",
     "measuresAgg.sum",
+    "queryDefinition.filterPill.ranking.top",
+    "queryDefinition.filterPill.units.minute_few",
+    "queryDefinition.filterPill.units.minute_many",
+    "queryDefinition.filterPill.units.minute_one",
+    "queryDefinition.filterPill.units.minute_other",
     "queryDefinition.tooltipType"
   ],
   "it-it": [
@@ -114,21 +118,16 @@
     "measures.min",
     "measuresAgg.max",
     "measuresAgg.min",
+    "queryDefinition.filterPill.ranking.top",
     "queryDefinition.tooltipFormula"
   ],
   "ja-jp": [
     "filterRelations.and",
     "filterRelations.or",
     "filterWidget.controls.overflowCount",
-    "formatting.number.abbreviations.billion",
-    "formatting.number.abbreviations.million",
-    "formatting.number.abbreviations.thousand",
-    "formatting.number.abbreviations.trillion",
     "kpi.percentFormat"
   ],
   "ko-kr": [
-    "filterRelations.and",
-    "filterRelations.or",
     "filterWidget.controls.overflowCount",
     "filterWidget.dateCondition.summary.current",
     "formatting.number.abbreviations.billion",
@@ -145,6 +144,7 @@
     "advanced.tooltip.trendType",
     "arearange.tooltip.max",
     "arearange.tooltip.min",
+    "boxplot.tooltip.box",
     "boxplot.tooltip.max",
     "boxplot.tooltip.min",
     "criteriaFilter.is",
@@ -159,6 +159,8 @@
     "filterWidget.dateCondition.summary.date",
     "filterWidget.dateCondition.summary.relative",
     "filterWidget.dateCondition.summary.relativeIncludingCurrent",
+    "filterWidget.numberRange.maximum",
+    "filterWidget.numberRange.minimum",
     "filters",
     "formatting.number.abbreviations.billion",
     "formatting.number.abbreviations.million",
@@ -170,6 +172,8 @@
     "measures.min",
     "measuresAgg.max",
     "measuresAgg.min",
+    "queryDefinition.filterPill.ranking.top",
+    "queryDefinition.filterPill.units.week_one",
     "queryDefinition.tooltipType"
   ],
   "pt-br": [
@@ -179,14 +183,11 @@
     "filterWidget.dateCondition.summary.current",
     "filterWidget.dateCondition.summary.relative",
     "filterWidget.dateCondition.summary.relativeIncludingCurrent",
-    "formatting.number.abbreviations.billion",
-    "formatting.number.abbreviations.million",
-    "formatting.number.abbreviations.thousand",
-    "formatting.number.abbreviations.trillion",
     "kpi.comparison.vsBaseline",
     "kpi.comparison.withBaseline",
     "kpi.percentFormat",
-    "measuresAgg.sum"
+    "measuresAgg.sum",
+    "queryDefinition.filterPill.ranking.top"
   ],
   "ru-ru": [
     "filterWidget.controls.overflowCount",
@@ -196,31 +197,23 @@
     "kpi.comparison.withBaseline"
   ],
   "tr-tr": [
+    "advanced.tooltip.trend",
     "advanced.tooltip.trendData.min",
-    "arearange.tooltip.max",
     "arearange.tooltip.min",
-    "boxplot.tooltip.max",
     "boxplot.tooltip.min",
     "filterWidget.controls.betweenMin",
     "filterWidget.controls.overflowCount",
     "filterWidget.dateCondition.summary.current",
     "filterWidget.dateCondition.summary.relative",
     "filterWidget.dateCondition.summary.relativeIncludingCurrent",
+    "filterWidget.numberRange.minimum",
     "formatting.number.abbreviations.billion",
     "formatting.number.abbreviations.million",
+    "formatting.number.abbreviations.thousand",
     "formatting.number.abbreviations.trillion",
     "kpi.comparison.withBaseline",
     "measures.min",
     "measuresAgg.min"
   ],
-  "zh-cn": [
-    "filterRelations.and",
-    "filterRelations.or",
-    "filterWidget.controls.overflowCount",
-    "formatting.number.abbreviations.billion",
-    "formatting.number.abbreviations.million",
-    "formatting.number.abbreviations.thousand",
-    "formatting.number.abbreviations.trillion",
-    "kpi.percentFormat"
-  ]
+  "zh-cn": ["filterWidget.controls.overflowCount", "kpi.percentFormat"]
 }

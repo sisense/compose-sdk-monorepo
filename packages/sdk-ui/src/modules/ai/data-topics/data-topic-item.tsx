@@ -44,19 +44,21 @@ const IconContainer = styled.div`
 
 type Props = {
   title: string;
+  /** User-visible label; defaults to `title`. */
+  label?: string;
   description?: string;
   onClick?: () => void;
 };
 
 export default function DataTopicItem(props: Props) {
-  const { title, description, onClick } = props;
+  const { title, label = title, description, onClick } = props;
 
   const { themeSettings } = useThemeContext();
 
   return (
     <Container onClick={onClick} theme={themeSettings}>
       <div>
-        <Title theme={themeSettings}>{title}</Title>
+        <Title theme={themeSettings}>{label}</Title>
         <Description theme={themeSettings}>{description}</Description>
       </div>
       <IconContainer>

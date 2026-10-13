@@ -20,7 +20,7 @@ import { createClientApplication } from '../../app/client-application';
 import { type ClientApplication } from '../../app/types';
 import { ErrorBoundary } from '../../error-boundary/error-boundary';
 import { ModuleProvider } from '../../modules';
-import { PluginProvider } from '../../plugins/plugin-provider';
+import { EMPTY_PLUGINS, PluginProvider } from '../../plugins/plugin-provider';
 import { I18nProvider } from '../../translation/i18n-provider';
 import { ThemeProvider } from '../theme-provider';
 import { SisenseContext } from './sisense-context';
@@ -78,7 +78,7 @@ export const SisenseContextProvider: FunctionComponent<
   ssoMaxAuthRedirectAttempts,
   ssoRedirectAttemptsTtlMs,
   disableFusionPalette = false,
-  plugins = [],
+  plugins = EMPTY_PLUGINS,
   modules,
 }) => {
   const tracking = {

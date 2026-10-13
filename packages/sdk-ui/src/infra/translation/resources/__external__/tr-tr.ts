@@ -1,3 +1,6 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys and across CLDR plural forms this language does not distinguish (Time
+   Frame's `_few`/`_many` mirroring `_other`). Constants would fragment the translations. */
 import type { TranslationDictionary } from '../index';
 import { PACKAGE_NAMESPACE as SDK_UI_NAMESPACE } from '../index';
 
@@ -156,7 +159,7 @@ const translation: TranslationDictionary = {
   formatting: {
     number: {
       abbreviations: {
-        thousand: 'B',
+        thousand: 'K',
         million: 'M',
         billion: 'B',
         trillion: 'T',
@@ -195,11 +198,11 @@ const translation: TranslationDictionary = {
     count: 'Sayı',
     select: 'Seç',
     today: 'Bugün',
-    days: 'Günler',
-    weeks: 'Haftalar',
-    months: 'Aylar',
-    quarters: 'Çeyrekler',
-    years: 'Yıllar',
+    days: 'Gün',
+    weeks: 'Hafta',
+    months: 'Ay',
+    quarters: 'Çeyrek Yıl',
+    years: 'Yıl',
     earliestDate: 'En erken tarih',
     latestDate: 'En geç tarih',
     todayOutOfRange: 'Bugün kullanılabilir tarih aralığının dışında',
@@ -215,7 +218,7 @@ const translation: TranslationDictionary = {
       box: 'Kutu',
       min: 'Min',
       median: 'Medyan',
-      max: 'Max',
+      max: 'Maks',
     },
   },
   treemap: {
@@ -230,11 +233,11 @@ const translation: TranslationDictionary = {
       max: 'Üst sınır',
       forecastValue: 'Tahmin değeri',
       forecast: 'Tahmin',
-      trend: 'Eğilim',
+      trend: 'Trend',
       trendLocalValue: 'Yerel değer',
       confidenceInterval: 'Güven aralığı',
       trendType: 'Tür',
-      trendDataKey: 'Eğilim verisi',
+      trendDataKey: 'Trend Verileri',
       trendData: {
         min: 'Min',
         max: 'Maks',
@@ -246,7 +249,7 @@ const translation: TranslationDictionary = {
   arearange: {
     tooltip: {
       min: 'Min',
-      max: 'Max',
+      max: 'Maks',
     },
   },
   filterWidget: {
@@ -259,6 +262,12 @@ const translation: TranslationDictionary = {
       invertedFrom: 'Bitiş tarihinden önce olmalı',
       invertedTo: 'Başlangıç tarihinden sonra olmalı',
     },
+    numberRange: {
+      minimum: 'Minimum',
+      maximum: 'Maksimum',
+      notSet: 'Ayarlanmadı',
+      clear: '{{field}} temizle',
+    },
     selectedCount: '{{count}} seçildi',
     allExceptCount: '{{count}} hariç tümü',
     setupTitle: "Filtre widget'ını ayarlayın",
@@ -270,8 +279,11 @@ const translation: TranslationDictionary = {
       onOrAfter: 'Bu tarihte veya sonra',
       includingCurrent: 'mevcut dahil',
       includingCurrentLabel: 'Mevcut dahil',
-      /** Turkish is postpositional (date before önce/sonra) and does not pluralize a noun
-       *  that follows an explicit count ("Son 3 Yıl", not "Son 3 Yıllar") — see datetimeLevels. */
+      countMin: '1 veya daha büyük bir tam sayı girin',
+      /**
+       * Turkish is postpositional (date before önce/sonra) and does not pluralize a noun
+       *  that follows an explicit count ("Son 3 Yıl", not "Son 3 Yıllar") — see datetimeLevels.
+       */
       summary: {
         current: '{{- operator}} {{- grain}}',
         relative: '{{- operator}} {{- count}} {{- grain}}',
@@ -299,6 +311,90 @@ const translation: TranslationDictionary = {
       decreaseCount: 'Azalt',
       selectValues: '{{level}} seçin',
       clear: 'Temizle',
+    },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: 'Zaman aralığı seçenekleri',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to the
+       * `_one` (singular) or `_other` (plural) key by CLDR plural rules. Locales
+       * with more plural forms — Russian's `_few`/`_many`, Polish's `_many` — add
+       * more suffixes in their own resources; English needs only the two.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: 'Bugün',
+        yesterday: 'Dün',
+        tomorrow: 'Yarın',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: 'Bu hafta',
+          month: 'Bu ay',
+          quarter: 'Bu çeyrek',
+          year: 'Bu yıl',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         * Turkish does not pluralize a noun after an explicit count — "Son 3 hafta", not "haftalar".
+         */
+        last: {
+          week_one: 'Geçen hafta',
+          week_few: 'Son {{count}} hafta',
+          week_many: 'Son {{count}} hafta',
+          week_other: 'Son {{count}} hafta',
+          month_one: 'Geçen ay',
+          month_few: 'Son {{count}} ay',
+          month_many: 'Son {{count}} ay',
+          month_other: 'Son {{count}} ay',
+          quarter_one: 'Geçen çeyrek',
+          quarter_few: 'Son {{count}} çeyrek',
+          quarter_many: 'Son {{count}} çeyrek',
+          quarter_other: 'Son {{count}} çeyrek',
+          year_one: 'Geçen yıl',
+          year_few: 'Son {{count}} yıl',
+          year_many: 'Son {{count}} yıl',
+          year_other: 'Son {{count}} yıl',
+          day_few: 'Son {{count}} gün',
+          day_many: 'Son {{count}} gün',
+          day_other: 'Son {{count}} gün',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: 'Gelecek hafta',
+          week_few: 'Sonraki {{count}} hafta',
+          week_many: 'Sonraki {{count}} hafta',
+          week_other: 'Sonraki {{count}} hafta',
+          month_one: 'Gelecek ay',
+          month_few: 'Sonraki {{count}} ay',
+          month_many: 'Sonraki {{count}} ay',
+          month_other: 'Sonraki {{count}} ay',
+          quarter_one: 'Gelecek çeyrek',
+          quarter_few: 'Sonraki {{count}} çeyrek',
+          quarter_many: 'Sonraki {{count}} çeyrek',
+          quarter_other: 'Sonraki {{count}} çeyrek',
+          year_one: 'Gelecek yıl',
+          year_few: 'Sonraki {{count}} yıl',
+          year_many: 'Sonraki {{count}} yıl',
+          year_other: 'Sonraki {{count}} yıl',
+          day_few: 'Sonraki {{count}} gün',
+          day_many: 'Sonraki {{count}} gün',
+          day_other: 'Sonraki {{count}} gün',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: 'Bu hafta ve geçen hafta',
+          month: 'Bu ay ve geçen ay',
+          quarter: 'Bu çeyrek ve geçen çeyrek',
+          year: 'Bu yıl ve geçen yıl',
+        },
+        thisAndNext: {
+          week: 'Bu hafta ve gelecek hafta',
+          month: 'Bu ay ve gelecek ay',
+          quarter: 'Bu çeyrek ve gelecek çeyrek',
+          year: 'Bu yıl ve gelecek yıl',
+        },
+      },
     },
     calendar: {
       selectDates: 'Tarih seçin',
@@ -353,7 +449,7 @@ const translation: TranslationDictionary = {
       deleteWidget: "Widget'ı sil",
       duplicateWidget: "Widget'ı çoğalt",
       renameWidget: "Widget'ı yeniden adlandır",
-      distributeEqualWidth: 'Bu satırda eşit olarak dağıt',
+      distributeEqualWidth: 'Bu satıra eşit olarak dağıt',
       download: 'İndir',
       csvFile: 'CSV dosyası',
       excelFile: 'Excel dosyası',
@@ -604,7 +700,7 @@ const translation: TranslationDictionary = {
       lock: 'Kilitle',
       unlock: 'Kilidi Aç',
       lockGroup: 'Grubu Kilitle',
-      unlockGroup: 'Grup Kilidini Aç',
+      unlockGroup: 'Grubun Kilidini Aç',
     },
     toggleSwitch: 'Filtreyi etkinleştir/devre dışı bırak',
     linkedToWidget: {
@@ -663,10 +759,82 @@ const translation: TranslationDictionary = {
     tooltipType: 'Tür',
     tooltipColumn: 'Sütun',
     tooltipFormula: 'Formül',
+    filterPill: {
+      customFilter: 'özel filtre',
+      empty: 'boş',
+      notEmpty: 'boş değil',
+      not: '{{value}} değil',
+      and: 've',
+      or: 'veya',
+      moreValues: '{{values}} +{{count}} daha',
+      range: '{{from}} - {{to}}',
+      fromToLatest: '{{from}} - en geç tarih',
+      earliestTo: 'en erken tarih - {{to}}',
+      dependentOn: '{{parents}} öğesine bağlı',
+      dependentFilter: 'bağımlı filtre',
+      text: {
+        contains: '{{value}} içerir',
+        startsWith: '{{value}} ile başlar',
+        endsWith: '{{value}} ile biter',
+        doesntEqual: '{{value}} değerine eşit değil',
+        doesntStartWith: '{{value}} ile başlamaz',
+        doesntContain: '{{value}} içermez',
+        doesntEndWith: '{{value}} ile bitmez',
+        like: '{{value}} benzeri',
+      },
+      ranking: {
+        top: 'İlk {{count}}',
+        bottom: 'Son {{count}}',
+        by: '{{measure}} göre {{rank}}',
+      },
+      relative: {
+        last: 'son {{count}} {{unit}}',
+        next: 'sonraki {{count}} {{unit}}',
+        lastTo: '{{date}} tarihine kadar son {{count}} {{unit}}',
+        nextFrom: '{{date}} tarihinden itibaren {{count}} {{unit}}',
+        includingCurrent: '{{period}} (mevcut dahil)',
+        withOffset: '{{period}}, kaydırma {{offset}}',
+        today: 'bugün',
+        thisWeek: 'bu hafta',
+        thisMonth: 'bu ay',
+        thisQuarter: 'bu çeyrek',
+        thisYear: 'bu yıl',
+      },
+      units: {
+        year_one: 'yıl',
+        year_few: 'yıl',
+        year_many: 'yıl',
+        year_other: 'yıl',
+        quarter_one: 'çeyrek',
+        quarter_few: 'çeyrek',
+        quarter_many: 'çeyrek',
+        quarter_other: 'çeyrek',
+        month_one: 'ay',
+        month_few: 'ay',
+        month_many: 'ay',
+        month_other: 'ay',
+        week_one: 'hafta',
+        week_few: 'hafta',
+        week_many: 'hafta',
+        week_other: 'hafta',
+        day_one: 'gün',
+        day_few: 'gün',
+        day_many: 'gün',
+        day_other: 'gün',
+        hour_one: 'saat',
+        hour_few: 'saat',
+        hour_many: 'saat',
+        hour_other: 'saat',
+        minute_one: 'dakika',
+        minute_few: 'dakika',
+        minute_many: 'dakika',
+        minute_other: 'dakika',
+      },
+    },
   },
   measures: {
     countShort: '{{level}} sayısı',
-    countDistinct: 'Benzersiz say',
+    countDistinct: 'Benzersizleri Say',
     count: 'Tümünü say',
     average: 'Ortalama',
     sum: 'Toplam',

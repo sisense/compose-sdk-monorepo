@@ -1,13 +1,10 @@
-import type {
-  ClientApplication,
-  DataState,
-  GetDashboardModelsParams,
-} from '@sisense/sdk-ui-preact';
+import type { GetDashboardModelsParams } from '@sisense/sdk-ui-preact';
+import type { ClientApplication, DataState } from '@sisense/sdk-ui-preact/internal';
 import {
   dataLoadStateReducer,
   getDashboardModels,
   translateToDashboardsResponse,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { toRefs, watch } from 'vue';
 
 import type { DashboardModel } from '../components/dashboard/dashboard-model';

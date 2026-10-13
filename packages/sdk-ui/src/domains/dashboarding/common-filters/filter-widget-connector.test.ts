@@ -564,6 +564,49 @@ describe('connectFilterWidgetToProps — the widget owns one filter per dimensio
     expect(filter).toBe(rangeFilter);
   });
 
+  /* On a numeric attribute Range adopts an inclusive numeric filter — between,
+     ≥ or ≤ — and nothing only numeric Condition can show. */
+  it('lets a numeric Range read-adopt between, ≥ and ≤', () => {
+    const revenue = createAttribute({
+      name: 'Revenue',
+      expression: '[Commerce.Revenue]',
+      type: 'numeric-attribute',
+    });
+    [
+      filterFactory.between(revenue, 10, 50),
+      filterFactory.greaterThanOrEqual(revenue, 10),
+      filterFactory.lessThanOrEqual(revenue, 50),
+    ].forEach((candidate) => {
+      const { filter } = resolveFilterWidgetFilter([candidate], revenue, undefined, {
+        filterType: 'range',
+      });
+      expect(filter).toBe(candidate);
+    });
+  });
+
+  it('does not let a numeric Range read-adopt >, <, =, ≠, or an AND / OR chain', () => {
+    const revenue = createAttribute({
+      name: 'Revenue',
+      expression: '[Commerce.Revenue]',
+      type: 'numeric-attribute',
+    });
+    const atLeastTen = filterFactory.greaterThanOrEqual(revenue, 10);
+    const atMostFifty = filterFactory.lessThanOrEqual(revenue, 50);
+    [
+      filterFactory.greaterThan(revenue, 10),
+      filterFactory.lessThan(revenue, 50),
+      filterFactory.equals(revenue, 10),
+      filterFactory.doesntEqual(revenue, 10),
+      filterFactory.intersection([atLeastTen, atMostFifty]),
+      filterFactory.union([atLeastTen, atMostFifty]),
+    ].forEach((candidate) => {
+      const { filter } = resolveFilterWidgetFilter([candidate], revenue, undefined, {
+        filterType: 'range',
+      });
+      expect(filter).toBeNull();
+    });
+  });
+
   it('does not let List read-adopt a Range filter at its level', () => {
     const rangeFilter = filterFactory.dateRange(DM.Commerce.Date.Weeks, '2026-01-14', undefined);
     const { filter } = resolveFilterWidgetFilter([rangeFilter], DM.Commerce.Date.Weeks, undefined, {
@@ -630,6 +673,45 @@ describe('connectFilterWidgetToProps — the widget owns one filter per dimensio
       filterType: 'condition',
     });
     expect(filter).toBe(afterFilter);
+  });
+
+  /* Time Frame ('period') publishes only a RelativeDateFilter. Without the dedicated
+     `isReadableAdoption` branch the default falls through to `isMembersFilter`, so a Time
+     Frame selection reloaded from the dashboard was never adopted — the FilterWidget
+     came back on `Set filter` and the tile rendered as an unlinked stranger even though
+     attribute expression and granularity matched. */
+  it('lets Time Frame read-adopt a RelativeDateFilter at its level', () => {
+    const timeFrameFilter = filterFactory.dateRelativeTo(DM.Commerce.Date.Days, 1, 1);
+    const { filter } = resolveFilterWidgetFilter(
+      [timeFrameFilter],
+      DM.Commerce.Date.Days,
+      undefined,
+      {
+        filterType: 'period',
+      },
+    );
+    expect(filter).toBe(timeFrameFilter);
+  });
+
+  it('does not let Time Frame read-adopt a members filter at its level', () => {
+    const membersFilter = filterFactory.members(DM.Commerce.Date.Days, ['2026-09-29T00:00:00']);
+    const { filter } = resolveFilterWidgetFilter(
+      [membersFilter],
+      DM.Commerce.Date.Days,
+      undefined,
+      {
+        filterType: 'period',
+      },
+    );
+    expect(filter).toBeNull();
+  });
+
+  it('does not let Time Frame read-adopt a DateRangeFilter at its level', () => {
+    const rangeFilter = filterFactory.dateRange(DM.Commerce.Date.Days, '2026-01-14', undefined);
+    const { filter } = resolveFilterWidgetFilter([rangeFilter], DM.Commerce.Date.Days, undefined, {
+      filterType: 'period',
+    });
+    expect(filter).toBeNull();
   });
 
   /* Same guardrail as the List/Condition test above, mirrored for Range: since

@@ -2,7 +2,7 @@
 /**
  * Export-set resolver for the tag-report plugin.
  *
- * Walks each package's source entry point, following relative re-exports
+ * Walks each package's source entry points, following relative re-exports
  * recursively, to build the set of names that are reachable from the public
  * API.  Tagged declarations not in this set are excluded from the report.
  *
@@ -25,38 +25,69 @@ const { REPO_ROOT, SOURCE_DIRS } = require('./config.cjs');
  */
 const PKG_ENTRY = {
   'sdk-ui-angular': 'public-api.ts',
-  'sdk-ui-vue':     'lib.ts',
+  'sdk-ui-vue': 'lib.ts',
+};
+
+/**
+ * Further entry points (relative to the package's src) whose names count as exported. The
+ * non-public sdk-ui levels have entry points of their own and are not reachable from the root.
+ */
+const PKG_EXTRA_ENTRIES = {
+  'sdk-ui': ['modules/internal/index.ts', 'modules/sisense-internal/index.ts'],
 };
 
 // ── Module resolution ─────────────────────────────────────────────────────────
 
 /** @param {string} p */
-const isFile = (p) => { try { return fs.statSync(p).isFile(); } catch { return false; } };
+const isFile = (p) => {
+  try {
+    return fs.statSync(p).isFile();
+  } catch {
+    return false;
+  }
+};
 
 /**
- * Resolve a relative module specifier to an absolute .ts/.tsx file path.
+ * Return the `src` directory of the package that contains a file, or null.
+ *
+ * @param {string} filePath  Absolute path of a file inside a package.
+ * @returns {string | null}
+ */
+function packageSrcDirOf(filePath) {
+  const m = path
+    .relative(REPO_ROOT, filePath)
+    .replace(/\\/g, '/')
+    .match(/^(packages\/[^/]+\/src)\//);
+  return m ? path.join(REPO_ROOT, m[1]) : null;
+}
+
+/**
+ * Resolve a relative or `@/`-aliased module specifier to an absolute .ts/.tsx file path.
+ * `@/` is the packages' `@/*` → `./src/*` path alias (tsconfig `paths`).
  * Returns null for npm-package specifiers or when no matching file is found.
  *
  * Handles:
  *   './foo'          → foo.ts / foo.tsx / foo/index.ts / foo/index.tsx
  *   './foo.js'       → foo.ts  (TS files imported with a .js hint)
  *   './foo/index'    → foo/index.ts
+ *   '@/foo'          → <package>/src/foo (then as above)
  *
  * @param {string} fromFile   Absolute path of the importing file.
  * @param {string} specifier  Module specifier from the import/export statement.
  * @returns {string | null}
  */
 function resolveRelativeImport(fromFile, specifier) {
-  if (!specifier.startsWith('.')) return null; // npm package — skip
+  const srcDir = specifier.startsWith('@/') ? packageSrcDirOf(fromFile) : null;
+  if (!specifier.startsWith('.') && !srcDir) return null; // npm package — skip
 
   const dir = path.dirname(fromFile);
-  const base = path.resolve(dir, specifier);
+  const base = srcDir ? path.join(srcDir, specifier.slice(2)) : path.resolve(dir, specifier);
   const withoutJs = base.replace(/\.js$/, ''); // strip .js hints used in TS source
 
   for (const candidate of [
     withoutJs + '.ts',
     withoutJs + '.tsx',
-    base,                               // already-extensioned specifier
+    base, // already-extensioned specifier
     path.join(withoutJs, 'index.ts'),
     path.join(withoutJs, 'index.tsx'),
     path.join(base, 'index.ts'),
@@ -96,16 +127,20 @@ function collectExportedNames(entryFile) {
     visited.add(filePath);
 
     let content;
-    try { content = fs.readFileSync(filePath, 'utf-8'); } catch { return; }
+    try {
+      content = fs.readFileSync(filePath, 'utf-8');
+    } catch {
+      return;
+    }
 
     // Strip comments to avoid false matches inside doc blocks or disabled code.
-    const src = content
-      .replace(/\/\*[\s\S]*?\*\//g, ' ')
-      .replace(/\/\/[^\n]*/g, '');
+    const src = content.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/[^\n]*/g, '');
 
     // export * from './foo'  /  export type * from './foo'
     // export * as ns from './foo'  → add namespace name only; don't recurse
-    for (const m of src.matchAll(/\bexport\s+(?:type\s+)?\*(?:\s+as\s+(\w+))?\s+from\s+['"]([^'"]+)['"]/g)) {
+    for (const m of src.matchAll(
+      /\bexport\s+(?:type\s+)?\*(?:\s+as\s+(\w+))?\s+from\s+['"]([^'"]+)['"]/g,
+    )) {
       const nsAlias = m[1];
       const specifier = m[2];
       if (nsAlias) {
@@ -117,7 +152,9 @@ function collectExportedNames(entryFile) {
     }
 
     // export { X, Y as Z } [from './foo']  /  export type { … }
-    for (const m of src.matchAll(/\bexport\s+(?:type\s+)?\{([^}]+)\}(?:\s+from\s+['"]([^'"]+)['"])?/g)) {
+    for (const m of src.matchAll(
+      /\bexport\s+(?:type\s+)?\{([^}]+)\}(?:\s+from\s+['"]([^'"]+)['"])?/g,
+    )) {
       for (const part of m[1].split(',')) {
         const alias = part.trim().split(/\s+as\s+/);
         const publicName = (alias[alias.length - 1] || '').trim();
@@ -155,9 +192,11 @@ function buildExportedByPkg() {
     const m = srcDir.match(/packages\/([^/]+)\/src$/);
     if (!m) continue;
     const pkg = m[1];
-    const entryName = PKG_ENTRY[pkg] || 'index.ts';
-    const entryFile = path.join(REPO_ROOT, srcDir, entryName);
-    map.set(pkg, collectExportedNames(entryFile));
+    const entryNames = [PKG_ENTRY[pkg] || 'index.ts', ...(PKG_EXTRA_ENTRIES[pkg] || [])];
+    const names = entryNames.flatMap((entryName) => [
+      ...collectExportedNames(path.join(REPO_ROOT, srcDir, entryName)),
+    ]);
+    map.set(pkg, new Set(names));
   }
   return map;
 }

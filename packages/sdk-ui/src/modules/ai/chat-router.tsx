@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { useQueryClient } from '@tanstack/react-query';
 
+import { toDataSourceLabel } from '@/shared/utils/data-sources-utils';
+
 import LoadingSpinner from '../../shared/components/loading-spinner';
 import { useGetDataTopics } from './api/hooks';
 import ChatBox from './chat-box';
@@ -46,6 +48,12 @@ export default function ChatRouter() {
     return [];
   }, [data, fetchStatus, dataTopicsList, onContextsLoaded]);
 
+  const getDataTopicLabel = useCallback(
+    (title: string) =>
+      toDataSourceLabel(title, data?.find((dataTopic) => dataTopic.title === title)?.displayName),
+    [data],
+  );
+
   const queryClient = useQueryClient();
   const handleRefresh = useCallback(() => {
     setErrorMessage(undefined);
@@ -68,6 +76,7 @@ export default function ChatRouter() {
   return selectedContext ? (
     <ChatBox
       contextTitle={selectedContext}
+      contextLabel={getDataTopicLabel(selectedContext)}
       contextDetails={contextDetails}
       onGoBack={validDataTopicsList.length === 1 ? undefined : () => setSelectedContext(undefined)}
     />
@@ -75,6 +84,7 @@ export default function ChatRouter() {
     <ChatHome
       dataTopicsList={validDataTopicsList}
       onDataTopicClick={(title) => setSelectedContext(title)}
+      getDataTopicLabel={getDataTopicLabel}
     />
   );
 }

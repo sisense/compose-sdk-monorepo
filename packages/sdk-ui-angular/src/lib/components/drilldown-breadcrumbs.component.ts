@@ -10,10 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ComponentAdapter,
   DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact,
   type DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

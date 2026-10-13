@@ -9,6 +9,8 @@ import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { Button } from '@/shared/components/button';
 import { Popover, PopoverAnchorPosition } from '@/shared/components/popover';
+import { useDataSourceLabelResolver } from '@/shared/hooks/use-data-source-label-resolver.js';
+import type { LabelableDataSource } from '@/shared/utils/data-sources-utils.js';
 
 import { CubeIcon } from '../icons/index.js';
 import { FilterEditor } from './filter-editor.js';
@@ -88,6 +90,22 @@ const Container = styled.div<Themable>`
   width: 700px;
 `;
 
+type DataSourceLabelProps = {
+  dataSource: LabelableDataSource;
+};
+
+/**
+ * Label of the data source in the popover header. Rendered only while the popover is shown, so
+ * each open mounts it and refreshes stale display names, whatever keeps the popover mounted.
+ *
+ * @param props - Component props with the data source to label.
+ * @returns The data source label.
+ */
+const DataSourceLabel = (props: DataSourceLabelProps) => {
+  const getDataSourceLabel = useDataSourceLabelResolver();
+  return <>{getDataSourceLabel(props.dataSource)}</>;
+};
+
 /** @internal */
 export const FilterEditorPopover = ({
   filter,
@@ -104,6 +122,7 @@ export const FilterEditorPopover = ({
   const popoverTheme = themeSettings.general.popover;
   const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
   const shouldShowPopover = !!(filter && position);
+  const dataSource = filter?.attribute.dataSource;
 
   if (!shouldShowPopover) {
     return null;
@@ -135,7 +154,7 @@ export const FilterEditorPopover = ({
           <ModalHeaderInfo theme={themeSettings}>
             <CubeIcon aria-label="cube-icon" color={popoverTheme.header.textColor} />
             <span data-testid="filter-editor-popover-header-datasource">
-              {filter?.attribute.dataSource?.title}
+              {dataSource && <DataSourceLabel dataSource={dataSource} />}
             </span>
           </ModalHeaderInfo>
         </ModalHeader>

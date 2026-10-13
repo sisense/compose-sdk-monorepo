@@ -1,6 +1,7 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
-import type { DataState, RequestConfig } from '@sisense/sdk-ui-preact';
-import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
+import type { RequestConfig } from '@sisense/sdk-ui-preact';
+import type { DataState } from '@sisense/sdk-ui-preact/internal';
+import { dataLoadStateReducer } from '@sisense/sdk-ui-preact/internal';
 import { toRefs, type ToRefs, watch } from 'vue';
 
 import { useReducer } from '../helpers/use-reducer';

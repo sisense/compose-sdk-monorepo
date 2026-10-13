@@ -27,6 +27,12 @@ export const translation = {
       unsupportedConditionFilter:
         'Jaql for {{attributeName}} contains unsupported condition filter: {{filter}}',
       invalidDateValue: 'Filter date value is an invalid Date',
+      dateMeasure: {
+        notADateMeasure:
+          "'{{measure}}' is not a date measure, so the '{{level}}' level this filter needs has no meaning for it. Use measureGreaterThan and its family to filter a numeric measure by value.",
+        levelDimensionMismatch:
+          "The '{{level}}' level belongs to {{levelDimension}} but '{{measure}}' answers with a date from {{measureDimension}}. The filter would be applied to {{measureDimension}} and return rows that look right for the wrong dimension. Pass a level from {{measureDimension}}.",
+      },
       unexpectedFilterRelationsModelNode: 'Unexpected filter relations model node: {{node}}',
     },
     unsupportedDimensionalElement: 'Unsupported dimensional element type',

@@ -1,9 +1,9 @@
 import type {
-  CompleteThemeSettingsInternal,
   ThemeProviderProps as ThemeProviderPropsPreact,
   ThemeSettings,
 } from '@sisense/sdk-ui-preact';
-import { getThemeSettingsByOid } from '@sisense/sdk-ui-preact';
+import type { CompleteThemeSettingsInternal } from '@sisense/sdk-ui-preact/internal';
+import { getThemeSettingsByOid } from '@sisense/sdk-ui-preact/internal';
 import { merge } from 'ts-deepmerge';
 import { defineComponent, provide, ref, watchEffect } from 'vue';
 import type { PropType } from 'vue';

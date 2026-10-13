@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 
 /* eslint-disable @typescript-eslint/unbound-method */
-import { HookAdapter } from '@sisense/sdk-ui-preact';
+import { HookAdapter } from '@sisense/sdk-ui-preact/internal';
 import { of } from 'rxjs';
 
 import { DataSourceService, GetDataSourceDimensionsParams } from './data-source.service';
@@ -11,8 +11,8 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
+vi.mock('@sisense/sdk-ui-preact/internal', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact/internal')>();
   return {
     ...actual,
     useGetDataSourceDimensionsInternal: vi.fn(),

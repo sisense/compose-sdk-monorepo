@@ -7,7 +7,7 @@ import {
   Injector,
   Type,
 } from '@angular/core';
-import { ComponentAdapter } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createSisenseContextConnector,

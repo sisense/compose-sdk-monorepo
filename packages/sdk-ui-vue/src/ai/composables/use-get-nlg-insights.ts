@@ -1,10 +1,10 @@
-import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
 import {
   type ChatRestApi,
   prepareGetNlgInsightsPayload,
   type UseGetNlgInsightsParams as UseGetNlgInsightsParamsPreact,
   type UseGetNlgInsightsState as UseGetNlgInsightsStatePreact,
 } from '@sisense/sdk-ui-preact/ai';
+import { dataLoadStateReducer } from '@sisense/sdk-ui-preact/internal';
 import { toRefs, watch } from 'vue';
 
 import { useTracking } from '../../composables/use-tracking.js';

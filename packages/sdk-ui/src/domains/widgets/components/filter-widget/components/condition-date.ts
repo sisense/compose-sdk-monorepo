@@ -206,27 +206,48 @@ function isStoredDateConditionDraft(value: unknown): value is DateConditionDraft
   );
 }
 
-function readSessionStorage(expression: string): DateConditionDraft | undefined {
+/** What reading the session store found — or that there is no store to read. */
+type StoredDraftRead =
+  | { available: false }
+  | { available: true; draft: DateConditionDraft | undefined };
+
+function readSessionStorage(expression: string): StoredDraftRead {
+  let raw: string | null;
   try {
-    if (typeof sessionStorage === 'undefined') return undefined;
-    const raw = sessionStorage.getItem(incompleteDateDraftStorageKey(expression));
-    if (!raw) return undefined;
-    const parsed: unknown = JSON.parse(raw);
-    return isStoredDateConditionDraft(parsed) ? cloneDateConditionDraft(parsed) : undefined;
+    if (typeof sessionStorage === 'undefined') return { available: false };
+    raw = sessionStorage.getItem(incompleteDateDraftStorageKey(expression));
   } catch {
-    return undefined;
+    return { available: false };
+  }
+  if (!raw) return { available: true, draft: undefined };
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return {
+      available: true,
+      draft: isStoredDateConditionDraft(parsed) ? cloneDateConditionDraft(parsed) : undefined,
+    };
+  } catch {
+    return { available: true, draft: undefined };
   }
 }
 
-function writeSessionStorage(expression: string, draft: DateConditionDraft): void {
+/**
+ * Writes a draft to sessionStorage.
+ * @param expression - Opaque draft key.
+ * @param draft - The draft to store.
+ * @returns Whether the draft reached sessionStorage.
+ */
+function writeSessionStorage(expression: string, draft: DateConditionDraft): boolean {
   try {
-    if (typeof sessionStorage === 'undefined') return;
+    if (typeof sessionStorage === 'undefined') return false;
     sessionStorage.setItem(
       incompleteDateDraftStorageKey(expression),
       JSON.stringify(cloneDateConditionDraft(draft)),
     );
+    return true;
   } catch {
-    /* Private mode / quota — in-memory Map below still covers remount in-session. */
+    /* Private mode / quota — the in-memory Map below still covers remount in-session. */
+    return false;
   }
 }
 
@@ -253,8 +274,24 @@ function clearSessionStorageDrafts(): void {
   }
 }
 
-/** In-memory mirror so remount works even when sessionStorage is unavailable. */
+/**
+ * In-memory fallback for when sessionStorage is unavailable (private mode, quota).
+ *
+ * Never the first place a read looks while sessionStorage works: Fusion can run the same
+ * widget through more than one copy of this module — the dashboard and the widget editor
+ * each with its own, and so its own Map. Only sessionStorage is shared between them, so a
+ * Map read first returned a draft the other copy had since replaced (Before set in the
+ * editor, After set on the dashboard, Before back in the editor — observed with both writes
+ * landing on the same storage key).
+ */
 const incompleteDateDraftByExpression = new Map<string, DateConditionDraft>();
+
+/**
+ * Keys whose latest draft lives only in the Map: the write to sessionStorage failed (quota)
+ * while reads still work, so the store holds an older draft — or none. For these the Map is
+ * the newer truth until a write succeeds again.
+ */
+const draftsNotInStorage = new Set<string>();
 
 /**
  * Stores an unfinished date-condition draft.
@@ -266,7 +303,8 @@ const incompleteDateDraftByExpression = new Map<string, DateConditionDraft>();
 export function rememberIncompleteDateDraft(expression: string, draft: DateConditionDraft): void {
   const next = cloneDateConditionDraft(draft);
   incompleteDateDraftByExpression.set(expression, next);
-  writeSessionStorage(expression, next);
+  if (writeSessionStorage(expression, next)) draftsNotInStorage.delete(expression);
+  else draftsNotInStorage.add(expression);
 }
 
 /**
@@ -276,13 +314,17 @@ export function rememberIncompleteDateDraft(expression: string, draft: DateCondi
  * @internal
  */
 export function readIncompleteDateDraft(expression: string): DateConditionDraft | undefined {
-  const memory = incompleteDateDraftByExpression.get(expression);
-  if (memory) return cloneDateConditionDraft(memory);
   const stored = readSessionStorage(expression);
-  if (stored) {
-    incompleteDateDraftByExpression.set(expression, stored);
-    return cloneDateConditionDraft(stored);
+  if (!stored.available || draftsNotInStorage.has(expression)) {
+    const memory = incompleteDateDraftByExpression.get(expression);
+    return memory ? cloneDateConditionDraft(memory) : undefined;
   }
+  /* The shared store is the truth: mirror it — including an entry another copy removed. */
+  if (stored.draft) {
+    incompleteDateDraftByExpression.set(expression, stored.draft);
+    return cloneDateConditionDraft(stored.draft);
+  }
+  incompleteDateDraftByExpression.delete(expression);
   return undefined;
 }
 
@@ -293,6 +335,7 @@ export function readIncompleteDateDraft(expression: string): DateConditionDraft 
  */
 export function forgetIncompleteDateDraft(expression: string): void {
   incompleteDateDraftByExpression.delete(expression);
+  draftsNotInStorage.delete(expression);
   removeSessionStorage(expression);
 }
 
@@ -302,6 +345,7 @@ export function forgetIncompleteDateDraft(expression: string): void {
  */
 export function forgetAllIncompleteDateDrafts(): void {
   incompleteDateDraftByExpression.clear();
+  draftsNotInStorage.clear();
   clearSessionStorageDrafts();
 }
 

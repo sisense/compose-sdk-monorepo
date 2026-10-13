@@ -3,9 +3,9 @@ import {
   type GetFilterMembersData,
   type GetFilterMembersParams as GetFilterMembersParamsPreact,
   type GetFilterMembersResult as GetFilterMembersResultPreact,
-  HookAdapter,
   useGetFilterMembers,
 } from '@sisense/sdk-ui-preact';
+import { HookAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

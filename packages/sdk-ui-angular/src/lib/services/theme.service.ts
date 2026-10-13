@@ -1,11 +1,11 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 import { trackProductEvent } from '@sisense/sdk-tracking';
+import { type ThemeProviderProps as ThemeConfig } from '@sisense/sdk-ui-preact';
 import {
   type CompleteThemeSettingsInternal,
   getDefaultThemeSettings,
   getThemeSettingsByOid,
-  type ThemeProviderProps as ThemeConfig,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject, Observable, skip } from 'rxjs';
 import { merge } from 'ts-deepmerge';
 

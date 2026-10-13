@@ -102,7 +102,6 @@ const Chip = styled.button`
   font-family: inherit;
   font-size: ${typography.paragraph.size};
   line-height: ${typography.paragraph.lineHeight};
-  color: ${fwVar('textPrimary', fwFallback.textPrimary)};
   white-space: nowrap;
   cursor: pointer;
   background: ${fwVar('surfaceMuted', fwFallback.surfaceMuted)};
@@ -110,11 +109,17 @@ const Chip = styled.button`
   border-radius: ${FIELD_RADIUS.s};
   transition: background-color 0.12s ease;
 
+  /* Doubled so a host \`button\` reset cannot keep its own ink on this native button —
+     the same reasoning \`FieldInput\` doubles its own color rule for (field.tsx). */
+  && {
+    color: ${fwVar('textPrimary', fwFallback.textPrimary)};
+  }
+
   &:hover:not(:disabled) {
     background: ${fwVar('border', fwFallback.border)};
   }
 
-  &:disabled {
+  &&:disabled {
     color: ${fwVar('textSecondary', fwFallback.textSecondary)};
     cursor: not-allowed;
   }
@@ -151,10 +156,15 @@ const NavButton = styled.button`
   align-items: center;
   justify-content: center;
   padding: 0;
-  color: ${fwVar('textPrimary', fwFallback.textPrimary)};
   cursor: pointer;
   background: none;
   border: 0;
+
+  /* Doubled so a host \`button\` reset cannot keep its own ink on this native button —
+     the same reasoning \`FieldInput\` doubles its own color rule for (field.tsx). */
+  && {
+    color: ${fwVar('textPrimary', fwFallback.textPrimary)};
+  }
 `;
 
 const MonthLabel = styled.span`
@@ -230,10 +240,14 @@ const Cell = styled.button<CellStyleProps>`
   font-family: inherit;
   font-size: ${typography.paragraph.size};
   /* Out-of-month days and days beyond the data both read as the secondary grey. */
-  color: ${(p) =>
-    p.$beyondData || p.$outside
-      ? fwVar('textSecondary', fwFallback.textSecondary)
-      : fwVar('textPrimary', fwFallback.textPrimary)};
+  /* Doubled so a host \`button\` reset cannot keep its own ink on this native button —
+     the same reasoning \`FieldInput\` doubles its own color rule for (field.tsx). */
+  && {
+    color: ${(p) =>
+      p.$beyondData || p.$outside
+        ? fwVar('textSecondary', fwFallback.textSecondary)
+        : fwVar('textPrimary', fwFallback.textPrimary)};
+  }
   cursor: pointer;
   /* A day beyond the data is dimmed to say so — but not while it sits in a chosen band,
      where the mute would wash out the fill under it. The grey number still marks it. */

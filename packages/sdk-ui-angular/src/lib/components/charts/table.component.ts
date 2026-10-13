@@ -7,11 +7,8 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import {
-  ComponentAdapter,
-  Table as TablePreact,
-  type TableProps as TablePropsPreact,
-} from '@sisense/sdk-ui-preact';
+import { Table as TablePreact, type TableProps as TablePropsPreact } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import {
   createPluginContextConnector,

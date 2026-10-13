@@ -7,16 +7,19 @@ import type { DashboardPersistenceManager } from '../../persistence/types.js';
 
 /**
  * Widget variants whose `onChange` accepts a {@link WidgetChangeEvent} and whose
- * header supports inline title editing (see `useWidgetHeaderTitle`). Custom
- * widgets are excluded — their `onChange` is the persistence-facing
- * `VisualizationStateUpdate` callback, not a change-event channel.
+ * header supports inline title editing (see `useWidgetHeaderTitle`).
  */
 type ChangeEventCapableWidgetProps = Extract<
   WidgetProps,
-  { widgetType: 'chart' | 'pivot' | 'filter' | 'narrative' }
+  { widgetType: 'chart' | 'pivot' | 'filter' | 'narrative' | 'custom' }
 >;
 
-/** Identifies widgets that emit {@link WidgetChangeEvent} through `onChange`. */
+/**
+ * Identifies widgets that emit {@link WidgetChangeEvent} through `onChange`.
+ *
+ * @param widget - The widget to check.
+ * @returns True for chart, pivot, filter, narrative and custom widgets.
+ */
 function isChangeEventCapableWidgetProps(
   widget: WidgetProps,
 ): widget is ChangeEventCapableWidgetProps {
@@ -24,7 +27,8 @@ function isChangeEventCapableWidgetProps(
     widget.widgetType === 'chart' ||
     widget.widgetType === 'pivot' ||
     widget.widgetType === 'filter' ||
-    widget.widgetType === 'narrative'
+    widget.widgetType === 'narrative' ||
+    widget.widgetType === 'custom'
   );
 }
 
@@ -45,11 +49,11 @@ export type WidgetRenamingOutput = {
 
 /**
  * Middleware hook that enables widget-level rename UI and optionally persists renames.
- * Sets config.header.title.editing.enabled on each widget so ChartWidget/PivotTableWidget show rename UI.
+ * Sets config.header.title.editing.enabled on each widget so the widget header shows rename UI.
  * When persistence is set, wraps widget onChange to call updateWidget on title/changed
- * before forwarding to the change-detection layer.
+ * before forwarding to the change-detection layer (which applies the new title locally).
  *
- * @param options - Options containing widgets, enabled flag, and optional persistence.
+ * @param params - Options containing widgets, enabled flag, and optional persistence.
  * @returns Widgets with config.header.title.editing.enabled and optionally wrapped onChange.
  *
  * @example
@@ -77,9 +81,8 @@ export function useWidgetRenaming(params: UseWidgetRenamingParams): WidgetRenami
           },
         },
       };
-      // Only chart/pivot/filter/narrative widgets emit WidgetChangeEvent through `onChange`;
-      // wrapping other variants would clobber unrelated callbacks (e.g. the
-      // custom-widget persistence `onChange`, which carries a VisualizationStateUpdate).
+      // Only widgets that emit WidgetChangeEvent through `onChange` are wrapped;
+      // wrapping other variants would clobber unrelated callbacks.
       if (persistence && isChangeEventCapableWidgetProps(widget)) {
         return {
           ...widget,

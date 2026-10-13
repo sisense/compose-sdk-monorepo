@@ -1,4 +1,5 @@
-import type { CustomSisenseContext, Plugin } from '@sisense/sdk-ui-preact';
+import type { Plugin } from '@sisense/sdk-ui-preact';
+import type { CustomSisenseContext } from '@sisense/sdk-ui-preact/internal';
 import { inject, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
 

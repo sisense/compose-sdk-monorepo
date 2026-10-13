@@ -3,31 +3,29 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
-import {
-  DASHBOARD_NARRATIVE_MAX_QUERIES,
-  type DashboardNarrativeQueriesRequest,
-  getDashboardNarrative,
-  getDashboardNarrativeByDashboardId,
-  isDashboardNarrativeCacheMiss,
-  isRetryableDashboardNarrativeError,
+import type {
+  DashboardNarrativeRequestOptions,
+  DashboardNarrativeTriggerType,
 } from '@/infra/api/narrative/dashboard-narrative-endpoints.js';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 
 import type { NarrativeState } from '../components/narrative/types.js';
 import { buildDashboardNarrativeQueries } from '../core/build-dashboard-narrative-queries.js';
-import { isDashboardNarrativeResponse, toNarrativeData } from '../core/to-narrative-data.js';
+import {
+  type DashboardNarrativeTarget,
+  isNoDataNarrativeError,
+  requestDashboardNarrative,
+} from '../core/get-narrative-from-dashboard.js';
 
-/** What one generation requests: a saved dashboard by id, or the widgets' queries. */
-type NarrativeRequestTarget =
-  | { kind: 'dashboard'; dashboardId: string; sharedMode: boolean; adminAccess: boolean }
-  | { kind: 'queries'; request: DashboardNarrativeQueriesRequest };
-
-/** One request: its target, and whether it only reads the service's cache. */
-type NarrativeRequest = { target: NarrativeRequestTarget; cacheOnly: boolean };
-
-/** Automatic attempts after a retryable failure, before the failed state is shown. */
-const RETRYABLE_ATTEMPTS = 1;
-const RETRY_DELAY_MS = 1000;
+/**
+ * One request: its target, whether it only reads the service's cache, and — for a generation —
+ * the usage-tracking fields.
+ */
+type NarrativeRequest = {
+  target: DashboardNarrativeTarget;
+  cacheOnly: boolean;
+  tracking?: Pick<DashboardNarrativeRequestOptions, 'subActionType' | 'triggerType'>;
+};
 
 /**
  * Parameters of {@link useNarrativeWidgetState}.
@@ -94,51 +92,56 @@ export function useNarrativeWidgetState(
   const [noData, setNoData] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: ({ target, cacheOnly }: NarrativeRequest) => {
+    // The retry of a server-side failure happens inside `requestDashboardNarrative`.
+    mutationFn: ({ target, cacheOnly, tracking }: NarrativeRequest) => {
       if (!httpClient) {
         return Promise.reject(new Error('HttpClient is required for narrative requests'));
       }
-      return target.kind === 'dashboard'
-        ? getDashboardNarrativeByDashboardId(httpClient, target.dashboardId, {
-            cacheOnly,
-            sharedMode: target.sharedMode,
-            adminAccess: target.adminAccess,
-          })
-        : getDashboardNarrative(httpClient, { ...target.request, cacheOnly });
+      return requestDashboardNarrative(httpClient, target, { cacheOnly, ...tracking });
     },
-    retry: (failureCount, error) =>
-      failureCount < RETRYABLE_ATTEMPTS && isRetryableDashboardNarrativeError(error),
-    retryDelay: RETRY_DELAY_MS,
   });
-  const { mutate, reset, status, data, variables } = mutation;
+  const { mutate, reset, status, data, error, variables } = mutation;
 
   /** `undefined` when neither a dashboard id nor any widget query is there to request. */
-  const getTarget = useCallback((): NarrativeRequestTarget | undefined => {
-    if (dashboardId) return { kind: 'dashboard', dashboardId, sharedMode, adminAccess };
-    const queries = buildDashboardNarrativeQueries(widgets ?? [], defaultDataSource).slice(
-      0,
-      DASHBOARD_NARRATIVE_MAX_QUERIES,
-    );
-    return queries.length > 0 ? { kind: 'queries', request: { queries } } : undefined;
+  const getTarget = useCallback((): DashboardNarrativeTarget | undefined => {
+    if (dashboardId) return { dashboardId, sharedMode, adminAccess };
+    const queries = buildDashboardNarrativeQueries(widgets ?? [], defaultDataSource);
+    return queries.length > 0 ? { queries } : undefined;
   }, [dashboardId, sharedMode, adminAccess, widgets, defaultDataSource]);
 
-  const generate = useCallback(() => {
-    const target = getTarget();
-    if (!target) {
-      reset();
-      setNoData(true);
-      return;
-    }
-    setNoData(false);
-    mutate({ target, cacheOnly: false });
-  }, [getTarget, mutate, reset]);
+  // Whether this widget has shown a narrative, cached or generated: a generation after one is a
+  // regenerate, even when the attempt in between failed.
+  const hasShownNarrative = useRef(false);
+
+  const requestGeneration = useCallback(
+    (triggerType?: DashboardNarrativeTriggerType) => {
+      const target = getTarget();
+      if (!target) {
+        reset();
+        setNoData(true);
+        return;
+      }
+      setNoData(false);
+      mutate({
+        target,
+        cacheOnly: false,
+        tracking: {
+          subActionType: hasShownNarrative.current ? 'regenerate' : 'generate',
+          triggerType,
+        },
+      });
+    },
+    [getTarget, mutate, reset],
+  );
+
+  const generate = useCallback(() => requestGeneration('widgetButton'), [requestGeneration]);
 
   const requestedOnMount = useRef(false);
   useEffect(() => {
     if (!generateOnMount || requestedOnMount.current || !httpClient) return;
     requestedOnMount.current = true;
-    generate();
-  }, [generateOnMount, httpClient, generate]);
+    requestGeneration();
+  }, [generateOnMount, httpClient, requestGeneration]);
 
   useEffect(() => {
     if (generateOnMount || requestedOnMount.current || !httpClient) return;
@@ -160,18 +163,19 @@ export function useNarrativeWidgetState(
       case 'loading':
         return { status: 'loading' };
       case 'success':
-        if (!isDashboardNarrativeResponse(data)) {
-          return isLookup ? { status: 'idle' } : { status: 'error', kind: 'failed' };
-        }
-        return isLookup && isDashboardNarrativeCacheMiss(data)
-          ? { status: 'idle' }
-          : { status: 'ready', data: toNarrativeData(data) };
+        return { status: 'ready', data: data.narrative };
       case 'error':
-        return isLookup ? { status: 'idle' } : { status: 'error', kind: 'failed' };
+        // A lookup that finds nothing in the cache, or fails, leaves the generate action.
+        if (isLookup) return { status: 'idle' };
+        return { status: 'error', kind: isNoDataNarrativeError(error) ? 'no-data' : 'failed' };
       default:
         return isLookupPending ? { status: 'loading' } : { status: 'idle' };
     }
-  }, [noData, status, data, isLookup, isLookupPending]);
+  }, [noData, status, data, error, isLookup, isLookupPending]);
+
+  useEffect(() => {
+    if (state.status === 'ready') hasShownNarrative.current = true;
+  }, [state.status]);
 
   return { state, generate };
 }

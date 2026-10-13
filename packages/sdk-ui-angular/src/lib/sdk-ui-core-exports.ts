@@ -53,7 +53,6 @@ export type {
   ChartWidgetStyleOptions,
   Color,
   ColorPaletteTheme,
-  CommonWidgetProps,
   ConditionalDataColorOptions,
   Convolution,
   DashboardLayoutOptions,
@@ -188,3 +187,6 @@ export type {
   WidgetType,
   X2Title,
 } from '@sisense/sdk-ui-preact';
+
+// `@internal` in sdk-ui, but part of this package's public API until it is promoted or dropped.
+export type { CommonWidgetProps } from '@sisense/sdk-ui-preact/internal';

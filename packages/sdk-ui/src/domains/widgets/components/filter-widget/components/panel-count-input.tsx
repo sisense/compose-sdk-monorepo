@@ -21,6 +21,24 @@ import { useHover } from './use-hover';
 
 const PANEL_SIZE: FieldSize = 's';
 
+/** Fifteen digits always fit a safe integer — `Number.MAX_SAFE_INTEGER` has sixteen. */
+const MAX_COUNT_DIGITS = 15;
+
+/**
+ * Keeps a typed or pasted count to what can be a count: digits only, no leading zeroes
+ * (`01` → `1`, a lone `0` stays), at most {@link MAX_COUNT_DIGITS} long. What is left is
+ * either a usable count, empty, or `0` — so the only error the field can show is "below 1".
+ * @param text - The raw text in the field.
+ * @returns The text the field keeps.
+ * @internal
+ */
+export function normalizeCountInput(text: string): string {
+  return text
+    .replace(/\D/g, '')
+    .replace(/^0+(?=\d)/, '')
+    .slice(0, MAX_COUNT_DIGITS);
+}
+
 const Stepper = styled(Trailing)`
   flex-direction: column;
   width: 16px;
@@ -100,7 +118,10 @@ export function PanelCountInput({
         aria-describedby={message ? errorId : undefined}
         data-testid={dataTestId}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        /* `inputMode` merely picks the mobile keypad — a text field takes any key, so the
+           text is normalised here. Empty and `0` still land: an empty count stays
+           incomplete until Apply, and `0` is flagged as below 1. */
+        onChange={(event) => onChange(normalizeCountInput(event.target.value))}
       />
       <Stepper>
         <Step

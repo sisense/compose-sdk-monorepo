@@ -47,7 +47,8 @@ import {
   validateDateInput,
 } from './date-text.js';
 import type { DateEntryProblem } from './date-text.js';
-import { typography } from './design-tokens.js';
+import { FIELD_RADIUS, spacing, typography } from './design-tokens.js';
+import type { FieldRadius } from './design-tokens.js';
 import type { DropdownItem } from './dropdown';
 import type { FieldOwnProps } from './field';
 import { fwFallback, fwVar } from './field-palette.js';
@@ -84,18 +85,35 @@ const IncludingCurrent = styled.button`
   font-family: inherit;
   font-size: ${typography.label.size};
   line-height: ${typography.label.lineHeight};
-  color: ${fwVar('textPrimary', fwFallback.textPrimary)};
   text-align: left;
   cursor: pointer;
   background: none;
   border: 0;
+
+  /* Label and checkbox glyph both in the primary text (the glyph follows via
+     currentColor). Doubled so a host \`button\` reset cannot keep its own ink on this
+     native button (see \`FieldInput\`, field.tsx). */
+  && {
+    color: ${fwVar('textPrimary', fwFallback.textPrimary)};
+  }
 `;
 
-const Preview = styled.p`
+/* The resolved range under a relative condition, in a muted frame of its own so it reads as
+   the answer to the controls above rather than a stray caption. The field's own 8px inset
+   plus a transparent 1px border, so the text lines up exactly with the inputs above; the
+   corners follow the Corner Radius setting like every other control in the panel. */
+const Preview = styled.p<{ $radius?: FieldRadius }>`
+  box-sizing: border-box;
   margin: 0;
-  font-size: ${typography.paragraph.size};
-  line-height: ${typography.paragraph.lineHeight};
-  color: ${fwVar('textSecondary', fwFallback.textSecondary)};
+  padding: 6px 8px;
+  font-size: ${typography.label.size};
+  font-variant-numeric: tabular-nums;
+  line-height: ${typography.label.lineHeight};
+  color: ${fwVar('textPrimary', fwFallback.textPrimary)};
+  background: ${fwVar('surfaceMuted', fwFallback.surfaceMuted)};
+  border: ${spacing.borderWidth} solid transparent;
+  border-radius: ${({ $radius = 's' }) => FIELD_RADIUS[$radius]};
+  cursor: default;
 `;
 
 /** @internal */
@@ -119,30 +137,31 @@ export type ConditionFilterDateProps = FieldOwnProps & {
 };
 
 /**
- * @param props - Attribute, linked filter, clock, data bounds, and publish callback
- * @returns The date Condition trigger and its drill-in panel
+ * @param props - Attribute, linked filter, clock, data bounds, and publish callback.
+ * @returns The date Condition trigger and its drill-in panel.
  * @internal
  */
-export function ConditionFilterDate({
-  attribute,
-  filter = null,
-  onFilterUpdate,
-  placeholder,
-  id,
-  today: todayProp,
-  earliestData,
-  latestData,
-  excludedDateLevels,
-  label,
-  error,
-  disabled,
-  state,
-  size,
-  radius,
-  width,
-  controlStyle,
-  className,
-}: ConditionFilterDateProps) {
+export function ConditionFilterDate(props: ConditionFilterDateProps) {
+  const {
+    attribute,
+    filter = null,
+    onFilterUpdate,
+    placeholder,
+    id,
+    today: todayProp,
+    earliestData,
+    latestData,
+    excludedDateLevels,
+    label,
+    error,
+    disabled,
+    state,
+    size,
+    radius,
+    width,
+    controlStyle,
+    className,
+  } = props;
   const { t } = useTranslation();
   const { mask, locale } = useDateMask();
   const today = todayProp ?? new Date();
@@ -173,14 +192,30 @@ export function ConditionFilterDate({
      stable across refresh/editor navigation — see rememberIncompleteDateDraft docs) in
      addition to the dimension, so two widgets on the same date column don't share a draft.
      Falls back to the bare expression only before a filter exists yet (brand-new widget). */
-  const dimKey = filter?.config?.guid
-    ? `${attribute.expression}::${filter.config.guid}`
-    : attribute.expression;
+  /* The host hands a blank Condition its background filter (include-all / members) rather
+     than null, so the guid is there both while a condition is applied and after it is
+     cleared — the draft is remembered under one key and read back under the same one.
+     A host may still echo a clear as a plain `filter={null}` with no guid at all (a Compose
+     SDK app wiring `onFilterUpdate` straight into its own state); the last guid seen keeps
+     the key stable until a new one arrives. */
+  const incomingGuid = filter?.config?.guid;
+  const [lastGuid, setLastGuid] = useState(incomingGuid);
+  if (incomingGuid && incomingGuid !== lastGuid) setLastGuid(incomingGuid);
+  const filterGuid = incomingGuid ?? lastGuid;
+  const dimKey = filterGuid ? `${attribute.expression}::${filterGuid}` : attribute.expression;
   const resolveOpenDraft = useCallback(
     (fromFilter: DateConditionDraft) => {
       if (isEditableDateConditionFilter(filter)) return fromFilter;
       const remembered = readIncompleteDateDraft(dimKey);
-      const candidate = remembered ?? fromFilter;
+      const rememberedOrFilter = remembered ?? fromFilter;
+      /* A remembered Last/Next draft reopens on a usable count: one parked with `0`, an
+         emptied field or a stale session entry starts again from the default 1 rather
+         than reopening on a value Apply would refuse. */
+      const candidate =
+        dateOperatorOf(rememberedOrFilter.op).shape === 'relative' &&
+        parseDateConditionCount(rememberedOrFilter.count) === null
+          ? { ...rememberedOrFilter, count: '1' }
+          : rememberedOrFilter;
       /* Anchor ops publish at Days — if Days is already claimed, fall back to Last. */
       if (daysTaken && dateOperatorOf(candidate.op).shape === 'date') {
         return makeDefaultDraft();
@@ -230,6 +265,13 @@ export function ConditionFilterDate({
     openDrill,
     buildDrill,
   } = panel;
+
+  /* The default draft Clear just put in place, kept by identity: while the panel still
+     holds exactly that object, the reader has picked nothing since, so the field reads
+     `Set filter` — the same as clearing it with ✕ — rather than the default's summary.
+     The first edit makes a new draft object, and the summary comes back with it. */
+  const [clearedDraft, setClearedDraft] = useState<DateConditionDraft | null>(null);
+  const draftJustCleared = clearedDraft !== null && draft === clearedDraft;
 
   const labelOf = (op: DateConditionOp) => t(dateOperatorOf(op).labelKey);
   const includingCurrentLabel = t(
@@ -288,9 +330,13 @@ export function ConditionFilterDate({
     )[0];
   })();
 
+  /* A typed count below 1 is flagged as soon as it is typed, not only on Apply — the field
+     takes digits only, so `0` is the one mistake left to make. An empty count stays quiet:
+     Apply clears it as an unfinished draft. */
+  const countInvalid = shape === 'relative' && parseDateConditionCount(draft.count) === null;
   const countError =
-    triedApply && shape === 'relative' && parseDateConditionCount(draft.count) === null
-      ? t('filterEditor.validationErrors.invalidNumber')
+    countInvalid && (triedApply || draft.count.trim() !== '')
+      ? t('filterWidget.dateCondition.countMin')
       : undefined;
 
   const anchorError = (() => {
@@ -327,6 +373,17 @@ export function ConditionFilterDate({
         return;
       }
     }
+    /* A typed count that is not a whole number ≥ 1 — `0` — is a mistake to show, not an
+       unfinished draft to clear: keep the panel open with the count flagged. Only an empty
+       count falls through to the clear below. */
+    if (
+      shape === 'relative' &&
+      draft.count.trim() !== '' &&
+      parseDateConditionCount(draft.count) === null
+    ) {
+      setTriedApply(true);
+      return;
+    }
     if (!isDateConditionComplete(draft)) {
       rememberIncompleteDateDraft(dimKey, draft);
       onFilterUpdate?.(null);
@@ -351,7 +408,19 @@ export function ConditionFilterDate({
       return;
     }
     forgetIncompleteDateDraft(dimKey);
-    const config = filter?.config ? { ...filter.config } : undefined;
+    /* A date condition's own config carries over whole. A blank Condition's background is a
+       members filter: only its base settings carry over — the guid, which filter relations
+       resolve by, plus disabled / locked — and its members-only settings stay behind. */
+    const incomingConfig = filter?.config;
+    const config = !incomingConfig
+      ? undefined
+      : isEditableDateConditionFilter(filter)
+      ? { ...incomingConfig }
+      : {
+          guid: incomingConfig.guid,
+          disabled: incomingConfig.disabled,
+          locked: incomingConfig.locked,
+        };
     onFilterUpdate?.(dateConditionToFilter(attribute, draft, mask, config, t));
     close();
     setCalendarShown(false);
@@ -466,7 +535,9 @@ export function ConditionFilterDate({
             {t('filterWidget.dateCondition.includingCurrentLabel', 'Including current')}
           </IncludingCurrent>
           {relativePreview && (
-            <Preview data-testid="filter-widget-condition-preview">{relativePreview}</Preview>
+            <Preview $radius={radius} data-testid="filter-widget-condition-preview">
+              {relativePreview}
+            </Preview>
           )}
         </>
       )}
@@ -475,7 +546,9 @@ export function ConditionFilterDate({
         <>
           {grainSelector}
           {relativePreview && (
-            <Preview data-testid="filter-widget-condition-preview">{relativePreview}</Preview>
+            <Preview $radius={radius} data-testid="filter-widget-condition-preview">
+              {relativePreview}
+            </Preview>
           )}
         </>
       )}
@@ -543,7 +616,7 @@ export function ConditionFilterDate({
       className={className}
       placeholder={placeholder}
       isOpen={isOpen}
-      triggerValue={isOpen ? openLabel : committedLabel}
+      triggerValue={isOpen ? (draftJustCleared ? undefined : openLabel) : committedLabel}
       showPlaceholder={showPlaceholder}
       hint={hoverHint}
       onOpen={() => {
@@ -563,6 +636,10 @@ export function ConditionFilterDate({
       onClearDraft={() => {
         forgetIncompleteDateDraft(dimKey);
         clearDraft();
+        /* Same default `clearDraft` resets to, set here so its identity is known. */
+        const cleared = makeDefaultDraft();
+        setDraft(cleared);
+        setClearedDraft(cleared);
         setCalendarShown(false);
         setAnchorProblem(null);
       }}

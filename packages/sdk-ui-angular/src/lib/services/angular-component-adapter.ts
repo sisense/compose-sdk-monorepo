@@ -1,5 +1,5 @@
 import { ComponentRef, reflectComponentType, Type } from '@angular/core';
-import { type ExternalComponentAdapter } from '@sisense/sdk-ui-preact';
+import { type ExternalComponentAdapter } from '@sisense/sdk-ui-preact/internal';
 
 import { DynamicRenderer } from './dynamic-renderer.service';
 

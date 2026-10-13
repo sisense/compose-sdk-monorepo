@@ -158,6 +158,9 @@ export type {
 export { DateRangePickerFilter } from './date-range-picker-filter.js';
 export type { DateRangePickerFilterProps } from './date-range-picker-filter.js';
 
+export { NumberRangeFilter } from './number-range-filter.js';
+export type { NumberRangeFilterProps } from './number-range-filter.js';
+
 export { DateRangeCalendarGrid } from './date-range-calendar-grid.js';
 export type {
   DateRangeCalendarGridProps,

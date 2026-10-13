@@ -1,3 +1,6 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Locale strings deliberately repeat across
+   unrelated keys and across CLDR plural forms this language does not distinguish (Time
+   Frame's `_few`/`_many` mirroring `_other`). Constants would fragment the translations. */
 import type { TranslationDictionary } from '../index';
 import { PACKAGE_NAMESPACE as SDK_UI_NAMESPACE } from '../index';
 
@@ -150,17 +153,17 @@ const translation: TranslationDictionary = {
     },
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
-  chartNoData: '結果なし',
+  chartNoData: '結果がありません',
   filters: 'フィルター',
   cancel: 'キャンセル',
   includeAll: 'すべて含める',
   formatting: {
     number: {
       abbreviations: {
-        thousand: 'K',
-        million: 'M',
-        billion: 'B',
-        trillion: 'T',
+        thousand: '(千)',
+        million: '(百万)',
+        billion: '(十億)',
+        trillion: '(兆)',
       },
     },
   },
@@ -189,7 +192,7 @@ const translation: TranslationDictionary = {
     by: 'による',
   },
   dateFilter: {
-    last: '最後',
+    last: '過去',
     next: '次',
     from: '開始',
     to: '終了',
@@ -260,6 +263,12 @@ const translation: TranslationDictionary = {
       invertedFrom: '終了日より前の日付を入力してください',
       invertedTo: '開始日より後の日付を入力してください',
     },
+    numberRange: {
+      minimum: '最小',
+      maximum: '最大',
+      notSet: '未設定',
+      clear: '{{field}}をクリア',
+    },
     selectedCount: '{{count}} 件選択',
     allExceptCount: '{{count}} 件を除くすべて',
     setupTitle: 'フィルターウィジェットを設定',
@@ -271,8 +280,11 @@ const translation: TranslationDictionary = {
       onOrAfter: 'この日またはそれ以降',
       includingCurrent: '現在を含む',
       includingCurrentLabel: '現在を含む',
-      /** Japanese is postpositional — the date comes before the operator (前/以前 etc.),
-       *  the opposite of English word order; relative needs the attributive の. */
+      countMin: '1 以上の整数を入力してください',
+      /**
+       * Japanese is postpositional — the date comes before the operator (前/以前 etc.),
+       *  the opposite of English word order; relative needs the attributive の.
+       */
       summary: {
         current: '{{- operator}}{{- grain}}',
         relative: '{{- operator}}の{{- count}}{{- grain}}',
@@ -302,6 +314,89 @@ const translation: TranslationDictionary = {
       selectValues: '{{level}}を選択',
       clear: 'クリア',
     },
+    timeFrame: {
+      /** Accessible name for the row-list popover — read to a screen reader on open. */
+      listboxLabel: '期間オプション',
+      /**
+       * Row labels. Two shapes carry a `{{count}}`, which i18next resolves to the
+       * `_one` (singular) or `_other` (plural) key by CLDR plural rules. Locales
+       * with more plural forms — Russian's `_few`/`_many`, Polish's `_many` — add
+       * more suffixes in their own resources; English needs only the two.
+       */
+      labels: {
+        /** Day-grain count=1: `Today` / `Yesterday` / `Tomorrow` — calendar words, not arithmetic. */
+        today: '今日',
+        yesterday: '昨日',
+        tomorrow: '明日',
+        /** `This X` — single period, no count in the label. Day has none (Today covers it). */
+        this: {
+          week: '今週',
+          month: '今月',
+          quarter: '今四半期',
+          year: '今年',
+        },
+        /**
+         * `Last X` / `Last N X` — count drops for the singular, plural interpolates it.
+         * Day `_one` renders as `Yesterday` and never reaches this key.
+         */
+        last: {
+          week_one: '先週',
+          week_few: '過去 {{count}} 週間',
+          week_many: '過去 {{count}} 週間',
+          week_other: '過去 {{count}} 週間',
+          month_one: '先月',
+          month_few: '過去 {{count}} か月',
+          month_many: '過去 {{count}} か月',
+          month_other: '過去 {{count}} か月',
+          quarter_one: '前四半期',
+          quarter_few: '過去 {{count}} 四半期',
+          quarter_many: '過去 {{count}} 四半期',
+          quarter_other: '過去 {{count}} 四半期',
+          year_one: '昨年',
+          year_few: '過去 {{count}} 年',
+          year_many: '過去 {{count}} 年',
+          year_other: '過去 {{count}} 年',
+          day_few: '過去 {{count}} 日間',
+          day_many: '過去 {{count}} 日間',
+          day_other: '過去 {{count}} 日間',
+        },
+        /** `Next X` / `Next N X`. Day `_one` renders as `Tomorrow`. */
+        next: {
+          week_one: '来週',
+          week_few: '今後 {{count}} 週間',
+          week_many: '今後 {{count}} 週間',
+          week_other: '今後 {{count}} 週間',
+          month_one: '来月',
+          month_few: '今後 {{count}} か月',
+          month_many: '今後 {{count}} か月',
+          month_other: '今後 {{count}} か月',
+          quarter_one: '次の四半期',
+          quarter_few: '今後 {{count}} 四半期',
+          quarter_many: '今後 {{count}} 四半期',
+          quarter_other: '今後 {{count}} 四半期',
+          year_one: '来年',
+          year_few: '今後 {{count}} 年',
+          year_many: '今後 {{count}} 年',
+          year_other: '今後 {{count}} 年',
+          day_few: '今後 {{count}} 日間',
+          day_many: '今後 {{count}} 日間',
+          day_other: '今後 {{count}} 日間',
+        },
+        /** Paired frames — include the current period. Day grain has no such pair. */
+        thisAndLast: {
+          week: '今週と先週',
+          month: '今月と先月',
+          quarter: '今四半期と前四半期',
+          year: '今年と昨年',
+        },
+        thisAndNext: {
+          week: '今週と来週',
+          month: '今月と来月',
+          quarter: '今四半期と次の四半期',
+          year: '今年と来年',
+        },
+      },
+    },
     calendar: {
       selectDates: '日付を選択',
       multipleDaysHint: '複数の日付を選択できます',
@@ -320,7 +415,7 @@ const translation: TranslationDictionary = {
   unsupportedFilterMessage: 'サポートされていないフィルター（データクエリに適用）',
   unsupportedFilter: 'サポートされていないフィルター{{filter}}',
   commonFilter: {
-    clearSelectionButton: '選択をクリア',
+    clearSelectionButton: '選択範囲のクリア',
     selectMenuItem: '選択',
     unselectMenuItem: '選択解除',
   },
@@ -333,7 +428,7 @@ const translation: TranslationDictionary = {
   drilldown: {
     drillMenuItem: 'ドリル',
     breadcrumbsAllSuffix: 'すべて',
-    breadcrumbsPrev: '前へ',
+    breadcrumbsPrev: '前',
     breadcrumbsNext: '次へ',
     popover: {
       members: 'メンバー',
@@ -352,15 +447,15 @@ const translation: TranslationDictionary = {
       switchToChart: 'チャートに切り替え',
     },
     menu: {
-      deleteWidget: 'ウィジェットを削除',
-      duplicateWidget: 'ウィジェットを複製',
+      deleteWidget: 'ウィジェットの削除',
+      duplicateWidget: 'ウィジェットの複製',
       renameWidget: 'ウィジェットの名前を変更',
-      distributeEqualWidth: 'この行で均等に配分',
+      distributeEqualWidth: 'この行に均等に分配',
       download: 'ダウンロード',
-      csvFile: 'CSVファイル',
-      excelFile: 'Excelファイル',
+      csvFile: 'CSV ファイル',
+      excelFile: 'Excel ファイル',
       repeatRowsRecommended: '行を繰り返す（推奨）',
-      mergeRows: '行を結合',
+      mergeRows: '行を結合する',
     },
   },
   customWidgets: {
@@ -560,7 +655,7 @@ const translation: TranslationDictionary = {
     addMeasure: 'メジャーを追加',
   },
   pivotTable: {
-    grandTotal: '合計',
+    grandTotal: '総計',
     subTotal: '{{value}}合計',
     limits: {
       baseNote:
@@ -604,7 +699,7 @@ const translation: TranslationDictionary = {
       lock: 'ロック',
       unlock: 'ロック解除',
       lockGroup: 'グループをロック',
-      unlockGroup: 'グループのロック解除',
+      unlockGroup: 'グループをロック解除',
     },
     toggleSwitch: 'フィルターを有効/無効にする',
     linkedToWidget: {
@@ -661,14 +756,86 @@ const translation: TranslationDictionary = {
     showLess: '表示を減らす',
     connectorBy: '別',
     connectorWhere: '条件',
-    tooltipType: '種類',
+    tooltipType: 'タイプ',
     tooltipColumn: '列',
     tooltipFormula: '数式',
+    filterPill: {
+      customFilter: 'カスタムフィルター',
+      empty: '空',
+      notEmpty: '空ではない',
+      not: '{{value}}以外',
+      and: 'かつ',
+      or: 'または',
+      moreValues: '{{values}} 他{{count}}件',
+      range: '{{from}}～{{to}}',
+      fromToLatest: '{{from}}～最も遅い日付',
+      earliestTo: '最も早い日付～{{to}}',
+      dependentOn: '{{parents}}に依存',
+      dependentFilter: '依存フィルター',
+      text: {
+        contains: '{{value}}を含む',
+        startsWith: '{{value}}で始まる',
+        endsWith: '{{value}}で終わる',
+        doesntEqual: '{{value}}と等しくない',
+        doesntStartWith: '{{value}}で始まらない',
+        doesntContain: '{{value}}を含まない',
+        doesntEndWith: '{{value}}で終わらない',
+        like: '{{value}}に類似',
+      },
+      ranking: {
+        top: '上位{{count}}',
+        bottom: '下位{{count}}',
+        by: '{{measure}}による{{rank}}',
+      },
+      relative: {
+        last: '過去{{count}}{{unit}}',
+        next: '今後{{count}}{{unit}}',
+        lastTo: '{{date}}までの過去{{count}}{{unit}}',
+        nextFrom: '{{date}}からの{{count}}{{unit}}',
+        includingCurrent: '{{period}}（現在を含む）',
+        withOffset: '{{period}}、オフセット{{offset}}',
+        today: '今日',
+        thisWeek: '今週',
+        thisMonth: '今月',
+        thisQuarter: '今四半期',
+        thisYear: '今年',
+      },
+      units: {
+        year_one: '年',
+        year_few: '年',
+        year_many: '年',
+        year_other: '年',
+        quarter_one: '四半期',
+        quarter_few: '四半期',
+        quarter_many: '四半期',
+        quarter_other: '四半期',
+        month_one: 'か月',
+        month_few: 'か月',
+        month_many: 'か月',
+        month_other: 'か月',
+        week_one: '週間',
+        week_few: '週間',
+        week_many: '週間',
+        week_other: '週間',
+        day_one: '日',
+        day_few: '日',
+        day_many: '日',
+        day_other: '日',
+        hour_one: '時間',
+        hour_few: '時間',
+        hour_many: '時間',
+        hour_other: '時間',
+        minute_one: '分',
+        minute_few: '分',
+        minute_many: '分',
+        minute_other: '分',
+      },
+    },
   },
   measures: {
     countShort: '{{level}}の件数',
-    countDistinct: 'ユニーク数',
-    count: '全件数',
+    countDistinct: '一意をカウント',
+    count: 'すべてカウント',
     average: '平均',
     sum: '合計',
     min: '最小',

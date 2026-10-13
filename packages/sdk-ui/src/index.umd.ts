@@ -1,6 +1,12 @@
+import { registerAllTranslations } from './infra/translation/register-all-translations';
+
 export * from './modules/ai';
 export * from './modules/analytics-composer';
 export * from './index';
+// The package root carries the public levels only; the bundle keeps exposing the internal levels
+// on its global, as it always has.
+export * from './modules/internal';
+export * from './modules/sisense-internal';
 
 // TEMPORARY WORKAROUND: re-export selected sdk-data features so Fusion can build
 // CSDK filters and Attribute instances from the sdk-ui UMD bundle without a separate
@@ -9,3 +15,5 @@ export * from './index';
 // UMD module. Tracked as a separate activity: "make @sisense/sdk-data available in
 // Fusion as a UMD module".
 export { filterFactory, createAttribute } from '@sisense/sdk-data';
+
+registerAllTranslations();

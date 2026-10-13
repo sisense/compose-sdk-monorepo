@@ -247,6 +247,7 @@ function getHighlightsAllowedPanelNames(widgetType: FusionWidgetType) {
       return ['category'];
     case 'map/scatter':
       return ['geo'];
+    case 'pivot':
     case 'pivot2':
       return ['rows', 'columns'];
     default:

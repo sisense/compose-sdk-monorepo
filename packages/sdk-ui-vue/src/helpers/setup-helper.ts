@@ -3,7 +3,7 @@ import {
   ComponentAdapter,
   type ContextConnector,
   createWrapperElement,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { h, isReactive, onBeforeUnmount, ref, type Slots, toRaw } from 'vue';
 
 import { isObject } from '../utils.js';

@@ -2,12 +2,11 @@
 
 /** @vitest-environment jsdom */
 import {
-  type AppSettings,
   type ClientApplication,
   type CompleteThemeSettingsInternal,
   getDashboardModel,
   getDashboardModels,
-} from '@sisense/sdk-ui-preact';
+} from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject } from 'rxjs';
 import { Mock, Mocked } from 'vitest';
 
@@ -20,7 +19,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@sisense/sdk-ui-preact/internal', () => ({
   getDashboardModel: vi.fn(),
   getDashboardModels: vi.fn(),
 }));
@@ -32,7 +31,7 @@ const getDashboardModelsMock = getDashboardModels as Mock<typeof getDashboardMod
 const mockThemeSettings = {
   palette: { variantColors: ['#FF0000'] },
 } as CompleteThemeSettingsInternal;
-const mockAppSettings = { serverThemeSettings: {} } as AppSettings;
+const mockAppSettings = { serverThemeSettings: {} } as ClientApplication['settings'];
 
 describe('DashboardService', () => {
   let sisenseContextService: Mocked<SisenseContextService>;

@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 
 import { Themable } from '@/infra/contexts/theme-provider/types';
-
-import { CompleteThemeSettingsInternal } from '../..';
+import type { CompleteThemeSettingsInternal } from '@/types';
 
 const AiDisclaimerContainer = styled.div<Themable>`
   text-align: center;

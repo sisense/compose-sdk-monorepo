@@ -24,6 +24,7 @@ import {
   SeriesStyle,
   ValueStyle,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
+import type { NarrativeWidgetStyleOptions } from '@/domains/widgets/components/narrative-widget/types.js';
 import type { ChartWidgetConfig, WidgetType } from '@/domains/widgets/components/widget/types.js';
 import type {
   WidgetHeaderMenuConfig,
@@ -546,6 +547,27 @@ export type TextWidgetJSON = {
 };
 
 /**
+ * JSON representation of a dashboard narrative widget payload.
+ * Only the serializable widget fields are kept; the narrative text itself is generated at render
+ * time. Callbacks and host chrome flags (`containerless`, `generateOnMount`) are re-supplied by the
+ * hosting dashboard. `widgets` is dropped because a hosting dashboard supplies its own widgets, and
+ * with `dashboardId` set they are not sent at all.
+ * `sharedMode` and `adminAccess` are also left out: they shape the narrative request like
+ * `dashboardId` does, but today's callers (the assistant loads dashboards through
+ * `dashboardModelTranslator.toDashboardProps`) never set them. A caller that renders this JSON
+ * for a dashboard opened in shared mode or through Admin Access must pass them again.
+ * `widgetType` and `id` are added on `WidgetJSON` via `WithCommonWidgetJSON`.
+ *
+ * @internal
+ */
+export type NarrativeWidgetJSON = {
+  title?: string;
+  styleOptions?: NarrativeWidgetStyleOptions;
+  config?: Pick<WidgetConfigJSON, 'header'>;
+  dashboardId?: string;
+};
+
+/**
  * JSON representation of a custom/plugin widget payload.
  * `dataOptions` is passed through as opaque JSON — `GenericDataOptions` cannot be reliably
  * round-tripped without custom-widget-specific schema knowledge.
@@ -599,6 +621,7 @@ export type WidgetJSON =
   | WithCommonWidgetJSON<ChartWidgetJSON, 'chart'>
   | WithCommonWidgetJSON<PivotTableWidgetJSON, 'pivot'>
   | WithCommonWidgetJSON<TextWidgetJSON, 'text'>
+  | WithCommonWidgetJSON<NarrativeWidgetJSON, 'narrative'>
   | WithCommonWidgetJSON<CustomWidgetJSON, 'custom'>;
 
 // ─── Dashboard JSON type ──────────────────────────────────────────────────────
