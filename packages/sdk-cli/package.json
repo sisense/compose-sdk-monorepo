@@ -7,6 +7,9 @@
     "url": "https://github.com/sisense/compose-sdk-monorepo",
     "directory": "packages/sdk-cli"
   },
+  "bugs": {
+    "url": "https://github.com/sisense/compose-sdk-monorepo/issues"
+  },
   "keywords": [
     "Sisense",
     "Compose SDK"
