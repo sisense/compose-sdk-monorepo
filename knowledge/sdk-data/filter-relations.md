@@ -17,21 +17,22 @@ Models logical AND/OR relationships between filters as a binary tree and provide
 | Type     | `FilterRelations` — packages/sdk-data/src/dimensional-model/interfaces.ts:703                                                        |
 | Type     | `FilterRelationsNode` — packages/sdk-data/src/dimensional-model/interfaces.ts:676                                                    |
 | Types    | `FilterRelationsModel` / `FilterRelationsJaql` — packages/sdk-data/src/dimensional-model/interfaces.ts:720 / :732                    |
-| Guard    | `isFilterRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:75                                         |
-| Type     | `FilterRelationsRules` (guid-only internal tree) — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:92            |
-| Function | `splitFiltersAndRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:148                                 |
-| Function | `combineFiltersAndRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:202                               |
-| Function | `getFiltersArray` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:187                                          |
-| Function | `calculateNewRelations` (diff-driven rebuild) — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:249              |
-| Function | `mergeFiltersOrFilterRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:125                             |
-| Function | `mergeFilters` (plain arrays, dedupe by compare id) — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:819        |
-| Function | `getRelationsWithReplacedFilter` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:297                           |
-| Function | `getFilterCompareId` / `getAttributeCompareId` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:790 / :777      |
-| Function | `getFilterRelationsFromJaql` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:849                               |
-| Function | `convertFilterRelationsModelToRelationRules` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:467               |
-| Function | `filterRelationRulesToFilterRelationsModel` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:613                |
-| Function | `convertFilterRelationsModelToJaql` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:901                        |
-| Function | `parenthesizeNestedLogicalSubgroupsInFilterRelationsModel` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:577 |
+| Guard    | `isFilterRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:79                                         |
+| Type     | `FilterRelationsRules` (guid-only internal tree) — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:96            |
+| Function | `splitFiltersAndRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:152                                 |
+| Function | `combineFiltersAndRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:206                               |
+| Function | `getFiltersArray` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:191                                          |
+| Function | `calculateNewRelations` (diff-driven rebuild) — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:253              |
+| Function | `mergeFiltersOrFilterRelations` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:129                            |
+| Function | `mergeFilters` (plain arrays, dedupe by compare id) — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:864        |
+| Function | `getRelationsWithReplacedFilter` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:301                           |
+| Function | `getFilterCompareId` / `getAttributeCompareId` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:835 / :781      |
+| Function | `getMeasureCompareId` (measure identity) — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:800                   |
+| Function | `getFilterRelationsFromJaql` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:894                               |
+| Function | `convertFilterRelationsModelToRelationRules` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:471               |
+| Function | `filterRelationRulesToFilterRelationsModel` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:617                |
+| Function | `convertFilterRelationsModelToJaql` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:946                        |
+| Function | `parenthesizeNestedLogicalSubgroupsInFilterRelationsModel` — packages/sdk-data/src/dimensional-model/filters/filter-relations.ts:581 |
 
 # Contract
 
@@ -46,7 +47,7 @@ export interface FilterRelations {
   composeCode?: string;
 }
 
-// Internal working form: nodes reference filters by guid (filter-relations.ts:92-105)
+// Internal working form: nodes reference filters by guid (filter-relations.ts:96-109)
 export type FilterRelationsRule = {
   left: FilterRelationsRuleNode;
   right: FilterRelationsRuleNode;
@@ -60,25 +61,25 @@ export type FilterRelationsRuleIdNode = { instanceid: string };
 // Query (JAQL) form (interfaces.ts:732-743): { operator, left, right } with { instanceid } leaves
 ```
 
-`isFilterRelations` (filter-relations.ts:75) is the runtime discriminator between `Filter[]` and `FilterRelations`: checks `operator === 'AND' | 'OR'` plus `left`/`right`.
+`isFilterRelations` (filter-relations.ts:79) is the runtime discriminator between `Filter[]` and `FilterRelations`: checks `operator === 'AND' | 'OR'` plus `left`/`right`.
 
 # How it connects
 
 - Built by `filterFactory.logic.and`/`or` ([filters](./filters.md), factory.ts:1868/:1895); `logic.and` flattens a `Filter[]` node into a right-leaning AND chain through `relate` (factory.ts:1832).
 - `helpers.ts` transformers (`withAddedFilter`, `withoutFilter`, `withReplacedFilter`) are the intended mutation API: they `splitFiltersAndRelations` → edit the flat array → `calculateNewRelations` → `combineFiltersAndRelations`.
-- `combineFiltersAndRelations` reconstructs the tree by calling `filterFactory.logic.and/or` (filter-relations.ts:219), so rebuilt relations regain `composeCode`.
+- `combineFiltersAndRelations` reconstructs the tree by calling `filterFactory.logic.and/or` (filter-relations.ts:223), so rebuilt relations regain `composeCode`.
 - sdk-ui consumes this heavily: dashboard-model reducers, widget-by-id utils, drilldown hooks, and packages/sdk-ui/src/shared/utils/filter-relations.ts; the dashboard-model ↔ rules converters bridge to persisted dashboard DTOs, `getFilterRelationsFromJaql` bridges from fetched query metadata.
 
 # Invariants and traps
 
-1. Tree leaves are matched to filters exclusively by `config.guid` (`instanceid`). Replacing a filter with a re-created one (new guid) without updating relations orphans the node — `combineFiltersAndRelations` then does `filters.find(...)!` (filter-relations.ts:216) and silently inserts `undefined`. Always go through `withReplacedFilter` or `calculateNewRelations`.
-2. `calculateNewRelations` diffs by guid: an added filter is attached at the ROOT with `AND` (filter-relations.ts:413); a removed filter collapses its parent node. Pass `shouldReplaceSameAttributeFilters: true` to treat a same-attribute/new-guid filter as an in-place replace and preserve tree shape (:205); disabled filters are never replace-eligible (:312).
+1. Tree leaves are matched to filters exclusively by `config.guid` (`instanceid`). Replacing a filter with a re-created one (new guid) without updating relations orphans the node — `combineFiltersAndRelations` then does `filters.find(...)!` (filter-relations.ts:220) and silently inserts `undefined`. Always go through `withReplacedFilter` or `calculateNewRelations`.
+2. `calculateNewRelations` diffs by guid: an added filter is attached at the ROOT with `AND` (filter-relations.ts:417); a removed filter collapses its parent node. Pass `shouldReplaceSameAttributeFilters: true` to treat a same-attribute/new-guid filter as an in-place replace and preserve tree shape (:209); disabled filters are never replace-eligible (:316).
 3. `splitFiltersAndRelations` deduplicates filters via a `Set` — a filter referenced from two leaves comes back once; relations keep both leaves.
-4. Single-filter relations are trivial: `combineFiltersAndRelations` returns a plain `Filter[]` when rules are `null` or a lone id node (:162). Callers must keep accepting `Filter[] | FilterRelations` on the way out.
-5. `getFilterRelationsFromJaql` bails out to plain `filters` when `highlights` are present (:807) because JAQL relations then reference highlight nodes too; it throws `errors.unknownFilterInFilterRelations` for an unknown guid (:820).
-6. Cascading filters are ONE node in CSDK rules but expand to a `CascadingIdentifier` with per-level guids in the dashboard model (:448, :581); the model→rules direction throws if no cascading filter covers the level ids (:460).
-7. `filterRelationRulesToFilterRelationsModel` always parenthesizes nested logical subtrees for the dashboard model (:610); `parenthesizeNestedLogicalSubgroupsInFilterRelationsModel` is idempotent.
-8. Merging by attribute uses `getFilterCompareId` (expression + granularity, formula fallback) — `mergeFilters` overwrites a same-attribute filter in place rather than appending (:767); calculated-dimension filters derive identity from their formula (:712).
+4. Single-filter relations are trivial: `combineFiltersAndRelations` returns a plain `Filter[]` when rules are `null` or a lone id node (:166). Callers must keep accepting `Filter[] | FilterRelations` on the way out.
+5. `getFilterRelationsFromJaql` bails out to plain `filters` when `highlights` are present (:852) because JAQL relations then reference highlight nodes too; it throws `errors.unknownFilterInFilterRelations` for an unknown guid (:865).
+6. Cascading filters are ONE node in CSDK rules but expand to a `CascadingIdentifier` with per-level guids in the dashboard model (:452, :585); the model→rules direction throws if no cascading filter covers the level ids (:464).
+7. `filterRelationRulesToFilterRelationsModel` always parenthesizes nested logical subtrees for the dashboard model (:614); `parenthesizeNestedLogicalSubgroupsInFilterRelationsModel` is idempotent.
+8. Merging by attribute uses `getFilterCompareId` (expression + granularity, formula fallback) — `mergeFilters` overwrites a same-attribute filter in place rather than appending (:771); calculated-dimension filters derive identity from their formula (:716).
 
 # Related
 

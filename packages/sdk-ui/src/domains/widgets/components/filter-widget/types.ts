@@ -1,4 +1,4 @@
-import type { Attribute, DataSource, Filter } from '@sisense/sdk-data';
+import type { Attribute, DataSource, Filter, Measure } from '@sisense/sdk-data';
 
 import type { FilterWidgetChangeEvent } from '@/domains/widgets/change-events';
 import type { WidgetContainerStyleOptions } from '@/types';
@@ -139,6 +139,8 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
  * - `'period'`       — Time Frame: one-click list of ready-made relative windows (Today,
  *                     Last 7 days, This month, …) for datetime attributes only. Implemented.
  * - `'condition'`    — condition builder for text (with optional AND/OR chaining), numeric, and date attributes. Implemented.
+ * - `'rank'`         — Top / Bottom N ranking of the attribute's members by a measure fixed by the dashboard
+ *                     designer (see {@link FilterWidgetProps.rankBy}), for text, numeric, and datetime attributes. Implemented.
  *
  * @example
  * The following selects the member-select dropdown rendering:
@@ -148,7 +150,13 @@ export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
  *
  * @beta
  */
-export type FilterWidgetFilterType = 'members' | 'calendar' | 'range' | 'period' | 'condition';
+export type FilterWidgetFilterType =
+  | 'members'
+  | 'calendar'
+  | 'range'
+  | 'period'
+  | 'condition'
+  | 'rank';
 
 /**
  * Human-readable UI labels for each {@link FilterWidgetFilterType}.
@@ -168,6 +176,7 @@ export const filterWidgetFilterTypeLabels: Record<FilterWidgetFilterType, string
   range: 'Range',
   period: 'Time Frame',
   condition: 'Condition',
+  rank: 'Rank',
 };
 
 /**
@@ -203,9 +212,10 @@ export interface FilterWidgetProps {
    * How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
    * `'condition'` renders a condition control for text, numeric, or datetime attributes,
    * `'calendar'` a calendar for datetime attributes, `'range'` a two-field From/To
-   * date-range picker for datetime attributes, and `'period'` a Time Frame dropdown —
+   * date-range picker for datetime attributes, `'period'` a Time Frame dropdown —
    * a one-click list of ready-made relative windows (Today, Last 7 days, This month, …)
-   * for datetime attributes.
+   * for datetime attributes, and `'rank'` a Top / Bottom N control that ranks the
+   * attribute's members by {@link FilterWidgetProps.rankBy}.
    * Additional types will be added as they are implemented.
    *
    * @defaultValue 'members'
@@ -232,6 +242,20 @@ export interface FilterWidgetProps {
    * @beta
    */
   timeFrames?: string[];
+  /**
+   * The measure a `'rank'` filter ranks the attribute's members by — a base measure with an
+   * aggregation, or a calculated measure. It is fixed by whoever configures the widget and is
+   * shown, never chosen, in the control.
+   *
+   * When omitted, a `'rank'` widget shows a disabled control that explains a measure is
+   * needed.
+   *
+   * Ignored for every filter type other than `'rank'`.
+   *
+   * @category Widget
+   * @beta
+   */
+  rankBy?: Measure;
   /**
    * If true, the dropdown allows selecting multiple members.
    *

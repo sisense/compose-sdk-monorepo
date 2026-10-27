@@ -1,4 +1,5 @@
 import type { NarrativeState } from '@/domains/narrative/components/narrative';
+import type { DashboardNarrativeTriggerType } from '@/infra/api/narrative/dashboard-narrative-endpoints.js';
 import type { WidgetContainerStyleOptions } from '@/types';
 
 import type { NarrativeWidgetChangeEvent } from '../../change-events';
@@ -97,6 +98,24 @@ export interface NarrativeWidgetProps {
   generateOnMount?: boolean;
 
   /**
+   * What caused the generation on mount, reported for the service's usage tracking. Only read
+   * with `generateOnMount`.
+   * @default 'export'
+   * @category Data
+   * @internal
+   */
+  generateOnMountTriggerType?: DashboardNarrativeTriggerType;
+
+  /**
+   * Whether the narrative, before one is generated, suggests adding AI context, with an arrow up to
+   * the host header's three-dot menu, where the AI context option lives. Drawn at the distance from
+   * the right edge of Fusion's widget header, and only while the widget is at least 650 px wide.
+   * @category Widget
+   * @internal
+   */
+  aiContextHint?: boolean;
+
+  /**
    * Fires once after mount — with `generateOnMount`, once the generation has settled (ready or
    * error). Fusion's render pipeline waits on it before PDF/image export — without the callback
    * the export of a dashboard holding this widget would hang.
@@ -122,6 +141,14 @@ export interface NarrativeWidgetProps {
    * @internal
    */
   onStateChange?: (state: NarrativeState) => void;
+
+  /**
+   * Fires each time a generation started from the widget — generate, regenerate or retry — ends
+   * with a narrative. Not fired for the cached narrative shown on mount or for `generateOnMount`.
+   * @category Callbacks
+   * @internal
+   */
+  onGenerated?: () => void;
 
   /**
    * Fires on widget change events:

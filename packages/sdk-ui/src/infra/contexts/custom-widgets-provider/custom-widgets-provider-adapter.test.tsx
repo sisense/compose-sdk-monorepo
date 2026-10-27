@@ -1,10 +1,10 @@
 import { render, waitFor } from '@testing-library/react';
 
+import { WidgetDefinitionRegistry } from '@/domains/widgets/widget-definitions';
 import { PluginContext } from '@/infra/plugins/plugin-context';
-import { WidgetPluginRegistry } from '@/infra/plugins/widget-plugins/widget-plugin-registry';
 
 import { CustomWidgetsProviderAdapter } from './custom-widgets-provider-adapter';
-import { CustomWidgetComponent } from './types';
+import type { CustomWidgetComponent } from './types';
 
 describe('CustomWidgetsProviderAdapter', () => {
   it('throws when error is provided', () => {
@@ -22,7 +22,7 @@ describe('CustomWidgetsProviderAdapter', () => {
   it('registers customWidgetsMap entries into the plugin registry', async () => {
     const widget: CustomWidgetComponent = () => null;
     const customWidgetsMap = new Map<string, CustomWidgetComponent>([['example', widget]]);
-    const widgetRegistry = new WidgetPluginRegistry();
+    const widgetRegistry = new WidgetDefinitionRegistry();
 
     render(
       <PluginContext.Provider value={{ widgetPlugins: [], widgetRegistry }}>
@@ -33,7 +33,7 @@ describe('CustomWidgetsProviderAdapter', () => {
     );
 
     await waitFor(() => {
-      expect(widgetRegistry.has('example')).toBe(true);
+      expect(widgetRegistry.hasComponent('example')).toBe(true);
       expect(widgetRegistry.getComponent('example')).toBe(widget);
     });
   });

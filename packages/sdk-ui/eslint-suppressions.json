@@ -4,16 +4,6 @@
       "count": 1
     }
   },
-  "scripts/vite/vite.umd.build.ts": {
-    "security/detect-unsafe-regex": {
-      "count": 2
-    }
-  },
-  "scripts/vite/vite.umd.fusion.build.ts": {
-    "security/detect-unsafe-regex": {
-      "count": 2
-    }
-  },
   "src/__demo__/app.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1
@@ -2152,22 +2142,16 @@
     }
   },
   "src/domains/dashboarding/hooks/jtd/jtd-widget-transforms.test.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 3
-    },
     "@typescript-eslint/no-explicit-any": {
-      "count": 42
+      "count": 36
     }
   },
   "src/domains/dashboarding/hooks/jtd/jtd-widget-transforms.tsx": {
     "@typescript-eslint/consistent-type-assertions": {
-      "count": 3
-    },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 5
+      "count": 2
     },
     "jsdoc/require-description-complete-sentence": {
-      "count": 8
+      "count": 6
     },
     "jsdoc/require-param-description": {
       "count": 1
@@ -2242,9 +2226,6 @@
     }
   },
   "src/domains/dashboarding/hooks/use-jtd.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    },
     "jsdoc/require-description-complete-sentence": {
       "count": 2
     },
@@ -2315,14 +2296,6 @@
     },
     "jsdoc/require-param": {
       "count": 2
-    }
-  },
-  "src/domains/dashboarding/hooks/use-widget-updates-persistence.test.ts": {
-    "@typescript-eslint/no-non-null-assertion": {
-      "count": 9
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 10
     }
   },
   "src/domains/dashboarding/hooks/use-widget-updates-persistence.ts": {
@@ -3871,12 +3844,6 @@
     }
   },
   "src/domains/filters/components/filter-tile-container.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    },
     "jsdoc/require-jsdoc": {
       "count": 2
     },
@@ -7760,23 +7727,6 @@
       "count": 8
     }
   },
-  "src/domains/visualizations/components/chart/restructured-charts/utils.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    },
-    "jsdoc/require-jsdoc": {
-      "count": 1
-    },
-    "jsdoc/require-param": {
-      "count": 2
-    },
-    "jsdoc/require-returns": {
-      "count": 1
-    }
-  },
   "src/domains/visualizations/components/chart/types.ts": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 3
@@ -10647,10 +10597,10 @@
   },
   "src/domains/widgets/components/filter-widget/components/condition-filter-shell.tsx": {
     "jsdoc/require-description-complete-sentence": {
-      "count": 4
+      "count": 3
     },
     "jsdoc/require-param": {
-      "count": 30
+      "count": 2
     },
     "jsdoc/require-returns": {
       "count": 1
@@ -10869,14 +10819,6 @@
       "count": 1
     }
   },
-  "src/domains/widgets/components/filter-widget/components/panel-count-input.tsx": {
-    "jsdoc/require-param": {
-      "count": 9
-    },
-    "jsdoc/require-returns": {
-      "count": 1
-    }
-  },
   "src/domains/widgets/components/filter-widget/components/panel-number-input.tsx": {
     "jsdoc/require-param": {
       "count": 10
@@ -10905,12 +10847,6 @@
     }
   },
   "src/domains/widgets/components/filter-widget/components/selector.tsx": {
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    },
-    "jsdoc/require-param": {
-      "count": 32
-    },
     "react-hooks/refs": {
       "count": 7
     }
@@ -10976,10 +10912,7 @@
   },
   "src/domains/widgets/components/filter-widget/filter-widget-dropdown.test.tsx": {
     "@typescript-eslint/no-non-null-assertion": {
-      "count": 20
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 3
+      "count": 19
     }
   },
   "src/domains/widgets/components/filter-widget/filter-widget-setup.tsx": {
@@ -11361,12 +11294,6 @@
   "src/domains/widgets/components/widget-by-id/translate-widget-style-options/apply-partial-dto-style.ts": {
     "jsdoc/no-undefined-types": {
       "count": 1
-    },
-    "jsdoc/require-param": {
-      "count": 2
-    },
-    "jsdoc/require-returns": {
-      "count": 1
     }
   },
   "src/domains/widgets/components/widget-by-id/translate-widget-style-options/categorical-labels-style.ts": {
@@ -11380,15 +11307,6 @@
   "src/domains/widgets/components/widget-by-id/translate-widget-style-options/extract-unsupported-style-options.ts": {
     "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 10
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 1
-    },
-    "jsdoc/require-param": {
-      "count": 3
-    },
-    "jsdoc/require-returns": {
-      "count": 2
     }
   },
   "src/domains/widgets/components/widget-by-id/translate-widget-style-options/narrative-widget-style.ts": {
@@ -11552,20 +11470,6 @@
     },
     "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 1
-    }
-  },
-  "src/domains/widgets/components/widget-by-id/utils.ts": {
-    "@typescript-eslint/consistent-type-assertions": {
-      "count": 1
-    },
-    "jsdoc/require-jsdoc": {
-      "count": 22
-    },
-    "jsdoc/require-param": {
-      "count": 8
-    },
-    "jsdoc/require-returns": {
-      "count": 2
     }
   },
   "src/domains/widgets/components/widget-by-id/widget-by-id.test.tsx": {
@@ -12099,10 +12003,7 @@
       "count": 6
     },
     "jsdoc/require-description-complete-sentence": {
-      "count": 31
-    },
-    "jsdoc/require-jsdoc": {
-      "count": 1
+      "count": 2
     },
     "jsdoc/require-param": {
       "count": 8
@@ -12120,17 +12021,11 @@
     }
   },
   "src/domains/widgets/widget-model/widget-model-translator/widget-model-translator.test.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 4
-    },
     "@typescript-eslint/no-explicit-any": {
       "count": 29
     },
     "@typescript-eslint/no-non-null-assertion": {
       "count": 68
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 6
     }
   },
   "src/domains/widgets/widget-model/widget-model-translator/widget-model-translator.ts": {
@@ -12142,9 +12037,6 @@
     },
     "@typescript-eslint/no-non-null-assertion": {
       "count": 3
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
     },
     "@typescript-eslint/no-use-before-define": {
       "count": 9
@@ -12374,11 +12266,6 @@
       "count": 1
     }
   },
-  "src/infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter.test.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    }
-  },
   "src/infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter.tsx": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 3
@@ -12413,9 +12300,6 @@
     }
   },
   "src/infra/contexts/custom-widgets-provider/use-custom-widgets.test.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
     "react/display-name": {
       "count": 1
     }
@@ -13025,23 +12909,7 @@
       "count": 1
     }
   },
-  "src/infra/plugins/plugin-context.ts": {
-    "jsdoc/require-description-complete-sentence": {
-      "count": 3
-    }
-  },
-  "src/infra/plugins/plugin-provider.test.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    }
-  },
   "src/infra/plugins/plugin-provider.tsx": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
-    "jsdoc/require-description-complete-sentence": {
-      "count": 4
-    },
     "jsdoc/require-param": {
       "count": 3
     },
@@ -13067,11 +12935,6 @@
       "count": 1
     }
   },
-  "src/infra/plugins/use-widget-plugin-registry.ts": {
-    "jsdoc/require-returns": {
-      "count": 1
-    }
-  },
   "src/infra/plugins/validate-plugins.test.ts": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 1
@@ -13082,16 +12945,13 @@
       "count": 1
     },
     "jsdoc/require-description-complete-sentence": {
-      "count": 6
+      "count": 2
     },
     "tsdoc/syntax": {
       "count": 3
     }
   },
   "src/infra/plugins/widget-plugins/types.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
@@ -13099,15 +12959,7 @@
       "count": 1
     },
     "jsdoc/require-description-complete-sentence": {
-      "count": 33
-    }
-  },
-  "src/infra/plugins/widget-plugins/widget-plugin-registry.ts": {
-    "jsdoc/require-param": {
       "count": 9
-    },
-    "jsdoc/require-returns": {
-      "count": 2
     }
   },
   "src/infra/themes/__mocks__/legacy-design-settings.mock.ts": {
@@ -14397,7 +14249,7 @@
       "count": 3
     },
     "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 2
+      "count": 1
     },
     "jsdoc/require-description-complete-sentence": {
       "count": 3
@@ -14501,10 +14353,10 @@
       "count": 15
     },
     "@typescript-eslint/no-non-null-assertion": {
-      "count": 6
+      "count": 5
     },
     "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 24
+      "count": 23
     }
   },
   "src/modules/analytics-composer/nlq-v3-translator/query/translate-query-from-json.ts": {
@@ -14660,9 +14512,6 @@
     }
   },
   "src/modules/analytics-composer/nlq-v3-translator/shared/expression/factory-function-processors.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "jsdoc/require-description-complete-sentence": {
       "count": 3
     }
@@ -14734,7 +14583,7 @@
   },
   "src/modules/analytics-composer/nlq-v3-translator/shared/expression/process-arg.ts": {
     "@typescript-eslint/consistent-type-imports": {
-      "count": 2
+      "count": 1
     },
     "jsdoc/require-description-complete-sentence": {
       "count": 3
@@ -14913,7 +14762,7 @@
       "count": 1
     },
     "jsdoc/require-param": {
-      "count": 3
+      "count": 1
     },
     "tsdoc/syntax": {
       "count": 2

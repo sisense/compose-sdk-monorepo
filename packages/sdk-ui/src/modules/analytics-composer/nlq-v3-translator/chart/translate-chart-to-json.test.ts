@@ -5,7 +5,7 @@ import {
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../../__mocks__/mock-data-sources.js';
 import { getSuccessData } from '../shared/utils/translation-helpers.js';
-import type { ChartJSON } from '../types.js';
+import type { ChartJSON, FunctionCall, StyledMeasureColumnJSON } from '../types.js';
 import { translateChartFromJSON } from './translate-chart-from-json.js';
 import { translateChartToJSON } from './translate-chart-to-json.js';
 
@@ -314,5 +314,154 @@ describe('translateChartToJSON — Sankey', () => {
     expect(reverseJSON.dataOptions).toEqual(dataOptions);
     const reverseProps = getSuccessData(translateChartFromJSON({ data: reverseJSON, context }));
     expect(reverseProps.dataOptions).toEqual(chartProps.dataOptions);
+  });
+});
+
+describe('translateChartToJSON — formula-driven color conditions', () => {
+  const AVG_COST = { function: 'measureFactory.average', args: ['DM.Commerce.Cost', 'Avg Cost'] };
+  const conditionalValue = (valueMeasure: FunctionCall): StyledMeasureColumnJSON => ({
+    column: REVENUE,
+    color: {
+      type: 'conditional',
+      conditions: [
+        { color: 'red', expression: '0', operator: '>', valueMeasure },
+        { color: 'green', expression: '1000', operator: '<' },
+      ],
+    },
+  });
+  const getConditions = (dataOptions: unknown) =>
+    (dataOptions as { value: { color: { conditions: { valueMeasure?: unknown }[] } }[] }).value[0]
+      .color.conditions;
+
+  it.each(['kpi', 'indicator'] as const)(
+    'translates valueMeasure to a measure and back to a function call: %s',
+    (chartType) => {
+      const { chartProps, reverseJSON } = roundTripFromJSON({
+        chartType,
+        dataOptions: { value: [conditionalValue(AVG_COST)] },
+      });
+
+      const [measureCondition, literalCondition] = getConditions(chartProps.dataOptions);
+      expect(measureCondition.valueMeasure).toMatchObject({ name: 'Avg Cost' });
+      expect(typeof (measureCondition.valueMeasure as { jaql?: unknown }).jaql).toBe('function');
+      expect(literalCondition.valueMeasure).toBeUndefined();
+
+      expect(getConditions(reverseJSON.dataOptions)[0].valueMeasure).toEqual(AVG_COST);
+    },
+  );
+
+  it('round-trips through JSON.stringify', () => {
+    const { reverseJSON } = roundTripFromJSON({
+      chartType: 'kpi',
+      dataOptions: { value: [conditionalValue(AVG_COST)] },
+    });
+
+    const reverseProps = getSuccessData(
+      translateChartFromJSON({ data: JSON.parse(JSON.stringify(reverseJSON)), context }),
+    );
+    const [condition] = getConditions(reverseProps.dataOptions);
+    expect((condition.valueMeasure as { jaql: () => unknown }).jaql()).toMatchObject({
+      jaql: { agg: 'avg', dim: '[Commerce.Cost]' },
+    });
+  });
+
+  it('rejects a valueMeasure that is not a function call', () => {
+    const result = translateChartFromJSON({
+      data: {
+        chartType: 'kpi',
+        // @ts-expect-error -- deliberately invalid valueMeasure
+        dataOptions: { value: [conditionalValue({ name: 'Avg Cost' })] },
+      },
+      context,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.errors[0].message).toContain('color.conditions[0].valueMeasure');
+  });
+
+  it('rejects a valueMeasure that is not a measure', () => {
+    const result = translateChartFromJSON({
+      data: {
+        chartType: 'kpi',
+        dataOptions: {
+          value: [
+            conditionalValue({
+              function: 'filterFactory.members',
+              args: ['DM.Commerce.Gender', ['Male']],
+            }),
+          ],
+        },
+      },
+      context,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.errors[0].message).toContain('color.conditions[0].valueMeasure');
+  });
+
+  it('passes a null condition through instead of throwing', () => {
+    const { chartProps } = roundTripFromJSON({
+      chartType: 'kpi',
+      dataOptions: { value: [conditionalValue(AVG_COST)] },
+    });
+    const [styledValue] = (chartProps.dataOptions as { value: { color: object }[] }).value;
+    const [measureCondition] = getConditions(chartProps.dataOptions);
+
+    const result = translateChartToJSON({
+      ...chartProps,
+      dataOptions: {
+        ...chartProps.dataOptions,
+        value: [
+          { ...styledValue, color: { ...styledValue.color, conditions: [null, measureCondition] } },
+        ],
+      },
+    } as typeof chartProps);
+
+    const [nullCondition, translatedCondition] = getConditions(getSuccessData(result).dataOptions);
+    expect(nullCondition).toBeNull();
+    expect(translatedCondition.valueMeasure).toEqual(AVG_COST);
+  });
+
+  it('reports a condition measure missing composeCode at its own path', () => {
+    const { chartProps } = roundTripFromJSON({
+      chartType: 'kpi',
+      dataOptions: { value: [conditionalValue(AVG_COST)] },
+    });
+    const [styledValue] = (chartProps.dataOptions as { value: { color: object }[] }).value;
+    const [measureCondition, literalCondition] = getConditions(chartProps.dataOptions);
+
+    const result = translateChartToJSON({
+      ...chartProps,
+      dataOptions: {
+        ...chartProps.dataOptions,
+        value: [
+          {
+            ...styledValue,
+            color: {
+              ...styledValue.color,
+              conditions: [
+                {
+                  ...measureCondition,
+                  valueMeasure: {
+                    ...(measureCondition.valueMeasure as object),
+                    composeCode: undefined,
+                  },
+                },
+                literalCondition,
+              ],
+            },
+          },
+        ],
+      },
+    } as typeof chartProps);
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0].path).toBe('dataOptions.value[0].color.conditions[0].valueMeasure');
+    expect(result.errors[0].message).toContain('missing composeCode');
+    expect(result.errors[0].message).not.toContain('DM.Commerce.Revenue');
   });
 });

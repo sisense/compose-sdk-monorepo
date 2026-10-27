@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect, useRef } from 'react';
 
-import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
+import { useWidgetDefinitionRegistry } from '@/infra/plugins/use-widget-definition-registry';
 import type { CustomVisualization } from '@/infra/plugins/widget-plugins/types';
 
 import { CustomContextProviderProps } from '../../../types';
@@ -21,8 +21,8 @@ export type CustomWidgetsContextAdapter<T = CustomWidgetComponentProps> = {
  * Keeps the helper decoupled from the concrete registry implementation.
  */
 interface LegacyWidgetRegistry {
-  register(name: string, component: CustomVisualization, source: 'legacy'): void;
-  unregister(name: string, source: 'legacy'): void;
+  registerComponent(name: string, component: CustomVisualization, source: 'legacy'): void;
+  unregisterComponent(name: string, source: 'legacy'): void;
 }
 
 /**
@@ -42,15 +42,15 @@ function reconcileLegacyWidgets(
   current.forEach((component, widgetTypeName) => {
     const prevComponent = prev.get(widgetTypeName);
     if (prevComponent !== component) {
-      registry.unregister(widgetTypeName, 'legacy');
-      registry.register(widgetTypeName, component as CustomVisualization, 'legacy');
+      registry.unregisterComponent(widgetTypeName, 'legacy');
+      registry.registerComponent(widgetTypeName, component as CustomVisualization, 'legacy');
     }
     keysToCleanup.add(widgetTypeName);
   });
 
   prev.forEach((_, widgetTypeName) => {
     if (!current.has(widgetTypeName)) {
-      registry.unregister(widgetTypeName, 'legacy');
+      registry.unregisterComponent(widgetTypeName, 'legacy');
     }
   });
 
@@ -63,7 +63,7 @@ function reconcileLegacyWidgets(
  */
 function createLegacyCleanup(registry: LegacyWidgetRegistry, keys: Set<string>): () => void {
   return () => {
-    keys.forEach((widgetTypeName) => registry.unregister(widgetTypeName, 'legacy'));
+    keys.forEach((widgetTypeName) => registry.unregisterComponent(widgetTypeName, 'legacy'));
   };
 }
 
@@ -82,7 +82,7 @@ export const CustomWidgetsProviderAdapter: React.FC<
   if (error) {
     throw error;
   }
-  const widgetRegistry = useWidgetPluginRegistry();
+  const widgetRegistry = useWidgetDefinitionRegistry();
   const { customWidgetsMap } = context;
   const prevRef = useRef<Map<string, CustomWidgetComponent<CustomWidgetComponentProps>>>(new Map());
 

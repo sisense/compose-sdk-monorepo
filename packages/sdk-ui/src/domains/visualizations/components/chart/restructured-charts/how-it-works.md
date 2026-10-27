@@ -75,7 +75,7 @@ function getChartBuilder(chartType) {
 
 The restructured charts integrate seamlessly with the existing chart rendering pipeline:
 
-1. **Chart Type Detection**: `isRestructuredChartType()` checks if a chart type uses the new architecture
+1. **Chart Type Detection**: `isRestructuredChartType()` checks if a chart type uses the new architecture (backed by `RESTRUCTURED_CHART_TYPES` in `restructured-chart-types.ts`, which a type test keeps equal to the keys of `chartBuildersMap`)
 2. **Builder Retrieval**: `getChartBuilder()` fetches the appropriate builder
 3. **Data Flow**: The builder's methods are used throughout the data pipeline
 4. **Rendering**: The builder's renderer component is used to display the chart

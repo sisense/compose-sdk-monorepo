@@ -75,9 +75,10 @@ Configuration of the widget.
 How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
 `'condition'` renders a condition control for text, numeric, or datetime attributes,
 `'calendar'` a calendar for datetime attributes, `'range'` a two-field From/To
-date-range picker for datetime attributes, and `'period'` a Time Frame dropdown —
+date-range picker for datetime attributes, `'period'` a Time Frame dropdown —
 a one-click list of ready-made relative windows (Today, Last 7 days, This month, …)
-for datetime attributes.
+for datetime attributes, and `'rank'` a Top / Bottom N control that ranks the
+attribute's members by [FilterWidgetProps.rankBy](interface.FilterWidgetProps.md#rankby).
 Additional types will be added as they are implemented.
 
 ##### Default Value
@@ -99,6 +100,21 @@ If true, the dropdown allows selecting multiple members.
 ```ts
 true
 ```
+
+***
+
+#### rankBy <Badge type="beta" text="Beta" />
+
+> **rankBy**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)
+
+The measure a `'rank'` filter ranks the attribute's members by — a base measure with an
+aggregation, or a calculated measure. It is fixed by whoever configures the widget and is
+shown, never chosen, in the control.
+
+When omitted, a `'rank'` widget shows a disabled control that explains a measure is
+needed.
+
+Ignored for every filter type other than `'rank'`.
 
 ***
 

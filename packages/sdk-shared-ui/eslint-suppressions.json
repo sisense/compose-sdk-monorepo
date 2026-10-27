@@ -1,12 +1,4 @@
 {
-  "scripts/vite/vite.umd.build.ts": {
-    "@typescript-eslint/naming-convention": {
-      "count": 1
-    },
-    "import/no-extraneous-dependencies": {
-      "count": 2
-    }
-  },
   "src/lib/Breadcrumbs/Breadcrumbs.tsx": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 3

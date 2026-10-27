@@ -1,5 +1,17 @@
-/* eslint-disable sonarjs/no-duplicate-string */
+/**
+ * Fusion widget identity helpers. The DTO type ↔ widget type ↔ chart type mappings are projections
+ * of the descriptor table in `domains/widgets/widget-identity`; add or change a built-in widget type there.
+ */
 import type { ChartSubtype } from '@/domains/visualizations/core/chart-options-processor/subtype-to-design-options.js';
+import {
+  BUILT_IN_WIDGET_DESCRIPTORS,
+  type BuiltInWidgetDescriptor,
+  type BuiltInWidgetKey,
+  descriptorByChartType,
+  descriptorByFusionType,
+  officialPluginByCsdkType,
+  officialPluginByFusionType,
+} from '@/domains/widgets/widget-identity/index.js';
 import type { WidgetModel } from '@/domains/widgets/widget-model';
 import type { WidgetTypeInternal } from '@/domains/widgets/widget-model/types.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
@@ -33,43 +45,14 @@ export {
   getFilterCompareId,
 } from '@sisense/sdk-data';
 
-const fusionWidgetTypeToChartType: Partial<Record<FusionWidgetType, ChartType>> = {
-  'chart/line': 'line',
-  'chart/area': 'area',
-  'chart/bar': 'bar',
-  'chart/column': 'column',
-  'chart/polar': 'polar',
-  'chart/pie': 'pie',
-  'chart/funnel': 'funnel',
-  treemap: 'treemap',
-  sunburst: 'sunburst',
-  sankey: 'sankey',
-  'chart/scatter': 'scatter',
-  indicator: 'indicator',
-  kpi: 'kpi',
-  'chart/boxplot': 'boxplot',
-  'map/scatter': 'scattermap',
-  'map/area': 'areamap',
-  tablewidget: 'table',
-  tablewidgetagg: 'table',
-  heatmap: 'calendar-heatmap',
-};
-
-const chartTypeToFusionWidgetType: Record<ChartType, FusionWidgetType> = Object.entries(
-  fusionWidgetTypeToChartType,
-).reduce<Record<ChartType, FusionWidgetType>>((acc, [key, value]) => {
-  if (value !== undefined) {
-    acc[value] = key;
-  }
-  return acc;
-}, {} as Record<ChartType, FusionWidgetType>);
-
 /**
  * Returns `true` when a panel item's jaql represents a measure — either a base-measure
  * aggregation (`jaql.agg`) or a calculated measure (`jaql.formula`). Mirrors Fusion's
  * `isMeasure` dimension helper so CSDK code can evaluate the same "is measure?" checks
  * Fusion's widget manifests rely on.
  *
+ * @param item - The panel item.
+ * @returns `true` when the panel item is a measure.
  * @internal
  */
 export function isMeasurePanelItem(item: PanelItem): boolean {
@@ -78,17 +61,41 @@ export function isMeasurePanelItem(item: PanelItem): boolean {
 }
 
 /**
- * Returns the corresponding chart type for a given widget type.
+ * Returns the chart type of a Fusion widget DTO type, read from the built-in widget descriptor table.
  *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns The chart type, or `undefined` for non-chart and unknown Fusion types.
  * @internal
  */
-export function getChartType(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetTypeToChartType[fusionWidgetType];
-}
-export function getFusionWidgetTypeFromChartType(chartType: ChartType): FusionWidgetType {
-  return chartTypeToFusionWidgetType[chartType];
+export function getChartType(fusionWidgetType: FusionWidgetType): ChartType | undefined {
+  return descriptorByFusionType.get(fusionWidgetType)?.chartType;
 }
 
+/**
+ * Returns the canonical Fusion widget DTO type of a chart type, read from the built-in widget
+ * descriptor table.
+ *
+ * Chart types without a Fusion DTO type (`streamgraph`, `arearange`) yield `undefined`.
+ *
+ * @param chartType - The chart type.
+ * @returns The canonical Fusion widget DTO type.
+ * @internal
+ */
+export function getFusionWidgetTypeFromChartType(chartType: ChartType): FusionWidgetType {
+  // The declared return type predates the descriptor table; `undefined` is kept for chart types
+  // without a Fusion DTO type rather than throwing.
+  return descriptorByChartType.get(chartType)?.fusionType as FusionWidgetType;
+}
+
+/**
+ * Returns the Fusion widget DTO type of a widget, read from the built-in widget descriptor table.
+ *
+ * @param widgetType - The widget type.
+ * @param chartType - The chart type, required when `widgetType` is `'chart'`.
+ * @param customWidgetType - The custom widget type, used when `widgetType` is `'custom'`.
+ * @returns The Fusion widget DTO type.
+ * @internal
+ */
 export function getFusionWidgetType(
   widgetType: WidgetType,
   chartType?: ChartType,
@@ -100,43 +107,40 @@ export function getFusionWidgetType(
     }
     return getFusionWidgetTypeFromChartType(chartType);
   }
-  if (widgetType === 'pivot') {
-    return 'pivot2';
-  }
   if (widgetType === 'custom') {
     // Officially-supported plugin widgets (e.g. Tabber) map to their Fusion DTO type
     // (`'tabber-buttons'` → `'WidgetsTabber'`); other custom widgets pass through as-is.
-    if (customWidgetType && isSupportedPluginCsdkWidget(customWidgetType)) {
-      return csdkPluginWidgetTypeToFusion(customWidgetType as CsdkPluginWidgetType);
-    }
-    return customWidgetType ?? 'custom';
+    const officialPlugin =
+      customWidgetType === undefined ? undefined : officialPluginByCsdkType.get(customWidgetType);
+    return officialPlugin?.fusionType ?? customWidgetType ?? 'custom';
   }
-  if (widgetType === 'text') {
-    return 'richtexteditor';
-  }
-  if (widgetType === 'narrative') {
-    return 'dashboardnarrative';
-  }
-  if (widgetType === 'filter') {
-    return 'filter';
+  const descriptor: BuiltInWidgetDescriptor | undefined = BUILT_IN_WIDGET_DESCRIPTORS[widgetType];
+  if (descriptor?.fusionType) {
+    return descriptor.fusionType;
   }
   throw new TranslatableError('errors.widgetModel.unsupportedWidgetType', {
     widgetType,
   });
 }
 
+/**
+ * Returns the widget type of a Fusion widget DTO type, read from the built-in widget descriptor table.
+ *
+ * Fusion types the table does not know are read as `'chart'`.
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns The widget type.
+ * @internal
+ */
 export function getWidgetType(fusionWidgetType: FusionWidgetType): WidgetType {
-  if (fusionWidgetType === 'filter') {
-    return 'filter';
-  } else if (isPivotTableFusionWidget(fusionWidgetType)) {
-    return 'pivot';
-  } else if (isCustomWidgetFusionWidget(fusionWidgetType)) {
+  if (isCustomWidgetFusionWidget(fusionWidgetType)) {
     return 'custom';
-  } else if (isTextFusionWidget(fusionWidgetType)) {
-    return 'text';
-  } else if (isNarrativeFusionWidget(fusionWidgetType)) {
-    return 'narrative';
-  } else if (isChartFusionWidget(fusionWidgetType)) {
+  }
+  const descriptor = descriptorByFusionType.get(fusionWidgetType);
+  if (descriptor) {
+    return descriptor.widgetType;
+  }
+  if (isChartFusionWidget(fusionWidgetType)) {
     return 'chart';
   }
   throw new TranslatableError('errors.widgetModel.unsupportedFusionWidgetType', {
@@ -144,6 +148,13 @@ export function getWidgetType(fusionWidgetType: FusionWidgetType): WidgetType {
   });
 }
 
+/**
+ * Returns the chart subtype of a Fusion widget subtype.
+ *
+ * @param widgetSubtype - The Fusion widget subtype.
+ * @returns The chart subtype, or `undefined` when the subtype has no chart equivalent.
+ * @internal
+ */
 export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | undefined {
   const widgetSubtypeToChartSubtype: Partial<Record<WidgetSubtype, ChartSubtype>> = {
     'area/basic': 'area/basic',
@@ -177,60 +188,44 @@ export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | un
   return widgetSubtypeToChartSubtype[widgetSubtype];
 }
 
+/**
+ * Checks whether a Fusion widget DTO type maps to a built-in widget type (canonical types and aliases).
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` when the descriptor table knows the type.
+ * @internal
+ */
 export function isSupportedWidgetType(
   fusionWidgetType: string,
 ): fusionWidgetType is FusionWidgetType {
-  const supportedWidgetTypes: string[] = [
-    'chart/line',
-    'chart/area',
-    'chart/bar',
-    'chart/column',
-    'chart/polar',
-    'chart/pie',
-    'chart/funnel',
-    'treemap',
-    'sunburst',
-    'sankey',
-    'chart/scatter',
-    'indicator',
-    'kpi',
-    'tablewidget',
-    'tablewidgetagg',
-    'pivot',
-    'pivot2',
-    'chart/boxplot',
-    'map/scatter',
-    'map/area',
-    'richtexteditor',
-    'heatmap',
-    'filter',
-    'dashboardnarrative',
-  ];
-  return supportedWidgetTypes.includes(fusionWidgetType);
+  return descriptorByFusionType.has(fusionWidgetType);
 }
 
 /**
  * Check if the given fusion widget type is a supported plugin widget (in DTO format).
+ *
  * @param fusionWidgetType - The fusion widget type from DTO.
  * @returns True if it's a supported plugin widget.
  * @internal
  */
 export function isSupportedPluginFusionWidget(fusionWidgetType: string): boolean {
-  return fusionWidgetType === 'WidgetsTabber';
+  return officialPluginByFusionType.has(fusionWidgetType);
 }
 
 /**
  * Check if the given CSDK widget type is a supported plugin widget (in CSDK format).
+ *
  * @param csdkWidgetType - The CSDK custom widget type.
  * @returns True if it's a supported plugin widget.
  * @internal
  */
 export function isSupportedPluginCsdkWidget(csdkWidgetType: string): boolean {
-  return csdkWidgetType === 'tabber-buttons';
+  return officialPluginByCsdkType.has(csdkWidgetType);
 }
 
 /**
  * Map a Fusion plugin widget type (DTO) to CSDK plugin widget type.
+ *
  * @param fusionType - The Fusion plugin widget type from DTO.
  * @returns The corresponding CSDK plugin widget type.
  * @internal
@@ -238,18 +233,16 @@ export function isSupportedPluginCsdkWidget(csdkWidgetType: string): boolean {
 export function fusionPluginWidgetTypeToCsdk(
   fusionType: FusionPluginWidgetType,
 ): CsdkPluginWidgetType {
-  // Currently only one mapping, but structured for future plugin widgets
-  // eslint-disable-next-line sonarjs/no-small-switch
-  switch (fusionType) {
-    case 'WidgetsTabber':
-      return 'tabber-buttons';
-    default:
-      throw new TranslatableError('errors.unsupportedPluginWidgetType', { widgetType: fusionType });
+  const officialPlugin = officialPluginByFusionType.get(fusionType);
+  if (!officialPlugin) {
+    throw new TranslatableError('errors.unsupportedPluginWidgetType', { widgetType: fusionType });
   }
+  return officialPlugin.csdkType;
 }
 
 /**
  * Map a CSDK plugin widget type to Fusion plugin widget type (DTO).
+ *
  * @param csdkType - The CSDK plugin widget type.
  * @returns The corresponding Fusion plugin widget type for DTO.
  * @internal
@@ -257,72 +250,84 @@ export function fusionPluginWidgetTypeToCsdk(
 export function csdkPluginWidgetTypeToFusion(
   csdkType: CsdkPluginWidgetType,
 ): FusionPluginWidgetType {
-  // Currently only one mapping, but structured for future plugin widgets
-  // eslint-disable-next-line sonarjs/no-small-switch
-  switch (csdkType) {
-    case 'tabber-buttons':
-      return 'WidgetsTabber';
-    default:
-      throw new TranslatableError('errors.unsupportedPluginWidgetType', { widgetType: csdkType });
+  const officialPlugin = officialPluginByCsdkType.get(csdkType);
+  if (!officialPlugin) {
+    throw new TranslatableError('errors.unsupportedPluginWidgetType', { widgetType: csdkType });
   }
+  return officialPlugin.fusionType;
 }
 
 /**
- * Widget types that support Jump To Dashboard (JTD) functionality.
+ * Returns the built-in widget key of a Fusion widget DTO type.
  *
- * Supported types:
- * - Pie chart with no categories, Pie chart
- * - Indicator
- * - Text widget
- * - Column chart, Bar chart, Line chart, Area chart
- * - Pivot
- * - Scatter chart, Polar chart
- * - Blox.
- *
- * @internal
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns The built-in widget key, or `undefined` for unknown types.
  */
-export const JTD_SUPPORTED_WIDGET_TYPES: FusionWidgetType[] = [
-  'chart/pie',
-  'indicator',
-  'richtexteditor',
-  'chart/column',
-  'chart/bar',
-  'chart/line',
-  'chart/area',
-  'pivot',
-  'pivot2',
-  'chart/scatter',
-  'chart/polar',
-];
+const keyOfFusionType = (fusionWidgetType: FusionWidgetType): BuiltInWidgetKey | undefined =>
+  descriptorByFusionType.get(fusionWidgetType)?.key;
 
 /**
- * Check if the widget type supports Jump To Dashboard (JTD).
+ * Checks whether a Fusion widget DTO type is a table widget (`tablewidget` or `tablewidgetagg`).
  *
- * @param fusionWidgetType - The fusion widget type.
- * @returns True if the widget type supports JTD, false otherwise.
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for table widget types.
  * @internal
  */
-export function widgetTypeSupportsJtd(fusionWidgetType: FusionWidgetType): boolean {
-  return JTD_SUPPORTED_WIDGET_TYPES.includes(fusionWidgetType);
+export function isTableFusionWidget(fusionWidgetType: FusionWidgetType): boolean {
+  return keyOfFusionType(fusionWidgetType) === 'table';
 }
 
-export function isTableFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType === 'tablewidget' || fusionWidgetType === 'tablewidgetagg';
-}
+/**
+ * Checks whether a widget model is a table chart widget.
+ *
+ * @param widgetModel - The widget model.
+ * @returns `true` for chart widgets with the `table` chart type.
+ * @internal
+ */
 export function isTableWidgetModel(widgetModel: WidgetModel): boolean {
   return isChartWidget(widgetModel.widgetType) && widgetModel.chartType === 'table';
 }
 
-export function isPivotTableFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType === 'pivot' || fusionWidgetType === 'pivot2';
+/**
+ * Checks whether a Fusion widget DTO type is a pivot table widget (`pivot2` or `pivot`).
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for pivot table widget types.
+ * @internal
+ */
+export function isPivotTableFusionWidget(fusionWidgetType: FusionWidgetType): boolean {
+  return keyOfFusionType(fusionWidgetType) === 'pivot';
 }
+
+/**
+ * Checks whether a widget type is the pivot table widget.
+ *
+ * @param widgetType - The widget type.
+ * @returns `true` for `pivot`.
+ * @internal
+ */
 export function isPivotWidget(widgetType: WidgetType) {
   return widgetType === 'pivot';
 }
 
-export function isTextFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType === 'richtexteditor';
+/**
+ * Checks whether a Fusion widget DTO type is the text widget.
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for `richtexteditor`.
+ * @internal
+ */
+export function isTextFusionWidget(fusionWidgetType: FusionWidgetType): boolean {
+  return keyOfFusionType(fusionWidgetType) === 'text';
 }
+
+/**
+ * Checks whether a widget type is the text widget.
+ *
+ * @param widgetType - The widget type.
+ * @returns `true` for `text`.
+ * @internal
+ */
 export function isTextWidget(widgetType: WidgetType) {
   return widgetType === 'text';
 }
@@ -333,8 +338,8 @@ export function isTextWidget(widgetType: WidgetType) {
  * @returns `true` for `dashboardnarrative`.
  * @internal
  */
-export function isNarrativeFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType === 'dashboardnarrative';
+export function isNarrativeFusionWidget(fusionWidgetType: FusionWidgetType): boolean {
+  return keyOfFusionType(fusionWidgetType) === 'narrative';
 }
 
 /**
@@ -357,17 +362,47 @@ export function isFilterWidget(widgetType: WidgetType) {
   return widgetType === 'filter';
 }
 
+/**
+ * Type guard for the style of a text widget DTO.
+ *
+ * @param widgetStyle - The widget DTO style.
+ * @returns Whether the style carries text widget HTML content.
+ * @internal
+ */
 export function isTextWidgetDtoStyle(widgetStyle: WidgetStyle): widgetStyle is TextWidgetDtoStyle {
   return 'content' in widgetStyle && 'html' in widgetStyle.content;
 }
 
+/**
+ * Checks whether a Fusion widget DTO type is the generic custom widget type.
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for `custom`.
+ * @internal
+ */
 export function isCustomWidgetFusionWidget(fusionWidgetType: FusionWidgetType) {
   return fusionWidgetType === 'custom';
 }
+
+/**
+ * Checks whether a widget type is the custom widget.
+ *
+ * @param widgetType - The widget type.
+ * @returns `true` for `custom`.
+ * @internal
+ */
 export function isCustomWidget(widgetType: WidgetType) {
   return widgetType === 'custom';
 }
 
+/**
+ * Checks whether a Fusion widget DTO type is read as a chart: any type that is not filter, pivot,
+ * text or narrative, including unknown types.
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for chart and unknown widget types.
+ * @internal
+ */
 export function isChartFusionWidget(fusionWidgetType: FusionWidgetType) {
   return (
     fusionWidgetType !== 'filter' &&
@@ -376,15 +411,51 @@ export function isChartFusionWidget(fusionWidgetType: FusionWidgetType) {
     !isNarrativeFusionWidget(fusionWidgetType)
   );
 }
-export function isChartTypeFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType.startsWith('chart');
+
+/**
+ * Checks whether a Fusion widget DTO type is a known chart in the Fusion `chart/*` family
+ * (for example `chart/line` or `chart/pie`).
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for known `chart/*` widget types.
+ * @internal
+ */
+export function isChartTypeFusionWidget(fusionWidgetType: FusionWidgetType): boolean {
+  return (
+    descriptorByFusionType.get(fusionWidgetType)?.widgetType === 'chart' &&
+    fusionWidgetType.startsWith('chart/')
+  );
 }
-export function isPieChartFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType === 'chart/pie';
+
+/**
+ * Checks whether a Fusion widget DTO type is the pie chart.
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for `chart/pie`.
+ * @internal
+ */
+export function isPieChartFusionWidget(fusionWidgetType: FusionWidgetType): boolean {
+  return keyOfFusionType(fusionWidgetType) === 'pie';
 }
-export function isIndicatorFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType === 'indicator';
+
+/**
+ * Checks whether a Fusion widget DTO type is the indicator chart.
+ *
+ * @param fusionWidgetType - The Fusion widget DTO type.
+ * @returns `true` for `indicator`.
+ * @internal
+ */
+export function isIndicatorFusionWidget(fusionWidgetType: FusionWidgetType): boolean {
+  return keyOfFusionType(fusionWidgetType) === 'indicator';
 }
+
+/**
+ * Checks whether a widget type is the chart widget.
+ *
+ * @param widgetType - The widget type.
+ * @returns `true` for `chart`.
+ * @internal
+ */
 export function isChartWidget(widgetType: WidgetType) {
   return widgetType === 'chart';
 }
@@ -468,6 +539,14 @@ export function isChartWidgetProps(
   return widgetProps.widgetType === 'chart';
 }
 
+/**
+ * Returns the internal widget type of widget props: the chart type for chart widgets, the widget
+ * type otherwise.
+ *
+ * @param widgetProps - The widget props.
+ * @returns The internal widget type.
+ * @internal
+ */
 export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTypeInternal {
   if (isPivotTableWidgetProps(widgetProps)) {
     return 'pivot';
@@ -485,6 +564,8 @@ export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTyp
 /**
  * Registers new "onDataPointClick" handler for the Widget component.
  *
+ * @param widgetProps - The widget props to extend in place.
+ * @param handler - The handler combined with the existing one.
  * @internal
  */
 export function registerDataPointClickHandler(
@@ -507,6 +588,8 @@ export function registerDataPointClickHandler(
 /**
  * Registers new "onDataPointContextMenu" handler for the Widget component.
  *
+ * @param widgetProps - The widget props to extend in place.
+ * @param handler - The handler combined with the existing one.
  * @internal
  */
 export function registerDataPointContextMenuHandler(
@@ -532,6 +615,8 @@ export function registerDataPointContextMenuHandler(
 /**
  * Registers new "onDataPointsSelected" handler for the Widget component.
  *
+ * @param widgetProps - The widget props to extend in place.
+ * @param handler - The handler combined with the existing one.
  * @internal
  */
 export function registerDataPointsSelectedHandler(
@@ -545,12 +630,27 @@ export function registerDataPointsSelectedHandler(
   }
 }
 
+/**
+ * Returns the enabled items of a widget DTO panel.
+ *
+ * @param panels - The widget DTO panels.
+ * @param panelName - The name of the panel to read.
+ * @returns The panel items that are not disabled; empty when the panel is missing.
+ * @internal
+ */
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {
   const panel = panels.find((p) => p.name === panelName);
   const panelItems = panel?.items ?? [];
   return panelItems.filter((item) => !item.disabled);
 }
 
+/**
+ * Returns the root of a panel item chain, following `parent` links.
+ *
+ * @param item - The panel item.
+ * @returns The root panel item.
+ * @internal
+ */
 export function getRootPanelItem(item: PanelItem): PanelItem {
   return item.parent ? getRootPanelItem(item.parent) : item;
 }

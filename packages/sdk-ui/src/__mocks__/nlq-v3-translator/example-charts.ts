@@ -463,3 +463,81 @@ export const SAMPLE_ECOMMERCE_COLUMN_CHART_WITH_CALCULATED_DIMENSION: ChartJSON 
     breakBy: ['DM.Commerce.Gender'],
   },
 };
+
+/**
+ * Sample ECommerce KPI chart example
+ * Colors revenue red when it falls below 1.5 × total cost (formula-driven color condition)
+ */
+export const SAMPLE_ECOMMERCE_KPI_CHART_WITH_FORMULA_COLOR: ChartJSON = {
+  chartType: 'kpi',
+  dataOptions: {
+    value: {
+      column: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Revenue'] },
+      color: {
+        type: 'conditional',
+        conditions: [
+          {
+            color: '#e74c3c',
+            expression: '0',
+            operator: '<',
+            valueMeasure: {
+              function: 'measureFactory.multiply',
+              args: [
+                { function: 'measureFactory.sum', args: ['DM.Commerce.Cost', 'Total Cost'] },
+                1.5,
+                'Cost Target',
+              ],
+            },
+          },
+          { color: '#2ecc71', expression: '0', operator: '>=' },
+        ],
+        defaultColor: '#2ecc71',
+      },
+    },
+    category: 'DM.Commerce.Date.Years',
+    comparison: { type: 'previous-period' },
+  },
+  styleOptions: {
+    title: { align: 'center', textStyle: { fontWeight: 'bold' } },
+    value: { textStyle: { textTransform: 'uppercase' } },
+    sparkline: { enabled: true, chartType: 'area' },
+  },
+};
+
+/**
+ * Sample ECommerce Sankey chart example
+ * Shows revenue flowing from gender to age range
+ */
+export const SAMPLE_ECOMMERCE_SANKEY_CHART: ChartJSON = {
+  chartType: 'sankey',
+  dataOptions: {
+    category: ['DM.Commerce.Gender', 'DM.Commerce.Age Range'],
+    value: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Revenue'] },
+  },
+  styleOptions: { orientation: 'horizontal', linkOpacity: 0.5, nodeAlignment: 'center' },
+};
+
+/**
+ * Sample ECommerce table chart example
+ * Lists categories whose last order fell in 2012 or 2013 (date-measure members filter)
+ */
+export const SAMPLE_ECOMMERCE_TABLE_CHART_WITH_DATE_MEASURE_FILTER: ChartJSON = {
+  chartType: 'table',
+  dataOptions: {
+    columns: [
+      'DM.Category.Category',
+      { function: 'measureFactory.max', args: ['DM.Commerce.Date.Days', 'Last Order'] },
+      { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Revenue'] },
+    ],
+  },
+  filters: [
+    {
+      function: 'filterFactory.dateMeasureMembers',
+      args: [
+        { function: 'measureFactory.max', args: ['DM.Commerce.Date.Days', 'Last Order'] },
+        'DM.Commerce.Date.Years',
+        ['2012-01-01T00:00:00', '2013-01-01T00:00:00'],
+      ],
+    },
+  ],
+};

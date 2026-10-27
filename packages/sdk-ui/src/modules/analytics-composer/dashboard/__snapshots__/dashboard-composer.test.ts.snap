@@ -1163,7 +1163,24 @@ export default function CodeExample() {
               'noTitle': false,
             },
             'style': {
+              'components': {
+                'title': {
+                  'inactive': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+                'ticks': {
+                  'inactive': false,
+                },
+                'labels': {
+                  'inactive': false,
+                },
+              },
               '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,
@@ -1180,6 +1197,8 @@ export default function CodeExample() {
                 },
               },
               '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,
@@ -1223,7 +1242,24 @@ export default function CodeExample() {
               'noTitle': false,
             },
             'style': {
+              'components': {
+                'title': {
+                  'inactive': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+                'ticks': {
+                  'inactive': false,
+                },
+                'labels': {
+                  'inactive': false,
+                },
+              },
               '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,
@@ -1240,6 +1276,8 @@ export default function CodeExample() {
                 },
               },
               '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,
@@ -1303,7 +1341,24 @@ export default function CodeExample() {
               'noTitle': false,
             },
             'style': {
+              'components': {
+                'title': {
+                  'inactive': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+                'ticks': {
+                  'inactive': false,
+                },
+                'labels': {
+                  'inactive': false,
+                },
+              },
               '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,
@@ -1320,6 +1375,8 @@ export default function CodeExample() {
                 },
               },
               '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,
@@ -1383,7 +1440,24 @@ export default function CodeExample() {
               'noTitle': false,
             },
             'style': {
+              'components': {
+                'title': {
+                  'inactive': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+                'ticks': {
+                  'inactive': false,
+                },
+                'labels': {
+                  'inactive': false,
+                },
+              },
               '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,
@@ -1400,6 +1474,8 @@ export default function CodeExample() {
                 },
               },
               '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
                 'components': {
                   'title': {
                     'inactive': false,

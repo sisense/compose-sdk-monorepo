@@ -274,6 +274,16 @@ const translation: TranslationDictionary = {
       notSet: 'Sin definir',
       clear: 'Borrar {{field}}',
     },
+    rank: {
+      rankedBy: 'Clasificado por {{- field}}',
+      rankedByLabel: 'Clasificado por:',
+      topBy: 'Top {{valA}} por:',
+      bottomBy: 'Últimos {{valA}} por:',
+      chooseRankedBy:
+        'Elija un campo por el cual clasificar en: Configuración del filtro › Clasificado por',
+      direction: 'Dirección de la clasificación',
+      count: 'Número de miembros',
+    },
     selectedCount: '{{count}} seleccionados',
     allExceptCount: 'Todos excepto {{count}}',
     setupTitle: 'Configurar un widget de filtro',
@@ -471,6 +481,7 @@ const translation: TranslationDictionary = {
     copy: 'Copiar al portapapeles',
     copied: 'Copiado',
     creditsUsed: 'Se usó el {{usagePercentage}}% de los créditos de IA.',
+    aiContextHint: 'Para un mejor rendimiento,<br/>agregá <strong>Contexto de IA</strong>',
     noDataTitle: 'No hay datos del panel disponibles',
     noDataDescription:
       'Cuando los datos del panel estén disponibles, podrás generar una narrativa.',

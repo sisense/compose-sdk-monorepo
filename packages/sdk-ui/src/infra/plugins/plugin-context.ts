@@ -1,22 +1,23 @@
 import { createContext } from 'react';
 
+import type { WidgetDefinitionRegistry } from '@/domains/widgets/widget-definitions';
+
 import type { AnyWidgetPlugin } from './widget-plugins/types.js';
-import type { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js';
 
 /**
- * Context for accessing registered plugins
+ * Context for accessing registered plugins.
  *
  * @internal
  */
 export interface PluginContextValue {
   /**
-   * Validated widget plugin declarations (metadata)
+   * Validated widget plugin declarations (metadata).
    */
   widgetPlugins: readonly AnyWidgetPlugin[];
   /**
-   * Central widget component registry (used for lookup and legacy bridge)
+   * Central widget definition registry (used for lookup and legacy bridge).
    */
-  widgetRegistry: WidgetPluginRegistry;
+  widgetRegistry: WidgetDefinitionRegistry;
 }
 
 /**
@@ -28,7 +29,7 @@ export const PLUGIN_CONTEXT_MISSING_MESSAGE =
 
 /**
  * React context for plugin management.
- * Default is null to avoid a shared WidgetPluginRegistry at module load (cross-test/consumer pollution).
+ * Default is null to avoid a shared WidgetDefinitionRegistry at module load (cross-test/consumer pollution).
  * PluginProvider supplies a real value; consumers must check for null and throw if missing.
  */
 export const PluginContext = createContext<PluginContextValue | null>(null);

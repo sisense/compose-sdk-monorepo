@@ -265,6 +265,17 @@ describe('widget-by-id utils', () => {
     it('should throw error for unsupported widget type', () => {
       expect(() => getFusionWidgetType('unsupported' as any)).toThrow();
     });
+
+    it('maps the official tabber plugin and passes other custom widget types through', () => {
+      expect(getFusionWidgetType('custom', undefined, 'tabber-buttons')).toBe('WidgetsTabber');
+      expect(getFusionWidgetType('custom', undefined, 'my-plugin')).toBe('my-plugin');
+    });
+
+    it('throws when a chart widget has no chart type', () => {
+      expect(() => getFusionWidgetType('chart')).toThrow(
+        'chartType is required for chart widget type',
+      );
+    });
   });
 
   describe('getWidgetType', () => {
@@ -284,6 +295,16 @@ describe('widget-by-id utils', () => {
     it('should return "chart" for chart fusion widget types', () => {
       expect(getWidgetType('chart/line')).toBe('chart');
       expect(getWidgetType('indicator')).toBe('chart');
+    });
+
+    it('reads filter, narrative and table aliases', () => {
+      expect(getWidgetType('filter')).toBe('filter');
+      expect(getWidgetType('dashboardnarrative')).toBe('narrative');
+      expect(getWidgetType('tablewidgetagg')).toBe('chart');
+    });
+
+    it('reads unknown fusion widget types as chart', () => {
+      expect(getWidgetType('unknown-widget')).toBe('chart');
     });
   });
 

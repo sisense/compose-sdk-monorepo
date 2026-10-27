@@ -1,12 +1,12 @@
 import { type ReactNode, useMemo } from 'react';
 
-import { TabberButtonsWidget } from '@/domains/widgets/components/tabber-buttons-widget';
+import { WidgetDefinitionRegistry } from '@/domains/widgets/widget-definitions';
 
 import { PluginContext } from './plugin-context.js';
-import { Plugin } from './types.js';
+import type { Plugin } from './types.js';
 import { getValidPlugins } from './validate-plugins.js';
-import type { AnyCustomVisualization, AnyWidgetPlugin } from './widget-plugins/types.js';
-import { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js';
+import { toWidgetDefinition } from './widget-plugins/to-widget-definition.js';
+import type { AnyWidgetPlugin } from './widget-plugins/types.js';
 
 /**
  * Shared empty plugins list used as the default when no plugins are passed.
@@ -18,24 +18,24 @@ import { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js
 export const EMPTY_PLUGINS = Object.freeze<Plugin[]>([]) as Plugin[];
 
 /**
- * Props for PluginProvider component
+ * Props for PluginProvider component.
  *
  * @sisenseInternal
  */
 export interface PluginProviderProps {
   /**
-   * Array of plugins to register
+   * Array of plugins to register.
    */
   plugins: Plugin[];
 
   /**
-   * Child components
+   * Child components.
    */
   children: ReactNode;
 }
 
 /**
- * Plugin Provider component that validates and provides access to plugins
+ * Plugin Provider component that validates and provides access to plugins.
  *
  * @sisenseInternal
  */
@@ -48,21 +48,12 @@ export const PluginProvider: React.FC<PluginProviderProps> = ({ plugins, childre
   );
 
   const widgetRegistry = useMemo(() => {
-    const registry = new WidgetPluginRegistry();
+    // Built-in widgets (the tabber) are static definitions the registry reads first.
+    const registry = new WidgetDefinitionRegistry();
 
-    // 1. Register built-in widgets
-    // The registry erases prop types at its boundary (see AnyCustomVisualization), so the
-    // typed built-in widget is registered through that erased visualization type.
-    registry.register('tabber-buttons', TabberButtonsWidget as AnyCustomVisualization, 'plugin');
-
-    // 2. Register declarative plugin widgets
     widgetPlugins.forEach((plugin) => {
       if (plugin.customWidget) {
-        registry.register(
-          plugin.customWidget.name,
-          plugin.customWidget.visualization.Component,
-          'plugin',
-        );
+        registry.register(toWidgetDefinition(plugin.customWidget, plugin.name), 'plugin');
       }
     });
 

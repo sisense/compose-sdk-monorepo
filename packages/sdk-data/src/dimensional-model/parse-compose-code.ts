@@ -210,8 +210,8 @@ function unquote(key: string): string {
 }
 
 /**
- * Unescapes quotes inside an already-unwrapped string literal.
- * Both the backslash-escaped (\') and doubled ('') forms occur in composeCode.
+ * Unescapes quotes and backslashes inside an already-unwrapped string literal.
+ * Both the backslash-escaped (\') and doubled ('') quote forms occur in composeCode.
  *
  * @param content - The string contents, without its surrounding quotes
  * @param quote - The quote character that wrapped the contents
@@ -221,8 +221,8 @@ function unquote(key: string): string {
 function unescapeQuotes(content: string, quote: string): string {
   // One pass, not two: replacing `\'` first would turn `A\'\'B` into `A''B`, which a second pass
   // over doubled quotes would then collapse to `A'B`, losing one. Static patterns per quote char.
-  const pattern = quote === '"' ? /""|\\"/g : /''|\\'/g;
-  return content.replace(pattern, quote);
+  const pattern = quote === '"' ? /""|\\"|\\\\/g : /''|\\'|\\\\/g;
+  return content.replace(pattern, (match) => (match === '\\\\' ? '\\' : quote));
 }
 
 /**

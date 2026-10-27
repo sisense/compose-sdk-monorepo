@@ -2,9 +2,12 @@
  * Custom processing registry for factory functions that require complex validation
  * and transformation beyond basic argument type checking.
  */
-import { CustomFunctionProcessor } from '../../types.js';
+import { type CustomFunctionProcessor, isRecordStringUnknown } from '../../types.js';
+import { resolveCalculatedDimensionDataType } from './custom-formula/infer-calculated-dimension-type.js';
 import { processCustomFormula } from './custom-formula/process-custom-formula.js';
 import {
+  processDateMeasureMembersFilter,
+  processDateMeasureRelativeFilter,
   processDatetimeFromFilter,
   processDatetimeMembersFilter,
   processDatetimeRangeFilter,
@@ -17,8 +20,46 @@ import {
   processStringFilter,
   processStringOrNumericFilter,
 } from './filter-processors.js';
-import { processNumericMeasure } from './measure-processors.js';
+import { processAttributeMeasure, processNumericMeasure } from './measure-processors.js';
 import { processMeasuredValue } from './process-measured-value.js';
+
+/**
+ * Wraps context keys in brackets, since the formula references them with brackets.
+ *
+ * @param formulaContext - Formula context whose keys may arrive without brackets.
+ * @returns The same context keyed by bracket reference.
+ */
+function withBracketedKeys(formulaContext: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(formulaContext).map(([key, value]) => [
+      key.startsWith('[') ? key : `[${key}]`,
+      value,
+    ]),
+  );
+}
+
+/**
+ * Processes attributeFactory.customFormula: validates it like a measure formula without the
+ * aggregation requirement, then sets the data type its formula decides, or the given one.
+ *
+ * @param processedArgs - The title, formula, context and optional data type.
+ * @param context - Processing context.
+ * @returns Processed args with the resolved data type at index 3.
+ */
+const processCalculatedDimension: CustomFunctionProcessor = (processedArgs, context) => {
+  const [title, formula, formulaContext] = processCustomFormula(processedArgs, context, {
+    requireAggregative: false,
+  });
+  const dataType =
+    typeof formula === 'string' && isRecordStringUnknown(formulaContext)
+      ? resolveCalculatedDimensionDataType(
+          formula,
+          withBracketedKeys(formulaContext),
+          processedArgs[3],
+        )
+      : undefined;
+  return dataType ? [title, formula, formulaContext, dataType] : [title, formula, formulaContext];
+};
 
 /**
  * Registry mapping function paths to their custom processing functions.
@@ -36,11 +77,16 @@ export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
   'measureFactory.customFormula': processCustomFormula,
   // A calculated dimension groups rather than aggregates, so the aggregative-function requirement
   // that applies to measures is lifted here.
-  'attributeFactory.customFormula': (processedArgs, context) =>
-    processCustomFormula(processedArgs, context, { requireAggregative: false }),
+  'attributeFactory.customFormula': processCalculatedDimension,
   'measureFactory.measuredValue': processMeasuredValue,
 
   // Numeric-only aggregations: reject text and datetime attributes (BE throws otherwise)
+  // Any-type aggregations: reject only a calculated dimension, which the engine cannot aggregate
+  'measureFactory.min': processAttributeMeasure,
+  'measureFactory.max': processAttributeMeasure,
+  'measureFactory.count': processAttributeMeasure,
+  'measureFactory.countDistinct': processAttributeMeasure,
+  'measureFactory.aggregate': processAttributeMeasure,
   'measureFactory.sum': processNumericMeasure,
   'measureFactory.average': processNumericMeasure,
   'measureFactory.avg': processNumericMeasure,
@@ -81,6 +127,9 @@ export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
   'filterFactory.dateRelative': processDatetimeRelativeFilter,
   'filterFactory.dateRelativeFrom': processDatetimeRelativeFilter,
   'filterFactory.dateRelativeTo': processDatetimeRelativeFilter,
+  'filterFactory.dateMeasureMembers': processDateMeasureMembersFilter,
+  'filterFactory.dateMeasureRelativeFrom': processDateMeasureRelativeFilter,
+  'filterFactory.dateMeasureRelativeTo': processDateMeasureRelativeFilter,
 };
 
 /**

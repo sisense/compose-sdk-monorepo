@@ -1,5 +1,5 @@
 /**
- * Integer count entry inside a date Condition panel — Last N / Next N.
+ * Integer count entry inside a Condition or Rank panel — Last N / Next N, Top / Bottom N.
  *
  * Stepper arrows nudge whole numbers ≥ 1. The field itself is text so an incomplete
  * count (empty, 0, a fraction) can land and stay incomplete until Apply, matching
@@ -61,19 +61,35 @@ export type PanelCountInputProps = {
   controlStyle?: FieldOwnProps['controlStyle'];
   dataTestId?: string;
   id?: string;
+  placeholder?: string;
+  /** Keeps typed or pasted text to what the field accepts. Defaults to {@link normalizeCountInput}. */
+  normalize?: (text: string) => string;
+  /**
+   * Steps the count by one. Given, it replaces the default whole-number nudge and also lets
+   * ArrowUp / ArrowDown step the count from the keyboard.
+   */
+  step?: (value: string, delta: 1 | -1) => string;
 };
 
-/** @internal */
-export function PanelCountInput({
-  value,
-  onChange,
-  ariaLabel,
-  error,
-  radius,
-  controlStyle,
-  dataTestId = 'filter-widget-condition-count',
-  id,
-}: PanelCountInputProps) {
+/**
+ * @param props - Value, change handler and the optional field behaviour.
+ * @returns The count field with its stepper.
+ * @internal
+ */
+export function PanelCountInput(props: PanelCountInputProps) {
+  const {
+    value,
+    onChange,
+    ariaLabel,
+    error,
+    radius,
+    controlStyle,
+    dataTestId = 'filter-widget-condition-count',
+    id,
+    placeholder,
+    normalize = normalizeCountInput,
+    step,
+  } = props;
   const { t } = useTranslation();
   const fieldId = useFieldId(id);
   const inputId = `${fieldId}-input`;
@@ -89,6 +105,10 @@ export function PanelCountInput({
   });
 
   const nudge = (direction: 1 | -1) => {
+    if (step) {
+      onChange(step(value, direction));
+      return;
+    }
     const current = parseDateConditionCount(value) ?? 0;
     onChange(String(Math.max(1, current + direction)));
   };
@@ -114,6 +134,7 @@ export function PanelCountInput({
         inputMode="numeric"
         autoComplete="off"
         aria-label={ariaLabel}
+        placeholder={placeholder}
         aria-invalid={invalid || undefined}
         aria-describedby={message ? errorId : undefined}
         data-testid={dataTestId}
@@ -121,7 +142,12 @@ export function PanelCountInput({
         /* `inputMode` merely picks the mobile keypad — a text field takes any key, so the
            text is normalised here. Empty and `0` still land: an empty count stays
            incomplete until Apply, and `0` is flagged as below 1. */
-        onChange={(event) => onChange(normalizeCountInput(event.target.value))}
+        onChange={(event) => onChange(normalize(event.target.value))}
+        onKeyDown={(event) => {
+          if (!step || (event.key !== 'ArrowUp' && event.key !== 'ArrowDown')) return;
+          event.preventDefault();
+          nudge(event.key === 'ArrowUp' ? 1 : -1);
+        }}
       />
       <Stepper>
         <Step

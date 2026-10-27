@@ -16,6 +16,8 @@ const THRESHOLD_STATEMENTS = parseInt(env.DEV_APP_THRESHOLD_STATEMENTS || '70', 
 
 // Build variant configuration
 const BUILD_VARIANT = env.BUILD_VARIANT || 'bundled'; // 'bundled' or 'lightweight'
+// `build:watch`: runtime code only, no declaration files, and `dist` is updated in place
+const BUILD_WATCH = env.BUILD_WATCH === 'true';
 
 interface FileSystem {
   readdirSync(path: string): string[];
@@ -101,17 +103,22 @@ export default defineConfig(({ mode }) => ({
       targets: [{ src: 'package.json', dest: getOutputDir() }],
       hook: 'writeBundle',
     }),
-    dts({
-      entryRoot: 'src',
-      tsconfigPath: join(__dirname, 'tsconfig.lib.json'),
-      outDir: getOutputDir(),
-    }),
+    ...(BUILD_WATCH
+      ? []
+      : [
+          dts({
+            entryRoot: 'src',
+            tsconfigPath: join(__dirname, 'tsconfig.lib.json'),
+            outDir: getOutputDir(),
+          }),
+        ]),
   ] as PluginOption[],
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.scss'],
   },
   build: {
     outDir: getOutputDir(),
+    emptyOutDir: !BUILD_WATCH,
     lib: {
       entry: entryPoints,
       name: 'sdk-shared-ui',

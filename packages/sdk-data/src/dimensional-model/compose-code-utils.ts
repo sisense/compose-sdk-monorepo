@@ -1,6 +1,15 @@
-import { escapeSingleQuotes } from '@sisense/sdk-common';
-
 import { DimensionalElement } from './base.js';
+
+/**
+ * Escapes a value for a single-quoted compose-code string: backslashes first, so a trailing
+ * backslash cannot escape the closing quote, then quotes.
+ *
+ * @param value - The raw string.
+ * @returns The escaped string contents.
+ */
+function escapeStringLiteral(value: string): string {
+  return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
 
 /**
  * Stringifies the argument, with an option to exclude specific properties from objects without a 'composeCode'.
@@ -17,7 +26,7 @@ export function stringifyHelper(arg: any, excludeProps: string[] = []): string {
     }
 
     if (typeof arg === 'string') {
-      return `'${escapeSingleQuotes(arg)}'`;
+      return `'${escapeStringLiteral(arg)}'`;
     }
 
     if (typeof arg === 'number' || typeof arg === 'boolean') {
@@ -40,7 +49,7 @@ export function stringifyHelper(arg: any, excludeProps: string[] = []): string {
       const entries = Object.entries(arg)
         .filter(([key]) => !excludeProps.includes(key))
         .map(([key, value]) => {
-          const formattedKey = /[^a-zA-Z0-9_$]/.test(key) ? `'${key}'` : key;
+          const formattedKey = /[^a-zA-Z0-9_$]/.test(key) ? `'${escapeStringLiteral(key)}'` : key;
           return `${formattedKey}: ${stringifyHelper(value, excludeProps)}`;
         });
       return `{ ${entries.join(', ')} }`;

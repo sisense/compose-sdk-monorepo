@@ -114,7 +114,7 @@ export type SpecificWidgetOptions = {
    *
    * `style` carries only the unsupported style fields not yet first-class translated by the
    * CSDK widget model (extracted via `extractUnsupportedStyleOptions`); they are re-attached
-   * to the DTO during serialization with lower priority than rebuilt translation output.
+   * to the DTO during serialization over the rebuilt output, replacing its defaults for them.
    *
    * @internal
    */

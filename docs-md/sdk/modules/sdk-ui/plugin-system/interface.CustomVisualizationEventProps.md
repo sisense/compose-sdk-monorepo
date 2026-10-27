@@ -30,7 +30,7 @@ interface MyEventProps extends CustomVisualizationEventProps<MyDataPoint> {
 
 > **onDataPointClick**?: [`CustomVisualizationDataPointEventHandler`](type-alias.CustomVisualizationDataPointEventHandler.md)\< `DataPoint` \>
 
-Click handler callback for a data point
+Click handler callback for a data point.
 
 ***
 
@@ -38,7 +38,7 @@ Click handler callback for a data point
 
 > **onDataPointContextMenu**?: [`CustomVisualizationDataPointContextMenuHandler`](type-alias.CustomVisualizationDataPointContextMenuHandler.md)\< `DataPoint` \>
 
-Context menu handler callback for a data point
+Context menu handler callback for a data point.
 
 ***
 
@@ -46,4 +46,4 @@ Context menu handler callback for a data point
 
 > **onDataPointsSelected**?: [`CustomVisualizationDataPointsEventHandler`](type-alias.CustomVisualizationDataPointsEventHandler.md)\< `DataPoint` \>
 
-Handler callback for selection of multiple data points
+Handler callback for selection of multiple data points.

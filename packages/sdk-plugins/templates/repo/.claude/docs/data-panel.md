@@ -2,7 +2,7 @@
 
 The data panel is declared in `src/index.tsx` under `customWidget.dataPanel.config.inputs`. It defines what dimensions and measures the user can assign to your widget in the Fusion editor data panel.
 
-> **Design inputs first.** Before writing any Visualization code, decide what your inputs should be called. Name them after what they represent visually — `x`/`y` for coordinate-based charts, `lat`/`lon` for geo, `path` for hierarchy, `breakBy` when a dimension splits data into series. The template defaults (`category`/`value`) are generic placeholders — rename them unless your chart is literally a category vs. value chart. The names become keys in `DataOptions`, appear in `DataPoint.entries` for cross-filtering, and are shown to users in the Fusion editor.
+> **Design inputs first.** Before writing any Visualization code, decide what your inputs should be called. Name them after what they represent visually — `x`/`y` for coordinate-based charts, `lat`/`lon` for geo, `path` for hierarchy, `breakBy` when a dimension splits data into series. The template defaults (`category`/`value`) are generic placeholders — rename them unless your chart is literally a category vs. value chart. The names become keys in `DataOptions`, appear in `DataPoint.entries` for cross-filtering, and are shown to users in the Fusion editor. They are also what saved widgets store their items under, so once dashboards use the plugin, never rename, remove or reorder inputs: add new ones at the end.
 
 ---
 

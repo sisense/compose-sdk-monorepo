@@ -1,21 +1,20 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, statSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import test from 'node:test';
 
 import {
-  DEMOS,
-  parseArgs,
   computeAuth,
+  DEMOS,
   demoSupportsMode,
-  updateEnvContent,
-  updateAngularContent,
-  maskSecret,
   getConfigPath,
-  resolveInputs,
+  maskSecret,
   nextMemory,
+  parseArgs,
   readMemory,
+  resolveInputs,
+  updateEnvContent,
   writeMemory,
 } from './update-demo-creds.mjs';
 
@@ -39,7 +38,6 @@ test('registry contains all 9 demos with required shape', () => {
     'vue-ts-demo',
   ]);
   for (const d of DEMOS) {
-    assert.ok(d.format === 'env' || d.format === 'angular', `${d.name} format`);
     assert.ok(d.dir && d.target && d.seed, `${d.name} paths`);
     assert.ok(d.keys.url && d.keys.token, `${d.name} url/token keys`);
   }
@@ -77,7 +75,9 @@ test('all demos support token and login', () => {
 });
 
 test('wat supported only by the 5 full env demos', () => {
-  const watSupported = DEMOS.filter((d) => demoSupportsMode(d, 'wat')).map((d) => d.name).sort();
+  const watSupported = DEMOS.filter((d) => demoSupportsMode(d, 'wat'))
+    .map((d) => d.name)
+    .sort();
   assert.deepEqual(watSupported, [
     'plugins-demo/react',
     'plugins-demo/vue',
@@ -88,7 +88,9 @@ test('wat supported only by the 5 full env demos', () => {
 });
 
 test('sso supported by the 5 full env demos plus angular-demo', () => {
-  const ssoSupported = DEMOS.filter((d) => demoSupportsMode(d, 'sso')).map((d) => d.name).sort();
+  const ssoSupported = DEMOS.filter((d) => demoSupportsMode(d, 'sso'))
+    .map((d) => d.name)
+    .sort();
   assert.deepEqual(ssoSupported, [
     'angular-demo',
     'plugins-demo/react',
@@ -163,49 +165,6 @@ test('env writer appends a managed key when missing', () => {
 });
 
 // ---------------------------------------------------------------------------
-// updateAngularContent
-// ---------------------------------------------------------------------------
-
-const NG_ENV = [
-  'export const environment = {',
-  "  APP_SISENSE_URL: 'http://old:1',",
-  "  APP_SISENSE_TOKEN: 'oldtoken',",
-  '  APP_SSO_ENABLED: false,',
-  "  APP_WIDGETS: 'keep-me',",
-  '};',
-  '',
-].join('\n');
-
-test('angular writer replaces quoted url + token strings', () => {
-  const out = updateAngularContent(NG_ENV, demo('angular-demo'), {
-    url: 'http://new:2/',
-    auth: computeAuth('token', 'NEWTOK'),
-  });
-  assert.match(out, /APP_SISENSE_URL: 'http:\/\/new:2\/'/);
-  assert.match(out, /APP_SISENSE_TOKEN: 'NEWTOK'/);
-  assert.match(out, /APP_SSO_ENABLED: false/);
-  assert.match(out, /APP_WIDGETS: 'keep-me'/); // preserved
-});
-
-test('angular writer sso mode toggles boolean and empties token', () => {
-  const out = updateAngularContent(NG_ENV, demo('angular-demo'), {
-    url: 'U',
-    auth: computeAuth('sso'),
-  });
-  assert.match(out, /APP_SSO_ENABLED: true/);
-  assert.match(out, /APP_SISENSE_TOKEN: ''/);
-});
-
-test('angular writer throws instead of silently dropping a write when a key is missing and the env block is unrecognizable', () => {
-  // url present so it is replaced, but token absent AND no `export const environment = {` anchor
-  const malformed = "APP_SISENSE_URL: 'x'\n";
-  assert.throws(
-    () => updateAngularContent(malformed, demo('angular-demo'), { url: 'U', auth: computeAuth('token', 'T') }),
-    /export const environment/,
-  );
-});
-
-// ---------------------------------------------------------------------------
 // maskSecret
 // ---------------------------------------------------------------------------
 
@@ -244,7 +203,10 @@ test('parseArgs throws when no auth mode given', () => {
 });
 
 test('parseArgs throws when multiple auth modes given', () => {
-  assert.throws(() => parseArgs(['--url', 'U', '--token', 'T', '--sso']), /mutually exclusive|one auth/i);
+  assert.throws(
+    () => parseArgs(['--url', 'U', '--token', 'T', '--sso']),
+    /mutually exclusive|one auth/i,
+  );
 });
 
 test('parseArgs help short-circuits without requiring a mode', () => {

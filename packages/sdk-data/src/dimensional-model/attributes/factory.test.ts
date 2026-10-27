@@ -236,3 +236,217 @@ describe('create() round-trip for calculated attributes', () => {
     expect(restored.jaql()).toEqual(original.jaql());
   });
 });
+
+describe('attributeFactory.customFormula data type', () => {
+  it('carries an explicit data type into the JAQL and compose code', () => {
+    const cd = attributeFactory.customFormula('Cost', '[c]', { c: revenue }, 'numeric');
+
+    expect(cd.jaql().jaql.datatype).toBe('numeric');
+    expect(cd.composeCode).toContain(", 'numeric')");
+  });
+
+  it('leaves the JAQL data type off when it is unknown', () => {
+    const cd = attributeFactory.customFormula('Age', '[a]', { a: ageRange });
+
+    expect(cd.jaql().jaql).not.toHaveProperty('datatype');
+  });
+});
+
+describe('calculated dimension context from JAQL', () => {
+  const cdJaqlWith = (nested: Record<string, unknown>) => ({
+    type: CALCULATED_DIMENSION_JAQL_TYPE,
+    title: 'Outer',
+    formula: '[N]',
+    datatype: 'text',
+    context: { '[N]': nested },
+  });
+  const nestedTypeOf = (json: object) =>
+    (create(json) as Attribute).jaql().jaql.context['[N]'].type;
+
+  it('reads an untyped grouping formula as a nested calculated dimension', () => {
+    const nested = {
+      title: 'Group',
+      formula: "CASE WHEN [A] = '1' THEN 'x' ELSE 'y' END",
+      context: { '[A]': { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' } },
+    };
+
+    expect(nestedTypeOf(cdJaqlWith(nested))).toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+
+  it('ignores aggregation names inside column references', () => {
+    const nested = {
+      title: 'Banded',
+      formula: "CASE WHEN [Revenue Sum (USD)] > 5 THEN 'a' ELSE 'b' END",
+      context: {
+        '[Revenue Sum (USD)]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'R' },
+      },
+    };
+
+    expect(nestedTypeOf(cdJaqlWith(nested))).toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+
+  it.each([
+    'YTDSum([R])',
+    'growth([R])',
+    'pastyear([R])',
+    'DIFFPastYear([R])',
+    'RSUM([R])',
+    'RAVG([R])',
+    'PREV([R])',
+    'NEXT([R])',
+  ])('keeps an untyped time-based measure formula %s a measure', (formula) => {
+    const nested = {
+      title: 'Time measure',
+      formula,
+      context: {
+        '[R]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'R' },
+      },
+    };
+
+    expect(nestedTypeOf(cdJaqlWith(nested))).not.toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+
+  it('keeps an untyped formula over a nested typed measure a measure', () => {
+    const nested = {
+      title: 'Share',
+      formula: '[S] / 2',
+      context: {
+        '[S]': {
+          type: 'measure',
+          title: 'Total',
+          formula: '[R] * 2',
+          context: { '[R]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'R' } },
+        },
+      },
+    };
+
+    expect(nestedTypeOf(cdJaqlWith(nested))).not.toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+
+  it('keeps an untyped formula over a nested aggregating formula a measure', () => {
+    const nested = {
+      title: 'Share',
+      formula: '[S] / 2',
+      context: {
+        '[S]': {
+          title: 'Total',
+          formula: 'SUM([R])',
+          context: { '[R]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'R' } },
+        },
+      },
+    };
+
+    expect(nestedTypeOf(cdJaqlWith(nested))).not.toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+
+  it('keeps an untyped aggregating formula a measure', () => {
+    const nested = {
+      title: 'Total',
+      formula: 'SUM([R])',
+      context: { '[R]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'Revenue' } },
+    };
+
+    expect(nestedTypeOf(cdJaqlWith(nested))).not.toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+});
+
+describe('calculated dimension compose code escaping', () => {
+  it('keeps a trailing backslash and quotes inside their string arguments', async () => {
+    const { parseComposeCodeToFunctionCall } = await import('../parse-compose-code.js');
+    const cd = attributeFactory.customFormula('x\\', ", measureFactory.sum(DM.T.Secret), 'it''s'", {
+      a: ageRange,
+    });
+
+    const { args } = parseComposeCodeToFunctionCall(cd.composeCode ?? '');
+
+    expect(args).toHaveLength(3);
+    expect(args[0]).toBe('x\\');
+    expect(args[1]).toBe(", measureFactory.sum(DM.T.Secret), 'it''s'");
+  });
+});
+
+describe('calculated dimension compose code from JSON', () => {
+  const cdJson = (extra: Record<string, unknown> = {}) => ({
+    type: CALCULATED_DIMENSION_JAQL_TYPE,
+    title: 'Cost CD',
+    formula: '[A]',
+    context: { '[A]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'Revenue' } },
+    ...extra,
+  });
+
+  it('carries a known data type as the last compose-code argument', () => {
+    const cd = create(cdJson({ datatype: 'numeric' })) as Attribute;
+
+    expect(cd.composeCode?.endsWith(", 'numeric')")).toBe(true);
+  });
+
+  it('keeps its compose code through a serialize round trip', () => {
+    const cd = create(cdJson({ datatype: 'numeric' })) as Attribute;
+    const restored = create((cd as DimensionalCalculatedAttribute).serialize()) as Attribute;
+
+    expect(restored.composeCode).toBe(cd.composeCode);
+  });
+
+  it('keeps the stored compose code of a serialized element', () => {
+    const serialized = {
+      ...(create(cdJson()) as DimensionalCalculatedAttribute).serialize(),
+      composeCode: 'DM.Commerce.CostCd',
+    };
+
+    expect((create(serialized) as Attribute).composeCode).toBe('DM.Commerce.CostCd');
+  });
+
+  it('ignores a compose code on raw JAQL', () => {
+    const cd = create(cdJson({ composeCode: 'DM.Commerce.CostCd' })) as Attribute;
+
+    expect(cd.composeCode).toMatch(/^attributeFactory\.customFormula\(/);
+  });
+
+  it('escapes a quote in a context key so the compose code parses back', async () => {
+    const { parseComposeCodeToFunctionCall } = await import('../parse-compose-code.js');
+    const cd = create(
+      cdJson({
+        formula: "[it's]",
+        context: { "[it's]": { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'R' } },
+      }),
+    ) as Attribute;
+
+    const { args } = parseComposeCodeToFunctionCall(cd.composeCode ?? '');
+
+    expect(Object.keys(args[2] as object)).toEqual(["[it's]"]);
+  });
+});
+
+describe('typed or aggregated context entries are not retyped', () => {
+  const nestedTypeOf = (nested: Record<string, unknown>) =>
+    (
+      create({
+        type: CALCULATED_DIMENSION_JAQL_TYPE,
+        title: 'Outer',
+        formula: '[N]',
+        context: { '[N]': nested },
+      }) as Attribute
+    ).jaql().jaql.context['[N]'];
+
+  it('leaves an entry with an aggregation a measure', () => {
+    const nested = nestedTypeOf({
+      title: 'Rev',
+      formula: '[R]',
+      agg: 'sum',
+      context: { '[R]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'R' } },
+    });
+
+    expect(nested.type).not.toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+
+  it('leaves an explicitly typed entry as it is', () => {
+    const nested = nestedTypeOf({
+      type: 'measure',
+      title: 'Rev',
+      formula: 'SUM([R])',
+      context: { '[R]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'R' } },
+    });
+
+    expect(nested.type).not.toBe(CALCULATED_DIMENSION_JAQL_TYPE);
+  });
+});

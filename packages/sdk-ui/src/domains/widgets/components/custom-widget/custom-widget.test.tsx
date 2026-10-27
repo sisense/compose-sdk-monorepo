@@ -7,15 +7,15 @@ import { setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
-import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
+import { useWidgetDefinitionRegistry } from '@/infra/plugins/use-widget-definition-registry';
 
 import { CustomWidget } from './custom-widget';
 
-vi.mock('@/infra/plugins/use-widget-plugin-registry');
+vi.mock('@/infra/plugins/use-widget-definition-registry');
 vi.mock('@/infra/contexts/sisense-context/sisense-context');
 
 describe('CustomWidget', () => {
-  const mockUseWidgetPluginRegistry = useWidgetPluginRegistry as unknown as Mock;
+  const mockUseWidgetDefinitionRegistry = useWidgetDefinitionRegistry as unknown as Mock;
   const mockUseSisenseContext = useSisenseContext as unknown as Mock;
 
   const customWidgetMap = new Map<string, (props: unknown) => React.JSX.Element>();
@@ -34,7 +34,7 @@ describe('CustomWidget', () => {
     });
 
     customWidgetMap.clear();
-    mockUseWidgetPluginRegistry.mockReturnValue({
+    mockUseWidgetDefinitionRegistry.mockReturnValue({
       getComponent: (key: string) => customWidgetMap.get(key),
     });
   });

@@ -9,14 +9,14 @@ import { samplePivotDashboard } from '@/domains/dashboarding/dashboard-model/__m
 import { jumpToDashboardConfigFromWidgetDto } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils.js';
 import type { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import type { WidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
-import {
+import type {
   BoxplotChartDataOptions,
   KpiChartDataOptions,
   PivotTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types';
 import type { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 import type { FilterWidgetProps } from '@/domains/widgets/components/filter-widget/types';
-import {
+import type {
   BoxplotWidgetStyle,
   CalendarHeatmapWidgetStyle,
   CartesianWidgetStyle,
@@ -27,8 +27,8 @@ import {
   TabberWidgetDtoStyle,
 } from '@/domains/widgets/components/widget-by-id/types';
 import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
-import { AppSettings } from '@/infra/app/settings/settings';
-import {
+import type { AppSettings } from '@/infra/app/settings/settings';
+import type {
   CalendarHeatmapStyleOptions,
   CompleteThemeSettingsInternal,
   PivotTableWidgetStyleOptions,
@@ -455,11 +455,14 @@ describe('WidgetModelTranslator', () => {
         });
 
         expect(dto.subtype).toBe('kpi/previous-period');
-        // The baseline is the preceding category bucket, so no comparison panel is written.
-        const panelNames = dto.metadata.panels
-          .map(({ name }) => name)
-          .filter((name) => name !== 'filters');
-        expect(panelNames).toEqual(['value', 'category']);
+        // The baseline is the preceding category bucket, so both comparison panels stay empty.
+        expect(dto.metadata.panels.map(({ name, items }) => [name, items.length])).toEqual([
+          ['value', 1],
+          ['category', 1],
+          ['target', 0],
+          ['comparisonValue', 0],
+          ['filters', 0],
+        ]);
       });
 
       it('derives kpi/standard, kpi/goal and kpi/trend from their comparisons', () => {
@@ -513,10 +516,87 @@ describe('WidgetModelTranslator', () => {
         });
 
         expect(dto.subtype).toBe('kpi/value');
-        const panelNames = dto.metadata.panels
-          .map(({ name }) => name)
-          .filter((name) => name !== 'filters');
-        expect(panelNames).toEqual(['value', 'comparisonValue']);
+        expect(dto.metadata.panels.map(({ name, items }) => [name, items.length])).toEqual([
+          ['value', 1],
+          ['category', 0],
+          ['target', 0],
+          ['comparisonValue', 1],
+          ['filters', 0],
+        ]);
+      });
+
+      describe('panel layout and round trip', () => {
+        const sumCost = measureFactory.sum(Commerce.Cost, 'Total Cost');
+        const comparisons: ReadonlyArray<[string, KpiChartDataOptions['comparison']]> = [
+          ['none', undefined],
+          ['previous-period', { type: 'previous-period' }],
+          ['delta', { type: 'delta', value: sumCost }],
+          ['value', { type: 'value', value: sumCost }],
+          ['target with a measure', { type: 'target', target: sumCost }],
+          ['target with a number', { type: 'target', target: 10000 }],
+        ];
+        const categories: ReadonlyArray<[string, KpiChartDataOptions['category']]> = [
+          ['without a category', undefined],
+          ['with a category', Commerce.Date.Months],
+        ];
+        const cases = comparisons.flatMap(([comparisonName, comparison]) =>
+          categories.map(
+            ([categoryName, category]) =>
+              [
+                `${comparisonName}, ${categoryName}`,
+                {
+                  value: sumRevenue,
+                  ...(category && { category }),
+                  ...(comparison && { comparison }),
+                },
+              ] as const,
+          ),
+        );
+
+        it.each(cases)(
+          'writes every manifest panel, then filters, in Fusion order (%s)',
+          (_, dataOptions) => {
+            expect(toKpiDto(dataOptions).metadata.panels.map(({ name }) => name)).toEqual([
+              'value',
+              'category',
+              'target',
+              'comparisonValue',
+              'filters',
+            ]);
+          },
+        );
+
+        it.each(cases)('reads back the same kpi data options (%s)', (_, dataOptions) => {
+          const dto = toKpiDto(dataOptions);
+          const backIn = fromWidgetDto(dto).dataOptions as KpiChartDataOptions;
+
+          // Same slots, same comparison kind. A fixed-number target comes back as a constant
+          // formula measure rather than a number (see toFixedTargetPanelItem), so the kind is
+          // the stable thing to compare there.
+          expect(Object.keys(backIn).sort()).toEqual(Object.keys(dataOptions).sort());
+          expect(backIn.comparison?.type).toBe(dataOptions.comparison?.type);
+
+          // The empty panels are read as unset slots: the result is exactly what the same DTO
+          // gives without them.
+          const withoutEmptyPanels: WidgetDto = {
+            ...dto,
+            metadata: {
+              ...dto.metadata,
+              panels: dto.metadata.panels.filter(
+                ({ name, items }) => name === 'filters' || items.length > 0,
+              ),
+            },
+          };
+          expect(backIn).toEqual(fromWidgetDto(withoutEmptyPanels).dataOptions);
+
+          // And writing the read-back model again fills the same panels. Items are compared by
+          // count: the fixed-number target is re-written from its measure form, not the number.
+          const panelShape = (panels: WidgetDto['metadata']['panels']) =>
+            panels.map(({ name, items }) => [name, items.length]);
+          expect(
+            panelShape(toWidgetDto(fromWidgetDto(dto), kpiDataSource).metadata.panels),
+          ).toEqual(panelShape(dto.metadata.panels));
+        });
       });
     });
 
@@ -545,6 +625,7 @@ describe('WidgetModelTranslator', () => {
       const makeScattermapWidgetDto = (
         overrides: Partial<WidgetDto['metadata']['panels'][number]>[] = [],
       ): WidgetDto =>
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- tsc needs this cast; lint's type info disagrees
         ({
           oid: 'scattermap-oid',
           title: 'scattermap',
@@ -768,56 +849,55 @@ describe('WidgetModelTranslator', () => {
     });
 
     describe('areamap widget', () => {
-      const makeAreamapWidgetDto = (subtype: 'areamap/world' | 'areamap/usa'): WidgetDto =>
-        ({
-          oid: 'areamap-oid',
-          title: 'areamap',
-          desc: null,
-          type: 'map/area',
-          subtype,
-          datasource: {
-            title: 'Sample ECommerce',
-            id: 'localhost_aSampleIAAaECommerce',
-            address: 'LocalHost',
-            database: 'aSampleIAAaECommerce',
-          },
-          metadata: {
-            panels: [
-              {
-                name: 'geo',
-                items: [
-                  {
-                    jaql: {
-                      table: 'Country',
-                      column: 'Country',
-                      dim: '[Country.Country]',
-                      datatype: 'text',
-                      merged: true,
-                      title: 'Country',
-                    },
+      const makeAreamapWidgetDto = (subtype: 'areamap/world' | 'areamap/usa'): WidgetDto => ({
+        oid: 'areamap-oid',
+        title: 'areamap',
+        desc: null,
+        type: 'map/area',
+        subtype,
+        datasource: {
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          address: 'LocalHost',
+          database: 'aSampleIAAaECommerce',
+        },
+        metadata: {
+          panels: [
+            {
+              name: 'geo',
+              items: [
+                {
+                  jaql: {
+                    table: 'Country',
+                    column: 'Country',
+                    dim: '[Country.Country]',
+                    datatype: 'text',
+                    merged: true,
+                    title: 'Country',
                   },
-                ],
-              },
-              {
-                name: 'color',
-                items: [
-                  {
-                    jaql: {
-                      table: 'Commerce',
-                      column: 'Revenue',
-                      dim: '[Commerce.Revenue]',
-                      datatype: 'numeric',
-                      agg: 'sum',
-                      title: 'Total Revenue',
-                    },
+                },
+              ],
+            },
+            {
+              name: 'color',
+              items: [
+                {
+                  jaql: {
+                    table: 'Commerce',
+                    column: 'Revenue',
+                    dim: '[Commerce.Revenue]',
+                    datatype: 'numeric',
+                    agg: 'sum',
+                    title: 'Total Revenue',
                   },
-                ],
-              },
-              { name: 'filters', items: [] },
-            ],
-          },
-          style: {},
-        } as unknown as WidgetDto);
+                },
+              ],
+            },
+            { name: 'filters', items: [] },
+          ],
+        },
+        style: {},
+      });
 
       it('should create a valid WidgetDto for the "areamap" (world) chart', () => {
         const mockDto = makeAreamapWidgetDto('areamap/world');
@@ -891,79 +971,78 @@ describe('WidgetModelTranslator', () => {
     describe('boxplot widget', () => {
       const makeBoxplotWidgetDto = (
         overrides: { subtype?: string; styleOverrides?: Partial<BoxplotWidgetStyle> } = {},
-      ): WidgetDto =>
-        ({
-          oid: 'boxplot-oid',
-          title: 'boxplot',
-          desc: null,
-          type: 'chart/boxplot',
-          subtype: overrides.subtype ?? 'boxplot/full',
-          datasource: {
-            title: 'Sample ECommerce',
-            id: 'localhost_aSampleIAAaECommerce',
-            address: 'LocalHost',
-            database: 'aSampleIAAaECommerce',
-          },
-          metadata: {
-            panels: [
-              {
-                name: 'category',
-                items: [
-                  {
-                    jaql: {
-                      table: 'Commerce',
-                      column: 'Age Range',
-                      dim: '[Commerce.Age Range]',
-                      datatype: 'text',
-                      merged: true,
-                      title: 'Age Range',
-                    },
+      ): WidgetDto => ({
+        oid: 'boxplot-oid',
+        title: 'boxplot',
+        desc: null,
+        type: 'chart/boxplot',
+        subtype: overrides.subtype ?? 'boxplot/full',
+        datasource: {
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          address: 'LocalHost',
+          database: 'aSampleIAAaECommerce',
+        },
+        metadata: {
+          panels: [
+            {
+              name: 'category',
+              items: [
+                {
+                  jaql: {
+                    table: 'Commerce',
+                    column: 'Age Range',
+                    dim: '[Commerce.Age Range]',
+                    datatype: 'text',
+                    merged: true,
+                    title: 'Age Range',
                   },
-                ],
-              },
-              {
-                name: 'value',
-                items: [
-                  {
-                    jaql: {
-                      table: 'Commerce',
-                      column: 'Cost',
-                      dim: '[Commerce.Cost]',
-                      datatype: 'numeric',
-                      title: 'Cost',
-                    },
+                },
+              ],
+            },
+            {
+              name: 'value',
+              items: [
+                {
+                  jaql: {
+                    table: 'Commerce',
+                    column: 'Cost',
+                    dim: '[Commerce.Cost]',
+                    datatype: 'numeric',
+                    title: 'Cost',
                   },
-                ],
-              },
-              { name: 'filters', items: [] },
-            ],
+                },
+              ],
+            },
+            { name: 'filters', items: [] },
+          ],
+        },
+        style: {
+          legend: { enabled: true, position: 'bottom' },
+          navigator: { enabled: false },
+          xAxis: {
+            enabled: true,
+            ticks: true,
+            labels: { enabled: true, rotation: 0 },
+            gridLines: true,
+            isIntervalEnabled: false,
           },
-          style: {
-            legend: { enabled: true, position: 'bottom' },
-            navigator: { enabled: false },
-            xAxis: {
-              enabled: true,
-              ticks: true,
-              labels: { enabled: true, rotation: 0 },
-              gridLines: true,
-              isIntervalEnabled: false,
-            },
-            yAxis: {
-              enabled: true,
-              ticks: true,
-              labels: { enabled: true, rotation: 0 },
-              gridLines: true,
-              isIntervalEnabled: false,
-            },
-            whisker: {
-              'whisker/iqr': true,
-              'whisker/extremums': false,
-              'whisker/deviation': false,
-            },
-            outliers: { enabled: true },
-            ...overrides.styleOverrides,
+          yAxis: {
+            enabled: true,
+            ticks: true,
+            labels: { enabled: true, rotation: 0 },
+            gridLines: true,
+            isIntervalEnabled: false,
           },
-        } as unknown as WidgetDto);
+          whisker: {
+            'whisker/iqr': true,
+            'whisker/extremums': false,
+            'whisker/deviation': false,
+          },
+          outliers: { enabled: true },
+          ...overrides.styleOverrides,
+        },
+      });
 
       it('should create a valid WidgetDto for the "boxplot" chart', () => {
         const mockDto = makeBoxplotWidgetDto();
@@ -1132,56 +1211,55 @@ describe('WidgetModelTranslator', () => {
     });
 
     describe('calendar-heatmap widget', () => {
-      const makeCalendarHeatmapWidgetDto = (style: CalendarHeatmapWidgetStyle = {}): WidgetDto =>
-        ({
-          oid: 'calendar-heatmap-oid',
-          title: 'calendar heatmap',
-          desc: null,
-          type: 'heatmap',
-          subtype: 'heatmap',
-          datasource: {
-            title: 'Sample ECommerce',
-            id: 'localhost_aSampleIAAaECommerce',
-            address: 'LocalHost',
-            database: 'aSampleIAAaECommerce',
-          },
-          metadata: {
-            panels: [
-              {
-                name: 'date',
-                items: [
-                  {
-                    jaql: {
-                      table: 'Commerce',
-                      column: 'Date',
-                      dim: '[Commerce.Date (Calendar)]',
-                      datatype: 'datetime',
-                      level: 'days',
-                      title: 'Date',
-                    },
+      const makeCalendarHeatmapWidgetDto = (style: CalendarHeatmapWidgetStyle = {}): WidgetDto => ({
+        oid: 'calendar-heatmap-oid',
+        title: 'calendar heatmap',
+        desc: null,
+        type: 'heatmap',
+        subtype: 'heatmap',
+        datasource: {
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          address: 'LocalHost',
+          database: 'aSampleIAAaECommerce',
+        },
+        metadata: {
+          panels: [
+            {
+              name: 'date',
+              items: [
+                {
+                  jaql: {
+                    table: 'Commerce',
+                    column: 'Date',
+                    dim: '[Commerce.Date (Calendar)]',
+                    datatype: 'datetime',
+                    level: 'days',
+                    title: 'Date',
                   },
-                ],
-              },
-              {
-                name: 'color',
-                items: [
-                  {
-                    jaql: {
-                      table: 'Commerce',
-                      column: 'Revenue',
-                      dim: '[Commerce.Revenue]',
-                      datatype: 'numeric',
-                      agg: 'sum',
-                      title: 'Total Revenue',
-                    },
+                },
+              ],
+            },
+            {
+              name: 'color',
+              items: [
+                {
+                  jaql: {
+                    table: 'Commerce',
+                    column: 'Revenue',
+                    dim: '[Commerce.Revenue]',
+                    datatype: 'numeric',
+                    agg: 'sum',
+                    title: 'Total Revenue',
                   },
-                ],
-              },
-              { name: 'filters', items: [] },
-            ],
-          },
-          style,
-        } as unknown as WidgetDto);
+                },
+              ],
+            },
+            { name: 'filters', items: [] },
+          ],
+        },
+        style,
+      });
 
       it('should create a valid WidgetDto for the "calendar-heatmap" chart', () => {
         const mockDto = makeCalendarHeatmapWidgetDto({
@@ -1693,6 +1771,7 @@ describe('WidgetModelTranslator', () => {
 
         const widgetModel = fromWidgetDto(
           lineChartDto,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- tsc needs this cast; lint's type info disagrees
           themeSettings as unknown as CompleteThemeSettingsInternal,
         );
 
@@ -2164,6 +2243,7 @@ describe('WidgetModelTranslator', () => {
         filtersPanelItems?: Record<string, unknown>[];
       } = {},
     ): WidgetDto =>
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- tsc needs this cast; lint's type info disagrees
       ({
         oid: 'fw-oid',
         title: opts.title ?? 'My Filter',
@@ -2307,6 +2387,111 @@ describe('WidgetModelTranslator', () => {
     it('normalizes "range" to "members" for a text dimension', () => {
       const props = toFilterProps(makeFilterWidgetDto({ style: { filterType: 'range' } }));
       expect(props.filterType).toBe('members');
+    });
+
+    describe('filter-widget-rank.unit:translator', () => {
+      const revenueSumJaql = {
+        table: 'Commerce',
+        column: 'Revenue',
+        dim: '[Commerce.Revenue]',
+        datatype: 'numeric',
+        agg: 'sum',
+        title: 'Total Revenue',
+      };
+      const formulaJaql = {
+        title: 'Double Revenue',
+        formula: '[rev] * 2',
+        context: { '[rev]': revenueSumJaql },
+      };
+      const rankByOf = (dto: WidgetDto) =>
+        (toCommonWidgetProps(fromWidgetDto(dto)) as unknown as FilterWidgetProps).rankBy;
+
+      it('keeps "rank" as "rank" while unknown types still fall back to "members"', () => {
+        expect(
+          toFilterProps(makeFilterWidgetDto({ style: { filterType: 'rank' } })).filterType,
+        ).toBe('rank');
+        expect(
+          toFilterProps(makeFilterWidgetDto({ style: { filterType: 'bogus' } })).filterType,
+        ).toBe('members');
+      });
+
+      it('reads rankBy for a field with an aggregation as a base measure', () => {
+        const rankBy = rankByOf(
+          makeFilterWidgetDto({ style: { filterType: 'rank', rankBy: revenueSumJaql } }),
+        );
+
+        expect(rankBy).toMatchObject({ name: 'Total Revenue', aggregation: 'sum' });
+      });
+
+      it('reads rankBy for a formula as a calculated measure', () => {
+        const rankBy = rankByOf(
+          makeFilterWidgetDto({ style: { filterType: 'rank', rankBy: formulaJaql } }),
+        );
+
+        expect(rankBy).toMatchObject({ name: 'Double Revenue', expression: '[rev] * 2' });
+      });
+
+      it('reads rankBy kept inside a { jaql } item wrapper', () => {
+        const rankBy = rankByOf(
+          makeFilterWidgetDto({
+            style: { filterType: 'rank', rankBy: { jaql: revenueSumJaql } },
+          }),
+        );
+
+        expect(rankBy).toMatchObject({ name: 'Total Revenue', aggregation: 'sum' });
+      });
+
+      it('keeps "rank" with rankBy unset when the stored measure is missing or not a measure', () => {
+        const plainFieldJaql = { ...revenueSumJaql, agg: undefined };
+        const cases = [undefined, null, 'oops', {}, [], plainFieldJaql];
+
+        cases.forEach((rankBy) => {
+          const dto = makeFilterWidgetDto({ style: { filterType: 'rank', rankBy } });
+          expect(toFilterProps(dto).filterType).toBe('rank');
+          expect(rankByOf(dto)).toBeUndefined();
+        });
+      });
+
+      it('keeps "rank" with rankBy unset when the stored aggregation is not a name', () => {
+        const cases = [5, true, {}, ['sum']].map((agg) => ({ ...revenueSumJaql, agg }));
+
+        cases.forEach((rankBy) => {
+          const dto = makeFilterWidgetDto({ style: { filterType: 'rank', rankBy } });
+          expect(toFilterProps(dto).filterType).toBe('rank');
+          expect(rankByOf(dto)).toBeUndefined();
+        });
+      });
+
+      it('keeps "rank" with rankBy unset when the { jaql } wrapper holds nothing readable', () => {
+        const cases = [
+          { jaql: null },
+          { jaql: 'oops' },
+          { jaql: {} },
+          { jaql: { dim: 5, agg: 'sum' } },
+        ];
+
+        cases.forEach((rankBy) => {
+          const dto = makeFilterWidgetDto({ style: { filterType: 'rank', rankBy } });
+          expect(toFilterProps(dto).filterType).toBe('rank');
+          expect(rankByOf(dto)).toBeUndefined();
+        });
+      });
+
+      it('keeps "rank" with rankBy unset when the measure JAQL cannot be built', () => {
+        const unbuildable = { agg: 'sum' };
+
+        const dto = makeFilterWidgetDto({ style: { filterType: 'rank', rankBy: unbuildable } });
+
+        expect(toFilterProps(dto).filterType).toBe('rank');
+        expect(rankByOf(dto)).toBeUndefined();
+      });
+
+      it('drops a stored rankBy for every type other than "rank"', () => {
+        ['members', 'condition', 'period'].forEach((filterType) => {
+          const dto = makeFilterWidgetDto({ style: { filterType, rankBy: revenueSumJaql } });
+          expect(rankByOf(dto)).toBeUndefined();
+        });
+      });
     });
 
     it('builds a LevelAttribute with granularity for a datetime dimension', () => {
@@ -2621,6 +2806,49 @@ describe('WidgetModelTranslator', () => {
         parentFilters: [],
       });
       expect(roundTripped.attribute.granularity).toBe('Months');
+    });
+
+    describe('filter-widget-rank.unit:translator — write side', () => {
+      const rankBy = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+
+      it('round-trips a Rank filter widget with its measure', () => {
+        const props = makeFilterWidgetProps({
+          filterType: 'rank',
+          rankBy,
+          styleOptions: undefined,
+          parentFilters: undefined,
+          dimensionFilters: undefined,
+        });
+
+        const dto = toWidgetDto(fromWidgetProps(props), datasourceForDto);
+        expect(dto.style).toMatchObject({
+          filterType: 'rank',
+          rankBy: expect.objectContaining({ agg: 'sum', title: 'Total Revenue' }),
+        });
+
+        const roundTripped = toWidgetProps(fromWidgetDto(dto)) as FilterWidgetProps;
+        expect(roundTripped.filterType).toBe('rank');
+        expect(roundTripped.rankBy?.jaql(true)).toEqual(rankBy.jaql(true));
+      });
+
+      it('writes a Rank widget without a measure as "rank" with no rankBy', () => {
+        const props = makeFilterWidgetProps({ filterType: 'rank' });
+
+        const dto = toWidgetDto(fromWidgetProps(props), datasourceForDto);
+
+        expect(dto.style).toMatchObject({ filterType: 'rank' });
+        expect(dto.style).not.toHaveProperty('rankBy');
+      });
+
+      it('does not carry rankBy for a type other than "rank"', () => {
+        const props = makeFilterWidgetProps({ filterType: 'condition', rankBy });
+
+        const model = fromWidgetProps(props);
+        const dto = toWidgetDto(model, datasourceForDto);
+
+        expect(model.filterWidgetData).not.toHaveProperty('rankBy');
+        expect(dto.style).not.toHaveProperty('rankBy');
+      });
     });
 
     it('round-trips a filter widget DTO: DTO → model → DTO keeps the fields the read side uses', () => {

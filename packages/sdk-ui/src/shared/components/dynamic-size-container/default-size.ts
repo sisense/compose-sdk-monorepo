@@ -6,26 +6,14 @@ import {
   TableType,
 } from '../../../domains/visualizations/core/chart-options-processor/translations/types';
 import { ChartType } from '../../../types';
+import {
+  DEFAULT_CHART_SIZE,
+  DEFAULT_INDICATOR_SIZE,
+  DEFAULT_PIVOT_TABLE_SIZE,
+  DEFAULT_TABLE_SIZE,
+} from './default-sizes';
 
-export const DEFAULT_PIVOT_TABLE_SIZE = {
-  width: 400,
-  height: 500,
-} as const;
-
-const DEFAULT_CHART_SIZE = {
-  width: 400,
-  height: 400,
-} as const;
-
-const DEFAULT_TABLE_SIZE = {
-  width: 400,
-  height: 500,
-} as const;
-
-const DEFAULT_INDICATOR_SIZE = {
-  width: 200,
-  height: 200,
-} as const;
+export { DEFAULT_PIVOT_TABLE_SIZE };
 
 export const getChartDefaultSize = (chartType: ChartType | TableType) => {
   if (isTable(chartType)) {

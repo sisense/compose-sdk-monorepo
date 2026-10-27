@@ -91,6 +91,34 @@ export enum Sort {
 export const CALCULATED_DIMENSION_JAQL_TYPE = 'calculated_dimension';
 
 /**
+ * Result data type of a calculated attribute's formula.
+ */
+export type CalculatedAttributeDataType = 'text' | 'numeric' | 'datetime';
+
+/**
+ * Every {@link CalculatedAttributeDataType} value.
+ *
+ * @internal
+ */
+export const CALCULATED_ATTRIBUTE_DATA_TYPES: readonly CalculatedAttributeDataType[] = [
+  'text',
+  'numeric',
+  'datetime',
+];
+
+/**
+ * Tells whether a value is a {@link CalculatedAttributeDataType}.
+ *
+ * @param value - Any value, such as a JAQL `datatype`.
+ * @returns True when the value is a calculated attribute data type.
+ * @internal
+ */
+export const isCalculatedAttributeDataType = (
+  value: unknown,
+): value is CalculatedAttributeDataType =>
+  CALCULATED_ATTRIBUTE_DATA_TYPES.some((type) => type === value);
+
+/**
  * Different metadata types
  *
  * @internal

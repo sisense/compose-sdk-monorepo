@@ -16,6 +16,24 @@ export { useDashboardModel } from '@/domains/dashboarding/dashboard-model';
 // Tracking Decorators
 export { withTracking } from '@/infra/decorators/component-decorators/with-tracking';
 
+// Widget data slots — for host editors that build data panels from Compose SDK slot descriptions.
+export {
+  evaluateCondition,
+  isDataPanelInputVisible,
+  isValidCondition,
+} from '@/domains/widgets/widget-definitions/condition';
+export type {
+  Condition,
+  ConditionContext,
+  WithVisibleWhen,
+} from '@/domains/widgets/widget-definitions/condition';
+export type {
+  DataPanelColoringMode,
+  DataPanelConfig,
+  DataPanelItemCapability,
+  JsonSchema,
+} from '@/domains/widgets/widget-definitions/widget-metadata';
+
 // Plugins
 export { createDataOptionsFromPanels } from '@/domains/widgets/components/widget-by-id/translate-widget-data-options';
 export { extractCombinedFilters } from '@/domains/widgets/components/widget-by-id/translate-dashboard-filters';
@@ -145,6 +163,17 @@ export { haveQueryParamsChanged } from '@/domains/query-execution/hooks/shared/q
 export type { BaseQueryParams } from '@/domains/query-execution/types.js';
 
 // Data browser popover — Fusion uses it as the FilterWidget
-// dimension picker (also re-exported in the UMD bundle for the AngularJS host).
+// dimension picker (the host's runtime bundle exposes it to the AngularJS host).
 export { AddFilterPopover } from '@/domains/data-browser/add-filter-popover/add-filter-popover.js';
 export { AddFilterDataBrowser } from '@/domains/data-browser/add-filter-popover/add-filter-data-browser.js';
+
+// Translations — for a host that builds its own runtime bundle from the package entries
+export { registerAllTranslations } from '@/infra/translation/register-all-translations.js';
+
+// sdk-data factories — for the same host: objects it builds for this package's components must come
+// from the sdk-data copy the package bundles, or they fail its `instanceof` checks
+export {
+  createAttribute,
+  createDimensionalElementFromJaql,
+  filterFactory,
+} from '@/modules/sisense-internal/sdk-data-factories.js';

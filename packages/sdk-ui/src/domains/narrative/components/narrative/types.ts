@@ -76,6 +76,15 @@ export type NarrativeProps = {
    * `quota-exceeded` error kind instead.
    */
   quotaWarning?: { usagePercentage: number; exceeded?: boolean };
+  /**
+   * Whether the idle state suggests adding AI context, with an arrow up to the host header's
+   * three-dot menu, where the AI context option lives. Defaults to `false`.
+   * @remarks
+   * The arrow keeps a fixed distance from the right edge, matching Fusion's widget header. Drawn
+   * only with the actions and only while the widget is at least 650 px wide; who sees it and for
+   * how long belongs to the caller.
+   */
+  aiContextHint?: boolean;
   /** Requests generation. Fired by the primary action wherever one is offered. */
   onGenerate?: () => void;
   /**

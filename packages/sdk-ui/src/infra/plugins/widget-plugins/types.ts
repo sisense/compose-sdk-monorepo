@@ -1,12 +1,17 @@
-import { FunctionComponent, ReactNode } from 'react';
+import type { FunctionComponent, ReactNode } from 'react';
 
 import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import type { DeepPartial } from 'ts-essentials';
 
-import { AnyObject } from '@/shared/utils/utility-types';
+import type { DataPanelInput } from '@/domains/widgets/widget-definitions/widget-metadata';
+import type { WidgetAbilities } from '@/domains/widgets/widget-identity/types';
+import type { AnyObject } from '@/shared/utils/utility-types';
 import type { AbstractDataPointWithEntries, GenericDataOptions } from '@/types';
 
 import type { BasePluginInfo } from '../types';
+
+// Re-exported so plugin authors keep importing the data slot type with the rest of the plugin types.
+export type { DataPanelInput };
 
 /**
  * Declares a widget plugin for registration with the Compose SDK.
@@ -45,30 +50,30 @@ export interface WidgetPlugin<
   Props extends CustomVisualizationProps<any, any, any, any> = CustomVisualizationProps,
 > extends BasePluginInfo {
   /**
-   * The type of plugin
+   * The type of plugin.
    */
   pluginType: 'widget';
   /**
-   * The custom widget declaration to be registered
+   * The custom widget declaration to be registered.
    */
   customWidget?: {
     /**
-     * The unique name of the custom widget type (used for registration and identification)
+     * The unique name of the custom widget type (used for registration and identification).
      * @example 'my-custom-widget'
      */
     name: string;
     /**
-     * The display name of the custom widget type (used for display in the UI)
+     * The display name of the custom widget type (used for display in the UI).
      * @example 'My Custom Widget'
      */
     displayName: string;
 
     /**
-     * Configuration options for the custom widget
+     * Configuration options for the custom widget.
      */
     config?: {
       /**
-       * Configuration options for the widget header
+       * Configuration options for the widget header.
        */
       header?: {
         /**
@@ -81,38 +86,38 @@ export interface WidgetPlugin<
     };
 
     /**
-     * Definition of the custom visualization to be rendered in the new custom widget
+     * Definition of the custom visualization to be rendered in the new custom widget.
      */
     visualization: {
       /**
-       * The custom visualization component to be rendered in the new custom widget
+       * The custom visualization component to be rendered in the new custom widget.
        */
       Component: CustomVisualization<Props>;
     };
 
     /**
-     * Definition of the design panel for the custom widget
+     * Definition of the design panel for the custom widget.
      */
     designPanel?: {
       Component?: DesignPanel<NonNullable<Props['styleOptions']>>;
     };
 
     /**
-     * The icon of the custom widget to be displayed in the widget selector
+     * The icon of the custom widget to be displayed in the widget selector.
      * @example
      * ```tsx
      * const MyWidgetIcon = () => <PieChartIcon />;
      * ```
-     * @internal
+     * @sisenseInternal
      */
     icon?: () => ReactNode;
 
     /**
-     * Definition of the data panel for the custom widget
+     * Definition of the data panel for the custom widget.
      */
     dataPanel?: {
       /**
-       * Configuration options for the data panel
+       * Configuration options for the data panel.
        * @example
        * ```tsx
        * {
@@ -125,7 +130,7 @@ export interface WidgetPlugin<
        */
       config?: {
         /**
-         * Inputs for the data panel
+         * Inputs for the data panel.
          * @example
          * ```tsx
          * [
@@ -134,46 +139,22 @@ export interface WidgetPlugin<
          * ]
          * ```
          */
-        inputs?: {
-          /**
-           * The name of the input
-           * @example 'category'
-           */
-          name: string;
-          /**
-           * The display name of the input
-           * @example 'Category'
-           */
-          displayName?: string;
-          /**
-           * The type of the input
-           */
-          type: 'dimension' | 'measure';
-          /**
-           * The minimum number of items that can be selected
-           * @example 1
-           */
-          minItems?: number;
-          /**
-           * The maximum number of items that can be selected
-           * @example 5
-           */
-          maxItems?: number;
-          /**
-           * Whether the items can be sorted
-           */
-          canSort?: boolean;
-          /**
-           * Whether the items can be formatted
-           */
-          canFormat?: boolean;
-          /**
-           * Whether the items can be colored
-           */
-          canColor?: boolean;
-        }[];
+        inputs?: DataPanelInput[];
       };
     };
+
+    /**
+     * Abilities of the custom widget that differ from the plugin defaults: what data it works
+     * with, which events it emits, and its layout. Invalid fields are ignored with a warning.
+     *
+     * @example
+     * ```ts
+     * // A static widget: no query and no events.
+     * { data: 'none', interactions: [] }
+     * ```
+     * @internal
+     */
+    abilities?: Partial<WidgetAbilities>;
   };
 }
 
@@ -362,21 +343,21 @@ export interface CustomVisualizationEventProps<
   DataPoint extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
 > {
   /**
-   * Click handler callback for a data point
+   * Click handler callback for a data point.
    *
    * @category Callbacks
    */
   onDataPointClick?: CustomVisualizationDataPointEventHandler<DataPoint>;
 
   /**
-   * Context menu handler callback for a data point
+   * Context menu handler callback for a data point.
    *
    * @category Callbacks
    */
   onDataPointContextMenu?: CustomVisualizationDataPointContextMenuHandler<DataPoint>;
 
   /**
-   * Handler callback for selection of multiple data points
+   * Handler callback for selection of multiple data points.
    *
    * @category Callbacks
    */

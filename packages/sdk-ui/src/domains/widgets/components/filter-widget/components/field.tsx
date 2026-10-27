@@ -457,7 +457,11 @@ export const FieldInput = styled.input`
     cursor: pointer;
   }
 
-  &&:disabled {
+  /* A locked box looks and behaves as disabled without being natively disabled (it has to stay
+     focusable), so it takes the disabled treatment by its aria attribute — including the cursor,
+     which the read-only rule above would otherwise turn into a pointer over the input. */
+  &&:disabled,
+  &&[aria-disabled='true'] {
     color: ${fwVar('textSecondary', fwFallback.textSecondary)};
     -webkit-text-fill-color: ${fwVar('textSecondary', fwFallback.textSecondary)};
     cursor: not-allowed;

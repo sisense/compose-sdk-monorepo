@@ -17,6 +17,7 @@ import flow from 'lodash-es/flow';
 
 import { CommonFiltersApplyMode } from '@/domains/dashboarding/common-filters/types';
 import { dimensionToPivotDimId } from '@/domains/dashboarding/hooks/jtd/jtd-config-transformers';
+import { widgetTypeSupportsJtd } from '@/domains/dashboarding/hooks/jtd/jtd-supported-widget-keys';
 import { isJumpTargetWithId } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import type {
   JtdConfigDto,
@@ -50,7 +51,6 @@ import {
   isPieChartFusionWidget,
   isPivotTableFusionWidget,
   isTextFusionWidget,
-  widgetTypeSupportsJtd,
 } from '@/domains/widgets/components/widget-by-id/utils';
 import type { RestApi } from '@/infra/api/rest-api';
 import type { DashboardDto } from '@/infra/api/types/dashboard-dto';
@@ -674,8 +674,8 @@ export function withSpecificWidgetOptions(
         : metadataBase;
 
     // Re-attach unsupported style fields snapshot from the original DTO so they
-    // survive Fusion → CSDK → Fusion round-trips. Rebuilt style takes precedence,
-    // partialDtoOptions.style only fills gaps the rebuild leaves untouched.
+    // survive Fusion → CSDK → Fusion round-trips. The snapshot holds only fields the
+    // model does not capture, so it wins over the defaults the rebuild writes for them.
     const style = applyPartialDtoStyle(widgetDto.style, partialDtoOptions?.style);
 
     return {

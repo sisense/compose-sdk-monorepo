@@ -1,15 +1,15 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { act, renderHook } from '@testing-library/react';
 
+import { WidgetDefinitionRegistry } from '@/domains/widgets/widget-definitions';
 import { PluginContext } from '@/infra/plugins/plugin-context';
-import { WidgetPluginRegistry } from '@/infra/plugins/widget-plugins/widget-plugin-registry';
 
-import { CustomWidgetComponent } from './types';
+import type { CustomWidgetComponent } from './types';
 import { useCustomWidgets } from './use-custom-widgets';
 
 const createWrapper =
-  (widgetRegistry: WidgetPluginRegistry) =>
+  (widgetRegistry: WidgetDefinitionRegistry) =>
   ({ children }: PropsWithChildren) =>
     (
       <PluginContext.Provider value={{ widgetPlugins: [], widgetRegistry }}>
@@ -19,7 +19,7 @@ const createWrapper =
 
 describe('useCustomWidgets', () => {
   it('registers and exposes custom widgets via PluginContext', () => {
-    const widgetRegistry = new WidgetPluginRegistry();
+    const widgetRegistry = new WidgetDefinitionRegistry();
     const Wrapper = createWrapper(widgetRegistry);
 
     const widgetA: CustomWidgetComponent = vi.fn(() => null);
@@ -40,13 +40,13 @@ describe('useCustomWidgets', () => {
   });
 
   it('returns only legacy registrations; plugin entries are not visible', () => {
-    const widgetRegistry = new WidgetPluginRegistry();
+    const widgetRegistry = new WidgetDefinitionRegistry();
     const Wrapper = createWrapper(widgetRegistry);
 
     const pluginWidget = vi.fn(() => null);
     const legacyWidget = vi.fn(() => null);
 
-    widgetRegistry.register('shared-type', pluginWidget, 'plugin');
+    widgetRegistry.registerComponent('shared-type', pluginWidget, 'plugin');
 
     const { result } = renderHook(() => useCustomWidgets(), { wrapper: Wrapper });
 
@@ -63,7 +63,7 @@ describe('useCustomWidgets', () => {
   });
 
   it('unregisterCustomWidget removes a legacy registration', () => {
-    const widgetRegistry = new WidgetPluginRegistry();
+    const widgetRegistry = new WidgetDefinitionRegistry();
     const Wrapper = createWrapper(widgetRegistry);
     const widget: CustomWidgetComponent = vi.fn(() => null);
 
@@ -80,7 +80,7 @@ describe('useCustomWidgets', () => {
   });
 
   it('unregisterCustomWidget for unknown type does not throw', () => {
-    const widgetRegistry = new WidgetPluginRegistry();
+    const widgetRegistry = new WidgetDefinitionRegistry();
     const Wrapper = createWrapper(widgetRegistry);
     const { result } = renderHook(() => useCustomWidgets(), { wrapper: Wrapper });
 
@@ -91,11 +91,11 @@ describe('useCustomWidgets', () => {
   });
 
   it('unregisterCustomWidget does not remove plugin-sourced widgets', () => {
-    const widgetRegistry = new WidgetPluginRegistry();
+    const widgetRegistry = new WidgetDefinitionRegistry();
     const Wrapper = createWrapper(widgetRegistry);
     const pluginWidget = vi.fn(() => null);
 
-    widgetRegistry.register('plugin-only', pluginWidget, 'plugin');
+    widgetRegistry.registerComponent('plugin-only', pluginWidget, 'plugin');
 
     const { result } = renderHook(() => useCustomWidgets(), { wrapper: Wrapper });
 
@@ -106,7 +106,7 @@ describe('useCustomWidgets', () => {
   });
 
   it('allows registering a new legacy widget after unregister', () => {
-    const widgetRegistry = new WidgetPluginRegistry();
+    const widgetRegistry = new WidgetDefinitionRegistry();
     const Wrapper = createWrapper(widgetRegistry);
     const widgetA: CustomWidgetComponent = vi.fn(() => null);
     const widgetB: CustomWidgetComponent = vi.fn(() => null);

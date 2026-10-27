@@ -10,11 +10,59 @@ import { parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
+import { isConditionalColor } from '../../shared/utils/conditional-color.js';
 import { toNlqErrorInput } from '../../shared/utils/translation-helpers.js';
 import type { MeasureItemJSON, StyledMeasureColumnJSON } from '../../types.js';
 
 /** Runtime StyledMeasureColumn: wrapper with column and optional style (from chart dataOptions) */
 type StyledMeasureColumn = { column: Measure; sortType?: SortDirection; [key: string]: unknown };
+
+/**
+ * Replaces each formula-driven color condition's `valueMeasure` with its parsed function call, so
+ * the threshold measure stays a `FunctionCall` in JSON instead of a serialized class instance.
+ *
+ * @param color - The `color` style of a measure column.
+ * @param path - Error path of the `color` style, such as `measures[0].color`.
+ * @returns The color style with JSON-safe condition measures, or an error per invalid condition.
+ */
+function translateColorConditionMeasuresToJSON(
+  color: unknown,
+  path: string,
+): NlqTranslationResult<unknown> {
+  if (!isConditionalColor<{ valueMeasure?: Measure }>(color)) return { success: true, data: color };
+  const errors: NlqTranslationError[] = [];
+  const conditions = color.conditions.map((condition, index) => {
+    const valueMeasure = condition?.valueMeasure;
+    if (!valueMeasure) return condition;
+    const conditionPath = `${path}.conditions[${index}].valueMeasure`;
+    const name = valueMeasure.name || 'unnamed';
+    if (!valueMeasure.composeCode) {
+      errors.push({
+        path: conditionPath,
+        input: toNlqErrorInput(valueMeasure),
+        message: `Measure (${name}) is missing composeCode`,
+      });
+      return condition;
+    }
+    try {
+      return {
+        ...condition,
+        valueMeasure: parseComposeCodeToFunctionCall(valueMeasure.composeCode),
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      errors.push({
+        path: conditionPath,
+        input: toNlqErrorInput(valueMeasure),
+        message: `Failed to parse composeCode for measure (${name}): ${errorMessage}. ComposeCode: '${valueMeasure.composeCode}'`,
+      });
+      return condition;
+    }
+  });
+  return errors.length > 0
+    ? { success: false, errors }
+    : { success: true, data: { ...color, conditions } };
+}
 
 function isStyledMeasureColumn(item: unknown): item is StyledMeasureColumn {
   return (
@@ -57,6 +105,16 @@ export function translateMeasuresToJSON(
       return;
     }
 
+    const colorResult = translateColorConditionMeasuresToJSON(
+      styledItem?.color,
+      `measures[${index}].color`,
+    );
+    if (!colorResult.success) {
+      errors.push(...colorResult.errors);
+      return;
+    }
+    const color = colorResult.data as JSONValue | undefined;
+
     try {
       const functionCall = parseComposeCodeToFunctionCall(measure.composeCode);
       // Prefer StyledMeasureColumn.sortType when present (sort lives on wrapper, not on measure)
@@ -72,6 +130,7 @@ export function translateMeasuresToJSON(
 
       if (hasStyle) {
         const style = styledItem ? (omit(styledItem, 'column') as Record<string, JSONValue>) : {};
+        if (color !== undefined) style.color = color;
         const styled: StyledMeasureColumnJSON = {
           column: functionCall,
           ...(sort !== undefined &&

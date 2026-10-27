@@ -1,10 +1,10 @@
 import { createAttribute, DimensionalLevelAttribute } from '../attributes/attributes.js';
 import * as attributeFactory from '../attributes/factory.js';
 import { createDateDimension } from '../dimensions/index.js';
-import { Filter } from '../interfaces.js';
+import type { Filter } from '../interfaces.js';
 import * as measureFactory from '../measures/factory.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
-import { DateLevels } from '../types.js';
+import { DateLevels, type FilterJaql } from '../types.js';
 import * as filterFactory from './factory.js';
 import {
   createFilter,
@@ -1078,11 +1078,87 @@ describe('measure filters on a date measure', () => {
 
     expect(itemOf(filter)).toMatchObject({
       dim: '[Table.Date]',
-      agg: 'max',
+      formula: 'max([Operand])',
       datatype: 'datetime',
       filter: { members: ['2013-01-01T00:00:00'] },
     });
+    expect(itemOf(filter).agg).toBeUndefined();
     expect(filter.jaql().panel).toBe('scope');
+  });
+
+  /* The aggregation form has one `level`, which the filter level overwrites, and the server then
+     aggregates the filter over the filter-level column. The formula form keeps the operand's own
+     level in its context, which is the shape Fusion sends. */
+  it('keeps the measure level in the formula context, apart from the filter level', () => {
+    const item = itemOf(
+      filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00']),
+    );
+
+    expect(item.context['[Operand]']).toMatchObject({ dim: '[Table.Date]', level: 'days' });
+    expect(item.level).toBe('years');
+  });
+
+  it('tells a max over days from a max over months filtered at the same level', () => {
+    const lastMonth = measureFactory.max(dateDim.Months, 'Last Order Month');
+    const byDays = itemOf(
+      filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00']),
+    );
+    const byMonths = itemOf(
+      filterFactory.dateMeasureMembers(lastMonth, dateDim.Years, ['2013-01-01T00:00:00']),
+    );
+
+    expect(byDays.context['[Operand]'].level).toBe('days');
+    expect(byMonths.context['[Operand]'].level).toBe('months');
+  });
+
+  it('rewrites a min the same way as a max', () => {
+    const firstOrder = measureFactory.min(dateDim.Days, 'First Order');
+    const item = itemOf(
+      filterFactory.dateMeasureMembers(firstOrder, dateDim.Years, ['2013-01-01T00:00:00']),
+    );
+
+    expect(item.formula).toBe('min([Operand])');
+    expect(item.context['[Operand]'].level).toBe('days');
+  });
+
+  /* The base filter restores `agg` from the original filter jaql before the measure keys are
+     written, so a formula item would carry both and the server would read the aggregation. */
+  it('drops an agg restored from the original filter jaql once the measure is a formula', () => {
+    const item = itemOf(
+      filterFactory.dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00'], {
+        originalFilterJaql: { agg: 'max' } as FilterJaql,
+      }),
+    );
+
+    expect(item.formula).toBe('max([Operand])');
+    expect(item.agg).toBeUndefined();
+  });
+
+  it('sends a formula measure as it is', () => {
+    const formula = measureFactory.customFormula('Last Order', 'max([D])', { D: dateDim.Days });
+    const item = itemOf(
+      filterFactory.dateMeasureMembers(formula, dateDim.Years, ['2013-01-01T00:00:00']),
+    );
+
+    expect(item.formula).toBe('max([D])');
+    expect(item.context['[D]'].level).toBe('days');
+    expect(item.level).toBe('years');
+  });
+
+  it.each([
+    ['dateMeasureRelativeFrom', filterFactory.dateMeasureRelativeFrom, 'next'],
+    ['dateMeasureRelativeTo', filterFactory.dateMeasureRelativeTo, 'last'],
+  ])('%s sends a formula measure as it is', (_name, build, operator) => {
+    const formula = measureFactory.customFormula('Last Order', 'max([D])', { D: dateDim.Days });
+    const item = itemOf(build(formula, dateDim.Years, 0, 1, '2013-06-01'));
+
+    expect(item.formula).toBe('max([D])');
+    expect(item.context['[D]'].level).toBe('days');
+    expect(item.level).toBe('years');
+    expect(item.agg).toBeUndefined();
+    expect(item.filter).toStrictEqual({
+      [operator]: { offset: 0, count: 1, anchor: '2013-06-01' },
+    });
   });
 
   it('negates the members through the config, in the exclude shape Fusion uses', () => {
@@ -1110,7 +1186,8 @@ describe('measure filters on a date measure', () => {
     const item = itemOf(build(lastOrder, dateDim.Years, 0, 1, '2013-06-01'));
 
     expect(item.level).toBe('years');
-    expect(item.agg).toBe('max');
+    expect(item.formula).toBe('max([Operand])');
+    expect(item.context['[Operand]'].level).toBe('days');
     expect(item.filter).toStrictEqual({
       [operator]: { offset: 0, count: 1, anchor: '2013-06-01' },
     });
@@ -1328,7 +1405,7 @@ describe('measure filters on a date measure', () => {
     ]);
 
     expect(filter.jaql(true).level).toBe('years');
-    expect(filter.jaql(true).agg).toBe('max');
+    expect(filter.jaql(true).formula).toBe('max([Operand])');
   });
 
   /* Deserialization stays unguarded, like `aggregateWithoutDateGuards`: a dashboard saved before
@@ -1342,6 +1419,18 @@ describe('measure filters on a date measure', () => {
       .serialize();
 
     expect(() => createFilter({ ...saved, [key]: value() })).not.toThrow();
+  });
+
+  /* Only a date measure is rewritten as a formula, so a rebuilt filter holding a number measure is
+     sent as it always was. */
+  it('sends a rebuilt filter on a number measure in the aggregation form', () => {
+    const saved = filterFactory
+      .dateMeasureMembers(lastOrder, dateDim.Years, ['2013-01-01T00:00:00'])
+      .serialize();
+    const item = itemOf(createFilter({ ...saved, measure: revenue.serialize() }));
+
+    expect(item.agg).toBe('sum');
+    expect(item.formula).toBeUndefined();
   });
 });
 

@@ -32,16 +32,16 @@ export interface FunctionCall {
 } // | FunctionCall | ArgArray | ArgObject
 ```
 
-Factory-name prefixes baked into the generated code (compose-code-utils.ts:110-165) — parsers dispatch on these verbatim strings:
+Factory-name prefixes baked into the generated code (compose-code-utils.ts:115-175) — parsers dispatch on these verbatim strings:
 
 ```text
 filterFactory.<fn>(...)        filterFactory.logic.<fn>(...)
 measureFactory.<fn>(...)       attributeFactory.<fn>(...)      analyticsFactory.<fn>(...)
 ```
 
-Generation rules (`withComposeCode`, compose-code-utils.ts:74): trailing `undefined` args are trimmed; a trailing `''`/`{}`/`undefined`/`null` arg is dropped; `guid` keys are excluded from stringified objects (:83); nested elements contribute their own `composeCode` verbatim (:36-38); `Date` becomes `new Date('<iso>')` (:27); the explicit `funcName` argument exists because minification breaks `func.name`.
+Generation rules (`withComposeCode`, compose-code-utils.ts:83): trailing `undefined` args are trimmed; a trailing `''`/`{}`/`undefined`/`null` arg is dropped; `guid` keys are excluded from stringified objects (:92); nested elements contribute their own `composeCode` verbatim (:45-47); `Date` becomes `new Date('<iso>')` (:37); string values and quoted object keys escape `\` before `'` (`escapeStringLiteral`, :10), so a value ending in a backslash cannot close its quote and inject calls; the explicit `funcName` argument exists because minification breaks `func.name`.
 
-Parsing rules: `DM.*` references stay strings even when they contain parentheses (parse-compose-code.ts:354); other `(`-containing values parse as nested `FunctionCall`s (:359); string literals accept both `\'` and `''` escapes (:221); splitting respects `()[]{}` nesting and quoted strings (:49).
+Parsing rules: `DM.*` references stay strings even when they contain parentheses (parse-compose-code.ts:354); other `(`-containing values parse as nested `FunctionCall`s (:359); string literals accept `\'`, `''` and `\\` escapes, unescaped in one pass (:221); splitting respects `()[]{}` nesting and quoted strings (:49).
 
 # How it connects
 
@@ -52,7 +52,7 @@ Parsing rules: `DM.*` references stay strings even when they contain parentheses
 # Invariants and traps
 
 1. `composeCode` must remain an executable factory call — parsers resolve `FunctionCall.function` against the factory namespaces above, so renaming or re-nesting a public factory function breaks round-tripping of previously persisted code.
-2. Always pass the explicit `funcName` when wrapping a factory function; relying on `func.name` breaks under minified builds (compose-code-utils.ts:71).
+2. Always pass the explicit `funcName` when wrapping a factory function; relying on `func.name` breaks under minified builds (compose-code-utils.ts:79).
 3. `composeCode` describes the element AT CREATION. Any transformation must clear or regenerate it — formula-filter transformers drop it deliberately (see [filters](./filters.md)); stale code silently regenerates the old element.
 4. `parseComposeCodeToFunctionCall` throws on non-string, empty, or non-call input (:242-:256) — callers must guard elements that never had `composeCode` (e.g. deserialized from JAQL).
 5. `parseObject` drops entries whose value parses to `null` (:395); `guid` never appears in generated object args, so parsed configs are guid-less by design.

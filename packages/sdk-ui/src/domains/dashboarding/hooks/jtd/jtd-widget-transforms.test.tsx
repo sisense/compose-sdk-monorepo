@@ -1,14 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as widgetUtils from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { WidgetHeaderTargets } from '@/domains/widgets/shared/widget-header/widget-header-targets';
-import { PivotTableDataPoint } from '@/types';
+import type { BeforeRenderHandler, HighchartsOptions } from '@/props';
+import type { PivotTableDataPoint } from '@/types';
 
 import * as jtdFormatters from './jtd-formatters.js';
 import * as jtdHandlers from './jtd-handlers.js';
 import * as jtdMenu from './jtd-menu.js';
-import { JtdWidgetTransformConfig } from './jtd-types.js';
+import { JTD_APPLICABLE_WIDGET_KEYS } from './jtd-supported-widget-keys.js';
+import type { JtdWidgetTransformConfig } from './jtd-types.js';
 import {
   addJtdIconToHeader,
   addPointerCursorToChart,
@@ -55,6 +57,11 @@ vi.mock('./jtd-formatters', () => ({
   isPivotClickHandlerActionable: vi.fn(),
   getPivotTargetActionability: vi.fn(),
 }));
+
+const cursorOf = (widgetProps: WidgetProps) =>
+  (widgetProps as { onBeforeRender?: BeforeRenderHandler }).onBeforeRender?.(
+    {} as HighchartsOptions,
+  )?.plotOptions?.series?.cursor;
 
 describe('jtd-widget-transforms', () => {
   const mockChartWidgetProps: WidgetProps = {
@@ -153,7 +160,7 @@ describe('jtd-widget-transforms', () => {
       const result = addPointerCursorToChart(mockChartWidgetProps);
 
       expect(result).not.toBe(mockChartWidgetProps);
-      expect((result as any).plotOptions?.series?.cursor).toBe('pointer');
+      expect(cursorOf(result)).toBe('pointer');
     });
 
     it('should return unchanged props for unsupported chart types', () => {
@@ -165,44 +172,42 @@ describe('jtd-widget-transforms', () => {
       expect(result).toBe(unsupportedChart);
     });
 
-    it('should preserve existing plotOptions when adding cursor', () => {
+    it('should keep existing Highcharts options and run the widget onBeforeRender after the cursor', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
-      const existingPlotOptions = {
-        plotOptions: {
-          series: { pointWidth: 20 },
-          column: { borderWidth: 1 },
-        },
+      const onBeforeRender = vi.fn((options: HighchartsOptions) => ({
+        ...options,
+        title: { text: 'from widget' },
+      }));
+      const chartWithHandler = { ...mockChartWidgetProps, onBeforeRender } as WidgetProps;
+
+      const result = addPointerCursorToChart(chartWithHandler) as {
+        onBeforeRender?: BeforeRenderHandler;
       };
-      const chartWithPlotOptions = { ...mockChartWidgetProps, ...existingPlotOptions };
+      const options = result.onBeforeRender?.({
+        plotOptions: { series: { animation: false }, column: { borderWidth: 1 } },
+      } as HighchartsOptions);
 
-      const result = addPointerCursorToChart(chartWithPlotOptions);
-
-      expect((result as any).plotOptions?.series?.cursor).toBe('pointer');
-      expect((result as any).plotOptions?.series?.pointWidth).toBe(20);
-      expect((result as any).plotOptions?.column?.borderWidth).toBe(1);
+      expect(onBeforeRender).toHaveBeenCalledWith(
+        expect.objectContaining({
+          plotOptions: expect.objectContaining({
+            series: expect.objectContaining({ cursor: 'pointer' }),
+          }),
+        }),
+      );
+      expect(options?.plotOptions?.series).toEqual({ animation: false, cursor: 'pointer' });
+      expect(options?.plotOptions?.column).toEqual({ borderWidth: 1 });
+      expect(options?.title).toEqual({ text: 'from widget' });
     });
 
-    it('should support all defined chart types', () => {
-      const supportedTypes = [
-        'line',
-        'area',
-        'column',
-        'bar',
-        'pie',
-        'funnel',
-        'scatter',
-        'bubble',
-      ];
-
-      supportedTypes.forEach((chartType) => {
+    it.each(JTD_APPLICABLE_WIDGET_KEYS.filter((key) => !['pivot', 'text'].includes(key)))(
+      'should add cursor pointer for the chart type %s',
+      (chartType) => {
         vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
-        const chartProps = { ...mockChartWidgetProps, chartType: chartType as any };
+        const chartProps = { ...mockChartWidgetProps, chartType } as WidgetProps;
 
-        const result = addPointerCursorToChart(chartProps);
-
-        expect((result as any).plotOptions?.series?.cursor).toBe('pointer');
-      });
-    });
+        expect(cursorOf(addPointerCursorToChart(chartProps))).toBe('pointer');
+      },
+    );
   });
 
   describe('applyClickNavigationForChart', () => {
@@ -458,14 +463,28 @@ describe('jtd-widget-transforms', () => {
       expect(jtdIconItemOf(result)).toBeDefined();
     });
 
-    it('should return unchanged props for non-supported widgets (text, custom)', () => {
-      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
-      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(false);
-
-      const result = addJtdIconToHeader(mockChartWidgetProps);
-
-      expect(result).toBe(mockChartWidgetProps);
+    it('should switch on the built-in JTD icon header item for text widgets', () => {
+      expect(jtdIconItemOf(addJtdIconToHeader(mockTextWidgetProps))).toBeDefined();
     });
+
+    it.each(['funnel', 'treemap', 'table', 'kpi'])(
+      'should switch on the built-in JTD icon header item for %s chart widgets',
+      (chartType) => {
+        const widget = { ...mockChartWidgetProps, chartType } as WidgetProps;
+        expect(jtdIconItemOf(addJtdIconToHeader(widget))).toBeDefined();
+      },
+    );
+
+    it.each<WidgetProps>([
+      { id: 'filter-1', widgetType: 'filter' } as WidgetProps,
+      { id: 'narrative-1', widgetType: 'narrative' } as WidgetProps,
+      { id: 'custom-1', widgetType: 'custom', customWidgetType: 'my-widget' } as WidgetProps,
+    ])(
+      'should return unchanged props for widgets JTD does not apply to ($widgetType)',
+      (widget) => {
+        expect(addJtdIconToHeader(widget)).toBe(widget);
+      },
+    );
 
     it('should switch on the built-in JTD icon header item for pivot widgets', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);

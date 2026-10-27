@@ -2,6 +2,8 @@ Rename a data input across all plugin files.
 
 The user will specify: the current input name and the new name.
 
+> **Only before the plugin is used in saved dashboards.** The input `name` is the key saved widgets store their items under. Renaming it in a plugin that dashboards already use detaches the saved data: the items load under the old name while the plugin reads the new one. In that case, keep the `name` and change only `displayName`, which is just the label shown in the editor. Ask the user which case applies before renaming.
+
 **All four source files must be updated atomically** — a partial rename leaves TypeScript errors and a runtime mismatch between `dataPanel.config.inputs[].name` and the `DataOptions` key.
 
 ## Files to change

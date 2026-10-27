@@ -226,6 +226,98 @@ describe('without actions', () => {
   });
 });
 
+/** Before a narrative exists, a host can point the user at the AI context option in its menu. */
+describe('AI context hint', () => {
+  it('suggests adding AI context beside the idle action, with the option name in bold', async () => {
+    setup(<Narrative state={{ status: 'idle' }} aiContextHint />);
+
+    const hint = await screen.findByTestId('csdk-narrative-ai-context-hint');
+    expect(hint).toHaveTextContent('For better performance,add AI Context');
+    expect(hint.querySelector('strong')).toHaveTextContent('AI Context');
+    expect(screen.getByTestId('csdk-narrative-generate')).toBeTruthy();
+  });
+
+  describe('beside the generate action', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    /** Lays the generate action out at 233–415 px and the hint text from `textLeft`, both 16–44 px high. */
+    const layOut = (textLeft: number) => {
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+        this: HTMLElement,
+      ) {
+        const box = (left: number, right: number) =>
+          ({ left, right, top: 16, bottom: 44, width: right - left, height: 28 } as DOMRect);
+        if (this.dataset.testid === 'csdk-narrative-generate') return box(233, 415);
+        if (this.parentElement?.dataset.testid === 'csdk-narrative-ai-context-hint') {
+          return box(textLeft, textLeft + 215);
+        }
+        return box(0, 648);
+      });
+    };
+
+    it('hides the hint while its text would come within 16 px of the action', async () => {
+      layOut(390);
+      setup(<Narrative state={{ status: 'idle' }} aiContextHint />);
+
+      expect(await screen.findByTestId('csdk-narrative-ai-context-hint')).toHaveStyle({
+        visibility: 'hidden',
+      });
+    });
+
+    it('re-measures when the action stack changes, as when a quota line joins it', async () => {
+      setup(<Narrative state={{ status: 'idle' }} aiContextHint />);
+      const action = await screen.findByTestId('csdk-narrative-generate');
+      const hintText = screen.getByTestId('csdk-narrative-ai-context-hint').firstElementChild;
+
+      const observedByHint = vi
+        .mocked(ResizeObserver)
+        .mock.results.map(({ value }) => value.observe.mock.calls.map((call: unknown[]) => call[0]))
+        .find((nodes: unknown[]) => nodes.includes(hintText));
+      expect(observedByHint).toContain(action.parentElement);
+    });
+
+    it('shows the hint when its text keeps clear of the action', async () => {
+      layOut(431);
+      setup(<Narrative state={{ status: 'idle' }} aiContextHint />);
+
+      expect(await screen.findByTestId('csdk-narrative-ai-context-hint')).toHaveStyle({
+        visibility: 'visible',
+      });
+    });
+  });
+
+  it('keeps the hint alongside the quota warning', async () => {
+    setup(
+      <Narrative state={{ status: 'idle' }} aiContextHint quotaWarning={{ usagePercentage: 87 }} />,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-ai-context-hint')).toBeTruthy();
+    expect(screen.getByTestId('csdk-narrative-quota-warning')).toBeTruthy();
+  });
+
+  it('shows no hint unless asked, once a narrative exists, on an error, or without actions', async () => {
+    const cases = [
+      <Narrative key="not asked" state={{ status: 'idle' }} />,
+      <Narrative key="ready" state={readyState} aiContextHint />,
+      <Narrative key="failed" state={{ status: 'error', kind: 'failed' }} aiContextHint />,
+      <Narrative
+        key="quota-exceeded"
+        state={{ status: 'error', kind: 'quota-exceeded' }}
+        aiContextHint
+      />,
+      <Narrative key="no actions" state={{ status: 'idle' }} aiContextHint showActions={false} />,
+    ];
+    for (const ui of cases) {
+      const { unmount } = setup(ui);
+      expect(await screen.findByTestId('csdk-narrative')).toBeTruthy();
+      expect(screen.queryByTestId('csdk-narrative-ai-context-hint')).toBeNull();
+      unmount();
+    }
+  });
+});
+
 /** The footer stays one line at any width; the disclaimer is the part that gives way. */
 describe('footer disclaimer', () => {
   it('keeps the footer on one line and cuts the disclaimer with an ellipsis', async () => {

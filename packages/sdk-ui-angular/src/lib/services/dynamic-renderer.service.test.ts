@@ -2,7 +2,7 @@
 import { ApplicationRef, EnvironmentInjector, Injector } from '@angular/core';
 import { type PreactNode } from '@sisense/sdk-ui-preact/internal';
 import { BehaviorSubject, of } from 'rxjs';
-import { beforeEach, describe, expect, it, type Mocked, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, type Mocked, vi } from 'vitest';
 
 import { DynamicRenderer } from './dynamic-renderer.service';
 import { type PreactComponent, wrapInAngularComponent } from './preact-backed-component';
@@ -19,6 +19,10 @@ const preactStub: PreactComponent<{ label: string }> = (props) =>
  */
 describe('DynamicRenderer', () => {
   let renderer: DynamicRenderer;
+
+  // Preact runs effects after the next paint, on a 35 ms timer under jsdom; they must fire before
+  // the test environment is torn down, which removes `cancelAnimationFrame` they call.
+  afterAll(() => new Promise((resolve) => setTimeout(resolve, 50)));
 
   beforeEach(() => {
     // the context services are mocked: constructing the real ones initializes a Sisense app,

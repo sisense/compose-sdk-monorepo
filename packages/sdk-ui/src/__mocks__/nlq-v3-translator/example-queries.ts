@@ -569,3 +569,57 @@ export const SAMPLE_ECOMMERCE_QUERY_WITH_STYLED_CALCULATED_DIMENSION: QueryJSON 
     },
   ],
 };
+
+const SAMPLE_ECOMMERCE_LAST_ORDER = {
+  function: 'measureFactory.max',
+  args: ['DM.Commerce.Date.Days', 'Last Order'],
+};
+
+/** Categories whose last order fell in 2012 or 2013 (date-measure members filter) */
+export const SAMPLE_ECOMMERCE_DATE_MEASURE_MEMBERS_QUERY: QueryJSON = {
+  dimensions: ['DM.Category.Category'],
+  measures: [SAMPLE_ECOMMERCE_LAST_ORDER],
+  filters: [
+    {
+      function: 'filterFactory.dateMeasureMembers',
+      args: [
+        SAMPLE_ECOMMERCE_LAST_ORDER,
+        'DM.Commerce.Date.Years',
+        ['2012-01-01T00:00:00', '2013-01-01T00:00:00'],
+      ],
+    },
+  ],
+};
+
+/** Categories whose last order fell in the year up to 1 June 2013 (date-measure relative filter) */
+export const SAMPLE_ECOMMERCE_DATE_MEASURE_RELATIVE_QUERY: QueryJSON = {
+  dimensions: ['DM.Category.Category'],
+  measures: [SAMPLE_ECOMMERCE_LAST_ORDER],
+  filters: [
+    {
+      function: 'filterFactory.dateMeasureRelativeTo',
+      args: [SAMPLE_ECOMMERCE_LAST_ORDER, 'DM.Commerce.Date.Years', 0, 1, '2013-06-01'],
+    },
+  ],
+};
+
+/** Revenue by month, filtered on two levels of one date column (years 2013, months March) */
+export const SAMPLE_ECOMMERCE_MULTI_LEVEL_DATE_FILTERS_QUERY: QueryJSON = {
+  dimensions: ['DM.Commerce.Date.Months'],
+  measures: [
+    {
+      function: 'measureFactory.sum',
+      args: ['DM.Commerce.Revenue', 'Total Revenue'],
+    },
+  ],
+  filters: [
+    {
+      function: 'filterFactory.members',
+      args: ['DM.Commerce.Date.Years', ['2013-01-01T00:00:00']],
+    },
+    {
+      function: 'filterFactory.members',
+      args: ['DM.Commerce.Date.Months', ['2013-03-01T00:00:00']],
+    },
+  ],
+};

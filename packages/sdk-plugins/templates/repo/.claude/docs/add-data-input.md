@@ -4,6 +4,8 @@ The user will specify: input name, display name, whether it is a dimension or me
 
 Make the following changes in order:
 
+> **Add the new input at the end of the `inputs` list.** Once the plugin is used in saved dashboards, never insert an input before existing ones: hosts may restore an input's settings by its position, so an inserted input shifts the ones after it.
+
 ## 1. `src/index.tsx` — add to `dataPanel.config.inputs`
 
 ```tsx

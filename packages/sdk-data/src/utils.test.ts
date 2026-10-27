@@ -348,6 +348,28 @@ describe('utils', () => {
       expect(expectedFilter.config.backgroundFilter).toBeDefined();
     });
 
+    test('should keep disabled and locked state of a filter with inner background filter', () => {
+      const jaql = {
+        table: 'Category',
+        column: 'Category',
+        dim: '[Category.Category]',
+        datatype: 'text' as DataType,
+        filter: {
+          members: ['Cell Phones'],
+          filter: { members: ['Cell Phones', 'Cameras'] },
+        },
+        title: 'Category',
+      };
+
+      const filter = createFilterFromJaql(jaql, instanceid, true, true);
+
+      expect(filter.config).toMatchObject({
+        disabled: true,
+        locked: true,
+        backgroundFilter: expect.anything(),
+      });
+    });
+
     test('should preserve agg from original JAQL in members filter output', () => {
       const jaql = {
         table: 'Commerce',

@@ -3,7 +3,8 @@ import { ChartType } from '@/index';
 /**
  * Widget type
  *
- * todo: as a future refactoring need to replace this type by combination of WidgetType and ChartType
+ * `BuiltInWidgetKey` (`domains/widgets/widget-identity`) covers the built-in types including
+ * `'filter'`, without `'custom'`; prefer it in new code. This type is kept for existing consumers.
  *
  * @internal
  */

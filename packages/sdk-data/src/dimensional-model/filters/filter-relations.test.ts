@@ -1,30 +1,31 @@
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes/attributes.js';
 import { createDateDimension } from '../dimensions/index.js';
-import { FilterRelations, FilterRelationsJaql, FilterRelationsModel } from '../interfaces.js';
+import type { FilterRelations, FilterRelationsJaql, FilterRelationsModel } from '../interfaces.js';
 import * as measureFactory from '../measures/factory.js';
-import { DateLevels } from '../types.js';
+import { DateLevels, Sort } from '../types.js';
 import * as filterFactory from './factory.js';
+import type { FilterRelationsRule } from './filter-relations.js';
 import {
   calculateNewRelations,
   combineFiltersAndRelations,
   convertFilterRelationsModelToJaql,
   convertFilterRelationsModelToRelationRules,
   filterRelationRulesToFilterRelationsModel,
-  FilterRelationsRule,
   findFilterByGuid,
   getFilterCompareId,
   getFilterRelationsFromJaql,
   getFiltersArray,
+  getMeasureCompareId,
   getRelationsWithReplacedFilter,
   isFilterRelations,
   mergeFilters,
   mergeFiltersOrFilterRelations,
   splitFiltersAndRelations,
 } from './filter-relations.js';
-import { CascadingFilter, MembersFilter } from './filters.js';
+import { CascadingFilter, isRankingFilter, MembersFilter } from './filters.js';
 import { createFilterFromJaqlInternal } from './utils/filter-from-jaql-util.js';
-import { FilterJaqlInternal } from './utils/types.js';
+import type { FilterJaqlInternal } from './utils/types.js';
 
 // Two distinct calculated-dimension (formula) filters. They become generic pass-through filters
 // with no attribute expression and no `dim`, so they must be told apart by their formula.
@@ -952,5 +953,125 @@ describe('measure filters keep their own identity', () => {
     );
 
     expect(mergeFilters([maxDate], [sameAgain])).toHaveLength(1);
+  });
+});
+
+describe('getMeasureCompareId', () => {
+  const revenue = new DimensionalAttribute('Revenue', '[Commerce.Revenue]');
+  const cost = new DimensionalAttribute('Cost', '[Commerce.Cost]');
+  const date = createDateDimension({ name: 'Date', expression: '[Commerce.Date]' });
+
+  const rankingMeasureFromJaql = (by: Record<string, unknown>) => {
+    const filter = createFilterFromJaqlInternal(
+      {
+        table: 'Brand',
+        column: 'Brand',
+        datatype: 'text',
+        title: 'Top 5 Brand by measure',
+        dim: '[Brand.Brand]',
+        filter: { top: 5, by },
+      } as unknown as FilterJaqlInternal,
+      'ranking-guid',
+    );
+    if (!isRankingFilter(filter)) throw new Error('expected a ranking filter');
+    return filter.measure;
+  };
+
+  it('should be the same for one measure however it is titled, formatted or sorted', () => {
+    const plain = measureFactory.sum(revenue);
+    const dressed = measureFactory.sum(revenue, 'Total').format('0.0a').sort(Sort.Descending);
+
+    expect(getMeasureCompareId(dressed)).toBe(getMeasureCompareId(plain));
+  });
+
+  it('should tell apart measures that differ in aggregation or attribute', () => {
+    const base = getMeasureCompareId(measureFactory.sum(revenue));
+
+    expect(getMeasureCompareId(measureFactory.average(revenue))).not.toBe(base);
+    expect(getMeasureCompareId(measureFactory.sum(cost))).not.toBe(base);
+  });
+
+  it('should tell apart one date attribute aggregated at different levels', () => {
+    expect(getMeasureCompareId(measureFactory.countDistinct(date.Years))).not.toBe(
+      getMeasureCompareId(measureFactory.countDistinct(date.Months)),
+    );
+  });
+
+  describe('calculated measures', () => {
+    const formula = (context: Record<string, unknown>, expression = 'SUM([a]) / SUM([b])') =>
+      measureFactory.customFormula('Ratio', expression, context as never);
+
+    it('should ignore the name and the order of the context entries', () => {
+      const first = formula({
+        '[a]': measureFactory.sum(revenue),
+        '[b]': measureFactory.sum(cost),
+      });
+      const second = measureFactory.customFormula('Other name', 'SUM([a]) / SUM([b])', {
+        '[b]': measureFactory.sum(cost),
+        '[a]': measureFactory.sum(revenue),
+      });
+
+      expect(getMeasureCompareId(second)).toBe(getMeasureCompareId(first));
+    });
+
+    it('should tell apart a different expression or a different context entry', () => {
+      const context = { '[a]': measureFactory.sum(revenue), '[b]': measureFactory.sum(cost) };
+      const base = getMeasureCompareId(formula(context));
+
+      expect(getMeasureCompareId(formula(context, 'SUM([a]) * SUM([b])'))).not.toBe(base);
+      expect(
+        getMeasureCompareId(formula({ ...context, '[b]': measureFactory.average(cost) })),
+      ).not.toBe(base);
+    });
+
+    it('should read attributes held in the context as well as measures', () => {
+      const byRevenue = formula({ '[a]': revenue }, 'COUNT([a])');
+      const byCost = formula({ '[a]': cost }, 'COUNT([a])');
+
+      expect(getMeasureCompareId(byRevenue)).not.toBe(getMeasureCompareId(byCost));
+    });
+  });
+
+  describe('against a measure rebuilt from a stored ranking filter', () => {
+    // The rebuilt measure is titled with the ranking message, which the original never carries.
+    it('should match a base measure', () => {
+      const rebuilt = rankingMeasureFromJaql({
+        table: 'Commerce',
+        column: 'Revenue',
+        datatype: 'numeric',
+        dim: '[Commerce.Revenue]',
+        agg: 'sum',
+      });
+
+      expect(getMeasureCompareId(rebuilt)).toBe(getMeasureCompareId(measureFactory.sum(revenue)));
+    });
+
+    it('should match a base measure over a date level', () => {
+      const rebuilt = rankingMeasureFromJaql({
+        table: 'Commerce',
+        column: 'Date',
+        datatype: 'datetime',
+        dim: '[Commerce.Date]',
+        level: 'years',
+        agg: 'count',
+      });
+
+      expect(getMeasureCompareId(rebuilt)).toBe(
+        getMeasureCompareId(measureFactory.countDistinct(date.Years)),
+      );
+      expect(getMeasureCompareId(rebuilt)).not.toBe(
+        getMeasureCompareId(measureFactory.countDistinct(date.Months)),
+      );
+    });
+
+    it('should match a calculated measure', () => {
+      const rebuilt = rankingMeasureFromJaql({
+        formula: 'SUM([a])',
+        context: { '[a]': { table: 'Commerce', column: 'Revenue', dim: '[Commerce.Revenue]' } },
+      });
+      const original = measureFactory.customFormula('Weighted', 'SUM([a])', { '[a]': revenue });
+
+      expect(getMeasureCompareId(rebuilt)).toBe(getMeasureCompareId(original));
+    });
   });
 });

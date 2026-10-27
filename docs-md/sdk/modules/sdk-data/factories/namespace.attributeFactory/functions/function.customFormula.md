@@ -7,7 +7,8 @@ title: customFormula
 > **customFormula**(
   `title`,
   `formula`,
-  `context`): [`Attribute`](../../../interfaces/interface.Attribute.md)
+  `context`,
+  `dataType`?): [`Attribute`](../../../interfaces/interface.Attribute.md)
 
 Creates a calculated attribute (a formula-based [Attribute](../../../interfaces/interface.Attribute.md)) from a valid custom formula.
 
@@ -22,7 +23,8 @@ include string functions (for example `Concat`, `Left`, `Right`) and conditional
 (`IF`, `CASE`).
 See full list of supported [dashboard functions](https://docs.sisense.com/main/SisenseLinux/dashboard-functions-reference.htm#String) for calculated attributes.
 
-Only `text` data type is supported for calculated attributes.
+Pass `dataType` when the result type is known, for example a `CASE` that returns numbers, so
+filters on the attribute compare values correctly.
 
 ## Parameters
 
@@ -31,6 +33,7 @@ Only `text` data type is supported for calculated attributes.
 | `title` | `string` | Title of the calculated attribute to be displayed |
 | `formula` | `string` | Formula used to compute the attribute's values |
 | `context` | [`CustomFormulaContext`](../../../interfaces/interface.CustomFormulaContext.md) | Formula context as a map of names to attributes (and, in advanced cases, measures or filters) |
+| `dataType`? | [`CalculatedAttributeDataType`](../../../type-aliases/type-alias.CalculatedAttributeDataType.md) | Optional JAQL data type of the formula's result (`text`, `numeric` or `datetime`); when omitted, the query client resolves it at query time |
 
 ## Returns
 

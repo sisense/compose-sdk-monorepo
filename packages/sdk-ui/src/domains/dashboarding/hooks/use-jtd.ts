@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import { type Filter } from '@sisense/sdk-data';
 
-import { WidgetsOptions } from '@/domains/dashboarding/dashboard-model/types';
+import type { WidgetsOptions } from '@/domains/dashboarding/dashboard-model/types';
 import { normalizeToJtdConfig } from '@/domains/dashboarding/hooks/jtd/jtd-config-transformers';
+import { isJtdApplicableWidget } from '@/domains/dashboarding/hooks/jtd/jtd-supported-widget-keys';
 import {
   type JtdActions,
   type JtdWidgetTransformConfig,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import { JtdConfig } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type { JtdConfig } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 // Import JTD-specific functions and types
 import {
   addJtdIconToHeader,
@@ -25,8 +26,8 @@ import {
   isPivotTableWidgetProps,
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetProps } from '@/domains/widgets/components/widget/types';
-import { OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
+import type { WidgetProps } from '@/domains/widgets/components/widget/types';
+import type { OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
 import { useModal } from '@/infra/contexts/modal-provider/use-modal';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
@@ -35,6 +36,9 @@ import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default
 /**
  * Shared function to apply JTD functionality to a widget.
  * Extracted to avoid code duplication between use-jtd.ts and use-jtd-widget.ts
+ *
+ * Widgets whose type is not in the JTD run-time list (see `isJtdApplicableWidget`) are returned
+ * unchanged.
  *
  * @param widgetProps - The widget props to enhance
  * @param config - JTD application configuration
@@ -61,7 +65,11 @@ export const applyJtdToWidget = (
     hyperlinkColor = getDefaultThemeSettings().typography.hyperlinkColor,
   } = config;
 
-  if (!normalizedJtdConfig.enabled || !normalizedJtdConfig.jumpTargets?.length) {
+  if (
+    !normalizedJtdConfig.enabled ||
+    !normalizedJtdConfig.jumpTargets?.length ||
+    !isJtdApplicableWidget(widgetProps)
+  ) {
     return widgetProps;
   }
 
@@ -98,11 +106,7 @@ export const applyJtdToWidget = (
   }
 
   // Add JTD icon if configured
-  if (
-    normalizedJtdConfig.showJtdIcon &&
-    updatedProps.widgetType !== 'text' &&
-    updatedProps.widgetType !== 'narrative'
-  ) {
+  if (normalizedJtdConfig.showJtdIcon) {
     updatedProps = addJtdIconToHeader(updatedProps);
   }
 

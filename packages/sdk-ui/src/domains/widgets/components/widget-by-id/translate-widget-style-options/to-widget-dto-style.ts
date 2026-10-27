@@ -104,7 +104,9 @@ export function toLegendStyle(legend?: LegendOptions): CartesianWidgetStyle['leg
 
 /**
  * Maps SDK axis label options to Fusion DTO axis style.
- * Fields not stored in SDK (ticks, inactive) use sensible defaults.
+ * Fields not stored in SDK (`inactive`, `ticks`, `labels.rotation`) use Fusion defaults; a
+ * widget loaded from Fusion gets its original values back from the partial DTO snapshot
+ * (see `applyPartialDtoStyle`).
  *
  * @internal
  */
@@ -478,7 +480,8 @@ export function withWidgetDesign(
 
 /**
  * Maps SDK pie chart style options to Fusion PieWidgetStyle (DTO).
- * Inverse of {@link extractPieChartStyleOptions}.
+ * Inverse of {@link extractPieChartStyleOptions}. The pie model has no navigator, so a
+ * default one is written; the original is restored from the partial DTO snapshot.
  *
  * @param styleOptions - Pie style options from WidgetModel.styleOptions
  * @returns Fusion PieWidgetStyle for the widget DTO
@@ -502,7 +505,9 @@ export function toPieWidgetStyle(styleOptions: PieStyleOptions): WidgetStyle {
 
 /**
  * Maps SDK indicator style options to Fusion IndicatorWidgetStyle (DTO).
- * Inverse of {@link extractIndicatorChartStyleOptions}.
+ * Inverse of {@link extractIndicatorChartStyleOptions}. The `inactive` flags and the
+ * `secondaryTitle` component are not in the model, so Fusion defaults are written; the
+ * originals are restored from the partial DTO snapshot.
  *
  * @param styleOptions - Indicator style options from WidgetModel.styleOptions
  * @returns Fusion IndicatorWidgetStyle for the widget DTO

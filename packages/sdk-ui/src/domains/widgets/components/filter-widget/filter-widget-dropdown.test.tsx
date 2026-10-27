@@ -6,6 +6,8 @@ import {
   type DimensionalLevelAttribute,
   filterFactory,
   isLevelAttribute,
+  isRankingFilter,
+  measureFactory,
   type MembersFilter,
   Sort,
 } from '@sisense/sdk-data';
@@ -294,6 +296,36 @@ vi.mock('./components', () => ({
       </div>
     );
   },
+  // The Rank control. Stubbed to what it is handed and what it reports back, so the
+  // dropdown's own seed rule and publish path are what the tests exercise.
+  RankFilter: ({
+    attribute,
+    rankBy,
+    filter,
+    onFilterUpdate,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test stub only reads the props it renders
+  any) => (
+    <div
+      data-testid="rank-filter-mock"
+      data-ranked-by={rankBy?.name ?? ''}
+      data-filter-type={filter?.filterType ?? ''}
+      data-attribute-level={attribute?.granularity ?? ''}
+    >
+      <button
+        data-testid="rank-apply"
+        onClick={() => onFilterUpdate(filterFactory.topRanking(attribute, rankBy, 5))}
+      />
+      <button
+        data-testid="rank-apply-months"
+        onClick={() =>
+          onFilterUpdate(
+            filterFactory.topRanking(createLevelAttribute(attribute, DateLevels.Months), rankBy, 5),
+          )
+        }
+      />
+      <button data-testid="rank-clear" onClick={() => onFilterUpdate(null)} />
+    </div>
+  ),
   // The calendar. Stubbed to what it reports back and the bounds it was handed, so the
   // dropdown's own publish path is what the tests exercise.
   DatePickerFilter: ({
@@ -685,9 +717,191 @@ describe('FilterWidgetDropdown', () => {
 
     expect(onFilterUpdate).toHaveBeenCalledTimes(1);
     expect(onDateLevelChange).toHaveBeenCalledTimes(1);
-    const leveled = onDateLevelChange.mock.calls[0]![0];
+    const leveled = onDateLevelChange.mock.calls[0][0];
     expect(isLevelAttribute(leveled) && leveled.granularity).toBe('Days');
     expect(order).toEqual(['filter', 'level']);
+  });
+
+  describe('filter-widget-rank.unit:dropdown', () => {
+    const rankBy = measureFactory.customFormula('Weighted Revenue', 'SUM([rev]) * 2', {
+      rev: DM.Commerce.Revenue,
+    });
+    const numericAttribute = createAttribute({
+      name: 'Quantity',
+      expression: '[Commerce.Quantity]',
+      type: 'numeric',
+    });
+
+    it.each([
+      ['text', textAttribute],
+      ['numeric', numericAttribute],
+      ['datetime', DM.Commerce.Date.Years],
+    ])('renders the Rank control for a %s attribute', (_kind, attribute) => {
+      const { getByTestId, queryByTestId } = render(
+        <FilterWidgetDropdown attribute={attribute} filterType="rank" rankBy={rankBy} />,
+      );
+
+      expect(getByTestId('filter-widget-rank').getAttribute('data-filter-type')).toBe('rank');
+      expect(getByTestId('rank-filter-mock')).toBeInTheDocument();
+      expect(queryByTestId('filter-widget-dropdown')).toBeNull();
+      expect(queryByTestId('filter-widget-condition')).toBeNull();
+    });
+
+    it('hands the control the measure to rank by', () => {
+      const { getByTestId } = render(
+        <FilterWidgetDropdown attribute={textAttribute} filterType="rank" rankBy={rankBy} />,
+      );
+
+      expect(getByTestId('rank-filter-mock').getAttribute('data-ranked-by')).toBe(
+        'Weighted Revenue',
+      );
+    });
+
+    it('follows the level of an applied ranking when the attribute lags behind it', () => {
+      const { getByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={DM.Commerce.Date.Years}
+          filterType="rank"
+          rankBy={rankBy}
+          filter={filterFactory.topRanking(DM.Commerce.Date.Months, rankBy, 3)}
+        />,
+      );
+
+      expect(getByTestId('rank-filter-mock').getAttribute('data-attribute-level')).toBe('Months');
+    });
+
+    it('asks for no members and is ready at once', () => {
+      const onReady = vi.fn();
+      render(
+        <FilterWidgetDropdown
+          attribute={textAttribute}
+          filterType="rank"
+          rankBy={rankBy}
+          onReady={onReady}
+        />,
+      );
+
+      expect(activeMemberQueries()).toEqual([]);
+      expect(onReady).toHaveBeenCalledTimes(1);
+    });
+
+    it('ignores multi-select', () => {
+      const { getByTestId, queryByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={textAttribute}
+          filterType="rank"
+          rankBy={rankBy}
+          isMultiselect={false}
+        />,
+      );
+
+      expect(getByTestId('rank-filter-mock')).toBeInTheDocument();
+      expect(queryByTestId('single-select')).toBeNull();
+      expect(queryByTestId('multi-select')).toBeNull();
+    });
+
+    it('publishes a ranking filter on Apply and include-all on clear', () => {
+      const onFilterUpdate = vi.fn();
+      const { getByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={textAttribute}
+          filterType="rank"
+          rankBy={rankBy}
+          onFilterUpdate={onFilterUpdate}
+        />,
+      );
+
+      fireEvent.click(getByTestId('rank-apply'));
+      fireEvent.click(getByTestId('rank-clear'));
+
+      expect(onFilterUpdate).toHaveBeenCalledTimes(2);
+      expect(isRankingFilter(onFilterUpdate.mock.calls[0]?.[0])).toBe(true);
+      expect(onFilterUpdate.mock.calls[1]?.[0]).toBeNull();
+    });
+
+    it('reports dateLevel after filter when Apply moves the level', () => {
+      const order: string[] = [];
+      const onDateLevelChange = vi.fn<(attribute: Attribute) => void>(() => {
+        order.push('level');
+      });
+      const onFilterUpdate = vi.fn(() => {
+        order.push('filter');
+      });
+      const { getByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={DM.Commerce.Date.Years}
+          filterType="rank"
+          rankBy={rankBy}
+          onDateLevelChange={onDateLevelChange}
+          onFilterUpdate={onFilterUpdate}
+        />,
+      );
+
+      fireEvent.click(getByTestId('rank-apply-months'));
+
+      expect(order).toEqual(['filter', 'level']);
+      const leveled = onDateLevelChange.mock.calls[0]?.[0];
+      expect(leveled && isLevelAttribute(leveled) && leveled.granularity).toBe('Months');
+    });
+
+    it('does not report a level change when Apply stays on the host level', () => {
+      const onDateLevelChange = vi.fn();
+      const { getByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={DM.Commerce.Date.Years}
+          filterType="rank"
+          rankBy={rankBy}
+          onDateLevelChange={onDateLevelChange}
+          onFilterUpdate={vi.fn()}
+        />,
+      );
+
+      fireEvent.click(getByTestId('rank-apply'));
+
+      expect(onDateLevelChange).not.toHaveBeenCalled();
+    });
+
+    it('reads a leftover members selection or include-all as a blank seed', () => {
+      const members = filterFactory.members(textAttribute, ['France']);
+      const { getByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={textAttribute}
+          filterType="rank"
+          rankBy={rankBy}
+          filter={members}
+        />,
+      );
+
+      expect(getByTestId('rank-filter-mock').getAttribute('data-filter-type')).toBe('');
+    });
+
+    it('hands an applied ranking filter to the control', () => {
+      const ranking = filterFactory.topRanking(textAttribute, rankBy, 3);
+      const { getByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={textAttribute}
+          filterType="rank"
+          rankBy={rankBy}
+          filter={ranking}
+        />,
+      );
+
+      expect(getByTestId('rank-filter-mock').getAttribute('data-filter-type')).toBe('ranking');
+    });
+
+    it('shows a note, not an empty control, for a filter it cannot read', () => {
+      const { getByTestId, queryByTestId } = render(
+        <FilterWidgetDropdown
+          attribute={textAttribute}
+          filterType="rank"
+          rankBy={rankBy}
+          filter={filterFactory.contains(textAttribute, 'fra')}
+        />,
+      );
+
+      expect(getByTestId('filter-widget-rank-unsupported')).toBeInTheDocument();
+      expect(queryByTestId('rank-filter-mock')).toBeNull();
+    });
   });
 
   it('keeps the members List UI when filterType is members (default)', () => {
@@ -2142,6 +2356,7 @@ describe('FilterWidgetDropdown — calendar', () => {
       DM.Commerce.Date.Years as DimensionalLevelAttribute,
       DateLevels.Days,
       // The same interpolation the i18n mock above does, so the level's title matches.
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- tsc needs this cast; lint's type info disagrees
       ((key: string, options?: { columnName?: string }) =>
         options?.columnName ? `${key}(${options.columnName})` : key) as never,
     );
@@ -2150,6 +2365,7 @@ describe('FilterWidgetDropdown — calendar', () => {
        that ever built its payload by hand — dropping the config, ordering the members
        differently, adding a clause of its own — fails here. */
     const fromList = withMembersFilterSelection(
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- tsc needs this cast; lint's type info disagrees
       filterFactory.members(dayAttribute, [], {
         guid: fromCalendar.config.guid,
         enableMultiSelection: fromCalendar.config.enableMultiSelection,

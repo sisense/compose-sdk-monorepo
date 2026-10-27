@@ -6,13 +6,28 @@
 import { Attribute, MetadataTypes } from '@sisense/sdk-data';
 
 /**
+ * Gets the result data type of a calculated attribute; text when it has none.
+ *
+ * @param attribute - The attribute to inspect.
+ * @returns The data type, or undefined when the attribute is not calculated.
+ */
+function getCalculatedAttributeDataType(attribute: Attribute): string | undefined {
+  if (!MetadataTypes.isCalculatedAttribute(attribute)) return undefined;
+  const dataType = 'dataType' in attribute ? attribute.dataType : undefined;
+  return typeof dataType === 'string' ? dataType : 'text';
+}
+
+/**
  * Validates that an attribute is compatible with text values
  *
  * @param attribute - The attribute to validate
  * @returns True if the attribute is a text type
  */
 export function isTextAttribute(attribute: Attribute): boolean {
-  return attribute.type === MetadataTypes.TextAttribute;
+  return (
+    attribute.type === MetadataTypes.TextAttribute ||
+    getCalculatedAttributeDataType(attribute) === 'text'
+  );
 }
 
 /**
@@ -22,7 +37,10 @@ export function isTextAttribute(attribute: Attribute): boolean {
  * @returns True if the attribute is a numeric type
  */
 export function isNumericAttribute(attribute: Attribute): boolean {
-  return attribute.type === MetadataTypes.NumericAttribute;
+  return (
+    attribute.type === MetadataTypes.NumericAttribute ||
+    getCalculatedAttributeDataType(attribute) === 'numeric'
+  );
 }
 
 /**
@@ -70,5 +88,5 @@ export function getAttributeTypeDisplayString(attribute: Attribute): string {
     ? 'numeric'
     : attribute.type === MetadataTypes.DateLevel
     ? 'date/datetime'
-    : 'unknown';
+    : getCalculatedAttributeDataType(attribute) ?? 'unknown';
 }

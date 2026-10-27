@@ -1,5 +1,37 @@
 # Log
 
+## 2026-10-23
+
+- **Removed**: the `sdk-ui` and `sdk-shared-ui` UMD bundles (`src/index.umd.ts` and the UMD build scripts). A host that loads Compose SDK as a script builds its own bundles from the package entries; invariant 9 says so for `sdk-ui`. Recorded in [architecture overview](./architecture/overview.md).
+
+## 2026-10-22
+
+- **Update**: `attributeFactory.customFormula`'s `dataType` is now the public `CalculatedAttributeDataType` (`text`, `numeric`, `datetime`); the values and an `isCalculatedAttributeDataType` guard live in `types.ts`. Re-anchored the shifted `types.ts` lines in [core elements](./sdk-data/core-elements.md).
+
+## 2026-10-21
+
+- **Fix**: rebuilding a widget's Fusion `style` (e.g. on duplicate) no longer resets Fusion-only values to defaults. `applyPartialDtoStyle` now layers the unsupported-style snapshot over the rebuilt style, and `extractUnsupportedStyleOptions` holds only fields the model does not capture: it stops snapshotting boxplot `whisker` / `outliers`, pivot grand totals and calendar `view/monthly`, and now snapshots the active indicator `components.*.inactive` and `icon` / `secondaryTitle`, the variant blocks' `subtype` / `skin`, and the pie `navigator`. Recorded in [dashboard model](./sdk-ui-dashboarding/dashboard-model.md).
+
+## 2026-10-20
+
+- **Update**: `attributeFactory.customFormula` takes an optional 4th `dataType`, and a calculated dimension's JAQL carries `datatype` only when known. `createCalculatedAttribute` now builds `attributeFactory.customFormula(...)` compose code and reads an untyped non-aggregating formula in its context as a nested calculated dimension. Re-anchored the shifted `attributes.ts` and `factory.ts` lines. Recorded in [attributes and dimensions](./sdk-data/attributes-and-dimensions.md).
+- **Fix**: compose-code strings now escape backslashes before quotes, and the parser unescapes `\\`, so a value ending in a backslash can no longer close its quote and inject factory calls. Re-anchored the shifted `compose-code-utils.ts` lines. Recorded in [compose code](./sdk-data/compose-code.md).
+
+## 2026-10-19
+
+- **Fix**: the JTD pointer cursor is now set through the widget's `onBeforeRender` chain; it used to be a top-level `plotOptions` prop that no renderer reads, so no chart showed it. Non-Highcharts renderers (maps, indicator, KPI, table) still get no JTD cursor. Recorded in [jump to dashboard](./sdk-ui-dashboarding/jump-to-dashboard.md).
+- **Fix**: Jump To Dashboard now has two named widget type lists in `jtd-supported-widget-keys.ts`. The loading list `JTD_SUPPORTED_WIDGET_KEYS` is unchanged and mirrors the Fusion Jump to Dashboard add-on. The new run-time list `JTD_APPLICABLE_WIDGET_KEYS` (every built-in chart type plus pivot and text) is read through `isJtdApplicableWidget` by click handling, the pointer cursor and the header icon, which used to keep lists of their own. No widget type loses JTD. Every chart that renders through Highcharts options now gets the pointer cursor in click mode (scatter map, area map, indicator, KPI and table do not), the text widget now gets the JTD icon, and the old cursor list (which named the non-existent chart type `bubble`) is gone. Re-anchored the shifted `use-jtd.ts` and `jtd-widget-transforms.tsx` anchors. Recorded in [jump to dashboard](./sdk-ui-dashboarding/jump-to-dashboard.md).
+- **Fix**: `useWidgetUpdatesPersistence` applies the navigator scroller branch only to chart widgets (`isChartWidgetProps`), so a plugin whose own `styleOptions` include `navigator` keeps its `visualizationState/changed` persistence; the optimistic apply now also merges a plugin's `navigator` style key. Re-anchored the shifted `use-widget-updates-persistence.ts` references. Recorded in [persistence manager](./sdk-ui-dashboarding/persistence-manager.md) and [widget actions](./sdk-ui-dashboarding/widget-actions.md).
+- **Update**: sdk-data gains `getMeasureCompareId` (`@internal`), the measure counterpart of `getAttributeCompareId`: a base measure is its attribute's compare id plus its aggregation, a calculated measure is its expression plus its sorted context entries, and titles, formats and sort are ignored, so a measure rebuilt from a stored ranking filter (titled with its ranking message) equals the original. Re-anchored the `filter-relations.ts` references, which shifted by the new imports and helper. Recorded in [filter relations](./sdk-data/filter-relations.md).
+
+## 2026-10-16
+
+- **Update**: FilterWidget gains a `'rank'` type (Top / Bottom N by a designer-fixed measure). `isReadableAdoption` now adopts only a `RankingFilter` (or include-all) for `'rank'`, and `'condition'` no longer adopts a `RankingFilter`, which it cannot show and whose next Apply would overwrite. Refreshed the shifted `filter-widget-connector.ts` anchors in the adoption paragraph. Recorded in [common filters](./sdk-ui-dashboarding/common-filters.md).
+
+## 2026-10-14
+
+- **Fix**: the date-measure members and relative-period filters now send a `min`/`max` aggregation in formula form (`formula` + `context`), so the measure keeps its own level and the filter level stays at the top. Before, both shared the aggregation's one `level`, and the server aggregated the filter over the filter-level column. Re-anchored the shifted `filters.ts` anchors. Recorded in [filters](./sdk-data/filters.md).
+
 ## 2026-10-12
 
 - **Update**: the two non-public `sdk-ui` API levels are served only by entry points of their own. The barrels moved from `src/public-api/{internal,sisense-internal}.ts` to `src/modules/internal/public-api/internal.ts` (`@sisense/sdk-ui/internal`) and `src/modules/sisense-internal/public-api/sisense-internal.ts` (`@sisense/sdk-ui/sisense-internal`). The package root and the `./query` subpath no longer export either level; the in-company UMD entry re-exports both, so its global is unchanged. `./internal` also re-exports the `query` module's internal tier, for now; per-module internal sub-entries (e.g. `@sisense/sdk-ui/query/internal`) are the long-term plan. Added invariant 9 (each entry exports only its own level, checked by `yarn public-api-check`; the rules for these entries are in the structure guideline, §9), extended invariants 3 and 7, and re-anchored invariant 4, which pointed at a stale `eslint.config.mjs` line. `useDashboardModel` is now also `@sisenseInternal`. Re-anchored the barrel references in the dashboarding docs, plus the shifted `use-dashboard-model.ts` anchors. Recorded in [architecture overview](./architecture/overview.md) and [sdk-ui dashboarding overview](./sdk-ui-dashboarding/overview.md).

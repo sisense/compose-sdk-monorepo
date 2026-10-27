@@ -303,8 +303,6 @@ export const translateQueryFromJSON = (
 
   const queryDatetimeErrors = validateQueryDatetimeConsistency({
     dimensions: adaptedDimensions,
-    filters: filters || [],
-    highlights: highlights ?? null,
   });
   if (queryDatetimeErrors.length > 0) {
     return {

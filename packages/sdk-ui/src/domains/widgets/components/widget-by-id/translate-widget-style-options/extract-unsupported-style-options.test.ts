@@ -102,7 +102,7 @@ describe('extractUnsupportedStyleOptions', () => {
   });
 
   describe('chart/boxplot', () => {
-    it('extracts axes plus outliers/whisker gaps', () => {
+    it('extracts axes but not outliers/whisker, which the model carries in dataOptions', () => {
       const style = {
         xAxis: { ticks: true },
         yAxis: { inactive: false, labels: { rotation: 0 } },
@@ -116,12 +116,6 @@ describe('extractUnsupportedStyleOptions', () => {
       expect(extractUnsupportedStyleOptions('chart/boxplot', style)).toEqual({
         xAxis: { ticks: true },
         yAxis: { inactive: false, labels: { rotation: 0 } },
-        outliers: { enabled: true },
-        whisker: {
-          'whisker/iqr': true,
-          'whisker/extremums': false,
-          'whisker/deviation': false,
-        },
       });
     });
 
@@ -198,6 +192,16 @@ describe('extractUnsupportedStyleOptions', () => {
         labels: { fontFamily: 'Arial' },
       });
     });
+
+    it('extracts navigator, which the pie model does not carry', () => {
+      const style = {
+        legend: { enabled: true, position: 'bottom' },
+        navigator: { enabled: true },
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('chart/pie', style)).toEqual({
+        navigator: { enabled: true },
+      });
+    });
   });
 
   describe('sunburst', () => {
@@ -217,6 +221,29 @@ describe('extractUnsupportedStyleOptions', () => {
   });
 
   describe('indicator', () => {
+    it('extracts the Fusion-only fields of the active components, not the modeled enabled flags', () => {
+      const style = {
+        subtype: 'round',
+        skin: '1',
+        components: {
+          ticks: { inactive: true, enabled: true },
+          labels: { inactive: false, enabled: false },
+          title: { inactive: true, enabled: false },
+          icon: { inactive: false, enabled: false },
+          secondaryTitle: { inactive: false, enabled: false },
+        },
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('indicator', style)).toEqual({
+        components: {
+          ticks: { inactive: true },
+          labels: { inactive: false },
+          title: { inactive: true },
+          icon: { inactive: false, enabled: false },
+          secondaryTitle: { inactive: false, enabled: false },
+        },
+      });
+    });
+
     it('extracts variant-keyed components.* gap fields', () => {
       const style = {
         subtype: 'simple',
@@ -239,6 +266,7 @@ describe('extractUnsupportedStyleOptions', () => {
         },
       } as unknown as WidgetStyle;
       expect(extractUnsupportedStyleOptions('indicator', style)).toEqual({
+        components: { title: { inactive: false } },
         'indicator/numeric': {
           components: {
             title: { inactive: true, enabled: false },
@@ -257,6 +285,23 @@ describe('extractUnsupportedStyleOptions', () => {
       });
     });
 
+    it('keeps the subtype and skin of a variant block', () => {
+      const style = {
+        'indicator/numeric': {
+          subtype: 'simple',
+          skin: '2',
+          components: { icon: { inactive: true, enabled: false } },
+        },
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('indicator', style)).toEqual({
+        'indicator/numeric': {
+          subtype: 'simple',
+          skin: '2',
+          components: { icon: { inactive: true, enabled: false } },
+        },
+      });
+    });
+
     it('skips a variant key when its components object is missing', () => {
       const style = {
         'indicator/numeric': {
@@ -271,22 +316,40 @@ describe('extractUnsupportedStyleOptions', () => {
       });
       expect(result).not.toHaveProperty('indicator/gauge');
     });
+
+    it.each([
+      ['no components object', { subtype: 'round', skin: '1' }],
+      ['components without picked flags', { subtype: 'round', skin: '1', components: {} }],
+    ])('keeps the subtype and skin of a variant block with %s', (_, variant) => {
+      const style = { 'indicator/gauge': variant } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('indicator', style)).toEqual({
+        'indicator/gauge': { subtype: 'round', skin: '1' },
+      });
+    });
+
+    it('skips a variant block with neither subtype, skin nor component flags', () => {
+      const style = { 'indicator/gauge': { components: {} } } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('indicator', style)).not.toHaveProperty(
+        'indicator/gauge',
+      );
+    });
   });
 
   describe('pivot / pivot2', () => {
-    it.each(['pivot', 'pivot2'] as const)('extracts grand totals + scroll for %s', (widgetType) => {
-      const style = {
-        rowsGrandTotal: true,
-        columnsGrandTotal: false,
-        scroll: true,
-        colors: { rows: true },
-      } as unknown as WidgetStyle;
-      expect(extractUnsupportedStyleOptions(widgetType, style)).toEqual({
-        rowsGrandTotal: true,
-        columnsGrandTotal: false,
-        scroll: true,
-      });
-    });
+    it.each(['pivot', 'pivot2'] as const)(
+      'extracts scroll but not grand totals, which the model carries in dataOptions, for %s',
+      (widgetType) => {
+        const style = {
+          rowsGrandTotal: true,
+          columnsGrandTotal: false,
+          scroll: true,
+          colors: { rows: true },
+        } as unknown as WidgetStyle;
+        expect(extractUnsupportedStyleOptions(widgetType, style)).toEqual({
+          scroll: true,
+        });
+      },
+    );
   });
 
   describe('tablewidget / tablewidgetagg', () => {
@@ -329,7 +392,7 @@ describe('extractUnsupportedStyleOptions', () => {
   });
 
   describe('heatmap (calendar)', () => {
-    it('extracts orient/* and view/monthly', () => {
+    it('extracts orient/* but not view/monthly, which the model carries as subtype', () => {
       const style = {
         'orient/horizontal': true,
         'orient/vertical': false,
@@ -339,7 +402,6 @@ describe('extractUnsupportedStyleOptions', () => {
       expect(extractUnsupportedStyleOptions('heatmap', style)).toEqual({
         'orient/horizontal': true,
         'orient/vertical': false,
-        'view/monthly': true,
       });
     });
   });

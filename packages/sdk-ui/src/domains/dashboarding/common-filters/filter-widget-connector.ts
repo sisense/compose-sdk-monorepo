@@ -3,6 +3,7 @@ import {
   filterFactory,
   isIncludeAllMembersFilter,
   isMembersFilter,
+  isRankingFilter,
   isRelativeDateFilter,
 } from '@sisense/sdk-data';
 
@@ -55,6 +56,11 @@ function canAdoptFilter(existing: Filter, incoming: Filter): boolean {
  * `isMembersFilter`, so a persisted Time Frame selection reloads as a stranger tile
  * (unlinked, no selection in the widget) even though widget attribute and filter attribute
  * match on expression + granularity.
+ *
+ * Rank publishes a `RankingFilter` and nothing else, so it adopts only that exact shape (or
+ * include-all). Condition's "any non-members" excludes a `RankingFilter` for the same reason in
+ * reverse: Condition cannot show a ranking, and adopting one would let its next Apply or clear
+ * overwrite a ranking some other hand created.
  */
 function isReadableAdoption(
   candidate: Filter,
@@ -65,7 +71,8 @@ function isReadableAdoption(
     return isInclusiveDateRangeFilter(candidate) || isEditableNumberRangeFilter(candidate);
   }
   if (filterType === 'period') return isRelativeDateFilter(candidate);
-  if (filterType === 'condition') return !isMembersFilter(candidate);
+  if (filterType === 'rank') return isRankingFilter(candidate);
+  if (filterType === 'condition') return !isMembersFilter(candidate) && !isRankingFilter(candidate);
   return isMembersFilter(candidate);
 }
 

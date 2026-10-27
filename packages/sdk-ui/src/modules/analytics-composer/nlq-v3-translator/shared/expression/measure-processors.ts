@@ -17,6 +17,39 @@ function extractAttribute(processedArgs: ProcessedArg[], context: FunctionContex
 }
 
 /**
+ * Throws when the aggregated attribute is a calculated dimension, which the engine cannot aggregate.
+ *
+ * @param attribute - The attribute being aggregated.
+ * @param context - Processing context with error prefix.
+ * @throws Error when the attribute is a calculated dimension.
+ */
+function rejectCalculatedDimension(attribute: Attribute, context: FunctionContext): void {
+  if (MetadataTypes.isCalculatedAttribute(attribute)) {
+    throw new Error(
+      `${context.pathPrefix}args[0]: Cannot aggregate a calculated dimension; use a column or a measure formula`,
+    );
+  }
+}
+
+/**
+ * Validates that an aggregated attribute is not a calculated dimension.
+ * Used by: min, max, count, countDistinct and aggregate.
+ *
+ * @param processedArgs - Processed arguments where args[0] is the attribute.
+ * @param context - Processing context with error prefix and other metadata.
+ * @returns Same `processedArgs` reference when validation succeeds.
+ * @throws Error when the attribute is a calculated dimension.
+ * @internal
+ */
+export function processAttributeMeasure(
+  processedArgs: ProcessedArg[],
+  context: FunctionContext,
+): ProcessedArg[] {
+  rejectCalculatedDimension(extractAttribute(processedArgs, context), context);
+  return processedArgs;
+}
+
+/**
  * Validates that the first argument is a numeric attribute.
  * Used by: sum, average, avg, stdev, variance, median
  *
@@ -35,6 +68,7 @@ export function processNumericMeasure(
   context: FunctionContext,
 ): ProcessedArg[] {
   const attribute = extractAttribute(processedArgs, context);
+  rejectCalculatedDimension(attribute, context);
 
   if (!isNumericAttribute(attribute)) {
     throw new Error(

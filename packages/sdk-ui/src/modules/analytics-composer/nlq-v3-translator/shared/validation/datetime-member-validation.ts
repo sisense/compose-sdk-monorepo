@@ -33,7 +33,7 @@ export function validateDatetimeMemberStrings(
 
   if (granularity === DateLevels.WeekOfYear) {
     throw new Error(
-      `${argPath(pathPrefix, 'args[0]')}: filterFactory.members does not support WeekOfYear. Use ${
+      `${argPath(pathPrefix, 'args[0]')}: members filters do not support WeekOfYear. Use ${
         DateLevels.Weeks
       } with ISO week-start datetimes instead.`,
     );

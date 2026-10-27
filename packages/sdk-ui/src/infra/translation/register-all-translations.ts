@@ -30,10 +30,11 @@ const ALL_TRANSLATIONS = [
 /**
  * Adds every locale dictionary shipped with the package to the shared i18next instance.
  *
- * For builds that have no `translations/*` subpath exports (the UMD bundle), so their host
- * cannot pass the dictionaries through `translationConfig.customTranslations`.
+ * For a runtime bundle that a host builds from the package entries. The entries register English
+ * only, and a page that loads the bundle as a script cannot pass dictionaries through
+ * `translationConfig.customTranslations`, so the bundle calls this once instead.
  *
- * @internal
+ * @sisenseInternal
  */
 export function registerAllTranslations(): void {
   for (const { language, namespace, resources } of ALL_TRANSLATIONS) {

@@ -10,6 +10,7 @@ describe('filterWidgetFilterTypeLabels', () => {
       range: 'Range',
       period: 'Time Frame',
       condition: 'Condition',
+      rank: 'Rank',
     });
   });
 });

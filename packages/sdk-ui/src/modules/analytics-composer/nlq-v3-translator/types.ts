@@ -24,6 +24,11 @@ import {
   SeriesStyle,
   ValueStyle,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
+import type {
+  ConditionalDataColorOptions,
+  DataColorCondition,
+  DataColorOptions,
+} from '@/domains/visualizations/core/chart-data/data-coloring/types.js';
 import type { NarrativeWidgetStyleOptions } from '@/domains/widgets/components/narrative-widget/types.js';
 import type { ChartWidgetConfig, WidgetType } from '@/domains/widgets/components/widget/types.js';
 import type {
@@ -234,10 +239,31 @@ export interface StyledColumnJSON extends CategoryStyle {
  *
  * @internal
  */
-export interface StyledMeasureColumnJSON extends ValueStyle, SeriesStyle {
+export interface StyledMeasureColumnJSON extends Omit<ValueStyle, 'color'>, SeriesStyle {
   /** Measure definition (function/args), e.g. { function: "measureFactory.sum", args: [...] } */
   column: FunctionCall;
+  /** Color options, where a conditional rule's threshold measure is a function call. */
+  color?: DataColorOptionsJSON;
 }
+
+/**
+ * JSON form of {@link DataColorCondition}, where the threshold measure of a formula-driven
+ * condition is a function call such as `measureFactory.average` over `DM.Commerce.Cost`.
+ *
+ * @internal
+ */
+export type DataColorConditionJSON = Omit<DataColorCondition, 'valueMeasure'> & {
+  valueMeasure?: FunctionCall;
+};
+
+/**
+ * JSON form of {@link DataColorOptions}, with conditional rules as {@link DataColorConditionJSON}.
+ *
+ * @internal
+ */
+export type DataColorOptionsJSON =
+  | Exclude<DataColorOptions, ConditionalDataColorOptions>
+  | (Omit<ConditionalDataColorOptions, 'conditions'> & { conditions?: DataColorConditionJSON[] });
 
 /**
  * Dimension item in query JSON: plain composeCode string, styled column, or a function call for a

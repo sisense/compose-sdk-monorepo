@@ -1,5 +1,14 @@
-import { type PointerEvent, type Ref, useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import {
+  type PointerEvent,
+  type Ref,
+  type RefObject,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
 import Markdown from 'markdown-to-jsx';
@@ -45,6 +54,12 @@ const CARD_BORDERS_PX = 2;
  */
 const INSIGHTS_STACK_BREAKPOINT_PX = INSIGHTS_ROW_MIN_WIDGET_PX - CARD_BORDERS_PX - 2 * GAP_PX;
 
+/** The design hides the AI context hint on a widget narrower than this. */
+const AI_CONTEXT_HINT_MIN_WIDGET_PX = 650;
+
+/** Content-box width below which the AI context hint is hidden, measured as for the insights row. */
+const AI_CONTEXT_HINT_BREAKPOINT_PX = AI_CONTEXT_HINT_MIN_WIDGET_PX - CARD_BORDERS_PX - 2 * GAP_PX;
+
 /** Mark size from the design. */
 const ICON_PX = 16;
 
@@ -72,6 +87,7 @@ export function formatNarrativeTimestamp(
 }
 
 const Body = styled.div<Themable & { hasFooter: boolean }>`
+  position: relative;
   box-sizing: border-box;
   container: narrative / inline-size;
   display: flex;
@@ -316,6 +332,121 @@ const QuotaIcon = styled.span`
   }
 `;
 
+// Anchors the AI context hint to the content's top-right corner, so the arrow stays under the host
+// header's three-dot menu whatever the widget width. Hidden by visibility, not display, while it would
+// crowd the generate action, so it can still be measured.
+const AiContextHintArea = styled.div<Themable & { isCrowded: boolean }>`
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: ${({ theme }) => theme.typography.secondaryTextColor};
+  pointer-events: none;
+  visibility: ${({ isCrowded }) => (isCrowded ? 'hidden' : 'visible')};
+
+  @container narrative (width < ${AI_CONTEXT_HINT_BREAKPOINT_PX}px) {
+    display: none;
+  }
+`;
+
+const AiContextHintText = styled.div`
+  position: absolute;
+  top: 17px;
+  right: 52px;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  white-space: nowrap;
+
+  strong {
+    font-weight: 600;
+  }
+`;
+
+const AiContextHintArrow = styled.svg`
+  position: absolute;
+  top: 8px;
+  right: 18px;
+`;
+
+/**
+ * Whether two boxes come closer than `gap` side by side while sharing a horizontal band. Boxes
+ * with no size, such as hidden or not yet laid out ones, never crowd anything.
+ * @param a - One box.
+ * @param b - The other box.
+ * @param gap - Least horizontal distance that keeps them apart.
+ * @returns `true` when they are too close.
+ */
+function isCrowding(a: DOMRect, b: DOMRect, gap: number): boolean {
+  if (a.width === 0 || b.width === 0) return false;
+  const sharesBand = a.top < b.bottom && b.top < a.bottom;
+  return sharesBand && a.left < b.right + gap && b.left < a.right + gap;
+}
+
+type AiContextHintProps = {
+  /** The idle action stack; its first child is the generate action the hint must keep clear of. */
+  actions: RefObject<HTMLElement | null>;
+};
+
+/**
+ * Suggests adding AI context, with an arrow up to the three-dot menu that offers it. Hidden while its
+ * text would come closer than the design's gap to the generate action — a long translation on a
+ * widget just above the width breakpoint.
+ * @param props - Component props.
+ * @returns The hint.
+ * @internal
+ */
+function AiContextHint(props: AiContextHintProps) {
+  const { actions } = props;
+  const { t } = useTranslation();
+  const { themeSettings } = useThemeContext();
+  const areaRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isCrowded, setIsCrowded] = useState(false);
+
+  useLayoutEffect(() => {
+    const text = textRef.current;
+    // The narrative body: resizing it moves both the hint and the action.
+    const body = areaRef.current?.parentElement;
+    // The stack: a quota line joining or leaving it moves the action without resizing it.
+    const stack = actions.current;
+    const action = stack?.firstElementChild;
+    if (!text || !body || !stack || !action) return;
+    const measure = () =>
+      setIsCrowded(
+        isCrowding(text.getBoundingClientRect(), action.getBoundingClientRect(), GAP_PX),
+      );
+    measure();
+    const observer = new ResizeObserver(measure);
+    [body, text, stack, action].forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, [actions]);
+
+  return (
+    <AiContextHintArea
+      ref={areaRef}
+      theme={themeSettings}
+      isCrowded={isCrowded}
+      data-testid="csdk-narrative-ai-context-hint"
+    >
+      <AiContextHintText ref={textRef}>
+        <Trans t={t} i18nKey="narrativeWidget.aiContextHint" />
+      </AiContextHintText>
+      <AiContextHintArrow
+        width="36"
+        height="36"
+        viewBox="0 0 36 36"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M5 34C17 32.5 28.8 25 31.5 3M28 6.5L31.5 3L35 6.5" />
+      </AiContextHintArrow>
+    </AiContextHintArea>
+  );
+}
+
 /**
  * Renders the primary action: the sparkle mark plus a label.
  * @param props - Component props.
@@ -543,6 +674,7 @@ export const Narrative = asSisenseComponent({
 })(function Narrative({
   state,
   quotaWarning,
+  aiContextHint = false,
   onGenerate,
   showLoadingOverlay = true,
   showActions = true,
@@ -615,6 +747,11 @@ export const Narrative = asSisenseComponent({
             )}
           </CenteredStack>
         </Centered>
+      )}
+
+      {/* After the action stack: the hint measures it in a layout effect, which runs once its ref is set. */}
+      {state.status === 'idle' && showActions && aiContextHint && (
+        <AiContextHint actions={contentNode} />
       )}
     </Body>
   );

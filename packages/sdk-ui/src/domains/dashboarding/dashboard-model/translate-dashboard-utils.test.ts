@@ -1693,43 +1693,43 @@ describe('translate-dashboard-utils', () => {
       expect(result).toBe(baseWidgetDto);
     });
 
-    it('should fill unsupported style fields from partialDtoOptions.style without overriding rebuilt values', () => {
-      const sunburstDto: WidgetDto = {
+    it('should restore unsupported style fields from partialDtoOptions.style over the rebuilt defaults', () => {
+      const lineDto: WidgetDto = {
         ...baseWidgetDto,
-        type: 'sunburst',
-        subtype: 'sunburst',
-        // mimic to-widget-dto-style output
+        type: 'chart/line',
+        subtype: 'line/basic',
+        // mimic to-widget-dto-style output: Fusion defaults for fields the model does not capture
         style: {
-          'legend/enabled': true,
-          'legend/position': 'bottom',
-          'tooltip/value': true,
-          'tooltip/contribution': false,
+          legend: { enabled: true, position: 'bottom' },
+          y2Axis: {
+            inactive: false,
+            enabled: true,
+            ticks: true,
+            labels: { enabled: true, rotation: 0 },
+            gridLines: true,
+          },
         } as unknown as WidgetDto['style'],
       };
 
       const widgetOptions: SpecificWidgetOptions = {
         partialDtoOptions: {
-          style: {
-            // gap fields preserved from the original DTO
-            'center/value': true,
-            'center/contribution': false,
-            'center/contributionToParent': true,
-            // conflict: rebuild emits true; partial holds the stale opposite
-            'legend/enabled': false,
-          },
+          // Fusion-only fields preserved from the original DTO
+          style: { y2Axis: { inactive: true, labels: { stepInterval: 5 } } },
         },
       };
 
-      const result = withSpecificWidgetOptions(widgetOptions)(sunburstDto);
+      const result = withSpecificWidgetOptions(widgetOptions)(lineDto);
 
-      // gap fields restored
-      expect(result.style).toMatchObject({
-        'center/value': true,
-        'center/contribution': false,
-        'center/contributionToParent': true,
+      expect(result.style).toEqual({
+        legend: { enabled: true, position: 'bottom' },
+        y2Axis: {
+          inactive: true,
+          enabled: true,
+          ticks: true,
+          labels: { enabled: true, rotation: 0, stepInterval: 5 },
+          gridLines: true,
+        },
       });
-      // conflict resolved in favor of rebuild
-      expect((result.style as Record<string, unknown>)['legend/enabled']).toBe(true);
     });
 
     it('should leave style unchanged when partialDtoOptions.style is empty', () => {

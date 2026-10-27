@@ -970,7 +970,7 @@ export type WidgetStyle = {
 export type FilterWidgetDtoStyle = {
   /**
    * Rendering type of the filter. Canonical values match FilterWidgetFilterType
-   * ('members' | 'calendar' | 'range' | 'period' | 'condition');
+   * ('members' | 'calendar' | 'range' | 'period' | 'condition' | 'rank');
    * legacy DTOs may carry 'list' or a 'filter/<type>' subtype string.
    */
   filterType?: string;
@@ -998,6 +998,11 @@ export type FilterWidgetDtoStyle = {
    * prop accepts.
    */
   timeFrames?: string[];
+  /**
+   * Rank — the JAQL of the measure the filter ranks by (an aggregated column or a formula), as
+   * stored by the host. Only meaningful when `filterType` is `'rank'`.
+   */
+  rankBy?: BaseJaql | FormulaJaql;
 };
 
 export enum FiltersMergeStrategyEnum {

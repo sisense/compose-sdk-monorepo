@@ -40,8 +40,8 @@ type MembersFormat = Record<
  * Every entry is marked `colored: true` and `isHandPickedColor: true` so Fusion treats the
  * mapping as user-supplied and renders the exact colors on round-trip.
  *
- * @param valueToColorMap - Map from category/series value to color string
- * @returns Fusion members format; empty object when the map is undefined
+ * @param valueToColorMap - Map from category/series value to color string.
+ * @returns Fusion members format; empty object when the map is undefined.
  */
 function toMembersFormat(valueToColorMap: ValueToColorMap | undefined): MembersFormat {
   return valueToColorMap
@@ -60,8 +60,8 @@ function toMembersFormat(valueToColorMap: ValueToColorMap | undefined): MembersF
  * a {@link MultiColumnValueToColorMap} (column → nested map). Used to pick the right
  * members-format shape for sunburst vs. pie/funnel.
  *
- * @param seriesToColorMap - Either a flat or multi-column color map
- * @returns True when every value is a string (i.e. flat map)
+ * @param seriesToColorMap - Either a flat or multi-column color map.
+ * @returns True when every value is a string, that is, a flat map.
  */
 function isValueToColorMap(
   seriesToColorMap: ValueToColorMap | MultiColumnValueToColorMap,
@@ -75,9 +75,9 @@ function isValueToColorMap(
  * is present, the first break-by item carries the members format so Fusion can render
  * the per-series colors.
  *
- * @param dataOptions - Cartesian chart data options from the WidgetModel
- * @param categoryPanelName - `x-axis` for line/area, `categories` for bar/column/polar
- * @returns Three Fusion panels in the order expected by the DTO
+ * @param dataOptions - Cartesian chart data options from the WidgetModel.
+ * @param categoryPanelName - `x-axis` for line/area, `categories` for bar/column/polar.
+ * @returns Three Fusion panels in the order expected by the DTO.
  */
 function toCartesianPanels(
   dataOptions: CartesianChartDataOptions,
@@ -108,8 +108,8 @@ function toCartesianPanels(
  * Builds DTO panels for a line chart widget. The category panel is named `x-axis`,
  * matching the Fusion convention for line/area charts.
  *
- * @param dataOptions - Cartesian chart data options from the WidgetModel
- * @returns Fusion panels: x-axis, values, break by
+ * @param dataOptions - Cartesian chart data options from the WidgetModel.
+ * @returns Fusion panels: x-axis, values, break by.
  * @internal
  */
 export function toLinePanels(dataOptions: CartesianChartDataOptions): Panel[] {
@@ -120,8 +120,8 @@ export function toLinePanels(dataOptions: CartesianChartDataOptions): Panel[] {
  * Builds DTO panels for an area chart widget. The category panel is named `x-axis`,
  * matching the Fusion convention for line/area charts.
  *
- * @param dataOptions - Cartesian chart data options from the WidgetModel
- * @returns Fusion panels: x-axis, values, break by
+ * @param dataOptions - Cartesian chart data options from the WidgetModel.
+ * @returns Fusion panels: x-axis, values, break by.
  * @internal
  */
 export function toAreaPanels(dataOptions: CartesianChartDataOptions): Panel[] {
@@ -131,8 +131,8 @@ export function toAreaPanels(dataOptions: CartesianChartDataOptions): Panel[] {
 /**
  * Builds DTO panels for a bar chart widget. The category panel is named `categories`.
  *
- * @param dataOptions - Cartesian chart data options from the WidgetModel
- * @returns Fusion panels: categories, values, break by
+ * @param dataOptions - Cartesian chart data options from the WidgetModel.
+ * @returns Fusion panels: categories, values, break by.
  * @internal
  */
 export function toBarPanels(dataOptions: CartesianChartDataOptions): Panel[] {
@@ -142,8 +142,8 @@ export function toBarPanels(dataOptions: CartesianChartDataOptions): Panel[] {
 /**
  * Builds DTO panels for a column chart widget. The category panel is named `categories`.
  *
- * @param dataOptions - Cartesian chart data options from the WidgetModel
- * @returns Fusion panels: categories, values, break by
+ * @param dataOptions - Cartesian chart data options from the WidgetModel.
+ * @returns Fusion panels: categories, values, break by.
  * @internal
  */
 export function toColumnPanels(dataOptions: CartesianChartDataOptions): Panel[] {
@@ -153,8 +153,8 @@ export function toColumnPanels(dataOptions: CartesianChartDataOptions): Panel[] 
 /**
  * Builds DTO panels for a polar chart widget. The category panel is named `categories`.
  *
- * @param dataOptions - Cartesian chart data options from the WidgetModel
- * @returns Fusion panels: categories, values, break by
+ * @param dataOptions - Cartesian chart data options from the WidgetModel.
+ * @returns Fusion panels: categories, values, break by.
  * @internal
  */
 export function toPolarPanels(dataOptions: CartesianChartDataOptions): Panel[] {
@@ -185,8 +185,8 @@ export function toTablePanels(dataOptions: TableDataOptionsInternal): Panel[] {
  * panels in that order; a panel is emitted even when its backing list is empty so that
  * the DTO panel order is stable across widgets.
  *
- * @param dataOptions - Indicator chart data options from the WidgetModel
- * @returns Fusion panels: value, min, max, secondary
+ * @param dataOptions - Indicator chart data options from the WidgetModel.
+ * @returns Fusion panels: value, min, max, secondary.
  * @internal
  */
 export function toIndicatorPanels(dataOptions: IndicatorChartDataOptions): Panel[] {
@@ -203,8 +203,8 @@ export function toIndicatorPanels(dataOptions: IndicatorChartDataOptions): Panel
  * is present, its entries are attached to each category item as `format.members` so
  * Fusion restores the per-slice colors.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Panel items for the `categories` panel
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Panel items for the `categories` panel.
  */
 function toFlatMembersCategoryItems(dataOptions: CategoricalChartDataOptions): PanelItem[] {
   const { seriesToColorMap } = dataOptions;
@@ -223,8 +223,8 @@ function toFlatMembersCategoryItems(dataOptions: CategoricalChartDataOptions): P
  * which carries its per-value colors on a dedicated `color` panel rather than on the
  * category items themselves.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Panel items for the `categories` panel
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Panel items for the `categories` panel.
  */
 function toPlainCategoryItems(dataOptions: CategoricalChartDataOptions): PanelItem[] {
   return dataOptions.category.map((column) => createPanelItem(normalizeColumn(column)));
@@ -235,8 +235,8 @@ function toPlainCategoryItems(dataOptions: CategoricalChartDataOptions): PanelIt
  * {@link MultiColumnValueToColorMap} keyed by normalized column title, so each category
  * item receives the nested entry matching its own title.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Panel items for the `categories` panel, each with per-column members format
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Panel items for the `categories` panel, each with per-column members format.
  */
 function toSunburstCategoryItems(dataOptions: CategoricalChartDataOptions): PanelItem[] {
   const { seriesToColorMap } = dataOptions;
@@ -258,8 +258,8 @@ function toSunburstCategoryItems(dataOptions: CategoricalChartDataOptions): Pane
  * Uses {@link normalizeAnyColumn} so either measure-like or attribute-like values are
  * accepted — categorical widgets historically allow both in the `value` slot.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Panel items to place in the `values` or `size` panel
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Panel items to place in the `values` or `size` panel.
  */
 function toCategoricalValueItems(dataOptions: CategoricalChartDataOptions): PanelItem[] {
   return dataOptions.value.map((column) => createPanelItem(normalizeAnyColumn(column)));
@@ -270,8 +270,8 @@ function toCategoricalValueItems(dataOptions: CategoricalChartDataOptions): Pane
  * flagged `isColored: true`; when no such column exists, an empty `color` panel is
  * emitted so the DTO shape stays consistent.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns The `color` panel (possibly empty)
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns The `color` panel (possibly empty).
  */
 function toTreemapColorPanel(dataOptions: CategoricalChartDataOptions): Panel {
   const colorCategory = dataOptions.category.find((column) => (column as StyledColumn).isColored);
@@ -295,8 +295,8 @@ function toTreemapColorPanel(dataOptions: CategoricalChartDataOptions): Panel {
  * Builds DTO panels for a pie chart widget. Category items carry `format.members` when
  * a flat `seriesToColorMap` is present so per-slice colors round-trip.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Fusion panels: categories, values
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Fusion panels: categories, values.
  * @internal
  */
 export function toPiePanels(dataOptions: CategoricalChartDataOptions): Panel[] {
@@ -310,8 +310,8 @@ export function toPiePanels(dataOptions: CategoricalChartDataOptions): Panel[] {
  * Builds DTO panels for a funnel chart widget. Category items carry `format.members` when
  * a flat `seriesToColorMap` is present so per-step colors round-trip.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Fusion panels: categories, values
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Fusion panels: categories, values.
  * @internal
  */
 export function toFunnelPanels(dataOptions: CategoricalChartDataOptions): Panel[] {
@@ -325,8 +325,8 @@ export function toFunnelPanels(dataOptions: CategoricalChartDataOptions): Panel[
  * Builds DTO panels for a sunburst chart widget. Each category item carries the nested
  * `format.members` entry matching its column title so per-level colors round-trip.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Fusion panels: categories, values
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Fusion panels: categories, values.
  * @internal
  */
 export function toSunburstPanels(dataOptions: CategoricalChartDataOptions): Panel[] {
@@ -341,8 +341,8 @@ export function toSunburstPanels(dataOptions: CategoricalChartDataOptions): Pane
  * and an extra `color` panel is emitted (see {@link toTreemapColorPanel}) so Fusion can
  * restore the per-value color assignments.
  *
- * @param dataOptions - Categorical chart data options from the WidgetModel
- * @returns Fusion panels: categories, size, color
+ * @param dataOptions - Categorical chart data options from the WidgetModel.
+ * @returns Fusion panels: categories, size, color.
  * @internal
  */
 export function toTreemapPanels(dataOptions: CategoricalChartDataOptions): Panel[] {
@@ -367,8 +367,8 @@ export function toTreemapPanels(dataOptions: CategoricalChartDataOptions): Panel
  * entries are attached to the `Break By / Color` item as `format.members` so
  * Fusion restores the per-series colors on round-trip.
  *
- * @param dataOptions - Scatter chart data options from the WidgetModel
- * @returns Fusion panels in fixed order; every declared panel is always present
+ * @param dataOptions - Scatter chart data options from the WidgetModel.
+ * @returns Fusion panels in fixed order; every declared panel is always present.
  * @internal
  */
 export function toScatterPanels(dataOptions: ScatterChartDataOptions): Panel[] {
@@ -420,8 +420,8 @@ export function toScatterPanels(dataOptions: ScatterChartDataOptions): Panel[] {
  * live on the style in the DTO and are written separately by
  * {@link toPivotTableWidgetStyle}.
  *
- * @param dataOptions - Pivot table data options from the WidgetModel
- * @returns Fusion panels: rows, columns, values
+ * @param dataOptions - Pivot table data options from the WidgetModel.
+ * @returns Fusion panels: rows, columns, values.
  * @internal
  */
 export function toPivotTablePanels(dataOptions: PivotTableDataOptions): Panel[] {
@@ -546,9 +546,9 @@ function applyPivotRowsSorting(params: {
  * `style.markers.size.min/max`, so this item-level format is the source of truth
  * for rendered marker sizes — emitting the style alone is not enough.
  *
- * @param dataOptions - Scattermap chart data options from the WidgetModel
- * @param markerSize - Optional marker-size options from WidgetModel.styleOptions.markers.size
- * @returns Fusion panels in fixed order; every declared panel is always present
+ * @param dataOptions - Scattermap chart data options from the WidgetModel.
+ * @param markerSize - Optional marker-size options from WidgetModel.styleOptions.markers.size.
+ * @returns Fusion panels in fixed order; every declared panel is always present.
  * @internal
  */
 export function toScattermapPanels(
@@ -602,8 +602,8 @@ export function toScattermapPanels(
  * The geo slot is a single attribute (country/state). The color slot is a
  * single measure; Fusion's manifest range-colors it at render time.
  *
- * @param dataOptions - Areamap chart data options from the WidgetModel
- * @returns Fusion panels in fixed order; every declared panel is always present
+ * @param dataOptions - Areamap chart data options from the WidgetModel.
+ * @returns Fusion panels in fixed order; every declared panel is always present.
  * @internal
  */
 export function toAreamapPanels(dataOptions: AreamapChartDataOptions): Panel[] {
@@ -626,8 +626,8 @@ export function toAreamapPanels(dataOptions: AreamapChartDataOptions): Panel[] {
  * derived box/whisker measures live on `style.whisker` rather than on panels, so
  * they are written by {@link toBoxplotWidgetStyle} instead.
  *
- * @param dataOptions - Boxplot chart data options from the WidgetModel
- * @returns Fusion panels in fixed order: category, value
+ * @param dataOptions - Boxplot chart data options from the WidgetModel.
+ * @returns Fusion panels in fixed order: category, value.
  * @internal
  */
 export function toBoxplotPanels(dataOptions: BoxplotChartDataOptions): Panel[] {
@@ -654,8 +654,8 @@ export function toBoxplotPanels(dataOptions: BoxplotChartDataOptions): Panel[] {
  * - {@link MultiColumnValueToColorMap} — nested entry keyed by normalized column title
  *   on the matching stage only.
  *
- * @param dataOptions - Sankey chart data options from the WidgetModel
- * @returns Panel items for the `category` panel, each with per-column members format
+ * @param dataOptions - Sankey chart data options from the WidgetModel.
+ * @returns Panel items for the `category` panel, each with per-column members format.
  */
 function toSankeyCategoryItems(dataOptions: SankeyChartDataOptions): PanelItem[] {
   const { seriesToColorMap } = dataOptions;
@@ -677,8 +677,8 @@ function toSankeyCategoryItems(dataOptions: SankeyChartDataOptions): PanelItem[]
  * `category` (2+ attributes) and `value` (single measure) panels — both are always
  * emitted, matching the inverse read in {@link extractSankeyChartDataOptions}.
  *
- * @param dataOptions - Sankey chart data options from the WidgetModel
- * @returns Fusion panels in fixed order: category, value
+ * @param dataOptions - Sankey chart data options from the WidgetModel.
+ * @returns Fusion panels in fixed order: category, value.
  * @internal
  */
 export function toSankeyPanels(dataOptions: SankeyChartDataOptions): Panel[] {
@@ -692,22 +692,6 @@ export function toSankeyPanels(dataOptions: SankeyChartDataOptions): Panel[] {
 }
 
 /**
- * Builds DTO panels for a kpi widget: `value` (always), `category` (when set), and a
- * comparison panel driven by `dataOptions.comparison.type`:
- * - `'target'` → a `target` panel, from either a measure column or a fixed number
- *   (see {@link toFixedTargetPanelItem})
- * - `'delta'` → a `comparisonValue` panel
- * - `'previous-period'` → no panel; the `kpi/previous-period` subtype carries it on its own,
- *   with the baseline read from the `category` panel's preceding bucket
- * - `'value'` → the same `comparisonValue` panel; `kpi/value` distinguishes it from `'delta'`
- *
- * Inverse of {@link extractKpiChartDataOptions} / {@link extractKpiComparison}.
- *
- * @param dataOptions - Kpi chart data options from the WidgetModel
- * @returns Panels for the `kpi` widget DTO
- * @internal
- */
-/**
  * Whether a `'target'` comparison can be written to a Fusion `target` panel.
  *
  * A measure column always can. A number can only when it is finite: `NaN` and `Infinity`
@@ -716,8 +700,8 @@ export function toSankeyPanels(dataOptions: SankeyChartDataOptions): Panel[] {
  * the panel and callers that pick the `kpi/goal` subtype must agree, so both ask this rather
  * than re-deriving the rule.
  *
- * @param comparison - The kpi comparison from the widget model's data options
- * @returns true when a `target` panel should be emitted
+ * @param comparison - The kpi comparison from the widget model's data options.
+ * @returns True when a `target` panel should be emitted.
  * @internal
  */
 export function isSerializableKpiTarget(
@@ -739,8 +723,8 @@ export function isSerializableKpiTarget(
  * was dropping the panel, which also cost the widget its `kpi/goal` subtype and so lost the
  * goal comparison entirely rather than just its authored form.
  *
- * @param target - Fixed target value from `comparison.target`
- * @returns Fusion panel item holding the value as a constant formula
+ * @param target - Fixed target value from `comparison.target`.
+ * @returns Fusion panel item holding the value as a constant formula.
  * @internal
  */
 function toFixedTargetPanelItem(target: number): PanelItem {
@@ -748,38 +732,74 @@ function toFixedTargetPanelItem(target: number): PanelItem {
   return { jaql: { formula, title: formula } };
 }
 
-export function toKpiPanels(dataOptions: KpiChartDataOptions): Panel[] {
-  const panels: Panel[] = [
-    { name: 'value', items: [createPanelItem(normalizeMeasureColumn(dataOptions.value))] },
-  ];
-
-  if (dataOptions.category) {
-    panels.push({
-      name: 'category',
-      items: [createPanelItem(normalizeColumn(dataOptions.category))],
-    });
-  }
-
-  const { comparison } = dataOptions;
+/**
+ * Builds the items of a kpi widget's `target` and `comparisonValue` panels from
+ * `dataOptions.comparison.type`:
+ * - `'target'` → the `target` panel, from either a measure column or a fixed number
+ *   (see {@link toFixedTargetPanelItem})
+ * - `'delta'` → the `comparisonValue` panel
+ * - `'value'` → the same `comparisonValue` panel; `kpi/value` distinguishes it from `'delta'`
+ * - `'previous-period'` → neither; the `kpi/previous-period` subtype carries it on its own,
+ *   with the baseline read from the `category` panel's preceding bucket
+ *
+ * @param comparison - The kpi comparison from the widget model's data options.
+ * @returns The items of the `target` and `comparisonValue` panels, empty when unused.
+ * @internal
+ */
+function toKpiComparisonItems(comparison: KpiChartDataOptions['comparison']): {
+  readonly target: PanelItem[];
+  readonly comparisonValue: PanelItem[];
+} {
   if (isSerializableKpiTarget(comparison)) {
-    panels.push({
-      name: 'target',
-      items: [
+    return {
+      target: [
         typeof comparison.target === 'number'
           ? toFixedTargetPanelItem(comparison.target)
           : createPanelItem(normalizeMeasureColumn(comparison.target)),
       ],
-    });
-  } else if (comparison?.type === 'delta' || comparison?.type === 'value') {
+      comparisonValue: [],
+    };
+  }
+  if (comparison?.type === 'delta' || comparison?.type === 'value') {
     // Both variants carry a single measure and share the panel; the subtype is what says
     // whether it is read as a delta baseline or shown as-is.
-    panels.push({
-      name: 'comparisonValue',
-      items: [createPanelItem(normalizeMeasureColumn(comparison.value))],
-    });
+    return {
+      target: [],
+      comparisonValue: [createPanelItem(normalizeMeasureColumn(comparison.value))],
+    };
   }
+  return { target: [], comparisonValue: [] };
+}
 
-  return panels;
+/**
+ * Builds DTO panels for a kpi widget. All four panels of the Fusion `kpi` manifest are always
+ * emitted, in the manifest's order — `value`, `category`, `target`, `comparisonValue` — with
+ * `items: []` for an unused one. Fusion saves only `{ name, items }` per panel and backfills
+ * each panel's `type` and `title` from the manifest by position, and it never recreates a
+ * missing manifest panel. A shorter list would mislabel the panels after it and leave the
+ * editor with no slot to fill in (for example, no `category` panel to add a sparkline to).
+ *
+ * The comparison panels' content follows {@link toKpiComparisonItems}. The `filters` panel is
+ * appended by the caller, as for every other widget type.
+ *
+ * Inverse of {@link extractKpiChartDataOptions} / {@link extractKpiComparison}, which read an
+ * empty panel as an unset slot.
+ *
+ * @param dataOptions - Kpi chart data options from the WidgetModel.
+ * @returns Fusion panels in manifest order: value, category, target, comparisonValue.
+ * @internal
+ */
+export function toKpiPanels(dataOptions: KpiChartDataOptions): Panel[] {
+  const categoryItems: PanelItem[] = dataOptions.category
+    ? [createPanelItem(normalizeColumn(dataOptions.category))]
+    : [];
+  const { target, comparisonValue } = toKpiComparisonItems(dataOptions.comparison);
+  return [
+    { name: 'value', items: [createPanelItem(normalizeMeasureColumn(dataOptions.value))] },
+    { name: 'category', items: categoryItems },
+    { name: 'target', items: target },
+    { name: 'comparisonValue', items: comparisonValue },
+  ];
 }
 
 /**
@@ -793,8 +813,8 @@ export function toKpiPanels(dataOptions: KpiChartDataOptions): Panel[] {
  * {@link CalendarHeatmapChartDataOptions.value} is read from / written to the panel named
  * `color`.
  *
- * @param dataOptions - Calendar heatmap chart data options from the WidgetModel
- * @returns Fusion panels: date, color
+ * @param dataOptions - Calendar heatmap chart data options from the WidgetModel.
+ * @returns Fusion panels: date, color.
  * @internal
  */
 export function toCalendarHeatmapPanels(dataOptions: CalendarHeatmapChartDataOptions): Panel[] {
@@ -817,8 +837,8 @@ export function toCalendarHeatmapPanels(dataOptions: CalendarHeatmapChartDataOpt
  * without further translation. The `filters` key is reserved by the DTO schema and
  * emitted separately from `widgetModel.filters`, so it is skipped here.
  *
- * @param dataOptions - Generic data options keyed by the plugin's input names
- * @returns One Fusion panel per declared input
+ * @param dataOptions - Generic data options keyed by the plugin's input names.
+ * @returns One Fusion panel per declared input.
  * @internal
  */
 export function toCustomWidgetPanels(dataOptions: GenericDataOptions | undefined): Panel[] {

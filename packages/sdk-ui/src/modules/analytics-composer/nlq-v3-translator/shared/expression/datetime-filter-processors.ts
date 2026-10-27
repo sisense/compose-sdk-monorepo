@@ -109,3 +109,39 @@ export function processDatetimeRelativeFilter(
 
   return processedArgs;
 }
+
+/**
+ * Runs a date-level filter processor on a date-measure filter, whose args lead with the measure
+ * and then follow the plain date filter's layout from the level on.
+ *
+ * Errors raised by the wrapped processor name the plain filter's arg positions, so they are
+ * shifted by one to match the date-measure filter's args.
+ *
+ * @param processor - Processor of the matching plain date filter.
+ * @returns Processor for the date-measure filter.
+ */
+function forDateMeasure(
+  processor: (processedArgs: ProcessedArg[], context: FunctionContext) => ProcessedArg[],
+): (processedArgs: ProcessedArg[], context: FunctionContext) => ProcessedArg[] {
+  return (processedArgs, context) => {
+    const [measure, ...levelArgs] = processedArgs;
+    try {
+      return [measure, ...processor(levelArgs, context)];
+    } catch (error) {
+      if (!(error instanceof Error)) throw error;
+      const prefix = context.pathPrefix.replace(/\.$/, '');
+      const { message } = error;
+      const head = message.startsWith(prefix) ? prefix : '';
+      const tail = message
+        .slice(head.length)
+        .replace(/args\[(\d+)\]/g, (_, index: string) => `args[${Number(index) + 1}]`);
+      throw new Error(head + tail);
+    }
+  };
+}
+
+/** Validates the members of `filterFactory.dateMeasureMembers` against its level. */
+export const processDateMeasureMembersFilter = forDateMeasure(processDatetimeMembersFilter);
+
+/** Validates the period of `filterFactory.dateMeasureRelativeFrom` / `dateMeasureRelativeTo`. */
+export const processDateMeasureRelativeFilter = forDateMeasure(processDatetimeRelativeFilter);

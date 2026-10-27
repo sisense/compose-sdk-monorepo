@@ -41,7 +41,7 @@ const myPlugin: WidgetPlugin = {
 
 > **customWidget**?: `object`
 
-The custom widget declaration to be registered
+The custom widget declaration to be registered.
 
 #### Type declaration
 
@@ -49,13 +49,13 @@ The custom widget declaration to be registered
 >
 > **config**?: `object`
 >
-> Configuration options for the custom widget
+> Configuration options for the custom widget.
 >
 > > ###### `config.header`
 > >
 > > **header**?: `object`
 > >
-> > Configuration options for the widget header
+> > Configuration options for the widget header.
 > >
 > > > ###### `header.visible`
 > > >
@@ -78,13 +78,13 @@ The custom widget declaration to be registered
 >
 > **dataPanel**?: `object`
 >
-> Definition of the data panel for the custom widget
+> Definition of the data panel for the custom widget.
 >
 > > ###### `dataPanel.config`
 > >
 > > **config**?: `object`
 > >
-> > Configuration options for the data panel
+> > Configuration options for the data panel.
 > >
 > > ###### Example
 > >
@@ -99,18 +99,9 @@ The custom widget declaration to be registered
 > >
 > > > ###### `config.inputs`
 > > >
-> > > **inputs**?: \{
-> > > `canColor?`: `boolean`;
-> > > `canFormat?`: `boolean`;
-> > > `canSort?`: `boolean`;
-> > > `displayName?`: `string`;
-> > > `maxItems?`: `number`;
-> > > `minItems?`: `number`;
-> > > `name`: `string`;
-> > > `type`: `"dimension"` \| `"measure"`;
-> > > }[]
+> > > **inputs**?: [`DataPanelInput`](interface.DataPanelInput.md)[]
 > > >
-> > > Inputs for the data panel
+> > > Inputs for the data panel.
 > > >
 > > > ###### Example
 > > >
@@ -129,7 +120,7 @@ The custom widget declaration to be registered
 >
 > **designPanel**?: `object`
 >
-> Definition of the design panel for the custom widget
+> Definition of the design panel for the custom widget.
 >
 > > ###### `designPanel.Component`
 > >
@@ -141,7 +132,7 @@ The custom widget declaration to be registered
 >
 > **displayName**: `string`
 >
-> The display name of the custom widget type (used for display in the UI)
+> The display name of the custom widget type (used for display in the UI).
 >
 > ###### Example
 >
@@ -153,7 +144,7 @@ The custom widget declaration to be registered
 >
 > **name**: `string`
 >
-> The unique name of the custom widget type (used for registration and identification)
+> The unique name of the custom widget type (used for registration and identification).
 >
 > ###### Example
 >
@@ -165,13 +156,13 @@ The custom widget declaration to be registered
 >
 > **visualization**: `object`
 >
-> Definition of the custom visualization to be rendered in the new custom widget
+> Definition of the custom visualization to be rendered in the new custom widget.
 >
 > > ###### `visualization.Component`
 > >
 > > **Component**: [`CustomVisualization`](type-alias.CustomVisualization.md)\< `Props` \>
 > >
-> > The custom visualization component to be rendered in the new custom widget
+> > The custom visualization component to be rendered in the new custom widget.
 > >
 > >
 >
@@ -191,7 +182,7 @@ Unique name identifier for the plugin
 
 > **pluginType**: `"widget"`
 
-The type of plugin
+The type of plugin.
 
 ***
 

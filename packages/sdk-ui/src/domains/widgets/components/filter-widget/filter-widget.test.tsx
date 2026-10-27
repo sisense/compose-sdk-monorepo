@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
-import { createAttribute, filterFactory } from '@sisense/sdk-data';
+import { createAttribute, filterFactory, measureFactory } from '@sisense/sdk-data';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
 
@@ -14,6 +14,11 @@ vi.mock('@/infra/decorators/component-decorators/as-sisense-component', () => ({
 
 vi.mock('@/domains/widgets/hooks/use-track-widget-init', () => ({
   useTrackWidgetInit: () => {},
+}));
+
+let mockContextReady = true;
+vi.mock('@/domains/widgets/hooks/use-widget-context-gate', () => ({
+  useWidgetContextGate: () => ({ isContextReady: mockContextReady }),
 }));
 
 // Stub the title feature: it returns the header config carrying a title item, so the widget's
@@ -69,8 +74,12 @@ vi.mock('@/infra/contexts/theme-provider', async (importOriginal) => {
 
 vi.mock('./filter-widget-dropdown', () => ({
   // any: stub only forwards the wiring callbacks under test; full prop typing adds no value here.
-  FilterWidgetDropdown: ({ onFilterUpdate, onDateLevelChange, isMultiselect }: any) => (
-    <div data-testid="dropdown" data-multiselect={String(isMultiselect)}>
+  FilterWidgetDropdown: ({ onFilterUpdate, onDateLevelChange, isMultiselect, rankBy }: any) => (
+    <div
+      data-testid="dropdown"
+      data-multiselect={String(isMultiselect)}
+      data-ranked-by={rankBy?.name ?? ''}
+    >
       <button
         data-testid="fire-filter"
         onClick={() => onFilterUpdate(filterFactory.members(attr, ['France']))}
@@ -91,6 +100,26 @@ describe('FilterWidget', () => {
     expect(getByTestId('widget-container')).toBeInTheDocument();
     expect(getByText('Country')).toBeInTheDocument();
     expect(getByTestId('dropdown')).toBeInTheDocument();
+  });
+
+  it('hands the dropdown the measure a Rank widget ranks by', () => {
+    const revenue = measureFactory.sum(
+      createAttribute({ name: 'Revenue', expression: '[Commerce.Revenue]', type: 'numeric' }),
+      'Total Revenue',
+    );
+    const { getByTestId } = render(
+      <FilterWidget attribute={attr} filterType="rank" rankBy={revenue} containerless={true} />,
+    );
+
+    expect(getByTestId('dropdown').getAttribute('data-ranked-by')).toBe('Total Revenue');
+  });
+
+  it('hands the dropdown no measure when none is set', () => {
+    const { getByTestId } = render(
+      <FilterWidget attribute={attr} filterType="rank" containerless={true} />,
+    );
+
+    expect(getByTestId('dropdown').getAttribute('data-ranked-by')).toBe('');
   });
 
   it('uses the explicit title when provided', () => {
@@ -220,6 +249,46 @@ describe('FilterWidget', () => {
       type: 'title/changed',
       payload: { title: 'Brand' },
     });
+  });
+});
+
+describe('FilterWidget while the Sisense context initializes', () => {
+  beforeEach(() => {
+    mockContextReady = false;
+  });
+  afterEach(() => {
+    mockContextReady = true;
+  });
+
+  it('keeps its container and title, and shows the field skeleton in place of the control', () => {
+    const { getByTestId, getByText, queryByTestId } = render(<FilterWidget attribute={attr} />);
+
+    expect(getByTestId('widget-container')).toBeInTheDocument();
+    expect(getByText('Country')).toBeInTheDocument();
+    expect(getByTestId('filter-widget-skeleton')).toBeInTheDocument();
+    expect(queryByTestId('dropdown')).toBeNull();
+  });
+
+  it('shows only the field skeleton when the host provides the chrome', () => {
+    const { getByTestId, queryByTestId } = render(
+      <FilterWidget attribute={attr} containerless={true} />,
+    );
+
+    expect(getByTestId('filter-widget-skeleton')).toBeInTheDocument();
+    expect(queryByTestId('widget-container')).toBeNull();
+    expect(queryByTestId('dropdown')).toBeNull();
+  });
+
+  it('renders the control as soon as the context is ready', () => {
+    const { getByTestId, queryByTestId, rerender } = render(
+      <FilterWidget attribute={attr} containerless={true} />,
+    );
+
+    mockContextReady = true;
+    rerender(<FilterWidget attribute={attr} containerless={true} />);
+
+    expect(getByTestId('dropdown')).toBeInTheDocument();
+    expect(queryByTestId('filter-widget-skeleton')).toBeNull();
   });
 });
 

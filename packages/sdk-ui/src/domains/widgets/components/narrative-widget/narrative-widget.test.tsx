@@ -132,6 +132,30 @@ describe('NarrativeWidget', () => {
     expect(screen.queryByTestId('csdk-narrative-generate')).toBeNull();
   });
 
+  it('reports the trigger on mount the host names, for usage tracking', async () => {
+    const bodies: unknown[] = [];
+    server.use(
+      http.post(`*/${DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}`, async ({ request }) => {
+        bodies.push(await request.json());
+        return HttpResponse.json(narrativeBody);
+      }),
+    );
+    setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget
+          widgets={[chart]}
+          generateOnMount
+          generateOnMountTriggerType="assistantCard"
+        />
+      </NarrativeTestWrapper>,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    expect(bodies[0]).toMatchObject({
+      tracking: { subActionType: 'generate', triggerType: 'assistantCard' },
+    });
+  });
+
   it('renders only the content when the host provides the chrome (containerless)', async () => {
     respondWithNarrative();
     setup(
@@ -402,6 +426,92 @@ describe('NarrativeWidget', () => {
       expect(onContentHeightChange).toHaveBeenCalled();
       expect(sizedWrapper(container)).toBe('');
     });
+  });
+
+  it('reports each generation started from the widget once it yields a narrative', async () => {
+    respondWithNarrative();
+    const onGenerated = vi.fn();
+    const { user } = setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget widgets={[chart]} onGenerated={onGenerated} />
+      </NarrativeTestWrapper>,
+    );
+
+    await user.click(await screen.findByTestId('csdk-narrative-generate'));
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    await vi.waitFor(() => expect(onGenerated).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByTestId('csdk-narrative-generate'));
+    await vi.waitFor(() => expect(onGenerated).toHaveBeenCalledTimes(2));
+  });
+
+  it('reports no generation for a failed attempt, a cached narrative or one generated on mount', async () => {
+    server.use(
+      http.post(`*/${DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}`, () =>
+        HttpResponse.json({ ...narrativeBody, cached: true }),
+      ),
+    );
+    const onGenerated = vi.fn();
+    const cached = setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget widgets={[chart]} onGenerated={onGenerated} />
+      </NarrativeTestWrapper>,
+    );
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    cached.unmount();
+
+    const onMount = setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget widgets={[chart]} generateOnMount onGenerated={onGenerated} />
+      </NarrativeTestWrapper>,
+    );
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    onMount.unmount();
+
+    server.use(
+      http.post(`*/${DASHBOARD_NARRATIVE_QUERIES_ENDPOINT}`, async ({ request }) => {
+        const { cacheOnly } = (await request.json()) as { cacheOnly?: boolean };
+        return cacheOnly
+          ? HttpResponse.json(cacheMissBody)
+          : new HttpResponse(null, { status: 400 });
+      }),
+    );
+    const { user } = setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget widgets={[chart]} onGenerated={onGenerated} />
+      </NarrativeTestWrapper>,
+    );
+    await user.click(await screen.findByTestId('csdk-narrative-generate'));
+    expect(await screen.findByTestId('csdk-narrative-error')).toHaveAttribute(
+      'data-error-kind',
+      'failed',
+    );
+
+    expect(onGenerated).not.toHaveBeenCalled();
+  });
+
+  it('reports no generation on mount, even when the host names the widget button as its trigger', async () => {
+    respondWithNarrative();
+    const onGenerated = vi.fn();
+    setup(
+      <NarrativeTestWrapper>
+        <NarrativeWidget
+          widgets={[chart]}
+          generateOnMount
+          generateOnMountTriggerType="widgetButton"
+          onGenerated={onGenerated}
+        />
+      </NarrativeTestWrapper>,
+    );
+
+    expect(await screen.findByTestId('csdk-narrative-overview')).toBeTruthy();
+    expect(onGenerated).not.toHaveBeenCalled();
+  });
+
+  it('suggests adding AI context before a narrative exists when the host asks for it', async () => {
+    setup(withQueryClient(<NarrativeWidget aiContextHint />));
+
+    expect(await screen.findByTestId('csdk-narrative-ai-context-hint')).toBeTruthy();
   });
 
   it('fires onReady once after mount, so export pipelines never hang on this widget', async () => {

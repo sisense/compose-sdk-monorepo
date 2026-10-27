@@ -1,5 +1,5 @@
 import type { Attribute } from '@sisense/sdk-data';
-import type { DataSource, Filter } from '@sisense/sdk-data';
+import type { DataSource, Filter, Measure } from '@sisense/sdk-data';
 
 import type {
   JumpToDashboardConfig,
@@ -113,11 +113,8 @@ export interface WidgetModel {
   drilldownOptions: DrilldownOptions | PivotTableDrilldownOptions;
 
   /**
-   * Jump to Dashboard configuration for this widget, when the model was built from a Fusion
-   * `WidgetDto` via `fromWidgetDto`. Populated with the same translation as dashboard
-   * `fromDashboardDto` uses for `widgetsOptions` (via `translateWidgetsOptions` →
-   * `jumpToDashboardConfigFromWidgetDto`). Omitted or `undefined` when the model is not
-   * Fusion-sourced (e.g. From widget props) or the widget has no versioned JTD..
+   * Jump to Dashboard configuration for this widget. Omitted or `undefined` when the widget
+   * has none.
    *
    * @see {@link widgetModelTranslator.toJtdConfig}
    * @internal
@@ -125,8 +122,9 @@ export interface WidgetModel {
   jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
 
   /**
-   * Parsed filter widget field data extracted from the Fusion DTO.
-   * Only present when `widgetType === 'filter'` and the model was built from a DTO.
+   * Filter widget field data: the attribute the widget filters and how its control is
+   * configured. Only present when `widgetType === 'filter'`; a model assembled by hand may omit
+   * it, and readers then fall back to the defaults.
    *
    * @internal
    */
@@ -136,10 +134,15 @@ export interface WidgetModel {
     isMultiselect: boolean;
     controlStyleOptions?: FilterWidgetControlStyleOptions;
     /**
-     * Curated set of Time Frame keys the widget offers, when the designer has flipped
-     * `style.customizeTimeFrames` on. `undefined` means the default 11 frames are used.
+     * Curated set of Time Frame keys the widget offers. `undefined` means the default 11
+     * frames are used.
      */
     timeFrames?: string[];
+    /**
+     * The measure a `'rank'` filter ranks by. Only set when `filterType` is `'rank'`; a rank
+     * widget without one has nothing to rank by, so its control stays disabled.
+     */
+    rankBy?: Measure;
   };
 }
 

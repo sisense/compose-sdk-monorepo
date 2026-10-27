@@ -5,6 +5,7 @@ title: Type Aliases
 # Type Aliases
 
 - [AnyObject](type-alias.AnyObject.md)
+- [CalculatedAttributeDataType](type-alias.CalculatedAttributeDataType.md)
 - [CalculatedMeasureTransformer](type-alias.CalculatedMeasureTransformer.md) <Badge type="beta" text="Beta" />
 - [DataSource](type-alias.DataSource.md)
 - [DataSourceInfo](type-alias.DataSourceInfo.md)

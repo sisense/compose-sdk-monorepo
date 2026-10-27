@@ -7,7 +7,10 @@ import { deepMerge } from '@/domains/dashboarding/persistence/deep-merge';
 import type { DashboardPersistenceManager } from '@/domains/dashboarding/persistence/types';
 import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types';
 import type { CustomWidgetChangeEvent } from '@/domains/widgets/change-events';
-import { isCustomWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
+import {
+  isChartWidgetProps,
+  isCustomWidgetProps,
+} from '@/domains/widgets/components/widget-by-id/utils';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import type { Navigator, TableStyleOptions } from '@/types';
 
@@ -128,8 +131,9 @@ function wireWidget(widget: WidgetProps, emit: (update: WidgetPropsUpdate) => vo
   // Each injected handler applies the update and schedules the debounced persistence write, then
   // synchronously chains to the incoming callback with the same argument, so consumer-supplied
   // callbacks keep firing inside a composed dashboard. The `updateWidget` write itself runs later.
-  // Branch 1: chart widgets with a navigator scroller.
-  if ('styleOptions' in widget && widget.styleOptions) {
+  // Branch 1: chart widgets with a navigator scroller. Gated on the chart type so a plugin whose
+  // own style options happen to include `navigator` still reaches the custom-widget branch.
+  if (isChartWidgetProps(widget) && widget.styleOptions) {
     const styleOptions = widget.styleOptions as {
       navigator?: { enabled?: boolean; onScrollerChange?: (min: number, max: number) => void };
     } & typeof widget.styleOptions;
@@ -209,14 +213,13 @@ function mergeUpdates(
   return prev ? deepMerge(prev, next) : next;
 }
 
-/** Applies the navigator scroll position from `update` to a chart widget. */
+/** Applies the navigator scroll position from `update` to a chart widget that has a navigator. */
 function withNavigatorScrollerLocation(update: WidgetPropsUpdate) {
   return (widget: WidgetProps): WidgetProps => {
     const scrollerLocation = update.styleOptions?.navigator?.scrollerLocation;
-    const existingNavigator =
-      'styleOptions' in widget
-        ? (widget.styleOptions as { navigator?: Navigator }).navigator
-        : undefined;
+    const existingNavigator = isChartWidgetProps(widget)
+      ? (widget.styleOptions as { navigator?: Navigator } | undefined)?.navigator
+      : undefined;
     if (!scrollerLocation || !existingNavigator) return widget;
     return {
       ...widget,
@@ -250,12 +253,12 @@ function withTableColumnWidths(update: WidgetPropsUpdate) {
 }
 
 /**
- * Deep-merges non-navigator `styleOptions` from `update` into a custom widget.
- * Navigator scroll is handled separately by {@link withNavigatorScrollerLocation}.
+ * Deep-merges `styleOptions` from `update` into a custom widget, including a plugin-owned
+ * `navigator` key (chart navigator scroll is handled by {@link withNavigatorScrollerLocation}).
  */
 function withCustomWidgetStyleOptions(update: WidgetPropsUpdate) {
   return (widget: WidgetProps): WidgetProps => {
-    if (!update.styleOptions || update.styleOptions.navigator || !isCustomWidgetProps(widget)) {
+    if (!update.styleOptions || !isCustomWidgetProps(widget)) {
       return widget;
     }
     return { ...widget, styleOptions: deepMerge(widget.styleOptions ?? {}, update.styleOptions) };

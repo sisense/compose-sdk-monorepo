@@ -400,14 +400,42 @@ describe('useNarrativeWidgetState', () => {
       expect(requests[2]).toMatchObject({ tracking: { subActionType: 'regenerate' } });
     });
 
-    it('marks a generation on mount as generate, with no trigger', async () => {
+    it('marks a generation on mount as generate, triggered by an export', async () => {
       respondWith(ok);
       const { result } = await renderNarrative({ widgets: [chart('c1')], generateOnMount: true });
 
       await waitFor(() => expect(result.current.state.status).toBe('ready'));
       expect(requests[0]).toEqual(
-        expect.objectContaining({ tracking: { subActionType: 'generate' } }),
+        expect.objectContaining({ tracking: { subActionType: 'generate', triggerType: 'export' } }),
       );
+    });
+
+    it('reports the trigger the host names for a generation on mount', async () => {
+      respondWith(ok);
+      const { result } = await renderNarrative({
+        widgets: [chart('c1')],
+        generateOnMount: true,
+        generateOnMountTriggerType: 'assistantCard',
+      });
+
+      await waitFor(() => expect(result.current.state.status).toBe('ready'));
+      expect(requests[0]).toMatchObject({
+        tracking: { subActionType: 'generate', triggerType: 'assistantCard' },
+      });
+    });
+
+    it('keeps a click as the widget button, whatever the trigger on mount', async () => {
+      respondWith(ok);
+      const { result } = await renderNarrative({
+        widgets: [chart('c1')],
+        generateOnMountTriggerType: 'assistantCard',
+      });
+      await waitFor(() => expect(result.current.state).toEqual({ status: 'idle' }));
+
+      act(() => result.current.generate());
+
+      await waitFor(() => expect(result.current.state.status).toBe('ready'));
+      expect(requests[0]).toMatchObject({ tracking: { triggerType: 'widgetButton' } });
     });
   });
 

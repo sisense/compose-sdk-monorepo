@@ -3,8 +3,11 @@ import {
   convertDataSource,
   convertJaqlDataSourceForDto,
   createAttribute,
+  createDimensionalElementFromJaql,
   DateLevels,
   DimensionalLevelAttribute,
+  isDimensionalBaseMeasure,
+  isDimensionalCalculatedMeasure,
   MetadataTypes,
 } from '@sisense/sdk-data';
 
@@ -227,7 +230,7 @@ export function toExecuteQueryParams(widgetModel: WidgetModel): ExecuteQueryPara
     // stay explicit (the eslint auto-fix would otherwise remove it and the build fails).
     const { attributes: chartAttributes, measures: chartMeasures } = getTranslatedDataOptions(
       widgetModel.dataOptions as ChartDataOptions,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-assertion -- tsc needs this cast; lint's type info disagrees
       widgetModel.chartType!,
     );
     dimensions = chartAttributes;
@@ -415,7 +418,7 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
  * ```tsx
  * <PivotTableWidget {...widgetModelTranslator.toPivotTableWidgetProps(widgetModel)} />
  * ```
-
+ *
  * Note: this method is not supported for chart or table widgets.
  * Use {@link toChartWidgetProps} instead for getting props for the <ChartWidget> component.
  */
@@ -538,10 +541,44 @@ function normalizeFilterWidgetType(
   if (raw === 'list') return 'members';
   // Handle subtype format: 'filter/members' → 'members'
   const value = raw?.startsWith('filter/') ? raw.slice('filter/'.length) : raw;
-  const known: FilterWidgetFilterType[] = ['members', 'calendar', 'range', 'period', 'condition'];
+  const known: FilterWidgetFilterType[] = [
+    'members',
+    'calendar',
+    'range',
+    'period',
+    'condition',
+    'rank',
+  ];
   const isKnownFilterType = (v: string | undefined): v is FilterWidgetFilterType =>
     v !== undefined && (known as string[]).includes(v);
   return isKnownFilterType(value) ? value : 'members';
+}
+
+/**
+ * Reads the measure a Rank filter ranks by from the DTO `style.rankBy` JAQL.
+ *
+ * Returns `undefined` for a missing, malformed or non-measure value, so the widget reads as if
+ * no measure were set (a disabled control) rather than failing the whole dashboard.
+ *
+ * @param raw - The stored `style.rankBy` JAQL.
+ * @returns The measure, or `undefined` when none can be read.
+ */
+function readRankByMeasure(raw: FilterWidgetDtoStyle['rankBy']): Measure | undefined {
+  if (!raw || typeof raw !== 'object') return undefined;
+  // The stored value is the measure JAQL; tolerate the `{ jaql }` item wrapper some hosts keep.
+  const jaql = 'jaql' in raw ? (raw as { jaql: typeof raw }).jaql : raw;
+  if (!jaql || typeof jaql !== 'object') return undefined;
+  const isMeasureJaql =
+    'formula' in jaql || ('agg' in jaql && typeof jaql.agg === 'string' && jaql.agg !== '');
+  if (!isMeasureJaql) return undefined;
+  try {
+    const element = createDimensionalElementFromJaql(jaql);
+    return isDimensionalBaseMeasure(element) || isDimensionalCalculatedMeasure(element)
+      ? element
+      : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /**
@@ -610,6 +647,10 @@ function extractFilterWidgetData(
       ? [...style.timeFrames]
       : undefined;
 
+  // Rank — the measure the filter ranks by. Read only for a `'rank'` widget; a stored value on
+  // any other type is stale and ignored.
+  const rankBy = filterType === 'rank' ? readRankByMeasure(style?.rankBy) : undefined;
+
   return {
     attribute,
     filterType,
@@ -618,6 +659,7 @@ function extractFilterWidgetData(
     // `style.filterDesign` is the host's persisted key for the control's styling.
     controlStyleOptions: extractFilterWidgetControlStyle(style?.filterDesign),
     ...(timeFrames ? { timeFrames } : {}),
+    ...(rankBy ? { rankBy } : {}),
   };
 }
 
@@ -648,7 +690,8 @@ function getFilterWidgetData(
  * of {@link extractFilterWidgetData}.
  *
  * Writes the canonical `filterType`, the current `multiSelection` flag, the control styling under
- * `filterDesign`, and the Time Frame set (with `customizeTimeFrames` on) only when one is curated.
+ * `filterDesign`, the Time Frame set (with `customizeTimeFrames` on) only when one is curated, and
+ * the Rank measure's JAQL under `rankBy` only for a `'rank'` widget.
  *
  * @param data - The filter widget data of the model.
  * @returns The filter widget DTO style.
@@ -661,6 +704,7 @@ function toFilterWidgetDtoStyle(
     multiSelection: data.isMultiselect,
     ...(data.controlStyleOptions ? { filterDesign: { ...data.controlStyleOptions } } : {}),
     ...(data.timeFrames ? { customizeTimeFrames: true, timeFrames: [...data.timeFrames] } : {}),
+    ...(data.filterType === 'rank' && data.rankBy ? { rankBy: data.rankBy.jaql(true) } : {}),
   };
 }
 
@@ -691,6 +735,8 @@ function toFilterWidgetProps(widgetModel: WidgetModel): CommonWidgetProps {
     // `style.customizeTimeFrames` on) — omitted otherwise so the widget falls back to
     // sdk-ui's default 11 frames via the readTimeFramesInput guard.
     ...(data.timeFrames ? { timeFrames: data.timeFrames } : {}),
+    // Rank's measure — omitted unless the widget is a Rank filter that has one set.
+    ...(data.rankBy ? { rankBy: data.rankBy } : {}),
     // Carry the widget-design container style (space around, corner radius, shadow,
     // border, background, header) so the CSDK-rendered FilterWidget's WidgetContainer
     // applies the same Widget Style as every other widget type. (`styleOptions` is
@@ -1224,6 +1270,9 @@ export function fromFilterWidgetProps(filterWidgetProps: FilterWidgetProps): Wid
       isMultiselect: filterWidgetProps.isMultiselect ?? true,
       ...(control ? { controlStyleOptions: control } : {}),
       ...(filterWidgetProps.timeFrames ? { timeFrames: [...filterWidgetProps.timeFrames] } : {}),
+      ...(filterWidgetProps.filterType === 'rank' && filterWidgetProps.rankBy
+        ? { rankBy: filterWidgetProps.rankBy }
+        : {}),
     },
   };
 }
@@ -1307,7 +1356,7 @@ export function toWidgetDto(
   }
 
   const chartType = widgetModel.chartType;
-  let fusionWidgetType = getFusionWidgetType(
+  const fusionWidgetType = getFusionWidgetType(
     widgetModel.widgetType,
     chartType,
     widgetModel.customWidgetType,
@@ -1402,8 +1451,6 @@ export function toWidgetDto(
     style = toPolarWidgetStyle(widgetModel.styleOptions as PolarStyleOptions);
   } else if (chartType === 'table') {
     panels.push(...toTablePanels(widgetModel.dataOptions as TableDataOptionsInternal));
-    // tablewidgetagg is now a disabled custom widget by default, and tablewidget should be fully compatible
-    fusionWidgetType = 'tablewidget';
     subtype = 'tablewidget';
     style = toTableWidgetStyle(widgetModel.styleOptions as TableStyleOptions);
   } else if (chartType === 'indicator') {

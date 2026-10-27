@@ -1,18 +1,21 @@
-import {
+import type {
   CartesianChartDataOptions,
   ChartDataOptions,
   StyledMeasureColumn,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { isCartesian } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
-import { ChartType } from '@/index';
+import type { ChartType } from '@/index';
 
-import { chartBuildersMap } from './chart-builder-factory.js';
-import { SupportedChartType } from './types.js';
-
-type ChartTypeWithAvailableBuilder = keyof typeof chartBuildersMap;
+import { RESTRUCTURED_CHART_TYPES } from './restructured-chart-types.js';
+import type { SupportedChartType } from './types.js';
 
 /**
- * Helper function to detect if chart data options contain forecast or trend analytics
+ * Helper function to detect if chart data options contain forecast or trend analytics.
+ *
+ * @param dataOptions - Chart data options to inspect.
+ * @param chartType - Chart type the data options belong to.
+ * @returns `true` if any value column has forecast or trend enabled.
+ * @internal
  */
 export function hasForecastOrTrend(dataOptions: ChartDataOptions, chartType: ChartType): boolean {
   if (!isCartesian(chartType)) return false;
@@ -24,22 +27,16 @@ export function hasForecastOrTrend(dataOptions: ChartDataOptions, chartType: Cha
   );
 }
 
+/**
+ * Checks whether a chart type is rendered by the restructured-charts architecture,
+ * that is, whether it has a builder in `chartBuildersMap`.
+ *
+ * @param chartType - Chart type to check.
+ * @returns `true` if the chart type has a restructured chart builder.
+ * @internal
+ */
 export function isRestructuredChartType(chartType: ChartType): chartType is SupportedChartType {
-  const restructuredChartTypes: ChartTypeWithAvailableBuilder[] = [
-    'areamap',
-    'area',
-    'column',
-    'bar',
-    'line',
-    'polar',
-    'pie',
-    'funnel',
-    'calendar-heatmap',
-    'kpi',
-    'treemap',
-    'sunburst',
-    'streamgraph',
-    'sankey',
-  ];
-  return restructuredChartTypes.includes(chartType as SupportedChartType);
+  return RESTRUCTURED_CHART_TYPES.some(
+    (restructuredChartType) => restructuredChartType === chartType,
+  );
 }

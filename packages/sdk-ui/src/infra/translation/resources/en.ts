@@ -271,6 +271,22 @@ export const translation = {
       /** The field's ✕ button; `field` is Minimum or Maximum. */
       clear: 'Clear {{field}}',
     },
+    /** Rank: trigger text, panel labels and accessible names. */
+    rank: {
+      /** Trigger and hover text with nothing applied; `field` is the ranked-by measure, unescaped. */
+      rankedBy: 'Ranked by {{- field}}',
+      /** Label over the read-only box that names the measure in the open panel. */
+      rankedByLabel: 'Ranked by:',
+      /** First row of the hover once a ranking is applied; the measure's name is the row under it. */
+      topBy: 'Top {{valA}} By:',
+      bottomBy: 'Bottom {{valA}} By:',
+      /** Hover hint of the disabled trigger while no measure has been chosen. */
+      chooseRankedBy: 'Choose a field to rank by in: Filter Settings › Ranked by',
+      /** Accessible name of the Top / Bottom selector. */
+      direction: 'Ranking direction',
+      /** Accessible name of the count field. */
+      count: 'Number of members',
+    },
     selectedCount: '{{count}} selected',
     allExceptCount: 'All except {{count}}',
     setupTitle: 'Set up a filter widget',
@@ -497,6 +513,7 @@ export const translation = {
     copy: 'Copy to clipboard',
     copied: 'Copied',
     creditsUsed: '{{usagePercentage}}% of AI credits have been used.',
+    aiContextHint: 'For better performance,<br/>add <strong>AI Context</strong>',
     noDataTitle: 'No dashboard data available',
     noDataDescription: 'Once dashboard data is available, you can generate a narrative.',
     failedTitle: 'Unable to generate the narrative',

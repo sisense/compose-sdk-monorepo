@@ -83,6 +83,9 @@ export type { PanelNumberInputProps } from './panel-number-input.js';
 export { ConditionFilter } from './condition-filter.js';
 export type { ConditionFilterProps, ConditionKind } from './condition-filter.js';
 
+export { RankFilter } from './rank-filter.js';
+export type { RankFilterProps } from './rank-filter.js';
+
 export { PanelCountInput } from './panel-count-input.js';
 export type { PanelCountInputProps } from './panel-count-input.js';
 

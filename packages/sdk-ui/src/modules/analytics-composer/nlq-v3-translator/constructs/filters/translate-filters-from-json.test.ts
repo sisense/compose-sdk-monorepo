@@ -1,6 +1,8 @@
 import {
   DateLevels,
   Filter,
+  isDateMeasureMembersFilter,
+  isDateMeasureRelativeFilter,
   isFilterRelations,
   isLevelAttribute,
   isMembersFilter,
@@ -25,6 +27,7 @@ import {
   translateFiltersFromJSONFunctionCall,
   translateHighlightsFromJSONFunctionCall,
 } from './translate-filters-from-json.js';
+import { translateFiltersToJSON } from './translate-filters-to-json.js';
 
 const MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE = createSchemaIndex(
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -1134,6 +1137,171 @@ describe('translateFilters', () => {
 
       expect(result.success).toBe(false);
       expect(getErrors(result)[0]).toContain('count must be greater than zero');
+    });
+  });
+
+  describe('date-measure filters', () => {
+    const context = {
+      dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+    };
+    const LAST_ORDER: FunctionCall = {
+      function: 'measureFactory.max',
+      args: ['DM.Commerce.Date.Days', 'Last Order'],
+    };
+    const translate = (filter: FunctionCall) =>
+      translateFiltersFromJSONFunctionCall({ data: [filter], context });
+
+    it('translates dateMeasureMembers', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureMembers',
+        args: [
+          LAST_ORDER,
+          'DM.Commerce.Date.Years',
+          ['2012-01-01T00:00:00', '2013-01-01T00:00:00'],
+        ],
+      });
+
+      const [filter] = getSuccessData(result) as Filter[];
+      expect(isDateMeasureMembersFilter(filter)).toBe(true);
+      if (!isDateMeasureMembersFilter(filter)) throw new Error('Expected date-measure members');
+      expect(filter.measure.name).toBe('Last Order');
+      expect(filter.level.granularity).toBe(DateLevels.Years);
+      expect(filter.members).toEqual(['2012-01-01T00:00:00', '2013-01-01T00:00:00']);
+    });
+
+    it('keeps the excludeMembers config of dateMeasureMembers', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureMembers',
+        args: [
+          LAST_ORDER,
+          'DM.Commerce.Date.Years',
+          ['2013-01-01T00:00:00'],
+          { excludeMembers: true },
+        ],
+      });
+
+      const [filter] = getSuccessData(result) as Filter[];
+      if (!isDateMeasureMembersFilter(filter)) throw new Error('Expected date-measure members');
+      expect(filter.config.excludeMembers).toBe(true);
+    });
+
+    it.each([
+      ['filterFactory.dateMeasureRelativeFrom', 'next'],
+      ['filterFactory.dateMeasureRelativeTo', 'last'],
+    ])('translates %s', (functionName, operator) => {
+      const result = translate({
+        function: functionName,
+        args: [LAST_ORDER, 'DM.Commerce.Date.Years', 0, 2, '2012-01-01'],
+      });
+
+      const [filter] = getSuccessData(result) as Filter[];
+      expect(isDateMeasureRelativeFilter(filter)).toBe(true);
+      if (!isDateMeasureRelativeFilter(filter)) throw new Error('Expected date-measure relative');
+      expect(filter.measure.name).toBe('Last Order');
+      expect(filter.offset).toBe(0);
+      expect(filter.count).toBe(2);
+      expect(filter.operator).toBe(operator);
+    });
+
+    it('accepts a date measure written as a custom formula', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureMembers',
+        args: [
+          {
+            function: 'measureFactory.customFormula',
+            args: ['First Order', 'MIN([d])', { d: 'DM.Commerce.Date.Days' }],
+          },
+          'DM.Commerce.Date.Years',
+          ['2012-01-01T00:00:00'],
+        ],
+      });
+
+      const [filter] = getSuccessData(result) as Filter[];
+      expect(isDateMeasureMembersFilter(filter)).toBe(true);
+    });
+
+    it('rejects a measure that is not a date measure', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureMembers',
+        args: [
+          { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Revenue'] },
+          'DM.Commerce.Date.Years',
+          ['2012-01-01T00:00:00'],
+        ],
+      });
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)[0]).toContain('is not a date measure');
+    });
+
+    it('rejects a level that is not a date level', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureMembers',
+        args: [LAST_ORDER, 'DM.Category.Category', ['Apple Mac Desktops']],
+      });
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)[0]).toContain('args[1]');
+    });
+
+    it('rejects members that do not match the level, pointing at the members arg', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureMembers',
+        args: [LAST_ORDER, 'DM.Commerce.Date.Weeks', ['202500']],
+      });
+
+      expect(result.success).toBe(false);
+      const [error] = getErrors(result);
+      expect(error).toContain('202500');
+      expect(error).toContain('args[2][0]');
+    });
+
+    it('rejects a relative period with a zero count, pointing at the count arg', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureRelativeFrom',
+        args: [LAST_ORDER, 'DM.Commerce.Date.Years', 0, 0],
+      });
+
+      expect(result.success).toBe(false);
+      const [error] = getErrors(result);
+      expect(error).toContain('count must be greater than zero');
+      expect(error).toContain('args[3]');
+    });
+
+    it('rejects a WeekOfYear level without naming the plain members filter', () => {
+      const result = translate({
+        function: 'filterFactory.dateMeasureMembers',
+        args: [LAST_ORDER, 'DM.Commerce.Date.WeekOfYear', ['1']],
+      });
+
+      expect(result.success).toBe(false);
+      const [error] = getErrors(result);
+      expect(error).toContain('args[1]: members filters do not support WeekOfYear');
+      expect(error).not.toContain('filterFactory.members');
+    });
+
+    it.each([
+      {
+        function: 'filterFactory.dateMeasureMembers',
+        args: [
+          LAST_ORDER,
+          'DM.Commerce.Date.Years',
+          ['2013-01-01T00:00:00'],
+          { excludeMembers: true },
+        ],
+      },
+      {
+        function: 'filterFactory.dateMeasureRelativeTo',
+        args: [LAST_ORDER, 'DM.Commerce.Date.Years', 0, 1, '2013-06-01'],
+      },
+    ])('round-trips $function through JSON', (filterJSON) => {
+      const [filter] = getSuccessData(translate(filterJSON)) as Filter[];
+
+      const [json] = getSuccessData(translateFiltersToJSON([filter]));
+      const [again] = getSuccessData(translate(json)) as Filter[];
+
+      expect(again.jaql()).toEqual(filter.jaql());
     });
   });
 });

@@ -64,10 +64,11 @@ export type DashboardNarrativeQueriesRequest = DashboardNarrativeRequestOptions 
 export type DashboardNarrativeSubActionType = 'generate' | 'regenerate';
 
 /**
- * The control that asked for a generation, reported for the service's usage tracking.
+ * What asked for a generation — a control, or an export that renders without a user —
+ * reported for the service's usage tracking.
  * @sisenseInternal
  */
-export type DashboardNarrativeTriggerType = 'widgetButton' | 'assistantCard';
+export type DashboardNarrativeTriggerType = 'widgetButton' | 'assistantCard' | 'export';
 
 /**
  * Options shared by every dashboard narrative route.

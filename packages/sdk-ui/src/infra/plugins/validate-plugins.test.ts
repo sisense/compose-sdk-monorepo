@@ -325,4 +325,82 @@ describe('getValidPlugins', () => {
       expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('duplicated'));
     });
   });
+  describe('data slot rules', () => {
+    let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleWarnSpy.mockRestore();
+    });
+
+    const withInputs = (inputs: unknown[]): Plugin => ({
+      name: 'slots-plugin',
+      version: '1.0.0',
+      requiredApiVersion: '^2.0.0',
+      pluginType: 'widget',
+      customWidget: {
+        name: 'slots',
+        displayName: 'Slots',
+        visualization: { Component: () => null },
+        // Simulates a manifest from untyped code or a newer SDK version.
+        dataPanel: { config: { inputs: inputs as never } },
+      },
+    });
+
+    it('keeps the plugin and warns about a condition it cannot read', () => {
+      const plugins = [
+        withInputs([
+          { name: 'goal', type: 'measure', visibleWhen: { path: 'styleOptions.size', gt: 5 } },
+        ]),
+      ];
+
+      expect(getValidPlugins(plugins, '2.20.0')).toHaveLength(1);
+      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('"slots-plugin": data slot "goal"'),
+      );
+    });
+
+    it.each([{}, 'inputs', [null], [42, { name: 'goal', visibleWhen: { gt: 1 } }]])(
+      'does not throw on malformed inputs %j',
+      (inputs) => {
+        expect(getValidPlugins([withInputs(inputs as unknown[])], '2.20.0')).toHaveLength(1);
+      },
+    );
+
+    it('does not warn about slots that follow every rule', () => {
+      const plugins = [
+        withInputs([
+          { name: 'value', type: 'measure' },
+          { name: 'goal', type: 'measure', visibleWhen: { slot: 'value', minItems: 1 } },
+        ]),
+      ];
+
+      getValidPlugins(plugins, '2.20.0');
+
+      expect(consoleWarnSpy).not.toHaveBeenCalled();
+    });
+
+    it('keeps the plugin and warns once per broken slot rule, naming the plugin and the slot', () => {
+      const plugins = [
+        withInputs([
+          { name: 'size', type: 'measure', maxItems: 0 },
+          { name: 'break-by', type: 'dimension' },
+          { name: 'filters', type: 'dimension' },
+          { name: 'width', type: 'measure', displayName: 'size' },
+        ]),
+      ];
+
+      expect(getValidPlugins(plugins, '2.20.0')).toHaveLength(1);
+      expect(consoleWarnSpy.mock.calls.map(([message]) => message)).toEqual([
+        '[Plugin] "slots-plugin": data slot "size" has maxItems 0; maxItems must be a whole number of at least 1.',
+        '[Plugin] "slots-plugin": data slot "break-by" has a name that is not camelCase; saved widgets load its items under "breakBy".',
+        '[Plugin] "slots-plugin": data slot "filters" has a name reserved by hosts; choose another name.',
+        '[Plugin] "slots-plugin": data slot "width" has the displayName "size", which is the name of another data slot.',
+      ]);
+    });
+  });
 });

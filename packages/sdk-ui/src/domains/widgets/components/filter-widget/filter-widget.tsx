@@ -1,6 +1,7 @@
 import { type FunctionComponent, useEffect, useRef } from 'react';
 
 import { useTrackWidgetInit } from '@/domains/widgets/hooks/use-track-widget-init';
+import { useWidgetContextGate } from '@/domains/widgets/hooks/use-widget-context-gate';
 import { getWidgetEntityId } from '@/domains/widgets/hooks/widget-entity-id';
 import {
   getFilterWidgetName,
@@ -13,6 +14,7 @@ import { ThemeProvider, useThemeContext } from '@/infra/contexts/theme-provider'
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 
 import { FilterWidgetDropdown } from './filter-widget-dropdown';
+import { FilterWidgetSkeleton } from './filter-widget-skeleton';
 import type { FilterWidgetProps } from './types';
 
 /**
@@ -47,7 +49,10 @@ import type { FilterWidgetProps } from './types';
  */
 export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseComponent({
   componentName: 'FilterWidget',
+  // Shows its own skeleton inside its container instead of the decorator's loading overlay.
+  shouldSkipSisenseContextWaiting: true,
 })((props) => {
+  const { isContextReady } = useWidgetContextGate();
   const {
     attribute,
     dataSource,
@@ -66,6 +71,7 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
     emptyState,
     onSetup,
     timeFrames,
+    rankBy,
   } = props;
 
   /* Split once: the control's own styling goes to the control, and the rest — the widget
@@ -115,7 +121,9 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
     }
   }, [title, attribute.name, attribute.expression, onChange]);
 
-  const dropdown = (
+  const dropdown = !isContextReady ? (
+    <FilterWidgetSkeleton controlStyleOptions={controlStyleOptions} />
+  ) : (
     <FilterWidgetDropdown
       attribute={attribute}
       dataSource={dataSource}
@@ -136,6 +144,7 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
       emptyState={emptyState}
       onSetup={onSetup}
       timeFrames={timeFrames}
+      rankBy={rankBy}
     />
   );
 

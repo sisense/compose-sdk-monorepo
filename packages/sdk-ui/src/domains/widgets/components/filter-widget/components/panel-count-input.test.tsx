@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { PanelCountInput } from './panel-count-input.js';
 
@@ -13,6 +13,15 @@ function ControlledCountInput({ initialValue = '' }: { initialValue?: string }) 
 }
 
 describe('PanelCountInput', () => {
+  it('shows the placeholder it is given while the count is empty', () => {
+    render(<PanelCountInput value="" onChange={() => undefined} placeholder="Enter a value" />);
+
+    expect(screen.getByTestId('filter-widget-condition-count')).toHaveAttribute(
+      'placeholder',
+      'Enter a value',
+    );
+  });
+
   it('takes digits only — a typed letter never lands in the count', async () => {
     const user = userEvent.setup();
     render(<ControlledCountInput />);
@@ -66,5 +75,65 @@ describe('PanelCountInput', () => {
     await user.paste('12345678901234567890');
 
     expect(input).toHaveValue('123456789012345');
+  });
+
+  describe('step', () => {
+    const FIVES = (value: string, delta: 1 | -1) => String(Number(value || 0) + delta * 5);
+
+    function SteppedCountInput({ step }: { step?: (value: string, delta: 1 | -1) => string }) {
+      const [value, setValue] = useState('10');
+      return <PanelCountInput value={value} onChange={setValue} step={step} />;
+    }
+
+    it('steps with ArrowUp and ArrowDown through the step it is given', async () => {
+      const user = userEvent.setup();
+      render(<SteppedCountInput step={FIVES} />);
+      const input = screen.getByTestId('filter-widget-condition-count');
+
+      await user.click(input);
+      await user.keyboard('{ArrowUp}');
+      expect(input).toHaveValue('15');
+      await user.keyboard('{ArrowDown}{ArrowDown}');
+      expect(input).toHaveValue('5');
+    });
+
+    it('steps the stepper buttons through it as well, with the value and the direction', async () => {
+      const user = userEvent.setup();
+      const step = vi.fn(FIVES);
+      render(<SteppedCountInput step={step} />);
+
+      await user.click(screen.getByTestId('filter-widget-condition-count-up'));
+      await user.click(screen.getByTestId('filter-widget-condition-count-down'));
+
+      expect(step).toHaveBeenNthCalledWith(1, '10', 1);
+      expect(step).toHaveBeenNthCalledWith(2, '15', -1);
+    });
+
+    it('leaves the arrow keys alone when no step is given, and nudges by one from the buttons', async () => {
+      const user = userEvent.setup();
+      render(<SteppedCountInput />);
+      const input = screen.getByTestId('filter-widget-condition-count');
+
+      await user.click(input);
+      await user.keyboard('{ArrowUp}');
+      expect(input).toHaveValue('10');
+      await user.click(screen.getByTestId('filter-widget-condition-count-up'));
+      expect(input).toHaveValue('11');
+    });
+  });
+
+  describe('normalize', () => {
+    it('replaces the digits-only rule with the one it is given', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <PanelCountInput value="" onChange={onChange} normalize={(text) => text.toUpperCase()} />,
+      );
+
+      await user.type(screen.getByTestId('filter-widget-condition-count'), 'ab');
+
+      expect(onChange).toHaveBeenNthCalledWith(1, 'A');
+      expect(onChange).toHaveBeenNthCalledWith(2, 'B');
+    });
   });
 });

@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/default-param-last */
 import cloneDeep from 'lodash-es/cloneDeep.js';
 import isArray from 'lodash-es/isArray.js';
 
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { DimensionalLevelAttribute } from '../attributes/attributes.js';
-import {
+import type {
   Attribute,
+  BaseMeasure,
+  CalculatedMeasure,
   Filter,
   FilterRelations,
   FilterRelationsJaql,
@@ -16,8 +17,10 @@ import {
   FilterRelationsModelIdNode,
   FilterRelationsModelNode,
   FilterRelationsNode,
-  isLevelAttribute,
+  Measure,
 } from '../interfaces.js';
+import { isLevelAttribute } from '../interfaces.js';
+import { MetadataTypes } from '../types.js';
 import * as filterFactory from './factory.js';
 import {
   isCascadingFilter,
@@ -105,7 +108,7 @@ export type FilterRelationsRuleIdNode = { instanceid: string };
 export type FilterRelationsRuleNode = FilterRelationsRule | FilterRelationsRuleIdNode;
 
 /**
- * Filter action types
+ * Filter action types.
  *
  * @internal
  */
@@ -601,7 +604,7 @@ export function parenthesizeNestedLogicalSubgroupsInFilterRelationsModel(
 
 function assertUnreachableFilterRelationsModelNode(value: never): FilterRelationsModelNode {
   throw new TranslatableError('errors.filter.unexpectedFilterRelationsModelNode', {
-    node: JSON.stringify(value as unknown),
+    node: JSON.stringify(value),
   });
 }
 
@@ -744,7 +747,7 @@ export function isOperatorDescriptionNode(
  * the attribute and the JAQL it resolves to.
  *
  * Shared by {@link getAttributeCompareId} and {@link getFilterCompareId} so the two stay in sync;
- * each caller supplies its own JAQL source (the attribute's own JAQL vs. the filter's JAQL).
+ * each caller supplies its own JAQL source (the attribute's own JAQL or the filter's JAQL).
  */
 function buildAttributeCompareId(
   attribute: Attribute,
@@ -766,7 +769,7 @@ function buildAttributeCompareId(
 /**
  * Gets a unique identifier for an attribute, combining its expression and granularity if available.
  *
- * Used to match filters by the attribute they target (e.g. filters embedded in
+ * Used to match filters by the attribute they target (for example filters embedded in
  * calculated-measure formulas), so that targeting by attribute and by filter instance
  * resolve to the same identity.
  *
@@ -778,6 +781,47 @@ export function getAttributeCompareId(attribute: Attribute): string {
   // Some synthetic attributes lack a `jaql()` method; degrade to expression + granularity only.
   const attributeJaql = typeof attribute.jaql === 'function' ? attribute.jaql(true) : undefined;
   return buildAttributeCompareId(attribute, attributeJaql);
+}
+
+/**
+ * Gets a unique identifier for a measure: what it computes, never what it is called.
+ *
+ * A base measure is identified by its attribute (expression plus granularity, as in
+ * {@link getAttributeCompareId}) and its aggregation. A calculated measure is identified by its
+ * expression and the identities of its context entries. Title, format, sort and data source are
+ * ignored, so the same measure carrying different labels - for example one rebuilt from a stored
+ * ranking filter, which is titled with its ranking message - still compares equal.
+ *
+ * @param measure - The measure to generate the unique identifier for.
+ * @returns The unique identifier for the measure.
+ * @internal
+ */
+export function getMeasureCompareId(measure: Measure): string {
+  if (MetadataTypes.isCalculatedMeasure(measure)) {
+    const { expression, context } = measure as CalculatedMeasure;
+    const contextId = Object.keys(context)
+      .sort()
+      .map((key) => `${key}=${getContextEntryCompareId(context[key])}`)
+      .join(',');
+    return `${expression}{${contextId}}`;
+  }
+  if (MetadataTypes.isBaseMeasure(measure)) {
+    const { attribute, aggregation } = measure as BaseMeasure;
+    return `${getAttributeCompareId(attribute)}_${aggregation}`;
+  }
+  return measure.id;
+}
+
+/**
+ * Gets the identifier of one calculated-measure context entry, which is a measure or an attribute.
+ *
+ * @param entry - The context entry.
+ * @returns The unique identifier for the entry.
+ */
+function getContextEntryCompareId(entry: Measure | Attribute): string {
+  return MetadataTypes.isMeasure(entry)
+    ? getMeasureCompareId(entry as Measure)
+    : getAttributeCompareId(entry as Attribute);
 }
 
 /**
@@ -840,12 +884,12 @@ export function mergeFilters(sourceFilters: Filter[] = [], targetFilters: Filter
  * Replaces nodes of filter reations tree with fetched filters by instance id.
  *
  * @param filters - The filters.
- * @param highlights - The highlights
+ * @param highlights - The highlights.
  * @param filterRelations - Fetched filter relations.
  * @returns Filter relations with filters in nodes.
  * @internal
  */
-/* eslint-disable-next-line sonarjs/cognitive-complexity */
+
 export function getFilterRelationsFromJaql(
   filters: Filter[],
   highlights: Filter[],

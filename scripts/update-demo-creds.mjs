@@ -1,23 +1,16 @@
 #!/usr/bin/env node
 // Update Sisense connection credentials across all example demo apps.
-
-import { parseArgs as nodeParseArgs } from 'node:util';
-import {
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  chmodSync,
-  existsSync,
-} from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import readline from 'node:readline';
+import { fileURLToPath } from 'node:url';
+import { parseArgs as nodeParseArgs } from 'node:util';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(SCRIPT_DIR, '..');
 
 // ---------------------------------------------------------------------------
-// Demo registry — the three credential profiles, verified against demo source.
+// Demo registry — the credential profiles, verified against demo source.
 // `keys` lists the exact variable names each demo reads; an absent wat/sso key
 // means that auth mode is unsupported for the demo (it is skipped with a warning).
 // ---------------------------------------------------------------------------
@@ -33,28 +26,68 @@ const viteFull = { url: VITE.url, token: VITE.token, wat: VITE.wat, sso: VITE.ss
 const viteTokenOnly = { url: VITE.url, token: VITE.token };
 
 export const DEMOS = [
-  { name: 'react-ts-demo', format: 'env', dir: 'examples/react-ts-demo', target: '.env.local', seed: '.env.local.example', keys: viteTokenOnly },
-  { name: 'vue-ts-demo', format: 'env', dir: 'examples/vue-ts-demo', target: '.env.local', seed: '.env.local.example', keys: viteFull },
-  { name: 'react-fusion', format: 'env', dir: 'examples/react-fusion', target: '.env.local', seed: '.env.local.example', keys: viteFull },
-  { name: 'simple-table-paginated', format: 'env', dir: 'examples/simple-table-paginated', target: '.env.local', seed: '.env.local.example', keys: viteTokenOnly },
-  { name: 'simple-table-plugin', format: 'env', dir: 'examples/simple-table-plugin', target: '.env.local', seed: '.env.local.example', keys: viteFull },
-  { name: 'plugins-demo/react', format: 'env', dir: 'examples/plugins-demo/react', target: '.env.local', seed: '.env.local.example', keys: viteFull },
-  { name: 'plugins-demo/vue', format: 'env', dir: 'examples/plugins-demo/vue', target: '.env.local', seed: '.env.local.example', keys: viteFull },
+  {
+    name: 'react-ts-demo',
+    dir: 'examples/react-ts-demo',
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteTokenOnly,
+  },
+  {
+    name: 'vue-ts-demo',
+    dir: 'examples/vue-ts-demo',
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteFull,
+  },
+  {
+    name: 'react-fusion',
+    dir: 'examples/react-fusion',
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteFull,
+  },
+  {
+    name: 'simple-table-paginated',
+    dir: 'examples/simple-table-paginated',
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteTokenOnly,
+  },
+  {
+    name: 'simple-table-plugin',
+    dir: 'examples/simple-table-plugin',
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteFull,
+  },
+  {
+    name: 'plugins-demo/react',
+    dir: 'examples/plugins-demo/react',
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteFull,
+  },
+  {
+    name: 'plugins-demo/vue',
+    dir: 'examples/plugins-demo/vue',
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteFull,
+  },
   {
     name: 'angular-demo',
-    format: 'angular',
     dir: 'examples/angular-demo',
-    target: 'src/environments/environment.development.ts',
-    seed: 'src/environments/environment.example.ts',
-    keys: { url: 'APP_SISENSE_URL', token: 'APP_SISENSE_TOKEN', sso: 'APP_SSO_ENABLED' },
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: { url: VITE.url, token: VITE.token, sso: VITE.sso },
   },
   {
     name: 'plugins-demo/angular',
-    format: 'angular',
     dir: 'examples/plugins-demo/angular',
-    target: 'src/environments/environment.development.ts',
-    seed: 'src/environments/environment.ts',
-    keys: { url: 'APP_SISENSE_URL', token: 'APP_SISENSE_TOKEN' },
+    target: '.env.local',
+    seed: '.env.local.example',
+    keys: viteTokenOnly,
   },
 ];
 
@@ -93,7 +126,9 @@ export function parseArgs(argv) {
     throw new Error('An auth mode is required: one of --token, --wat, --sso, --login.');
   }
   if (modes.length > 1) {
-    throw new Error(`Auth modes are mutually exclusive; got ${modes.join(', ')}. Pass exactly one.`);
+    throw new Error(
+      `Auth modes are mutually exclusive; got ${modes.join(', ')}. Pass exactly one.`,
+    );
   }
 
   const mode = modes[0];
@@ -155,34 +190,6 @@ export function updateEnvContent(content, demo, { url, auth }) {
   if (demo.keys.token) out = setEnvLine(out, demo.keys.token, auth.token);
   if (demo.keys.wat) out = setEnvLine(out, demo.keys.wat, auth.wat);
   if (demo.keys.sso) out = setEnvLine(out, demo.keys.sso, String(auth.sso));
-  return out;
-}
-
-function insertAngularProp(content, prop) {
-  const re = /(export const environment\s*=\s*\{\s*\n)/;
-  if (re.test(content)) return content.replace(re, `$1  ${prop},\n`);
-  // Fail loudly rather than silently dropping the write — a silent no-op would
-  // leave a credential unset while the run still reported the demo as updated.
-  throw new Error(`Could not locate "export const environment = {" to insert ${prop}`);
-}
-
-function setAngularString(content, key, value) {
-  const re = new RegExp(`(\\b${escapeRegExp(key)}[ \\t]*:[ \\t]*)(['"]).*?\\2`);
-  if (re.test(content)) return content.replace(re, `$1'${value}'`);
-  return insertAngularProp(content, `${key}: '${value}'`);
-}
-
-function setAngularBool(content, key, value) {
-  const re = new RegExp(`(\\b${escapeRegExp(key)}[ \\t]*:[ \\t]*)(true|false)`);
-  if (re.test(content)) return content.replace(re, `$1${value}`);
-  return insertAngularProp(content, `${key}: ${value}`);
-}
-
-export function updateAngularContent(content, demo, { url, auth }) {
-  let out = setAngularString(content, demo.keys.url, url);
-  if (demo.keys.token) out = setAngularString(out, demo.keys.token, auth.token);
-  if (demo.keys.wat) out = setAngularString(out, demo.keys.wat, auth.wat);
-  if (demo.keys.sso) out = setAngularBool(out, demo.keys.sso, auth.sso);
   return out;
 }
 
@@ -248,7 +255,11 @@ export function nextMemory(old, resolved) {
 
 function promptHidden(question) {
   return new Promise((resolve) => {
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: true,
+    });
     let muted = false;
     rl._writeToOutput = (str) => {
       if (!muted) process.stdout.write(str);
@@ -304,16 +315,17 @@ function applyToDemos(demos, mode, payload, { dryRun }) {
     } else if (existsSync(seedPath)) {
       content = readFileSync(seedPath, 'utf8');
     } else {
-      results.push({ name: demo.name, status: 'error', message: `no target or seed (${demo.seed})` });
+      results.push({
+        name: demo.name,
+        status: 'error',
+        message: `no target or seed (${demo.seed})`,
+      });
       continue;
     }
 
     let updated;
     try {
-      updated =
-        demo.format === 'env'
-          ? updateEnvContent(content, demo, payload)
-          : updateAngularContent(content, demo, payload);
+      updated = updateEnvContent(content, demo, payload);
     } catch (err) {
       // A writer that cannot place a key surfaces as an error rather than a
       // false "updated"/"created"; other demos still process.
@@ -378,7 +390,11 @@ function printSummary(resolved, secret, results, dryRun) {
   const skipped = results.filter((r) => r.status === 'skipped').map((r) => r.name);
 
   console.log('');
-  console.log(`${prefix}Done: ${created + updated} ${dryRun ? 'would change' : 'updated/created'} (${created} created, ${updated} updated), ${skipped.length} skipped.`);
+  console.log(
+    `${prefix}Done: ${created + updated} ${
+      dryRun ? 'would change' : 'updated/created'
+    } (${created} created, ${updated} updated), ${skipped.length} skipped.`,
+  );
   if (skipped.length) {
     console.log(`Skipped (no ${resolved.mode.toUpperCase()} support): ${skipped.join(', ')}`);
   }
@@ -422,7 +438,9 @@ export async function main(argv, env) {
   let secret = resolved.secret;
   if (resolved.mode === 'login') {
     if (opts.dryRun) {
-      console.log(`[dry-run] would log in to ${resolved.url} as ${resolved.username} to fetch an API token.`);
+      console.log(
+        `[dry-run] would log in to ${resolved.url} as ${resolved.username} to fetch an API token.`,
+      );
     } else {
       try {
         const password = await resolvePassword(resolved, env);
@@ -438,7 +456,12 @@ export async function main(argv, env) {
   }
 
   const auth = computeAuth(resolved.mode, secret);
-  const results = applyToDemos(DEMOS, resolved.mode, { url: resolved.url, auth }, { dryRun: opts.dryRun });
+  const results = applyToDemos(
+    DEMOS,
+    resolved.mode,
+    { url: resolved.url, auth },
+    { dryRun: opts.dryRun },
+  );
 
   printSummary(resolved, secret, results, opts.dryRun);
 

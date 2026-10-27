@@ -3,26 +3,27 @@ import { type ReactNode, useContext } from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { WidgetDefinitionRegistry } from '@/domains/widgets/widget-definitions';
+
 import { SisenseContextProvider } from '../contexts/sisense-context/sisense-context-provider.js';
 import {
   CustomPluginContextProvider,
   type CustomPluginContextProviderProps,
 } from './custom-plugin-context-provider.js';
 import { PluginContext, type PluginContextValue } from './plugin-context.js';
-import { useWidgetPluginRegistry } from './use-widget-plugin-registry.js';
-import type { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js';
+import { useWidgetDefinitionRegistry } from './use-widget-definition-registry.js';
 
 vi.mock('../app/client-application', () => ({
   // Never resolves: the provider renders its children without a client application.
   createClientApplication: vi.fn(() => new Promise(() => {})),
 }));
 
-type Snapshot = { registry: WidgetPluginRegistry; contextValue: PluginContextValue | null };
+type Snapshot = { registry: WidgetDefinitionRegistry; contextValue: PluginContextValue | null };
 
 const createProbe = () => {
   const snapshots: Snapshot[] = [];
   const Probe = () => {
-    const registry = useWidgetPluginRegistry();
+    const registry = useWidgetDefinitionRegistry();
     const contextValue = useContext(PluginContext);
     snapshots.push({ registry, contextValue });
     return null;

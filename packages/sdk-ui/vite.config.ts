@@ -27,6 +27,12 @@ const getTranslationEntries = (): Record<string, string> => {
     }, {});
 };
 
+/**
+ * `build:watch` rebuilds only the runtime code, to try changes in a host quickly: no declaration
+ * files and no type check, and `dist` is updated in place instead of being emptied on each rebuild.
+ */
+const BUILD_WATCH = process.env.BUILD_WATCH === 'true';
+
 /** Entry that carries the package stylesheet; see `src/styles.ts`. */
 const stylesEntry = resolve(__dirname, 'src/styles.ts');
 
@@ -47,15 +53,19 @@ export default defineConfig(({ mode }) => ({
       },
       useStrictCSP: true,
     }),
-    dts({
-      insertTypesEntry: true,
-      tsConfigFilePath:
-        mode === 'production' ? resolve(__dirname, './tsconfig.prod.json') : undefined,
-    }),
-    checker({
-      typescript: true,
-      overlay: { initialIsOpen: false },
-    }),
+    ...(BUILD_WATCH
+      ? []
+      : [
+          dts({
+            insertTypesEntry: true,
+            tsConfigFilePath:
+              mode === 'production' ? resolve(__dirname, './tsconfig.prod.json') : undefined,
+          }),
+          checker({
+            typescript: true,
+            overlay: { initialIsOpen: false },
+          }),
+        ]),
   ],
   define: {
     __PACKAGE_VERSION__: JSON.stringify(process.env.npm_package_version),
@@ -67,6 +77,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    emptyOutDir: !BUILD_WATCH,
     sourcemap: mode === 'production' ? false : true,
     target: 'es6',
     lib: {

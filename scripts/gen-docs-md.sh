@@ -10,6 +10,17 @@ echo "${ORANGE}** NOTE: TYPEDOC WARNINGS ARE TREATED AS ERRORS AND MUST BE FIXED
 
 set -o errexit
 
+# The wrapper packages (sdk-ui-angular, sdk-ui-vue, ...) are documented from their *built*
+# declarations, which nx rebuilds first (`dependsOn: ^build:prod`). Run bare, this script would
+# document whatever stale `dist/` happens to be on disk, and CI's docs-check — which always builds
+# first — would then report API doc changes this machine never produced. nx exports
+# NX_TASK_TARGET_PROJECT to the tasks it runs, so its absence means we were started by hand:
+# hand over to nx, which builds the dependencies and runs this script again.
+if [ -z "${NX_TASK_TARGET_PROJECT:-}" ]; then
+  echo "Not running under nx: going through 'nx run @sisense/root:docs:gen:md' so the dependency packages are built first."
+  exec yarn nx run @sisense/root:docs:gen:md
+fi
+
 # Build typedoc-plugin-markdown
 yarn nx run @sisense/typedoc-plugin-markdown:build
 

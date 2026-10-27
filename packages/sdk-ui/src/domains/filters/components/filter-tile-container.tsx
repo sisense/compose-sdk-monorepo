@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
-import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
+import type { TooltipProps } from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import { merge } from 'ts-deepmerge';
-import { DeepRequired } from 'ts-essentials';
+import type { DeepRequired } from 'ts-essentials';
 
 import { BackgroundFilterIcon } from '@/domains/filters/components/icons/background-filter-icon';
 import { DEFAULT_TEXT_COLOR, MIN_TOUCH_TARGET_SIZE } from '@/shared/const';
@@ -15,10 +16,11 @@ import type { MenuItem } from '@/shared/types/menu-item';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
 import { useThemeContext } from '../../../infra/contexts/theme-provider';
-import { Themable } from '../../../infra/contexts/theme-provider/types';
+import type { Themable } from '../../../infra/contexts/theme-provider/types';
 import { FilterTileMenuButton } from '../shared/filter-tile-menu-button';
 import { SisenseSwitchButton, TriangleIndicator } from './common';
-import { FilterVariant, isVertical } from './common/filter-utils';
+import type { FilterVariant } from './common/filter-utils';
+import { isVertical } from './common/filter-utils';
 import { BORDER_COLOR, BORDER_THICKNESS, FILTER_TILE_MIN_WIDTH } from './filters-panel/constants';
 import { ArrowDownIcon, LockIcon, PencilIcon, TrashIcon } from './icons';
 
@@ -163,7 +165,7 @@ interface FilterTileContainerProps {
    */
   menuItems?: MenuItem[];
   /**
-   * Render header title
+   * Render header title.
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
@@ -347,6 +349,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
               )}
               {menuItems &&
                 menuItems.length > 0 &&
+                !disabled &&
                 (linked ? (
                   // Wrapped so the dim applies to the button (it exposes no style prop).
                   <span style={{ display: 'inline-flex', opacity: LINKED_TILE_DIM }}>

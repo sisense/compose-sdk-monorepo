@@ -19,12 +19,13 @@ import {
 
 /**
  * One request: its target, whether it only reads the service's cache, and — for a generation —
- * the usage-tracking fields.
+ * the usage-tracking fields and whether the `generate` action asked for it.
  */
 type NarrativeRequest = {
   target: DashboardNarrativeTarget;
   cacheOnly: boolean;
   tracking?: Pick<DashboardNarrativeRequestOptions, 'subActionType' | 'triggerType'>;
+  fromGenerate?: boolean;
 };
 
 /**
@@ -45,6 +46,10 @@ export type UseNarrativeWidgetStateParams = {
    * Without it, the service's cache is looked up once instead, and nothing is generated.
    */
   generateOnMount?: boolean;
+  /** Sent as the generation's `triggerType` with `generateOnMount`. Defaults to `'export'`. */
+  generateOnMountTriggerType?: DashboardNarrativeTriggerType;
+  /** Called each time a generation requested through `generate` ends with a narrative. */
+  onGenerated?: () => void;
 };
 
 /**
@@ -84,6 +89,8 @@ export function useNarrativeWidgetState(
     sharedMode = false,
     adminAccess = false,
     generateOnMount = false,
+    generateOnMountTriggerType = 'export',
+    onGenerated,
   } = params;
   const { app, isInitialized } = useSisenseContext();
   const httpClient = app?.httpClient;
@@ -114,7 +121,7 @@ export function useNarrativeWidgetState(
   const hasShownNarrative = useRef(false);
 
   const requestGeneration = useCallback(
-    (triggerType?: DashboardNarrativeTriggerType) => {
+    (triggerType: DashboardNarrativeTriggerType, fromGenerate: boolean) => {
       const target = getTarget();
       if (!target) {
         reset();
@@ -129,19 +136,31 @@ export function useNarrativeWidgetState(
           subActionType: hasShownNarrative.current ? 'regenerate' : 'generate',
           triggerType,
         },
+        fromGenerate,
       });
     },
     [getTarget, mutate, reset],
   );
 
-  const generate = useCallback(() => requestGeneration('widgetButton'), [requestGeneration]);
+  const generate = useCallback(() => requestGeneration('widgetButton', true), [requestGeneration]);
+
+  const onGeneratedRef = useRef(onGenerated);
+  useEffect(() => {
+    onGeneratedRef.current = onGenerated;
+  }, [onGenerated]);
+  // Must stay out of the mutation's callbacks, where an error thrown by the host fails the generation.
+  useEffect(() => {
+    if (status === 'success' && variables?.fromGenerate) {
+      onGeneratedRef.current?.();
+    }
+  }, [status, data, variables]);
 
   const requestedOnMount = useRef(false);
   useEffect(() => {
     if (!generateOnMount || requestedOnMount.current || !httpClient) return;
     requestedOnMount.current = true;
-    requestGeneration();
-  }, [generateOnMount, httpClient, requestGeneration]);
+    requestGeneration(generateOnMountTriggerType, false);
+  }, [generateOnMount, generateOnMountTriggerType, httpClient, requestGeneration]);
 
   useEffect(() => {
     if (generateOnMount || requestedOnMount.current || !httpClient) return;

@@ -36,8 +36,8 @@ describe('factory-function-processors', () => {
     });
 
     it('should return undefined for functions without custom processing', () => {
-      expect(hasCustomProcessing('measureFactory.min')).toBe(false);
-      expect(getCustomProcessor('measureFactory.min')).toBeUndefined();
+      expect(hasCustomProcessing('measureFactory.add')).toBe(false);
+      expect(getCustomProcessor('measureFactory.add')).toBeUndefined();
     });
 
     it('should have numeric measure processors registered', () => {

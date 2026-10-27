@@ -11,7 +11,7 @@ import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-cont
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { withErrorBoundary } from '@/infra/decorators/component-decorators/with-error-boundary';
 import ErrorBoundaryBox from '@/infra/error-boundary/error-boundary-box';
-import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
+import { useWidgetDefinitionRegistry } from '@/infra/plugins/use-widget-definition-registry';
 import type {
   CustomVisualizationProps,
   VisualizationStateUpdate,
@@ -56,7 +56,7 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     entityId: getWidgetEntityId(widgetProps, 'custom', getCustomWidgetName(widgetProps)),
   });
   const { t } = useTranslation();
-  const registry = useWidgetPluginRegistry();
+  const registry = useWidgetDefinitionRegistry();
   const { app } = useSisenseContext();
 
   const CustomVisualizationToRender = registry.getComponent(widgetProps.customWidgetType);

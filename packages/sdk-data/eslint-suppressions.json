@@ -43,9 +43,6 @@
     }
   },
   "src/dimensional-model/attributes/factory.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "jsdoc/check-alignment": {
       "count": 1
     },
@@ -175,11 +172,6 @@
       "count": 2
     }
   },
-  "src/dimensional-model/filters/factory.test.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    }
-  },
   "src/dimensional-model/filters/factory.ts": {
     "@typescript-eslint/consistent-type-imports": {
       "count": 1
@@ -205,28 +197,14 @@
       "count": 2
     }
   },
-  "src/dimensional-model/filters/filter-relations.test.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 3
-    }
-  },
   "src/dimensional-model/filters/filter-relations.ts": {
     "@typescript-eslint/consistent-type-assertions": {
       "count": 2
     },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "@typescript-eslint/no-non-null-assertion": {
       "count": 3
     },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
-    },
     "@typescript-eslint/no-use-before-define": {
-      "count": 4
-    },
-    "jsdoc/require-description-complete-sentence": {
       "count": 4
     },
     "jsdoc/require-jsdoc": {

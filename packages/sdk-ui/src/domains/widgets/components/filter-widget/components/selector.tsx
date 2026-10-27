@@ -41,6 +41,8 @@ export type SelectorProps = FieldOwnProps & {
   /** Sits beside the value in its own slot — the `+N` overflow count. */
   badge?: ReactNode;
   title?: string;
+  /** Accessible name for a trigger whose value or placeholder does not name it. */
+  ariaLabel?: string;
   /**
    * The chosen values, when the trigger is reading a selection back.
    *
@@ -86,6 +88,12 @@ export type SelectorProps = FieldOwnProps & {
   popupRole?: 'listbox' | 'dialog';
   /** The glyph closing the box. Defaults to the open/closed chevron. */
   trailingIcon?: 'chevron' | 'calendar';
+  /**
+   * A box that looks disabled and never opens, yet stays reachable: hover and keyboard focus
+   * still show its `hint`, which is how it says what it needs before it can be used. A native
+   * `disabled` cannot do that — it takes the box out of the tab order and silences hover.
+   */
+  locked?: boolean;
 };
 
 /**
@@ -94,44 +102,47 @@ export type SelectorProps = FieldOwnProps & {
  * One text field backs every state — read-only when closed, where it reads as a
  * button, and editable when open, so the same caret keeps focus through the
  * transition. Swapping a `button` for an `input` on open would drop focus instead.
- * @param props - Value, open state, the search query and the panel to anchor
- * @returns The trigger, with its panel anchored beneath it
+ * @param props - Value, open state, the search query and the panel to anchor.
+ * @returns The trigger, with its panel anchored beneath it.
  * @internal
  */
-export function Selector({
-  value,
-  placeholder,
-  open,
-  onOpenChange,
-  search = '',
-  onSearchChange,
-  searchPlaceholder,
-  searchable = true,
-  clearable = true,
-  onClear,
-  id,
-  listboxId,
-  activeOptionId,
-  popover,
-  badge,
-  title,
-  names,
-  tooltip,
-  hint,
-  dataTestId,
-  openOnly = false,
-  popupRole = 'listbox',
-  trailingIcon = 'chevron',
-  label,
-  error,
-  disabled,
-  state,
-  size,
-  radius,
-  width,
-  controlStyle,
-  className,
-}: SelectorProps) {
+export function Selector(props: SelectorProps) {
+  const {
+    value,
+    placeholder,
+    open,
+    onOpenChange,
+    search = '',
+    onSearchChange,
+    searchPlaceholder,
+    searchable = true,
+    clearable = true,
+    onClear,
+    id,
+    listboxId,
+    activeOptionId,
+    popover,
+    badge,
+    title,
+    ariaLabel,
+    names,
+    tooltip,
+    hint,
+    dataTestId,
+    openOnly = false,
+    popupRole = 'listbox',
+    trailingIcon = 'chevron',
+    locked = false,
+    label,
+    error,
+    disabled,
+    state,
+    size,
+    radius,
+    width,
+    controlStyle,
+    className,
+  } = props;
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const fieldId = useFieldId(id);
@@ -158,13 +169,18 @@ export function Selector({
 
   const isOpen = (open ?? false) || state === 'active';
   const querying = isOpen && searchable;
-  const resolvedState = resolveFieldState({ state, disabled, hovered, active: isOpen });
+  const resolvedState = resolveFieldState({
+    state,
+    disabled: disabled || locked,
+    hovered,
+    active: isOpen,
+  });
   const hasValue = Boolean(names?.length || value);
   const pointerOver = hovered || state === 'hover';
   /* Focus counts as well as hover: a keyboard user who can reach the trigger but never the
      ✕ has no way to clear the filter at all. */
   const showClear =
-    clearable && hasValue && !disabled && (pointerOver || focused || state === 'active');
+    clearable && hasValue && !disabled && !locked && (pointerOver || focused || state === 'active');
 
   /* How much of the box the ✕ is taking right now. Assigned during render rather than from an
      effect because the observer can be told about the narrower input before an effect would
@@ -211,7 +227,9 @@ export function Selector({
      the same thing a second later, so it steps aside while this shows. */
   const isTruncated = hiddenCount > 0 || valueOverflows;
   const shownTooltip = (() => {
-    if (!pointerOver || isOpen) {
+    /* A locked box has no panel to open, so a keyboard user would never meet its hint
+       through hover alone — focus brings it up too. */
+    if (!(pointerOver || (locked && focused)) || isOpen) {
       return undefined;
     }
     /* A hint is what the box never says, so it does not wait for the box to run out of
@@ -246,7 +264,7 @@ export function Selector({
   }, [querying, isOpen, value]);
 
   const toggle = () => {
-    if (disabled) {
+    if (disabled || locked) {
       return;
     }
     if (!(openOnly && isOpen)) {
@@ -256,7 +274,7 @@ export function Selector({
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (disabled) {
+    if (disabled || locked) {
       return;
     }
     if (!isOpen && (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown')) {
@@ -298,7 +316,10 @@ export function Selector({
           }
         },
         onMouseDown: (event) => {
-          if (event.target === event.currentTarget) {
+          /* A locked box never takes focus from a press. If it did, its hint — which keyboard
+             focus brings up — would stay on screen after the pointer left, until the next click
+             elsewhere. Tab still focuses it, so keyboard users keep the hint. */
+          if (locked || event.target === event.currentTarget) {
             event.preventDefault();
           }
         },
@@ -324,12 +345,14 @@ export function Selector({
         aria-expanded={isOpen}
         aria-haspopup={popupRole}
         aria-controls={listboxId}
+        aria-label={ariaLabel}
         /* A dialog owns its own focus, so there is no active option for the trigger to
            point at — the grid's cell is focused for real. */
         aria-activedescendant={isOpen && popupRole === 'listbox' ? activeOptionId : undefined}
         aria-autocomplete={querying ? 'list' : undefined}
         autoComplete="off"
         disabled={disabled}
+        aria-disabled={locked || undefined}
         readOnly={!querying}
         data-testid={dataTestId ?? 'filter-widget-select-trigger'}
         value={querying ? search : shownValue ?? ''}

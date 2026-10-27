@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties, FunctionComponent } from 'react';
+import type { CSSProperties, FunctionComponent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -8,6 +8,7 @@ import {
   isIncludeAllMembersFilter,
   isLevelAttribute,
   isMembersFilter,
+  isRankingFilter,
   Sort,
 } from '@sisense/sdk-data';
 import type {
@@ -50,6 +51,7 @@ import {
   FilterSelect,
   NumberRangeFilter,
   PeriodFilter,
+  RankFilter,
 } from './components';
 import type { DropdownScrollEvent } from './components';
 import { isEditableDateConditionFilter } from './components/condition-date.js';
@@ -106,6 +108,7 @@ type FilterWidgetDropdownProps = Pick<
   | 'emptyState'
   | 'onSetup'
   | 'timeFrames'
+  | 'rankBy'
 > & {
   /** The control's own styling — `styleOptions.control`, unwrapped by the widget. */
   controlStyleOptions?: FilterWidgetControlStyleOptions;
@@ -197,6 +200,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     emptyState,
     onSetup,
     timeFrames,
+    rankBy,
   } = props;
   const { t } = useTranslation();
   /* Days are read and written in the reader's own format, so the same mask the calendar
@@ -239,6 +243,12 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
    * live dimension swap off datetime falls through to the plain members list below.
    */
   const isTimeFrameMode = isDateAttribute && filterType === 'period';
+  /**
+   * Rank — Top / Bottom N by a measure the designer fixed. Offered for every attribute type
+   * and, like Condition, it publishes its own filter (a ranking), never members, so it skips
+   * the members query and the members synchronizer.
+   */
+  const isRankMode = filterType === 'rank';
   /*
    * A linked filter Range cannot read (relative, exclusive Before/After, members —
    * anything `isEditableRangeFilter` rejects) must not silently render as two empty
@@ -284,6 +294,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     isLevelAttribute(filterFromProps.attribute) &&
     filterFromProps.attribute.expression === attribute.expression &&
     (isConditionMode ||
+      isRankMode ||
       isRangeMode ||
       isTimeFrameMode ||
       isMembersFilter(filterFromProps) ||
@@ -395,6 +406,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   // members synchronizer would read `.members` off a text filter and break.
   const membersFilterFromProps =
     isConditionMode ||
+    isRankMode ||
     !filterFromProps ||
     !Array.isArray((filterFromProps as MembersFilter).members)
       ? null
@@ -415,7 +427,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   );
 
   /**
-   * Condition Apply: publish the filter first, then move the widget level when the
+   * Condition and Rank Apply: publish the filter first, then move the widget level when the
    * published grain differs from the host attribute.
    *
    * Order is the reverse of List/Calendar. Those hosts discard any selection captured
@@ -544,7 +556,9 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
        `publishTimeFrameFilter` the same way — without this guard the grain move would fire
        right back through here and clobber the just-published relative filter with an empty
        MembersFilter. */
-    if (isConditionMode || isRangeMode || isNumberRangeMode || isTimeFrameMode) return;
+    if (isConditionMode || isRankMode || isRangeMode || isNumberRangeMode || isTimeFrameMode) {
+      return;
+    }
     if (isSameAttribute(filter.attribute, effectiveAttribute)) return;
     updateFilter(
       // Cast rationale: filterFactory.members returns the base Filter type but always
@@ -562,6 +576,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     effectiveAttribute,
     isMultiselect,
     isConditionMode,
+    isRankMode,
     isRangeMode,
     isNumberRangeMode,
     isTimeFrameMode,
@@ -581,6 +596,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
 
   const membersQueryAligned =
     !isConditionMode &&
+    !isRankMode &&
     !isRangeMode &&
     !isNumberRangeMode &&
     !isTimeFrameMode &&
@@ -726,6 +742,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
 
   useFireOnReady(
     isConditionMode ||
+      isRankMode ||
       isRangeMode ||
       isNumberRangeMode ||
       (!membersLoading && alignedMembersData !== undefined),
@@ -1211,6 +1228,35 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     );
   }
 
+  /**
+   * The padded frame every single-control type (Condition, Rank) renders inside, tagged with
+   * the test id and type its verification reads.
+   * @param testId - The frame's test id.
+   * @param type - The filter type the frame is showing.
+   * @param body - The control, or its unsupported note.
+   * @returns The framed control.
+   */
+  const renderControlFrame = (testId: string, type: string, body: ReactNode) => (
+    <div
+      data-testid={testId}
+      data-filter-type={type}
+      data-filter-attribute-value-type={attributeValueType ?? 'unsupported'}
+      style={containerAlign}
+    >
+      <div
+        style={{
+          padding: `${layout.padding.top}px ${layout.padding.right}px ${layout.padding.bottom}px ${layout.padding.left}px`,
+          width: '100%',
+          minWidth: layout.minWidth,
+          maxWidth: layout.maxWidth,
+          boxSizing: BORDER_BOX,
+        }}
+      >
+        {body}
+      </div>
+    </div>
+  );
+
   // Condition mode: text / numeric / date ConditionFilter; other types show unsupported.
   if (isConditionMode) {
     const isTextCondition = attributeValueType === 'text';
@@ -1243,57 +1289,76 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
       : null;
     const filterUnsupported = !blankBackground && conditionFilter == null;
 
-    return (
-      <div
-        data-testid="filter-widget-condition"
-        data-filter-type="condition"
-        data-filter-attribute-value-type={attributeValueType ?? 'unsupported'}
-        style={containerAlign}
-      >
-        <div
-          style={{
-            padding: `${layout.padding.top}px ${layout.padding.right}px ${layout.padding.bottom}px ${layout.padding.left}px`,
-            width: '100%',
-            minWidth: layout.minWidth,
-            maxWidth: layout.maxWidth,
-            boxSizing: BORDER_BOX,
-          }}
-        >
-          {attributeUnsupported || filterUnsupported ? (
-            <div data-testid="filter-widget-condition-unsupported" style={UNSUPPORTED_NOTE_STYLE}>
-              {attributeUnsupported
-                ? t(
-                    'filterWidget.conditionUnsupported',
-                    'Condition is available for text, numeric, and date fields',
-                  )
-                : t(
-                    'filterWidget.conditionNotRepresentable',
-                    'This condition cannot be edited here',
-                  )}
-            </div>
-          ) : (
-            <ConditionFilter
-              attribute={effectiveAttribute}
-              conditionKind={conditionKind}
-              /* The date Condition keys its unfinished draft by the linked filter's guid, so it
+    return renderControlFrame(
+      'filter-widget-condition',
+      'condition',
+      <>
+        {attributeUnsupported || filterUnsupported ? (
+          <div data-testid="filter-widget-condition-unsupported" style={UNSUPPORTED_NOTE_STYLE}>
+            {attributeUnsupported
+              ? t(
+                  'filterWidget.conditionUnsupported',
+                  'Condition is available for text, numeric, and date fields',
+                )
+              : t('filterWidget.conditionNotRepresentable', 'This condition cannot be edited here')}
+          </div>
+        ) : (
+          <ConditionFilter
+            attribute={effectiveAttribute}
+            conditionKind={conditionKind}
+            /* The date Condition keys its unfinished draft by the linked filter's guid, so it
                  gets the blank background as is (read as an empty seed) instead of null —
                  the guid then survives a clear. Text / numeric keep the null seed. */
-              filter={isDateCondition && blankBackground ? filterFromProps : conditionFilter}
-              onFilterUpdate={publishConditionFilter}
-              dataSource={dataSource}
-              parentFilters={parentFilters}
-              earliestData={dayStats?.min ? new Date(dayStats.min) : undefined}
-              latestData={dayStats?.max ? new Date(dayStats.max) : undefined}
-              excludedDateLevels={excludedDateLevels}
-              placeholder={placeholder}
-              width="100%"
-              size={tokens.size}
-              radius={tokens.cornerRadius}
-              controlStyle={controlStyleOptions}
-            />
-          )}
+            filter={isDateCondition && blankBackground ? filterFromProps : conditionFilter}
+            onFilterUpdate={publishConditionFilter}
+            dataSource={dataSource}
+            parentFilters={parentFilters}
+            earliestData={dayStats?.min ? new Date(dayStats.min) : undefined}
+            latestData={dayStats?.max ? new Date(dayStats.max) : undefined}
+            excludedDateLevels={excludedDateLevels}
+            placeholder={placeholder}
+            width="100%"
+            size={tokens.size}
+            radius={tokens.cornerRadius}
+            controlStyle={controlStyleOptions}
+          />
+        )}
+      </>,
+    );
+  }
+
+  // Rank mode: Top / Bottom N by the designer's measure. A foreign filter on the dimension
+  // (a members selection left over from a List widget, or include-all) is a blank seed; a
+  // real expression this control cannot read gets the stub rather than an empty panel that
+  // looks like include-all over a filtered dashboard.
+  if (isRankMode) {
+    const rankBlankBackground =
+      filterFromProps == null ||
+      isIncludeAllMembersFilter(filterFromProps) ||
+      isMembersFilter(filterFromProps);
+    const rankingFilter =
+      !rankBlankBackground && isRankingFilter(filterFromProps) ? filterFromProps : null;
+    const rankFilterUnsupported = !rankBlankBackground && rankingFilter == null;
+
+    return renderControlFrame(
+      'filter-widget-rank',
+      'rank',
+      rankFilterUnsupported ? (
+        <div data-testid="filter-widget-rank-unsupported" style={UNSUPPORTED_NOTE_STYLE}>
+          {t('filterWidget.conditionNotRepresentable', 'This condition cannot be edited here')}
         </div>
-      </div>
+      ) : (
+        <RankFilter
+          attribute={effectiveAttribute}
+          rankBy={rankBy}
+          filter={rankingFilter}
+          onFilterUpdate={publishConditionFilter}
+          width="100%"
+          size={tokens.size}
+          radius={tokens.cornerRadius}
+          controlStyle={controlStyleOptions}
+        />
+      ),
     );
   }
 

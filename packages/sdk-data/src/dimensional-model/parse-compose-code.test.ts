@@ -96,4 +96,20 @@ describe('parseComposeCodeToFunctionCall', () => {
 
     expect(result.args[0]).toBe('A""B');
   });
+
+  describe('compose code persisted before backslashes were escaped', () => {
+    it('keeps a lone backslash that is not followed by a quote or backslash', () => {
+      const result = parseComposeCodeToFunctionCall(String.raw`fn('C:\temp')`);
+
+      expect(result.args[0]).toBe(String.raw`C:\temp`);
+    });
+
+    it('reads an unescaped double backslash as one, the price of escaping new code', () => {
+      // Older generators wrote a value's backslashes verbatim, so a value that held `\\` now
+      // parses as `\`. Values with two adjacent backslashes are rare in member names and titles.
+      const result = parseComposeCodeToFunctionCall(String.raw`fn('a\\b')`);
+
+      expect(result.args[0]).toBe(String.raw`a\b`);
+    });
+  });
 });

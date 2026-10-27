@@ -18,6 +18,11 @@ import type {
  * Loose record of unsupported style fields preserved from the original
  * Fusion DTO. Returned by {@link extractUnsupportedStyleOptions}.
  *
+ * It must hold only fields the CSDK widget model does not capture: when a widget is
+ * written back, these values win over the rebuilt style (see `applyPartialDtoStyle`),
+ * so a field the model derives from `styleOptions` / `dataOptions` placed here would let
+ * a stale snapshot override the user's current props.
+ *
  * Typed as `Record<string, unknown>` because the keys and shapes go beyond
  * what `WidgetStyle` declares — e.g. `'center/value'` on sunburst, or
  * `'borders/grid'` on table widgets. Stored on
@@ -43,6 +48,10 @@ const hasKeys = (v: Bag): boolean => Object.keys(v).length > 0;
  *
  * Accepts `unknown` so callers don't need to cast typed widget styles whose
  * field shapes are narrower than the keys we want to read.
+ *
+ * @param source - The object to pick from.
+ * @param keys - The keys to pick.
+ * @returns The defined values of `keys`, or `undefined` when there are none.
  */
 function pickDefined<K extends string>(
   source: unknown,
@@ -67,6 +76,9 @@ function pickDefined<K extends string>(
  * "every N items" input in `axisLabelsDirective.html` writes to `labels.step`
  * via two-way binding. Both are preserved so user-entered values survive a
  * Fusion → CSDK → Fusion round-trip.
+ *
+ * @param axis - A Fusion axis style.
+ * @returns The unsupported axis fields, or `undefined` when there are none.
  */
 function pickUnsupportedAxisFields(axis: unknown): Bag | undefined {
   if (!isPlainObject(axis)) return undefined;
@@ -124,6 +136,14 @@ function extractScatterUnsupported(style: ScatterWidgetStyle): UnsupportedStyleO
   return out;
 }
 
+/**
+ * `whisker` and `outliers` are not picked: the model carries them as
+ * `dataOptions.boxType` / `dataOptions.outliersEnabled` and `toBoxplotWidgetStyle`
+ * always writes them back.
+ *
+ * @param style - A Fusion boxplot style.
+ * @returns The unsupported boxplot style fields.
+ */
 function extractBoxplotUnsupported(style: BoxplotWidgetStyle): UnsupportedStyleOptions {
   const out: Bag = { ...extractCartesianUnsupported(style) };
 
@@ -140,22 +160,23 @@ function extractBoxplotUnsupported(style: BoxplotWidgetStyle): UnsupportedStyleO
     out.xAxis = { ...(out.xAxis as Bag), x2Title };
   }
 
-  const outliers = pickDefined(style.outliers, ['enabled'] as const);
-  if (outliers) out.outliers = outliers;
-
-  const whisker = pickDefined(style.whisker, [
-    'whisker/iqr',
-    'whisker/extremums',
-    'whisker/deviation',
-  ] as const);
-  if (whisker) out.whisker = whisker;
-
   return out;
 }
 
+/**
+ * The pie model has no navigator, so `toPieWidgetStyle` writes a default one; the
+ * original is kept here so it wins over that default.
+ *
+ * @param style - A Fusion pie style.
+ * @returns The unsupported pie style fields.
+ */
 function extractPieUnsupported(style: PieWidgetStyle): UnsupportedStyleOptions {
+  const out: Bag = {};
   const labels = pickDefined(style.labels, ['fontFamily'] as const);
-  return labels ? { labels } : {};
+  if (labels) out.labels = labels;
+  const navigator = pickDefined(style.navigator, ['enabled'] as const);
+  if (navigator) out.navigator = navigator;
+  return out;
 }
 
 function extractSunburstUnsupported(style: SunburstWidgetStyle): UnsupportedStyleOptions {
@@ -172,18 +193,59 @@ const INDICATOR_VARIANT_KEYS = ['indicator/numeric', 'indicator/gauge'] as const
 const INDICATOR_COMPONENT_KEYS = ['title', 'icon', 'secondaryTitle', 'ticks', 'labels'] as const;
 const INDICATOR_COMPONENT_FIELDS = ['inactive', 'enabled'] as const;
 
-function pickIndicatorVariant(variant: unknown): Bag | undefined {
-  if (!isPlainObject(variant) || !isPlainObject(variant.components)) return undefined;
-  const components: Bag = {};
+/**
+ * Fields of the active (top-level) `style.components` the model does not capture. The
+ * model reads only `enabled` of `title`, `ticks` and `labels` (as
+ * `indicatorComponents.*.shouldBeShown`); every `inactive` flag and the `enabled` flag
+ * of `icon` and `secondaryTitle` are Fusion-only.
+ */
+const INDICATOR_ACTIVE_COMPONENT_FIELDS: Readonly<
+  Record<(typeof INDICATOR_COMPONENT_KEYS)[number], readonly ('inactive' | 'enabled')[]>
+> = {
+  title: ['inactive'],
+  icon: ['inactive', 'enabled'],
+  secondaryTitle: ['inactive', 'enabled'],
+  ticks: ['inactive'],
+  labels: ['inactive'],
+};
+
+function pickIndicatorActiveComponents(components: unknown): Bag | undefined {
+  if (!isPlainObject(components)) return undefined;
+  const out: Bag = {};
   for (const compKey of INDICATOR_COMPONENT_KEYS) {
-    const picked = pickDefined(variant.components[compKey], INDICATOR_COMPONENT_FIELDS);
-    if (picked) components[compKey] = picked;
+    const picked = pickDefined(components[compKey], INDICATOR_ACTIVE_COMPONENT_FIELDS[compKey]);
+    if (picked) out[compKey] = picked;
   }
-  return hasKeys(components) ? { components } : undefined;
+  return hasKeys(out) ? out : undefined;
+}
+
+/**
+ * A per-subtype block (`indicator/numeric`, `indicator/gauge`) keeps Fusion's settings for
+ * the subtype not currently shown; the model reads none of it.
+ *
+ * @param variant - A Fusion indicator per-subtype block.
+ * @returns The block's subtype, skin and component flags, or `undefined` when it has none of them.
+ */
+function pickIndicatorVariant(variant: unknown): Bag | undefined {
+  if (!isPlainObject(variant)) return undefined;
+  const components: Bag = {};
+  if (isPlainObject(variant.components)) {
+    for (const compKey of INDICATOR_COMPONENT_KEYS) {
+      const picked = pickDefined(variant.components[compKey], INDICATOR_COMPONENT_FIELDS);
+      if (picked) components[compKey] = picked;
+    }
+  }
+  const out: Bag = {
+    ...pickDefined(variant, ['subtype', 'skin'] as const),
+    ...(hasKeys(components) && { components }),
+  };
+  return hasKeys(out) ? out : undefined;
 }
 
 function extractIndicatorUnsupported(style: IndicatorWidgetStyle): UnsupportedStyleOptions {
   const out: Bag = {};
+  const components = pickIndicatorActiveComponents(style.components);
+  if (components) out.components = components;
   for (const key of INDICATOR_VARIANT_KEYS) {
     const variant = pickIndicatorVariant((style as unknown as Bag)[key]);
     if (variant) out[key] = variant;
@@ -192,8 +254,9 @@ function extractIndicatorUnsupported(style: IndicatorWidgetStyle): UnsupportedSt
 }
 
 function extractPivotUnsupported(style: PivotWidgetStyle): UnsupportedStyleOptions {
-  // `scroll` is undeclared on the CSDK type but exists on pivot2 DTOs.
-  return pickDefined(style, ['rowsGrandTotal', 'columnsGrandTotal', 'scroll'] as const) ?? {};
+  // `scroll` is undeclared on the CSDK type but exists on pivot2 DTOs. Grand totals are not
+  // picked: the model carries them as `dataOptions.grandTotals`.
+  return pickDefined(style, ['scroll'] as const) ?? {};
 }
 
 const TABLE_UNSUPPORTED_KEYS = [
@@ -214,9 +277,8 @@ function extractTableUnsupported(style: TableWidgetStyle): UnsupportedStyleOptio
 function extractCalendarHeatmapUnsupported(
   style: CalendarHeatmapWidgetStyle,
 ): UnsupportedStyleOptions {
-  return (
-    pickDefined(style, ['orient/horizontal', 'orient/vertical', 'view/monthly'] as const) ?? {}
-  );
+  // `view/monthly` is not picked: the model carries it as `styleOptions.subtype`.
+  return pickDefined(style, ['orient/horizontal', 'orient/vertical'] as const) ?? {};
 }
 
 function extractScattermapUnsupported(style: ScattermapWidgetStyle): UnsupportedStyleOptions {
@@ -261,9 +323,9 @@ const EXTRACTORS: Partial<
  * style fields, or for unknown / plugin types whose raw style is opaque to
  * the CSDK.
  *
- * @param widgetType - Fusion widget type from `WidgetDto.type`
- * @param style - Raw `WidgetDto.style` from the server
- * @returns A partial style containing only known-unsupported fields
+ * @param widgetType - Fusion widget type from `WidgetDto.type`.
+ * @param style - Raw `WidgetDto.style` from the server.
+ * @returns A partial style containing only known-unsupported fields.
  * @internal
  */
 export function extractUnsupportedStyleOptions(

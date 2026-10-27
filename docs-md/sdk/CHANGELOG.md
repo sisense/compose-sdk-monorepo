@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.39.0] - 2026-10-27
+
+### Added
+- Add Angular v22 support
+- Add `DataPanelInput` type (beta) to describe data panel inputs of custom widget plugins
+- Add optional `dataType` parameter to `attributeFactory.customFormula` for numeric and date calculated attributes
+- Add Rank filter type to `FilterWidget` for top or bottom N members ranked by a measure (internal testing)
+- Add skeleton loading placeholder to `FilterWidget` (internal testing)
+
+### Changed
+- Filter fixes:
+  - Fix `dateMeasureMembers`, `dateMeasureRelativeFrom` and `dateMeasureRelativeTo` ignoring the level of min and max measures
+  - Fix locked and disabled state being lost when a background filter is set
+  - Fix `FilterTile` header menu staying available while disabled
+- Fix duplicated widgets resetting Fusion style settings, such as a hidden secondary Y-axis
+- Fix KPI widgets saved to a Fusion dashboard showing the wrong panels in the Fusion widget editor
+- Fix custom widget plugins not saving their state when their style options include `navigator`
+- Fix Jump to Dashboard to show the pointer cursor on all supported charts and the icon on text widgets
+
+
 ## [2.38.0] - 2026-10-13
 
 ### Added

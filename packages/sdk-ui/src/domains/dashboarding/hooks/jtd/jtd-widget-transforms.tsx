@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import {
+import type {
   CustomDataCellFormatter,
   CustomHeaderCellFormatter,
 } from '@/domains/visualizations/components/pivot-table/formatters/types';
@@ -10,12 +9,12 @@ import {
   registerDataPointContextMenuHandler,
   registerDataPointsSelectedHandler,
 } from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { withHeaderItems } from '@/domains/widgets/helpers/header-items-utils.js';
 import { DEFAULT_HYPERLINK_COLOR } from '@/infra/contexts/theme-provider/default-theme-settings';
-import { PivotTableDataPointEventHandler } from '@/props.js';
+import type { BeforeRenderHandler, PivotTableDataPointEventHandler } from '@/props.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers';
-import { DataPoint, PivotTableDataPoint } from '@/types';
+import type { DataPoint, PivotTableDataPoint } from '@/types';
 
 import {
   createJtdHyperlinkDataCellFormatter,
@@ -35,57 +34,46 @@ import {
   getJumpToDashboardMenuItem,
   getJumpToDashboardMenuItemForMultiplePoints,
 } from './jtd-menu.js';
-import { JtdActions, JtdWidgetTransformConfig } from './jtd-types.js';
+import { isJtdApplicableWidget } from './jtd-supported-widget-keys.js';
+import type { JtdActions, JtdWidgetTransformConfig } from './jtd-types.js';
 
 const jumpToDashboardMenuId = 'jump-to-dashboard-menu';
 
 /**
- * Add pointer cursor to chart widgets that support it
+ * Sets the pointer cursor on every series of a Highcharts chart.
  *
- * @param widgetProps - The widget props
- * @returns Updated widget props with pointer cursor
+ * @param highchartsOptions - The Highcharts options about to be rendered.
+ * @returns The options with `plotOptions.series.cursor` set to `'pointer'`.
+ */
+const withPointerCursor: BeforeRenderHandler = (highchartsOptions) => ({
+  ...highchartsOptions,
+  plotOptions: {
+    ...highchartsOptions.plotOptions,
+    series: { ...highchartsOptions.plotOptions?.series, cursor: 'pointer' },
+  },
+});
+
+/**
+ * Adds the pointer cursor to chart widgets that Jump To Dashboard (JTD) applies to at run time.
+ *
+ * The cursor is set through the widget's `onBeforeRender` chain, so it applies to charts rendered
+ * with Highcharts; the widget's own `onBeforeRender` runs after it and keeps the last word. Charts
+ * that do not render through Highcharts options (scatter map, area map, indicator, KPI, table) get
+ * no JTD cursor.
+ *
+ * @param widgetProps - The widget props.
+ * @returns Updated widget props with the pointer cursor, or the same props for widgets that are
+ * not charts JTD applies to.
  * @internal
  */
 export const addPointerCursorToChart = (widgetProps: WidgetProps): WidgetProps => {
-  if (!isChartWidgetProps(widgetProps)) {
+  if (!isChartWidgetProps(widgetProps) || !isJtdApplicableWidget(widgetProps)) {
     return widgetProps;
   }
-
-  // Chart types that support cursor styling
-  const supportedChartTypes = [
-    'line',
-    'area',
-    'column',
-    'bar',
-    'pie',
-    'funnel',
-    'scatter',
-    'bubble',
-  ];
-  if (!supportedChartTypes.includes(widgetProps.chartType)) {
-    return widgetProps;
-  }
-
-  // Add cursor pointer through plotOptions (the correct way for Highcharts)
-  const updatedProps = { ...widgetProps } as WidgetProps & {
-    plotOptions?: {
-      series?: {
-        cursor?: string;
-      };
-    };
+  return {
+    ...widgetProps,
+    onBeforeRender: combineHandlers([withPointerCursor, widgetProps.onBeforeRender], true),
   };
-  const existingPlotOptions = updatedProps.plotOptions || {};
-  const existingSeries = existingPlotOptions.series || {};
-
-  updatedProps.plotOptions = {
-    ...existingPlotOptions,
-    series: {
-      ...existingSeries,
-      cursor: 'pointer',
-    },
-  };
-
-  return updatedProps as WidgetProps;
 };
 
 /**
@@ -513,15 +501,15 @@ export const applyPivotLinkStyling = (
 };
 
 /**
- * Add JTD icon to widget header if configured
+ * Add JTD icon to the header of widgets that Jump To Dashboard (JTD) applies to at run time.
  *
- * @param widgetProps - The widget props
- * @returns Updated widget props with JTD icon in header
+ * @param widgetProps - The widget props.
+ * @returns Updated widget props with JTD icon in header, or the same props for widgets JTD does not
+ * apply to.
  * @internal
  */
 export const addJtdIconToHeader = (widgetProps: WidgetProps): WidgetProps => {
-  // Only chart and pivot widgets carry a JTD target, so only they get the icon
-  if (!isChartWidgetProps(widgetProps) && !isPivotTableWidgetProps(widgetProps)) {
+  if (!isJtdApplicableWidget(widgetProps)) {
     return widgetProps;
   }
 

@@ -1,7 +1,13 @@
 /* eslint-disable max-lines */
 import { JaqlDataSourceForDto, LevelAttribute } from '@sisense/sdk-data';
 
-import { ArgInput, DIMENSIONAL_NAME_PREFIX, isFunctionCall, ProcessedArg } from '../../types.js';
+import {
+  type ArgInput,
+  DIMENSIONAL_NAME_PREFIX,
+  isAttributeElement,
+  isFunctionCall,
+  type ProcessedArg,
+} from '../../types.js';
 import { getAttributeTypeDisplayString, isDateLevelAttribute } from '../utils/attribute-helpers.js';
 import {
   createAttributeFromName,
@@ -157,6 +163,17 @@ export function processArg(input: ArgInput): ProcessedArg {
       return rawArg;
 
     case 'Attribute':
+      // A calculated dimension has no name to resolve; it arrives as its factory call.
+      if (isFunctionCall(rawArg) && rawArg.function === 'attributeFactory.customFormula') {
+        const element = processNode({
+          data: rawArg,
+          context: { dataSource, schemaIndex, pathPrefix: errorPrefix },
+        });
+        if (!isAttributeElement(element)) {
+          throw new Error(`${errorPrefix}: Expected calculated dimension to produce an attribute`);
+        }
+        return element;
+      }
       if (typeof rawArg !== 'string') {
         throw new Error(
           `${errorPrefix}: Expected attribute string, got ${typeof rawArg}. Example: 'DM.Commerce.Revenue'`,

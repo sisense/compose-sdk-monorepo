@@ -5,6 +5,7 @@ import type {
   SankeyChartDataOptions,
   TableDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
+import { createDataOptionsFromPanels } from '@/domains/widgets/components/widget-by-id/translate-widget-data-options';
 import type { GenericDataOptions, KpiChartDataOptions } from '@/types';
 
 import {
@@ -13,6 +14,35 @@ import {
   toSankeyPanels,
   toTablePanels,
 } from './to-widget-dto-panels';
+
+describe('custom widget panel name round trip', () => {
+  // A plugin's `DataPanelInput.name` is the persistence key: saving writes the dataOptions key as
+  // the panel name, loading reads it back as `camelCase(panel.name)`.
+  const saveAndLoad = (dataOptions: GenericDataOptions) =>
+    createDataOptionsFromPanels(toCustomWidgetPanels(dataOptions), []);
+
+  it('keeps a camelCase input name stable across save and load', () => {
+    const dataOptions = {
+      breakBy: [{ column: Commerce.Condition }],
+    } as unknown as GenericDataOptions;
+
+    const loaded = saveAndLoad(dataOptions);
+
+    expect(Object.keys(loaded)).toEqual(['breakBy']);
+    expect(toCustomWidgetPanels(loaded as GenericDataOptions).map((p) => p.name)).toEqual([
+      'breakBy',
+    ]);
+  });
+
+  it('renames a non-camelCase input name to its camelCase form on load', () => {
+    const dataOptions = {
+      'break-by': [{ column: Commerce.Condition }],
+    } as unknown as GenericDataOptions;
+
+    expect(toCustomWidgetPanels(dataOptions).map((p) => p.name)).toEqual(['break-by']);
+    expect(Object.keys(saveAndLoad(dataOptions))).toEqual(['breakBy']);
+  });
+});
 
 describe('toCustomWidgetPanels', () => {
   it('returns an empty array when dataOptions is undefined', () => {
@@ -220,59 +250,94 @@ describe('toSankeyPanels', () => {
 
 describe('toKpiPanels', () => {
   const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+  const sumCost = measureFactory.sum(Commerce.Cost, 'Total Cost');
+  // Fusion's kpi manifest order. Fusion backfills each saved panel's type and title from the
+  // manifest by position and never recreates a missing panel, so all four must always be there.
+  const manifestOrder = ['value', 'category', 'target', 'comparisonValue'];
 
-  it('emits only the value panel when category and comparison are unset', () => {
-    const dataOptions: KpiChartDataOptions = { value: sumRevenue };
+  const comparisons: ReadonlyArray<[string, KpiChartDataOptions['comparison']]> = [
+    ['none', undefined],
+    ['previous-period', { type: 'previous-period' }],
+    ['delta', { type: 'delta', value: sumCost }],
+    ['value', { type: 'value', value: sumCost }],
+    ['target with a measure', { type: 'target', target: sumCost }],
+    ['target with a number', { type: 'target', target: 10000 }],
+  ];
+  const categories: ReadonlyArray<[string, KpiChartDataOptions['category']]> = [
+    ['without a category', undefined],
+    ['with a category', Commerce.AgeRange],
+  ];
 
-    const panels = toKpiPanels(dataOptions);
+  describe.each(comparisons)('comparison: %s', (_, comparison) => {
+    it.each(categories)('emits all four panels in manifest order %s', (__, category) => {
+      const panels = toKpiPanels({
+        value: sumRevenue,
+        ...(category && { category }),
+        ...(comparison && { comparison }),
+      });
 
-    expect(panels.map((panel) => panel.name)).toEqual(['value']);
+      expect(panels.map((panel) => panel.name)).toEqual(manifestOrder);
+      expect(panels[0].items).toHaveLength(1);
+      expect(panels[1].items).toHaveLength(category ? 1 : 0);
+    });
+  });
+
+  it('writes the value measure into the value panel', () => {
+    const panels = toKpiPanels({ value: sumRevenue });
+
     expect((panels[0].items[0].jaql as { agg?: string }).agg).toBe('sum');
   });
 
-  it('emits a category panel when set', () => {
-    const dataOptions: KpiChartDataOptions = { value: sumRevenue, category: Commerce.AgeRange };
+  it('leaves category, target and comparisonValue empty when only value is set', () => {
+    const panels = toKpiPanels({ value: sumRevenue });
 
-    const panels = toKpiPanels(dataOptions);
-
-    expect(panels.map((panel) => panel.name)).toEqual(['value', 'category']);
+    expect(panels.slice(1)).toEqual([
+      { name: 'category', items: [] },
+      { name: 'target', items: [] },
+      { name: 'comparisonValue', items: [] },
+    ]);
   });
 
-  it('emits a target panel for a measure-column target comparison', () => {
-    const target = measureFactory.sum(Commerce.Cost, 'Cost Target');
-    const dataOptions: KpiChartDataOptions = {
+  it('writes the category into the category panel when set', () => {
+    const panels = toKpiPanels({ value: sumRevenue, category: Commerce.AgeRange });
+
+    expect(panels[1].items).toHaveLength(1);
+    expect((panels[1].items[0].jaql as { dim?: string }).dim).toBe('[Commerce.Age Range]');
+  });
+
+  it('fills only the target panel for a measure-column target comparison', () => {
+    const panels = toKpiPanels({
       value: sumRevenue,
-      comparison: { type: 'target', target },
-    };
+      comparison: { type: 'target', target: sumCost },
+    });
 
-    const panels = toKpiPanels(dataOptions);
-
-    expect(panels.map((panel) => panel.name)).toEqual(['value', 'target']);
+    expect(panels[2].items).toHaveLength(1);
+    expect((panels[2].items[0].jaql as { agg?: string }).agg).toBe('sum');
+    expect(panels[3].items).toEqual([]);
   });
 
   it('writes a literal-number target as a constant formula panel item', () => {
     // Fusion has no literal-number item; a fixed goal is a constant formula there, so that is
     // what a number serializes to. It comes back as a measure column, not a number.
-    const dataOptions: KpiChartDataOptions = {
+    const panels = toKpiPanels({
       value: sumRevenue,
       comparison: { type: 'target', target: 10000 },
-    };
+    });
 
-    const panels = toKpiPanels(dataOptions);
-
-    expect(panels.map((panel) => panel.name)).toEqual(['value', 'target']);
-    expect(panels[1].items[0].jaql).toEqual({ formula: '10000', title: '10000' });
+    expect(panels[2].items).toEqual([{ jaql: { formula: '10000', title: '10000' } }]);
+    expect(panels[3].items).toEqual([]);
   });
 
-  it('drops a non-finite target, which has no valid constant-formula form', () => {
+  it('leaves the target panel empty for a non-finite target, which has no formula form', () => {
     // Writing `{ formula: 'NaN' }` would build a panel the query engine rejects, so these fall
-    // back to no target panel — and, via isSerializableKpiTarget, to a non-goal subtype.
+    // back to an empty target panel — and, via isSerializableKpiTarget, to a non-goal subtype.
     for (const target of [NaN, Infinity, -Infinity]) {
       const panels = toKpiPanels({
         value: sumRevenue,
         comparison: { type: 'target', target },
       });
-      expect(panels.map((panel) => panel.name)).toEqual(['value']);
+      expect(panels.map((panel) => panel.name)).toEqual(manifestOrder);
+      expect(panels[2].items).toEqual([]);
     }
   });
 
@@ -286,43 +351,29 @@ describe('toKpiPanels', () => {
         value: sumRevenue,
         comparison: { type: 'target', target },
       });
-      expect(panels[1].items[0].jaql).toEqual({ formula, title: formula });
+      expect(panels[2].items[0].jaql).toEqual({ formula, title: formula });
     }
   });
 
-  it('emits a comparisonValue panel for a delta comparison', () => {
-    const baseline = measureFactory.sum(Commerce.Cost, 'Previous Cost');
-    const dataOptions: KpiChartDataOptions = {
-      value: sumRevenue,
-      comparison: { type: 'delta', value: baseline },
-    };
+  it.each(['delta', 'value'] as const)(
+    'fills only the comparisonValue panel for a %s comparison',
+    (type) => {
+      const panels = toKpiPanels({ value: sumRevenue, comparison: { type, value: sumCost } });
 
-    const panels = toKpiPanels(dataOptions);
+      expect(panels[2].items).toEqual([]);
+      expect(panels[3].items).toHaveLength(1);
+      expect((panels[3].items[0].jaql as { agg?: string }).agg).toBe('sum');
+    },
+  );
 
-    expect(panels.map((panel) => panel.name)).toEqual(['value', 'comparisonValue']);
-  });
-
-  it('emits no comparison panel for previous-period (the subtype carries it)', () => {
-    const dataOptions: KpiChartDataOptions = {
+  it('leaves both comparison panels empty for previous-period (the subtype carries it)', () => {
+    const panels = toKpiPanels({
       value: sumRevenue,
       category: Commerce.AgeRange,
       comparison: { type: 'previous-period' },
-    };
+    });
 
-    const panels = toKpiPanels(dataOptions);
-
-    expect(panels.map((panel) => panel.name)).toEqual(['value', 'category']);
-  });
-
-  it('emits a comparisonValue panel for the plain value comparison, same as delta', () => {
-    const comparisonValue = measureFactory.sum(Commerce.Cost, 'Secondary');
-    const dataOptions: KpiChartDataOptions = {
-      value: sumRevenue,
-      comparison: { type: 'value', value: comparisonValue },
-    };
-
-    const panels = toKpiPanels(dataOptions);
-
-    expect(panels.map((panel) => panel.name)).toEqual(['value', 'comparisonValue']);
+    expect(panels[2].items).toEqual([]);
+    expect(panels[3].items).toEqual([]);
   });
 });

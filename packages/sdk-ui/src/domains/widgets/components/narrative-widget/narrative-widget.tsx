@@ -61,8 +61,11 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
     sharedMode,
     adminAccess,
     generateOnMount = false,
+    generateOnMountTriggerType,
+    aiContextHint = false,
     onReady,
     onStateChange,
+    onGenerated,
     onContentHeightChange,
     onChange,
   } = props;
@@ -98,6 +101,8 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
     sharedMode,
     adminAccess,
     generateOnMount,
+    generateOnMountTriggerType,
+    onGenerated,
   });
 
   // With nothing generated yet a spent allowance leaves no action to offer, so it presents as the
@@ -168,6 +173,7 @@ export const NarrativeWidget: FunctionComponent<NarrativeWidgetProps> = asSisens
     <Narrative
       state={effectiveState}
       quotaWarning={quotaWarning}
+      aiContextHint={aiContextHint}
       onGenerate={generate}
       // The host that owns the chrome also owns the loading treatment.
       showLoadingOverlay={!containerless}

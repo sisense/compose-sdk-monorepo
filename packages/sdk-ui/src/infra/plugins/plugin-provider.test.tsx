@@ -1,13 +1,21 @@
-import { render } from '@testing-library/react';
+import type { ReactNode } from 'react';
+
+import { render, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { TabberButtonsWidget } from '@/domains/widgets/components/tabber-buttons-widget';
+import {
+  BUILT_IN_WIDGET_DEFINITIONS,
+  type WidgetDefinitionRegistry,
+} from '@/domains/widgets/widget-definitions';
+
 import { PluginProvider } from './plugin-provider.js';
-import { Plugin } from './types.js';
-import { useWidgetPluginRegistry } from './use-widget-plugin-registry.js';
+import type { Plugin } from './types.js';
+import { useWidgetDefinitionRegistry } from './use-widget-definition-registry.js';
 
 const RegistryConsumer = () => {
-  const registry = useWidgetPluginRegistry();
-  const hasTabber = registry.has('tabber-buttons');
+  const registry = useWidgetDefinitionRegistry();
+  const hasTabber = registry.hasComponent('tabber-buttons');
   return <div data-testid="registry-consumer">{hasTabber ? 'has-tabber' : 'no-tabber'}</div>;
 };
 
@@ -80,5 +88,66 @@ describe('PluginProvider', () => {
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('[Plugin]'));
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('invalid-plugin'));
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('requires API versions'));
+  });
+
+  describe('widget definitions', () => {
+    const renderRegistry = (plugins: Plugin[]): WidgetDefinitionRegistry =>
+      renderHook(() => useWidgetDefinitionRegistry(), {
+        wrapper: ({ children }: { children: ReactNode }) => (
+          <PluginProvider plugins={plugins}>{children}</PluginProvider>
+        ),
+      }).result.current;
+
+    const widgetPlugin = (customWidgetName: string, Component: () => null): Plugin => ({
+      name: `${customWidgetName}-plugin`,
+      version: '1.0.0',
+      requiredApiVersion: '^2.0.0',
+      pluginType: 'widget',
+      customWidget: {
+        name: customWidgetName,
+        displayName: 'Plugin Widget',
+        visualization: { Component },
+        dataPanel: { config: { inputs: [{ name: 'category', type: 'dimension' }] } },
+      },
+    });
+
+    it('should resolve the built-in tabber through the static map', () => {
+      const registry = renderRegistry([]);
+
+      expect(registry.get('custom:tabber-buttons')).toBe(
+        BUILT_IN_WIDGET_DEFINITIONS.get('custom:tabber-buttons'),
+      );
+      expect(registry.getComponent('tabber-buttons')).toBe(TabberButtonsWidget);
+      expect(registry.getAll('plugin')).toEqual([]);
+    });
+
+    it('should register a plugin named "line" as custom:line without shadowing a built-in', () => {
+      const Component = vi.fn(() => null);
+
+      const registry = renderRegistry([widgetPlugin('line', Component)]);
+
+      expect(registry.get('custom:line', 'plugin')).toMatchObject({
+        key: 'custom:line',
+        displayName: 'Plugin Widget',
+        visualization: { Component },
+        dataPanel: { config: { inputs: [{ name: 'category', type: 'dimension' }] } },
+      });
+      expect(registry.getComponent('line')).toBe(Component);
+      expect(registry.has('line')).toBe(false);
+      expect(consoleWarnSpy).not.toHaveBeenCalled();
+    });
+
+    it('should ignore a plugin named "tabber-buttons" with one [Plugin] warning', () => {
+      const registry = renderRegistry([
+        widgetPlugin(
+          'tabber-buttons',
+          vi.fn(() => null),
+        ),
+      ]);
+
+      expect(registry.getComponent('tabber-buttons')).toBe(TabberButtonsWidget);
+      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('[Plugin]'));
+    });
   });
 });

@@ -1,5 +1,6 @@
 import { withComposeCodeForAttribute } from '../compose-code-utils.js';
-import { Attribute, CustomFormulaContext } from '../interfaces.js';
+import type { Attribute, CustomFormulaContext } from '../interfaces.js';
+import type { CalculatedAttributeDataType } from '../types.js';
 import { DimensionalCalculatedAttribute } from './attributes.js';
 
 /**
@@ -16,7 +17,8 @@ import { DimensionalCalculatedAttribute } from './attributes.js';
  * (`IF`, `CASE`).
  * See full list of supported [dashboard functions](https://docs.sisense.com/main/SisenseLinux/dashboard-functions-reference.htm#String) for calculated attributes.
  *
- * Only `text` data type is supported for calculated attributes.
+ * Pass `dataType` when the result type is known, for example a `CASE` that returns numbers, so
+ * filters on the attribute compare values correctly.
  *
  * @example
  * Combine two attributes into a single text attribute.
@@ -43,6 +45,7 @@ import { DimensionalCalculatedAttribute } from './attributes.js';
  * @param title - Title of the calculated attribute to be displayed
  * @param formula - Formula used to compute the attribute's values
  * @param context - Formula context as a map of names to attributes (and, in advanced cases, measures or filters)
+ * @param dataType - Optional JAQL data type of the formula's result (`text`, `numeric` or `datetime`); when omitted, the query client resolves it at query time
  * @returns A calculated attribute instance
 
  * @group Factories
@@ -51,7 +54,8 @@ export const customFormula: (
   title: string,
   formula: string,
   context: CustomFormulaContext,
-) => Attribute = withComposeCodeForAttribute((title, formula, context) => {
+  dataType?: CalculatedAttributeDataType,
+) => Attribute = withComposeCodeForAttribute((title, formula, context, dataType) => {
   // context keys must be wrapped in brackets to match the references used in the formula
   const newContext = Object.fromEntries(
     Object.entries(context ?? {}).map(([key, value]) => [
@@ -60,5 +64,18 @@ export const customFormula: (
     ]),
   );
 
-  return new DimensionalCalculatedAttribute(title, formula, newContext);
+  return new DimensionalCalculatedAttribute(
+    title,
+    formula,
+    newContext,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    dataType,
+  );
 }, 'customFormula');

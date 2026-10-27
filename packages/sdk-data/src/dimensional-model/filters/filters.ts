@@ -18,6 +18,8 @@ import {
   MembersFilterConfig,
 } from '../interfaces.js';
 import {
+  DimensionalBaseMeasure,
+  DimensionalCalculatedMeasure,
   getDateMeasureAttribute,
   isDateMeasure,
   isDimensionalBaseMeasure,
@@ -1249,9 +1251,39 @@ function toMeasureAnchor(anchor?: Date | string): string | undefined {
   return anchor instanceof Date ? toLocalIsoDateTime(anchor).slice(0, 10) : anchor;
 }
 
+/** Context token of the operand when an aggregation is rewritten as a formula. */
+const FORMULA_OPERAND_TOKEN = '[Operand]';
+
 /**
- * Builds the item for `DateMeasureMembersFilter` and `DateMeasureRelativeFilter`: the measure keys
- * plus the filter's own level.
+ * Rewrites a `min`/`max` aggregation as the same call in formula form, the shape Fusion sends.
+ *
+ * The aggregation form has one `level`, which the filter level overwrites, so the server would
+ * aggregate the filter over the filter-level column, `MIN(<year>)` for a min over days. In the
+ * formula form the operand keeps its own level inside `context` and the top-level `level` is left
+ * to the filter alone.
+ *
+ * Only a date measure is rewritten. A saved filter is rebuilt without the guards, so it can hold
+ * any measure, and that one is sent as it always was.
+ *
+ * @param measure - Measure this filter carries.
+ * @returns The measure as a formula, or the measure itself when it is not a date aggregation.
+ * @internal
+ */
+function asFormulaMeasure(measure: Measure): Measure {
+  if (!isDimensionalBaseMeasure(measure) || !isDateMeasure(measure)) {
+    return measure;
+  }
+
+  const agg = DimensionalBaseMeasure.aggregationToJAQL(measure.aggregation);
+
+  return new DimensionalCalculatedMeasure(measure.name, `${agg}(${FORMULA_OPERAND_TOKEN})`, {
+    [FORMULA_OPERAND_TOKEN]: measure.attribute,
+  });
+}
+
+/**
+ * Builds the item for `DateMeasureMembersFilter` and `DateMeasureRelativeFilter`: the measure keys,
+ * in formula form, plus the filter's own level.
  *
  * @param item - Item the base filter produced.
  * @param measure - Measure this filter carries.
@@ -1264,7 +1296,12 @@ function withMeasureOnFilterItem(item: AnyObject, measure: Measure): AnyObject {
   const wrapper = item.jaql ? item : { jaql: item };
   const { level, dateTimeLevel, bucket } = wrapper.jaql;
 
-  applyMeasureJaqlKeys(wrapper, measure);
+  applyMeasureJaqlKeys(wrapper, asFormulaMeasure(measure));
+  // the base filter restores `agg` from the original filter jaql before these keys are written,
+  // and beside a formula the server would read it as the aggregation
+  if (wrapper.jaql.formula) {
+    delete wrapper.jaql.agg;
+  }
   applyFilterLevel(wrapper, level, dateTimeLevel, bucket);
 
   return item;

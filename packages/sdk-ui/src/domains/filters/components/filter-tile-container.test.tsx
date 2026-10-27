@@ -7,8 +7,14 @@ import { setup } from '@/__test-helpers__';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings.js';
 import { ThemeContext } from '@/infra/contexts/theme-provider/theme-context.js';
 import { i18nextInstance } from '@/infra/translation/initialize-i18n.js';
+import type { MenuItem } from '@/shared/types/menu-item.js';
 
 import { FilterTileContainer } from './filter-tile-container.js';
+
+// The menu button reads the menu context, which these tests do not provide.
+vi.mock('@/infra/contexts/menu-provider/hooks/use-menu', () => ({
+  useMenu: () => ({ openMenu: vi.fn() }),
+}));
 
 const minTouchTargetStyle = { minWidth: '24px', minHeight: '24px' };
 
@@ -294,6 +300,32 @@ describe('FilterTileContainer', () => {
       expect(info).toHaveAttribute('aria-label', 'Linked to filter widget info');
       // tabIndex=0 keeps the tooltip reachable via keyboard focus.
       expect(info).toHaveAttribute('tabindex', '0');
+    });
+  });
+
+  describe('filter tile menu', () => {
+    const menuItems: MenuItem[] = [
+      { id: 'lock', type: 'action', caption: 'Lock', onClick: () => {} },
+    ];
+
+    it('should render the menu button for an enabled tile', async () => {
+      setup(<FilterTileContainer renderContent={() => <></>} menuItems={menuItems} />);
+      expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
+    });
+
+    it('should not render the menu button for a disabled tile', async () => {
+      setup(<FilterTileContainer renderContent={() => <></>} menuItems={menuItems} disabled />);
+      expect(await screen.findByTestId('csdk-filter-tile-container')).toBeInTheDocument();
+      expect(screen.queryByLabelText('Filter tile menu')).toBeNull();
+    });
+
+    it('should bring the menu button back when a disabled tile is switched on', async () => {
+      const { rerender } = setup(
+        <FilterTileContainer renderContent={() => <></>} menuItems={menuItems} disabled />,
+      );
+      expect(screen.queryByLabelText('Filter tile menu')).toBeNull();
+      rerender(<FilterTileContainer renderContent={() => <></>} menuItems={menuItems} />);
+      expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
     });
   });
 

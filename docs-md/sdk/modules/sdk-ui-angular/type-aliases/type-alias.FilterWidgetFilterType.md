@@ -4,7 +4,7 @@ title: FilterWidgetFilterType
 
 # Type alias FilterWidgetFilterType <Badge type="beta" text="Beta" />
 
-> **FilterWidgetFilterType**: `"calendar"` \| `"condition"` \| `"members"` \| `"period"` \| `"range"`
+> **FilterWidgetFilterType**: `"calendar"` \| `"condition"` \| `"members"` \| `"period"` \| `"range"` \| `"rank"`
 
 `FilterWidgetFilterType` selects the rendering type for a filter widget.
 
@@ -14,6 +14,8 @@ title: FilterWidgetFilterType
 - `'period'`       — Time Frame: one-click list of ready-made relative windows (Today,
                     Last 7 days, This month, …) for datetime attributes only. Implemented.
 - `'condition'`    — condition builder for text (with optional AND/OR chaining), numeric, and date attributes. Implemented.
+- `'rank'`         — Top / Bottom N ranking of the attribute's members by a measure fixed by the dashboard
+                    designer (see [FilterWidgetProps.rankBy](../interfaces/interface.FilterWidgetProps.md#rankby)), for text, numeric, and datetime attributes. Implemented.
 
 ## Example
 

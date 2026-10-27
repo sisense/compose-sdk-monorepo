@@ -211,3 +211,112 @@ describe('Selector', () => {
     expect(screen.queryByTestId('filter-widget-select-tooltip')).not.toBeInTheDocument();
   });
 });
+
+describe('Selector — locked (a disabled look that stays reachable)', () => {
+  it('stays in the tab order and says it is disabled to assistive technology', () => {
+    render(<Selector value="Set filter" locked hint="Needs a field" />);
+
+    const input = screen.getByRole('combobox');
+    expect(input).not.toBeDisabled();
+    expect(input).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('shows its hint on hover', async () => {
+    const user = userEvent.setup();
+    render(<Selector value="Set filter" locked hint="Needs a field" />);
+
+    await user.hover(getSelectorHoverTarget());
+
+    expect(screen.getByTestId('filter-widget-select-tooltip')).toHaveTextContent('Needs a field');
+  });
+
+  it('shows its hint when a keyboard user focuses it', async () => {
+    const user = userEvent.setup();
+    render(<Selector value="Set filter" locked hint="Needs a field" />);
+
+    await user.tab();
+
+    expect(screen.getByRole('combobox')).toHaveFocus();
+    expect(screen.getByTestId('filter-widget-select-tooltip')).toHaveTextContent('Needs a field');
+  });
+
+  it('never opens, by click or by key', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    render(<Selector value="Set filter" locked hint="Needs a field" onOpenChange={onOpenChange} />);
+
+    await user.click(screen.getByRole('combobox'));
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
+    await user.keyboard('{ArrowDown}');
+
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it('does not take focus from a mouse press, so its hint follows the pointer', async () => {
+    const user = userEvent.setup();
+    render(<Selector value="Set filter" locked hint="Needs a field" />);
+
+    await user.click(screen.getByRole('combobox'));
+    expect(screen.getByRole('combobox')).not.toHaveFocus();
+    expect(screen.getByTestId('filter-widget-select-tooltip')).toBeInTheDocument();
+
+    await user.unhover(getSelectorHoverTarget());
+    expect(screen.queryByTestId('filter-widget-select-tooltip')).not.toBeInTheDocument();
+  });
+
+  it('drops the hint again when keyboard focus leaves', async () => {
+    const user = userEvent.setup();
+    render(<Selector value="Set filter" locked hint="Needs a field" />);
+
+    await user.tab();
+    expect(screen.getByTestId('filter-widget-select-tooltip')).toBeInTheDocument();
+
+    await user.tab();
+    expect(screen.queryByTestId('filter-widget-select-tooltip')).not.toBeInTheDocument();
+  });
+
+  it('never offers the ✕, even with a value and the pointer over it', async () => {
+    const user = userEvent.setup();
+    render(<Selector value="Top 10" locked clearable onClear={vi.fn()} hint="Needs a field" />);
+
+    await user.hover(getSelectorHoverTarget());
+
+    expect(isClearMounted()).toBe(false);
+  });
+
+  it('leaves a natively disabled selector exactly as before: no hint on hover', async () => {
+    const user = userEvent.setup();
+    render(<Selector value="Set filter" disabled hint="Needs a field" />);
+
+    await user.hover(getSelectorHoverTarget());
+
+    expect(screen.getByRole('combobox')).toBeDisabled();
+    expect(screen.queryByTestId('filter-widget-select-tooltip')).not.toBeInTheDocument();
+  });
+
+  it('does not change an ordinary selector: it opens and keeps no aria-disabled', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    render(<Selector value="Country" onOpenChange={onOpenChange} />);
+
+    await user.click(screen.getByRole('combobox'));
+
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.getByRole('combobox')).not.toHaveAttribute('aria-disabled');
+  });
+});
+
+describe('Selector — accessible name', () => {
+  it('names the trigger from `ariaLabel` when the value does not say what it is', () => {
+    render(<Selector value="Top" ariaLabel="Ranking direction" />);
+
+    expect(screen.getByRole('combobox', { name: 'Ranking direction' })).toBeInTheDocument();
+  });
+
+  it('adds no label of its own when none is given', () => {
+    render(<Selector value="Top" />);
+
+    expect(screen.getByRole('combobox')).not.toHaveAttribute('aria-label');
+  });
+});

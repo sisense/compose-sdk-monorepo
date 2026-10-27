@@ -193,9 +193,11 @@ function translateDataOptionsToJSON(dataOptions: object): NlqTranslationResult<D
         : translateMeasuresToJSON([item as Parameters<typeof translateMeasuresToJSON>[0][number]]);
       if (!itemResult.success) {
         itemResult.errors.forEach((e) => {
+          // Keep any path inside the item, such as a color condition's `.color.conditions[0]...`
+          const innerPath = e.path.replace(/^(measures|dimensions)\[\d+\]/, '');
           axisErrors.push({
             ...e,
-            path: dataOptionsPath(axisKey, i),
+            path: dataOptionsPath(axisKey, i) + innerPath,
             input: e.input ?? item,
           });
         });

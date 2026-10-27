@@ -22,7 +22,7 @@ features (common filters, edit-mode layout, jump-to-dashboard, tabber, header, p
 | Components  | `Dashboard` — `dashboard.tsx:71`; `DashboardById` — `dashboard-by-id.tsx:47` (both wrapped in `asSisenseComponent`)                     |
 | Composition | `useComposedDashboard` — `use-composed-dashboard.tsx:586`; `useComposedDashboardInternal` — `:168`                                      |
 | Model       | sub-barrel `dashboard-model/index.ts`; reducer under `dashboard-model/use-dashboard-model/`                                             |
-| Persistence | `DashboardPersistenceManager` — `persistence/types.ts:17`; `useWidgetUpdatesPersistence` — `hooks/use-widget-updates-persistence.ts:74` |
+| Persistence | `DashboardPersistenceManager` — `persistence/types.ts:17`; `useWidgetUpdatesPersistence` — `hooks/use-widget-updates-persistence.ts:77` |
 | Module      | `DASHBOARD_MODULE_NAME = 'dashboard'` — `dashboard-module/dashboard-module.ts:6`                                                        |
 | Defaults    | `DEFAULT_DASHBOARD_CONFIG`, `DEFAULT_DASHBOARD_BY_ID_CONFIG` — `constants.ts`                                                           |
 | Theme       | `useDashboardTheme` (@alpha) — `use-dashboard-theme.tsx:60`                                                                             |

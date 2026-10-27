@@ -83,6 +83,7 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
     { type: 'string', required: true, isName: true }, // title
     { type: 'string', required: true }, // formula
     { type: 'CustomFormulaContext', required: true }, // context
+    { type: 'string', required: false }, // dataType
   ],
 
   // Arithmetic operations
@@ -386,6 +387,29 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
     { type: 'BaseFilterConfig', required: false },
   ],
   'filterFactory.dateRelativeTo': [
+    { type: 'LevelAttribute', required: true },
+    { type: 'number', required: true }, // offset
+    { type: 'number', required: true }, // count
+    { type: 'Date | string', required: false }, // anchor
+    { type: 'BaseFilterConfig', required: false },
+  ],
+  // Date-measure filters: filter a date measure (e.g. max over a date) by members or a period
+  'filterFactory.dateMeasureMembers': [
+    { type: 'Measure', required: true },
+    { type: 'LevelAttribute', required: true },
+    { type: 'string[]', required: true },
+    { type: 'MembersFilterConfig', required: false },
+  ],
+  'filterFactory.dateMeasureRelativeFrom': [
+    { type: 'Measure', required: true },
+    { type: 'LevelAttribute', required: true },
+    { type: 'number', required: true }, // offset
+    { type: 'number', required: true }, // count
+    { type: 'Date | string', required: false }, // anchor
+    { type: 'BaseFilterConfig', required: false },
+  ],
+  'filterFactory.dateMeasureRelativeTo': [
+    { type: 'Measure', required: true },
     { type: 'LevelAttribute', required: true },
     { type: 'number', required: true }, // offset
     { type: 'number', required: true }, // count

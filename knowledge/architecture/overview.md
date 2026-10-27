@@ -62,7 +62,9 @@ Internal dependencies use the `workspace:*` protocol in each `package.json`.
    fails when an entry exports a name outside its level. The internal entry also re-exports the
    `query` module's internal tier; that is interim, and long term a module serves its internals from
    a sub-entry of its own (e.g. `@sisense/sdk-ui/query/internal`). The package root exports neither
-   level; the in-company UMD entry (`src/index.umd.ts`) re-exports both. Rules for these entries:
+   level. `sdk-ui` ships no UMD bundle: a host that loads Compose SDK as a script builds its own
+   bundle from the root, the module entries it uses and `./sisense-internal`. `./internal` stays
+   within this repository's packages. Rules for these entries:
    [structure guideline](../../packages/sdk-ui/__dev-docs__/PACKAGE_CODEBASE_STRUCTURE_GUIDELINE.md),
    §9.
 

@@ -82,6 +82,24 @@ export const IdleWithQuotaWarning: Story = {
   decorators: [inRow],
 };
 
+/** Fusion asks a designer to add AI context; the arrow is placed for Fusion's widget header. */
+export const IdleWithAiContextHint: Story = {
+  args: { state: { status: 'idle' }, aiContextHint: true },
+  decorators: [inRow],
+};
+
+/** The hint keeps its place when the low-credits warning joins the idle action. */
+export const IdleWithAiContextHintAndQuotaWarning: Story = {
+  args: { state: { status: 'idle' }, aiContextHint: true, quotaWarning: { usagePercentage: 87 } },
+  decorators: [inRow],
+};
+
+/** Pinned below 650 px: the hint is hidden. */
+export const IdleWithAiContextHintNarrow: Story = {
+  args: { state: { status: 'idle' }, aiContextHint: true },
+  decorators: [framed(240, 640)],
+};
+
 export const Loading: Story = {
   args: { state: { status: 'loading' } },
   decorators: [inRow],

@@ -2,6 +2,7 @@ import {
   CalculatedMeasure,
   FilterRelations,
   isFilterRelations,
+  isLevelAttribute,
   isMembersFilter,
   Measure,
   Sort,
@@ -9,7 +10,10 @@ import {
 } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
-import { SAMPLE_ECOMMERCE_MEASURED_VALUE_REVENUE_BY_GENDER_QUERY } from '../../../../__mocks__/nlq-v3-translator/example-queries.js';
+import {
+  SAMPLE_ECOMMERCE_MEASURED_VALUE_REVENUE_BY_GENDER_QUERY,
+  SAMPLE_ECOMMERCE_MULTI_LEVEL_DATE_FILTERS_QUERY,
+} from '../../../../__mocks__/nlq-v3-translator/example-queries.js';
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -22,6 +26,19 @@ import { translateQueryFromJSON } from './translate-query-from-json.js';
 
 function isCalculatedMeasure(measure: Measure): measure is CalculatedMeasure {
   return 'expression' in measure && 'context' in measure;
+}
+
+/** Maps each date-level members filter to its members, keyed by the filter's granularity. */
+function getMembersByDateLevel(
+  filters: Parameters<typeof flattenFilters>[0],
+): Record<string, string[]> {
+  return Object.fromEntries(
+    flattenFilters(filters)
+      .filter(isMembersFilter)
+      .flatMap(({ attribute, members }) =>
+        isLevelAttribute(attribute) ? [[attribute.granularity, members]] : [],
+      ),
+  );
 }
 
 describe('translateQueryFromJSON', () => {
@@ -1000,9 +1017,10 @@ describe('translateQueryFromJSON', () => {
       expect(result.success).toBe(true);
     });
 
-    it('should reject two filters on the same date column at different levels', () => {
-      const mockQueryJSON = {
-        dimensions: ['DM.Commerce.Age Range'],
+    it('should allow filters on the same date column at different levels', () => {
+      // Dashboard filters on Years and Months of one date column, as on the Sample ECommerce dashboard
+      const mockQueryJSON: QueryJSON = {
+        dimensions: ['DM.Brand.Brand'],
         measures: [
           {
             function: 'measureFactory.sum',
@@ -1012,28 +1030,83 @@ describe('translateQueryFromJSON', () => {
         filters: [
           {
             function: 'filterFactory.members',
-            args: ['DM.Commerce.Date.Weeks', ['2024-12-30T00:00:00']],
+            args: ['DM.Commerce.Date.Years', ['2013-01-01T00:00:00']],
           },
           {
             function: 'filterFactory.members',
-            args: ['DM.Commerce.Date.Months', ['2024-01-01T00:00:00']],
+            args: ['DM.Commerce.Date.Months', []],
+          },
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Weeks', ['2013-03-04T00:00:00']],
           },
         ],
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON as QueryJSON,
+        data: mockQueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
         },
       });
 
-      expect(result.success).toBe(false);
-      const errorResponse = result as NlqTranslationErrorResult;
-      const datetimeError = errorResponse.errors.find((error) => error.path === 'filters');
-      expect(datetimeError).toBeDefined();
-      expect(datetimeError!.message).toContain('conflicts');
+      expect(result.success).toBe(true);
+      expect(getMembersByDateLevel(getSuccessData(result).filters)).toEqual({
+        Years: ['2013-01-01T00:00:00'],
+        Months: [],
+        Weeks: ['2013-03-04T00:00:00'],
+      });
+    });
+
+    it('should keep the members of each level for the multi-level date filters example', () => {
+      const result = translateQueryFromJSON({
+        data: SAMPLE_ECOMMERCE_MULTI_LEVEL_DATE_FILTERS_QUERY,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      expect(getMembersByDateLevel(getSuccessData(result).filters)).toEqual({
+        Years: ['2013-01-01T00:00:00'],
+        Months: ['2013-03-01T00:00:00'],
+      });
+    });
+
+    it('should allow a highlight at a different level than a filter on the same date column', () => {
+      const mockQueryJSON: QueryJSON = {
+        dimensions: ['DM.Commerce.Date.Months'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Years', ['2013-01-01T00:00:00']],
+          },
+        ],
+        highlights: [
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Months', ['2013-03-01T00:00:00']],
+          },
+        ],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
     });
 
     it('should reject two dimensions on the same date column at different granularities (D2)', () => {

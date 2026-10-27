@@ -273,7 +273,7 @@ describe('useWidgetUpdatesPersistence', () => {
   it('optimistically applies table column widths to local widget state', () => {
     let stored = [makeTableWidget('table-a')];
     const setWidgets = (updater: (prev: never[]) => never[]) => {
-      stored = updater(stored as never) as never;
+      stored = updater(stored);
     };
 
     const { result } = renderHook(() =>
@@ -309,14 +309,15 @@ describe('useWidgetUpdatesPersistence', () => {
     const getOnChange = (widget: unknown) =>
       (widget as { onChange?: (event: CustomWidgetChangeEvent) => void }).onChange;
 
-    /** Emits plugin state updates as `visualizationState/changed` events, as CustomWidget does. */
+    /**
+     * Emits plugin state updates as `visualizationState/changed` events, as CustomWidget does.
+     * Throws when the hook did not inject an `onChange`, so tests fail loudly instead of no-op.
+     */
     const getOnVisualizationUpdate = (widget: unknown) => {
       const onChange = getOnChange(widget);
-      return (
-        onChange &&
-        ((update: VisualizationStateUpdate) =>
-          onChange({ type: 'visualizationState/changed', payload: update }))
-      );
+      if (!onChange) throw new Error('Expected an injected onChange handler');
+      return (update: VisualizationStateUpdate) =>
+        onChange({ type: 'visualizationState/changed', payload: update });
     };
 
     it('forwards non-visualization events (e.g. title/changed) to the upstream onChange', () => {
@@ -351,7 +352,7 @@ describe('useWidgetUpdatesPersistence', () => {
       );
 
       act(() => {
-        getOnVisualizationUpdate(result.current.widgets[0])?.({ customOptions: { lastPage: 3 } });
+        getOnVisualizationUpdate(result.current.widgets[0])({ customOptions: { lastPage: 3 } });
         vi.advanceTimersByTime(500);
       });
 
@@ -378,7 +379,7 @@ describe('useWidgetUpdatesPersistence', () => {
       expect(typeof onChange).toBe('function');
 
       act(() => {
-        onChange!({ customOptions: { lastPage: 3 } });
+        onChange({ customOptions: { lastPage: 3 } });
       });
 
       expect(setWidgets).toHaveBeenCalled();
@@ -403,7 +404,7 @@ describe('useWidgetUpdatesPersistence', () => {
       );
 
       act(() => {
-        getOnVisualizationUpdate(result.current.widgets[0])!({
+        getOnVisualizationUpdate(result.current.widgets[0])({
           styleOptions: { rowsPerPage: 20 },
         });
       });
@@ -419,6 +420,70 @@ describe('useWidgetUpdatesPersistence', () => {
       });
     });
 
+    it('persists visualizationState/changed for a plugin whose styleOptions include navigator', () => {
+      const persistence = makePersistence();
+      const setWidgets = vi.fn();
+      const upstreamOnChange = vi.fn();
+      const widgets = [
+        {
+          ...(makeCustomWidget('cw-a', {}, { navigator: { enabled: true } }) as object),
+          onChange: upstreamOnChange,
+        },
+      ];
+
+      const { result } = renderHook(() =>
+        useWidgetUpdatesPersistence(widgets as never, setWidgets, persistence),
+      );
+      const wired = result.current.widgets[0] as {
+        styleOptions: { navigator: { onScrollerChange?: unknown } };
+      };
+
+      expect(wired.styleOptions.navigator.onScrollerChange).toBeUndefined();
+
+      act(() => {
+        getOnVisualizationUpdate(wired)({ customOptions: { lastPage: 3 } });
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(upstreamOnChange).toHaveBeenCalledWith({
+        type: 'visualizationState/changed',
+        payload: { customOptions: { lastPage: 3 } },
+      });
+      expect(persistence.updateWidget).toHaveBeenCalledWith('cw-a', {
+        customOptions: { lastPage: 3 },
+      });
+    });
+
+    it('optimistically merges and persists a plugin-owned navigator styleOptions update', () => {
+      const persistence = makePersistence();
+      let stored = [makeCustomWidget('cw-a', {}, { navigator: { enabled: true, mode: 'a' } })];
+      const setWidgets = vi.fn((updater: (prev: never[]) => never[]) => {
+        stored = updater(stored);
+      });
+
+      const { result } = renderHook(() =>
+        useWidgetUpdatesPersistence(stored, setWidgets as never, persistence),
+      );
+
+      act(() => {
+        getOnVisualizationUpdate(result.current.widgets[0])({
+          styleOptions: { navigator: { mode: 'b' } },
+        });
+      });
+
+      expect((stored[0] as { styleOptions: unknown }).styleOptions).toEqual({
+        navigator: { enabled: true, mode: 'b' },
+      });
+
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(persistence.updateWidget).toHaveBeenCalledWith('cw-a', {
+        styleOptions: { navigator: { mode: 'b' } },
+      });
+    });
+
     it('merges styleOptions and customOptions emitted within the same debounce window', () => {
       const persistence = makePersistence();
       const setWidgets = vi.fn();
@@ -431,7 +496,7 @@ describe('useWidgetUpdatesPersistence', () => {
       // Emulates a plugin handler changing both fields in one tick (e.g. selecting
       // rows-per-page resets the page) — neither update must be dropped.
       act(() => {
-        const onChange = getOnVisualizationUpdate(result.current.widgets[0])!;
+        const onChange = getOnVisualizationUpdate(result.current.widgets[0]);
         onChange({ styleOptions: { rowsPerPage: 20 } });
         onChange({ customOptions: { lastOpenedPage: 0 } });
       });
@@ -457,7 +522,7 @@ describe('useWidgetUpdatesPersistence', () => {
       );
 
       act(() => {
-        getOnVisualizationUpdate(result.current.widgets[0])!({});
+        getOnVisualizationUpdate(result.current.widgets[0])({});
       });
 
       act(() => {
@@ -471,7 +536,7 @@ describe('useWidgetUpdatesPersistence', () => {
     it('optimistically merges customOptions into the existing bag', () => {
       let stored = [makeCustomWidget('cw-a', { lastPage: 0, theme: 'dark' })];
       const setWidgets = (updater: (prev: never[]) => never[]) => {
-        stored = updater(stored as never) as never;
+        stored = updater(stored);
       };
 
       const { result } = renderHook(() =>
@@ -479,7 +544,7 @@ describe('useWidgetUpdatesPersistence', () => {
       );
 
       act(() => {
-        getOnVisualizationUpdate(result.current.widgets[0])!({ customOptions: { lastPage: 5 } });
+        getOnVisualizationUpdate(result.current.widgets[0])({ customOptions: { lastPage: 5 } });
       });
 
       expect((stored[0] as { customOptions: unknown }).customOptions).toEqual({
@@ -495,7 +560,7 @@ describe('useWidgetUpdatesPersistence', () => {
         makeCustomWidget('cw-a', {}, { pagination: { currentPage: 1, location: 'left' } }),
       ];
       const setWidgets = (updater: (prev: never[]) => never[]) => {
-        stored = updater(stored as never) as never;
+        stored = updater(stored);
       };
 
       const { result } = renderHook(() =>
@@ -503,7 +568,7 @@ describe('useWidgetUpdatesPersistence', () => {
       );
 
       act(() => {
-        getOnVisualizationUpdate(result.current.widgets[0])!({
+        getOnVisualizationUpdate(result.current.widgets[0])({
           styleOptions: { pagination: { currentPage: 3 } },
         });
       });
@@ -516,7 +581,7 @@ describe('useWidgetUpdatesPersistence', () => {
     it('optimistically deep-merges a nested customOptions update, preserving sibling keys', () => {
       let stored = [makeCustomWidget('cw-a', { view: { zoom: 1, center: 'auto' }, theme: 'dark' })];
       const setWidgets = (updater: (prev: never[]) => never[]) => {
-        stored = updater(stored as never) as never;
+        stored = updater(stored);
       };
 
       const { result } = renderHook(() =>
@@ -524,7 +589,7 @@ describe('useWidgetUpdatesPersistence', () => {
       );
 
       act(() => {
-        getOnVisualizationUpdate(result.current.widgets[0])!({
+        getOnVisualizationUpdate(result.current.widgets[0])({
           customOptions: { view: { zoom: 2 } },
         });
       });
@@ -547,7 +612,7 @@ describe('useWidgetUpdatesPersistence', () => {
       // Two updates touching different leaves of the same nested object —
       // neither leaf must be dropped by the accumulator.
       act(() => {
-        const onChange = getOnVisualizationUpdate(result.current.widgets[0])!;
+        const onChange = getOnVisualizationUpdate(result.current.widgets[0]);
         onChange({ styleOptions: { pagination: { currentPage: 3 } } });
         onChange({ styleOptions: { pagination: { rowsPerPage: 20 } } });
       });
@@ -565,7 +630,7 @@ describe('useWidgetUpdatesPersistence', () => {
     it('replaces arrays wholesale instead of merging them', () => {
       let stored = [makeCustomWidget('cw-a', { selectedIds: [1, 2, 3] })];
       const setWidgets = (updater: (prev: never[]) => never[]) => {
-        stored = updater(stored as never) as never;
+        stored = updater(stored);
       };
 
       const { result } = renderHook(() =>
@@ -573,7 +638,7 @@ describe('useWidgetUpdatesPersistence', () => {
       );
 
       act(() => {
-        getOnVisualizationUpdate(result.current.widgets[0])!({
+        getOnVisualizationUpdate(result.current.widgets[0])({
           customOptions: { selectedIds: [4] },
         });
       });

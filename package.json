@@ -1,5 +1,5 @@
 {
-  "version": "2.38.0",
+  "version": "2.39.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -21,7 +21,8 @@
       },
       "docs:gen:md": {
         "outputs": [
-          "{workspaceRoot}/docs-md"
+          "{workspaceRoot}/docs-md",
+          "{workspaceRoot}/.reports/doc-tag-usage-report"
         ],
         "cache": true,
         "dependsOn": [

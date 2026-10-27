@@ -47,6 +47,7 @@ import {
   AggregationTypes,
   CALCULATED_DIMENSION_JAQL_TYPE,
   DateLevels,
+  isCalculatedAttributeDataType,
   JaqlSortDirection,
   MetadataTypes,
   Sort,
@@ -339,6 +340,8 @@ export const createFilterFromJaql = (
 
   const filter = createFilterFromJaqlInternal(jaql as FilterJaqlInternal, guid);
 
+  filter.config = { ...filter.config, originalFilterJaql: jaql, disabled, locked };
+
   if (hasBackgroundFilter) {
     const backgroundFilter = createFilterFromJaqlInternal(
       {
@@ -347,12 +350,8 @@ export const createFilterFromJaql = (
       } as FilterJaqlInternal,
       `${instanceid}-bg`,
     );
-    const config = filter.config;
-    filter.config = { ...config, backgroundFilter };
-    return filter;
+    filter.config = { ...filter.config, backgroundFilter };
   }
-
-  filter.config = { ...filter.config, originalFilterJaql: jaql, disabled, locked };
 
   return filter;
 };
@@ -659,6 +658,61 @@ export const createCalculatedMeasureHelper = (
 };
 
 /**
+ * Aggregation and measure functions, including time-based ones such as YTDSum, Growth and
+ * PastYear. A formula calling one is a measure, not a calculated dimension.
+ */
+const AGGREGATION_FUNCTION =
+  /\b(?:SUM|AVG|COUNT|DUPCOUNT|MIN|MAX|MEDIAN|MODE|STDEV|STDEVP|VAR|VARP|PERCENTILE|QUARTILE|RANK|CONTRIBUTION|RSUM|RAVG|PREV|NEXT|(?:YTD|QTD|MTD|WTD)\w*|GROWTH\w*|PAST\w*|DIFF\w*)\s*\(/i;
+
+/** Column references and string literals, removed before looking for function names. */
+const REFERENCES_AND_STRINGS = /\[[^\]]*\]|'[^']*'|"[^"]*"/g;
+
+/**
+ * Tells whether a context entry is a measure: it is typed as one, has an aggregation, its formula calls an
+ * aggregation or measure function, or an entry in its context does, at any depth.
+ *
+ * @param entry - A JAQL context entry.
+ * @returns True when the entry is or contains a measure.
+ */
+const isMeasureEntry = (entry: object): boolean => {
+  if ('type' in entry && entry.type === 'measure') return true;
+  if ('agg' in entry && entry.agg) return true;
+  const formula = 'formula' in entry ? entry.formula : undefined;
+  if (
+    typeof formula === 'string' &&
+    AGGREGATION_FUNCTION.test(formula.replace(REFERENCES_AND_STRINGS, ''))
+  ) {
+    return true;
+  }
+  const context = 'context' in entry ? entry.context : undefined;
+  return (
+    !!context &&
+    typeof context === 'object' &&
+    Object.values(context).some(
+      (value) => !!value && typeof value === 'object' && isMeasureEntry(value),
+    )
+  );
+};
+
+/**
+ * Marks an untyped, non-aggregating formula in a calculated dimension's context, such as a
+ * shared formula, as a nested calculated dimension. Fusion leaves its type unset.
+ *
+ * @param entry - A JAQL context entry of a calculated dimension.
+ * @returns The entry, typed as a calculated dimension when it is one.
+ * @internal
+ */
+export const asCalculatedDimensionContextEntry = <T extends object>(entry: T): T => {
+  const formula = 'formula' in entry ? entry.formula : undefined;
+  const isUntypedFormula =
+    typeof formula === 'string' &&
+    !('type' in entry && entry.type) &&
+    !('agg' in entry && entry.agg);
+  if (!isUntypedFormula) return entry;
+  return isMeasureEntry(entry) ? entry : { ...entry, type: CALCULATED_DIMENSION_JAQL_TYPE };
+};
+
+/**
  * Creates a calculated attribute (a calculated dimension) from the provided JAQL.
  *
  * @returns Calculated attribute.
@@ -669,10 +723,18 @@ export const createCalculatedAttributeHelper = (jaql: FormulaJaql): Attribute =>
     if (typeof jaqlContextValue === 'string') {
       return jaqlContextValue;
     }
-    return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
+    return (
+      jaqlContextValue &&
+      createDimensionalElementFromJaql(asCalculatedDimensionContextEntry(jaqlContextValue))
+    );
   });
 
-  const attribute = attributeFactory.customFormula(jaql.title, jaql.formula, context);
+  const attribute = attributeFactory.customFormula(
+    jaql.title,
+    jaql.formula,
+    context,
+    isCalculatedAttributeDataType(jaql.datatype) ? jaql.datatype : undefined,
+  );
 
   // Apply sort if present in the JAQL
   if (jaql.sort) {

@@ -12,18 +12,19 @@ Defines the common shape of every dimensional-model element (attribute, dimensio
 
 # Entry point
 
-| What                 | Where                                                                                                                                                |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Interface            | `Element` — packages/sdk-data/src/dimensional-model/interfaces.ts:19                                                                                 |
-| Base class           | `DimensionalElement` — packages/sdk-data/src/dimensional-model/base.ts:10                                                                            |
-| Constants            | `MetadataTypes` — packages/sdk-data/src/dimensional-model/types.ts:98                                                                                |
-| Constants            | `AggregationTypes` — packages/sdk-data/src/dimensional-model/types.ts:26                                                                             |
-| Constant             | `CALCULATED_DIMENSION_JAQL_TYPE = 'calculated_dimension'` — packages/sdk-data/src/dimensional-model/types.ts:91                                      |
-| Pass-through wrapper | `JaqlElement` — packages/sdk-data/src/dimensional-model/jaql-element.ts:36                                                                           |
-| Factory              | `createDimensionalElementFromMetadataItem` — packages/sdk-data/src/dimensional-model/jaql-element.ts:139                                             |
-| Helpers              | `normalizeName` — packages/sdk-data/src/dimensional-model/base.ts:157, `resolveElementNames` — base.ts:144, `wrapIfNeedsNormalization` — base.ts:202 |
-| JAQL type shapes     | `BaseJaql` — types.ts:506, `FormulaJaql` — types.ts:543, `MetadataItem` — types.ts:714, `MetadataItemJaql` — types.ts:763                            |
-| Query-result types   | `QueryResultData` — packages/sdk-data/src/interfaces.ts:231, `DataSource` — src/interfaces.ts:212 (union of string \| `DataSourceInfo`)              |
+| What                 | Where                                                                                                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Interface            | `Element` — packages/sdk-data/src/dimensional-model/interfaces.ts:19                                                                                                      |
+| Base class           | `DimensionalElement` — packages/sdk-data/src/dimensional-model/base.ts:10                                                                                                 |
+| Constants            | `MetadataTypes` — packages/sdk-data/src/dimensional-model/types.ts:126                                                                                                    |
+| Constants            | `AggregationTypes` — packages/sdk-data/src/dimensional-model/types.ts:26                                                                                                  |
+| Constant             | `CALCULATED_DIMENSION_JAQL_TYPE = 'calculated_dimension'` — packages/sdk-data/src/dimensional-model/types.ts:91                                                           |
+| Type                 | `CalculatedAttributeDataType` (`'text' \| 'numeric' \| 'datetime'`), values in `CALCULATED_ATTRIBUTE_DATA_TYPES`, guard `isCalculatedAttributeDataType` — types.ts:96-119 |
+| Pass-through wrapper | `JaqlElement` — packages/sdk-data/src/dimensional-model/jaql-element.ts:36                                                                                                |
+| Factory              | `createDimensionalElementFromMetadataItem` — packages/sdk-data/src/dimensional-model/jaql-element.ts:139                                                                  |
+| Helpers              | `normalizeName` — packages/sdk-data/src/dimensional-model/base.ts:157, `resolveElementNames` — base.ts:144, `wrapIfNeedsNormalization` — base.ts:202                      |
+| JAQL type shapes     | `BaseJaql` — types.ts:534, `FormulaJaql` — types.ts:571, `MetadataItem` — types.ts:742, `MetadataItemJaql` — types.ts:791                                                 |
+| Query-result types   | `QueryResultData` — packages/sdk-data/src/interfaces.ts:231, `DataSource` — src/interfaces.ts:212 (union of string \| `DataSourceInfo`)                                   |
 
 # Contract
 
@@ -37,7 +38,7 @@ jaql(nested?: boolean): any;
 
 The `jaql()` contract: called with `nested === true` it returns the bare inner JAQL object (`{ title, dim, datatype, ... }`) for embedding inside a parent (e.g. a calculated measure's `context`); called without arguments it returns the root metadata-item wrapper `{ jaql: {...}, format?, panel? }`. `DimensionalElement.toString()` delegates to `jaql()` (base.ts:131).
 
-`MetadataTypes` (types.ts:98) holds the canonical type strings, verbatim:
+`MetadataTypes` (types.ts:126) holds the canonical type strings, verbatim:
 
 ```ts
 Measure: 'measure', MeasureTemplate: 'measuretemplate', BaseMeasure: 'basemeasure',
@@ -49,14 +50,14 @@ NumericAttribute: 'numeric-attribute', CalculatedAttribute: 'calculatedattribute
 Filter: 'filter', DimensionFilter: 'dimensionfilter', MeasureFilter: 'measurefilter',
 ```
 
-plus duck-typing guards `isMeasure`, `isBaseMeasure`, `isCalculatedMeasure`, `isCalculatedAttribute`, `isDimension`, `isAttribute`, `isFilter` (types.ts:125-385) that accept either a type string or an object shape (raw JAQL included).
+plus duck-typing guards `isMeasure`, `isBaseMeasure`, `isCalculatedMeasure`, `isCalculatedAttribute`, `isDimension`, `isAttribute`, `isFilter` (types.ts:153-413) that accept either a type string or an object shape (raw JAQL included).
 
 `JaqlElement` (jaql-element.ts:36) wraps a raw `MetadataItem` with no interpretation — its `jaql()` returns the stored item as-is and it sets `skipValidation = true`. Used for JAQL that comes from a Fusion instance (widget DTOs, NLQ) and is assumed correct. `createDimensionalElementFromMetadataItem` (jaql-element.ts:139) prefers building a real measure/attribute (formula → calculated measure; `agg`+`dim` → measure; `dim` → attribute) and only falls back to `JaqlElement`.
 
 # How it connects
 
 - Subclassed by [attributes & dimensions](./attributes-and-dimensions.md) and [measures](./measures.md); filter classes in `dimensional-model/filters/` implement the same `Element` contract ([filters](./filters.md)).
-- `sdk-ui` / `sdk-query-client` build query payloads by calling `jaql()` on each element; `MetadataItem`/`MetadataItemJaql` (types.ts:714/763) are the wire shapes they exchange.
+- `sdk-ui` / `sdk-query-client` build query payloads by calling `jaql()` on each element; `MetadataItem`/`MetadataItemJaql` (types.ts:742/791) are the wire shapes they exchange.
 - `composeCode` (base.ts:105) carries the CSDK source-code representation of an element — see [compose-code](./compose-code.md).
 - `serialize()`/`__serializable` round-trip elements through JSON; `create()` in `dimensional-model/factory.ts:29` rebuilds elements from serialized JSON.
 - Query-result shapes (`QueryResultData`, `Data`, `Cell`) live at the package root, packages/sdk-data/src/interfaces.ts.
@@ -66,7 +67,7 @@ plus duck-typing guards `isMeasure`, `isBaseMeasure`, `isCalculatedMeasure`, `is
 1. `name` is identity, `title` is display. Measures emit `title: this.name` in JAQL (not `this.title`) so sdk-ui's per-measure aliasing round-trips — see [measures](./measures.md). Attributes emit `title: this.title`.
 2. Elements are immutable in practice: `sort()`, `format()` etc. must return a new instance, never mutate.
 3. A new element class must set a unique `__serializable` string; all `isDimensional*` type guards match on it, not on `instanceof` (survives cross-realm/serialized objects).
-4. `MetadataTypes.isCalculatedMeasure` explicitly excludes calculated attributes — both have `{ formula, context }`, distinguished by `type: 'calculated_dimension'` (types.ts:210-257). Any new formula-shaped element must keep these guards mutually exclusive.
+4. `MetadataTypes.isCalculatedMeasure` explicitly excludes calculated attributes — both have `{ formula, context }`, distinguished by `type: 'calculated_dimension'` (types.ts:238-285). Any new formula-shaped element must keep these guards mutually exclusive.
 5. `resolveElementNames` (base.ts:144) accepts legacy `title`-only JSON (title becomes identity when `name` is missing); every `create*` JSON factory must go through it.
 6. `normalizeName` (base.ts:157) strips non-`[a-zA-Z0-9_.]` chars, maps `.` to `_`, and prefixes a leading digit with `_` — the rule behind generated data-model property names and formula context keys.
 

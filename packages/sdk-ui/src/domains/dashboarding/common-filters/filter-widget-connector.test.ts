@@ -1,8 +1,9 @@
-import { createAttribute, filterFactory, isMembersFilter } from '@sisense/sdk-data';
+import { createAttribute, filterFactory, isMembersFilter, measureFactory } from '@sisense/sdk-data';
 import type { Filter } from '@sisense/sdk-data';
 import { describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import type { FilterWidgetFilterType } from '@/domains/widgets/components/filter-widget/types';
 
 import {
   connectFilterWidgetToProps,
@@ -736,5 +737,122 @@ describe('connectFilterWidgetToProps — the widget owns one filter per dimensio
     expect(setLink).toHaveBeenCalledWith({ filterId: rangeSelection.config.guid });
     const updatedFilters = setFilters.mock.calls[0][0] as Filter[];
     expect(updatedFilters).toEqual([conditionFilter, rangeSelection]);
+  });
+});
+
+describe('filter-widget-rank.unit:connector-adoption', () => {
+  const measure = measureFactory.customFormula('Weighted Revenue', 'SUM([rev])', {
+    rev: DM.Commerce.Revenue,
+  });
+  const ranking = filterFactory.topRanking(attr, measure, 5);
+  const includeAll = filterFactory.members(attr, []);
+  const resolveFor = (candidate: Filter, filterType: FilterWidgetFilterType) =>
+    resolveFilterWidgetFilter([candidate], attr, undefined, { filterType }).filter;
+
+  it('lets Rank read-adopt a same-attribute ranking filter', () => {
+    expect(resolveFor(ranking, 'rank')).toBe(ranking);
+  });
+
+  it('lets Rank read-adopt include-all', () => {
+    expect(resolveFor(includeAll, 'rank')).toBe(includeAll);
+  });
+
+  it.each([
+    ['members', filterFactory.members(attr, ['France'])],
+    ['text condition', filterFactory.contains(attr, 'fra')],
+    ['numeric condition', filterFactory.greaterThan(attr, 5)],
+    ['relative date', filterFactory.dateRelativeTo(DM.Commerce.Date.Days, 1, 1)],
+    ['date range', filterFactory.dateRange(DM.Commerce.Date.Days, '2026-01-14', undefined)],
+  ])('does not let Rank read-adopt a %s filter', (_name, candidate) => {
+    expect(
+      resolveFilterWidgetFilter([candidate], candidate.attribute, undefined, { filterType: 'rank' })
+        .filter,
+    ).toBeNull();
+  });
+
+  it('no longer lets Condition read-adopt a ranking filter', () => {
+    expect(resolveFor(ranking, 'condition')).toBeNull();
+  });
+
+  it('still lets Condition read-adopt a non-members, non-ranking expression', () => {
+    const text = filterFactory.contains(attr, 'fra');
+    expect(resolveFor(text, 'condition')).toBe(text);
+  });
+
+  it.each(['members', 'calendar', 'range', 'period'] as const)(
+    'does not let %s read-adopt a ranking filter',
+    (filterType) => {
+      expect(resolveFor(ranking, filterType)).toBeNull();
+    },
+  );
+
+  it('claims the guid of the ranking filter it adopts on its first Apply', () => {
+    const next = filterFactory.bottomRanking(attr, measure, 3);
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+
+    const { onChange } = connectFilterWidgetToProps({
+      filters: [ranking],
+      setFilters,
+      link: undefined,
+      setLink,
+    })({ attribute: attr, filterType: 'rank' });
+    onChange(next);
+
+    expect(setLink).toHaveBeenCalledWith({ filterId: ranking.config.guid });
+    const updated = setFilters.mock.calls[0][0] as Filter[];
+    expect(updated).toHaveLength(1);
+    expect(updated[0].config.guid).toBe(ranking.config.guid);
+  });
+
+  it('lands as its own filter beside a Condition filter on the same attribute', () => {
+    const condition = filterFactory.contains(attr, 'fra');
+    const next = filterFactory.topRanking(attr, measure, 3);
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+
+    const { onChange } = connectFilterWidgetToProps({
+      filters: [condition],
+      setFilters,
+      link: undefined,
+      setLink,
+    })({ attribute: attr, filterType: 'rank' });
+    onChange(next);
+
+    expect(setLink).toHaveBeenCalledWith({ filterId: next.config.guid });
+    expect(setFilters.mock.calls[0][0]).toEqual([condition, next]);
+  });
+
+  it('resets its own ranking filter to include-all under the same guid on clear', () => {
+    const setFilters = vi.fn();
+    const setLink = vi.fn();
+
+    const { onChange } = connectFilterWidgetToProps({
+      filters: [ranking],
+      setFilters,
+      link: { filterId: ranking.config.guid },
+      setLink,
+    })({ attribute: attr, filterType: 'rank' });
+    onChange(null);
+
+    const updated = setFilters.mock.calls[0][0] as Filter[];
+    expect(updated).toHaveLength(1);
+    expect(isMembersFilter(updated[0])).toBe(true);
+    expect(updated[0].config.guid).toBe(ranking.config.guid);
+  });
+
+  it('leaves a foreign filter untouched when Rank is cleared with nothing of its own', () => {
+    const condition = filterFactory.contains(attr, 'fra');
+    const setFilters = vi.fn();
+
+    const { onChange } = connectFilterWidgetToProps({
+      filters: [condition],
+      setFilters,
+      link: undefined,
+      setLink: vi.fn(),
+    })({ attribute: attr, filterType: 'rank' });
+    onChange(null);
+
+    expect(setFilters).not.toHaveBeenCalled();
   });
 });

@@ -29,10 +29,9 @@ export type FilterAttributeValueType = 'text' | 'numeric' | 'datetime';
 export function getFilterAttributeValueType(attribute: Attribute): FilterAttributeValueType | null {
   // A calculated dimension reports the metadata kind `'calculatedattribute'` as its `type`, which
   // is not a value type; the value type of its formula is carried in `dataType` instead. One built
-  // in code carries no `dataType` at all, and text is the only data type Sisense supports for a
-  // calculated dimension, so an absent one is read as text rather than as non-editable. A
-  // `dataType` that is present but unrecognized falls through to `null`, as any other attribute
-  // with an unrecognized type does.
+  // in code may carry no `dataType` (the type is optional), so an absent one defaults to text
+  // rather than to non-editable. A `dataType` that is present but unrecognized falls through to
+  // `null`, as any other attribute with an unrecognized type does.
   const isCalculated = MetadataTypes.isCalculatedAttribute(attribute);
   const valueType =
     (isCalculated

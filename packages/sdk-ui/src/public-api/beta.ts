@@ -27,6 +27,7 @@ export type {
   VisualizationStateUpdate,
   DesignPanelProps,
   DesignPanel,
+  DataPanelInput,
 } from '../infra/plugins/widget-plugins/types.js';
 
 // Widget plugin state persistence — bridges local component state with the

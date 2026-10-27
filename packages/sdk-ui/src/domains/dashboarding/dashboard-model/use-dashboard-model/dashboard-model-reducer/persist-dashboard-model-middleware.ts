@@ -61,10 +61,10 @@ export function toColResizeTableSize(columnWidths: readonly number[]): number {
 }
 
 /**
- * Drops `tableState.colResize` from a stale table style before it's merged as the
- * lower-priority source in {@link applyPartialDtoStyle}, which merges arrays by index
- * and would otherwise leave stale `colResize.columns` entries behind after a resize to
- * fewer columns. `rebuiltStyle` always carries a freshly computed `colResize`.
+ * Drops `tableState.colResize` from a stale table style before it's merged over the
+ * rebuilt style in {@link applyPartialDtoStyle}, which merges arrays by index and would
+ * otherwise overwrite the fresh `colResize.columns` (and leave stale entries behind after
+ * a resize to fewer columns). `rebuiltStyle` always carries a freshly computed `colResize`.
  *
  * @internal
  */

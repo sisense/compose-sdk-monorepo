@@ -85,7 +85,7 @@ describe('datetime member validation', () => {
   it('should reject WeekOfYear members filters', () => {
     expect(() =>
       validateDatetimeMemberStrings(['2024-01-01T00:00:00'], DateLevels.WeekOfYear, 'filters[0]'),
-    ).toThrow(/filters\[0\]\.args\[0\]: filterFactory\.members does not support WeekOfYear/);
+    ).toThrow(/filters\[0\]\.args\[0\]: members filters do not support WeekOfYear/);
   });
 
   it('should allow Years members as 4-digit year or ISO datetime', () => {
@@ -250,14 +250,9 @@ describe('flattenFilters', () => {
 });
 
 describe('query datetime validation', () => {
-  it('should allow dimension vs filter granularity mismatch on the same column', () => {
-    const yearsDimension = createDateLevelAttribute('DM.Commerce.Date.Years');
-    const quartersFilterAttribute = createDateLevelAttribute('DM.Commerce.Date.Quarters');
-
+  it('should allow a single date dimension', () => {
     const errors = validateQueryDatetimeConsistency({
-      dimensions: [yearsDimension],
-      filters: [filterFactory.members(quartersFilterAttribute, ['2024-01-01T00:00:00'])],
-      highlights: null,
+      dimensions: [createDateLevelAttribute('DM.Commerce.Date.Years')],
     });
 
     expect(errors).toHaveLength(0);
@@ -268,41 +263,29 @@ describe('query datetime validation', () => {
     expect(getDateColumnDisplayName(attribute)).toBe('Commerce.Date');
   });
 
-  it('should reject multiple filters on the same column at different levels', () => {
-    const weeksFilter = filterFactory.members(createDateLevelAttribute('DM.Commerce.Date.Weeks'), [
-      '2024-12-30T00:00:00',
-    ]);
-    const monthsFilter = filterFactory.members(
-      createDateLevelAttribute('DM.Commerce.Date.Months'),
-      ['2024-01-01T00:00:00'],
-    );
-
+  it('should allow dimensions on the same column at the same level', () => {
     const errors = validateQueryDatetimeConsistency({
-      dimensions: [],
-      filters: [weeksFilter, monthsFilter],
-      highlights: null,
-    });
-
-    expect(errors).toHaveLength(1);
-    expect(errors[0].path).toBe('filters');
-    expect(errors[0].message).toContain('Date filter on Weeks (filters[0])');
-    expect(errors[0].message).toContain('Date filter on Months (filters[1])');
-    expect(errors[0].message).toContain("'Commerce.Date'");
-  });
-
-  it('should allow highlight vs dimension granularity mismatch on the same column', () => {
-    const yearsDimension = createDateLevelAttribute('DM.Commerce.Date.Years');
-    const weeksHighlight = filterFactory.members(
-      createDateLevelAttribute('DM.Commerce.Date.Weeks'),
-      ['2024-12-30T00:00:00'],
-    );
-
-    const errors = validateQueryDatetimeConsistency({
-      dimensions: [yearsDimension],
-      filters: [],
-      highlights: [weeksHighlight],
+      dimensions: [
+        createDateLevelAttribute('DM.Commerce.Date.Months'),
+        createDateLevelAttribute('DM.Commerce.Date.Months'),
+      ],
     });
 
     expect(errors).toHaveLength(0);
+  });
+
+  it('should reject dimensions on the same column at different levels', () => {
+    const errors = validateQueryDatetimeConsistency({
+      dimensions: [
+        createDateLevelAttribute('DM.Commerce.Date.Years'),
+        createDateLevelAttribute('DM.Commerce.Date.Months'),
+      ],
+    });
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('dimensions');
+    expect(errors[0].message).toContain('Date breakdown on Years (dimensions[0])');
+    expect(errors[0].message).toContain('Date breakdown on Months (dimensions[1])');
+    expect(errors[0].message).toContain("'Commerce.Date'");
   });
 });

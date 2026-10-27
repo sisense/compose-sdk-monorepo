@@ -2,6 +2,8 @@ Remove a data input from this plugin — cleans up all four source files.
 
 The user will specify: the input name to remove.
 
+> **Only before the plugin is used in saved dashboards.** A saved widget stores only each input's `name` and its items, and hosts may restore an input's other settings by its position in `inputs`. Removing an input from a plugin that dashboards already use detaches the saved data and can shift the inputs after it. In that case, do not remove it: keep the input at its position with the same `name` and `type`, let the visualization ignore its items, and mark it in `displayName` (for example `'Break By (deprecated)'`). Ask the user which case applies before deleting anything.
+
 **Row indices shift when a dimension is removed.** After removing, update any hardcoded index accesses in `Visualization.tsx`.
 
 ## Files to change

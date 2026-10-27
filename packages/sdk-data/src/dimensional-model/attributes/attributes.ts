@@ -9,13 +9,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 /* eslint-disable sonarjs/no-nested-switch */
-import { createDimensionalElementFromJaql, parseExpression } from '../../utils.js';
+import {
+  asCalculatedDimensionContextEntry,
+  createDimensionalElementFromJaql,
+  parseExpression,
+} from '../../utils.js';
 import {
   DimensionalElement,
   normalizeName,
   resolveElementNames,
   wrapIfNeedsNormalization,
 } from '../base.js';
+import { stringifyHelper } from '../compose-code-utils.js';
 import { DATA_MODEL_MODULE_NAME } from '../consts.js';
 import { create } from '../factory.js';
 import { Attribute, AttributeContext, LevelAttribute } from '../interfaces.js';
@@ -799,7 +804,8 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
     };
 
     // The analytical engine resolves a formula element's result type from its `datatype`; preserve
-    // it so calculated-dimension filters/queries don't fail element data-type extraction.
+    // it so calculated-dimension filters/queries don't fail element data-type extraction. An unknown
+    // type is left off so the query client can resolve it from the server at query time.
     if (this.dataType) {
       result.jaql.datatype = this.dataType;
     }
@@ -923,8 +929,20 @@ export function createCalculatedAttribute(json: any): Attribute {
     // column's real data type.
     const isRawJaqlEntry =
       entry && typeof entry === 'object' && !entry.type && !entry.__serializable;
-    context[key] = isRawJaqlEntry ? createDimensionalElementFromJaql(entry) : create(entry);
+    context[key] = isRawJaqlEntry
+      ? createDimensionalElementFromJaql(asCalculatedDimensionContextEntry(entry))
+      : create(entry);
   });
+
+  // Match the compose code attributeFactory.customFormula would give, so a filter on this
+  // attribute can reference it by code instead of serializing the instance.
+  // trust a stored compose code only on a serialized element, not on raw dashboard JAQL
+  const composeCode =
+    (json.__serializable && json.composeCode) ||
+    `attributeFactory.customFormula(${[title ?? name, expression, context, json.datatype]
+      .filter((arg) => arg !== undefined)
+      .map((arg) => stringifyHelper(arg))
+      .join(', ')})`;
 
   return new DimensionalCalculatedAttribute(
     name,
@@ -933,7 +951,7 @@ export function createCalculatedAttribute(json: any): Attribute {
     desc,
     sort,
     json.dataSource,
-    undefined,
+    composeCode,
     json.panel,
     json.indexed,
     json.merged,

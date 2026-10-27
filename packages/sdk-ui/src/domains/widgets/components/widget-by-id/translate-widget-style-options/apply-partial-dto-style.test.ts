@@ -37,13 +37,26 @@ describe('applyPartialDtoStyle', () => {
     });
   });
 
-  it('rebuilt values win over partial on conflict', () => {
+  it('partial values win over the defaults the rebuild writes for fields the model does not capture', () => {
     const rebuilt = {
-      legend: { enabled: true, position: 'bottom' },
-    } as unknown as WidgetStyle;
-    const partial = { legend: { enabled: false, position: 'top' } };
-    const result = applyPartialDtoStyle(rebuilt, partial);
-    expect(result).toEqual({ legend: { enabled: true, position: 'bottom' } });
+      y2Axis: {
+        inactive: false,
+        enabled: true,
+        ticks: true,
+        labels: { enabled: true, rotation: 0 },
+        gridLines: true,
+      },
+    } as unknown as CartesianWidgetStyle;
+    const partial = { y2Axis: { inactive: true, ticks: false, labels: { rotation: 45 } } };
+    expect(applyPartialDtoStyle(rebuilt, partial)).toEqual({
+      y2Axis: {
+        inactive: true,
+        enabled: true,
+        ticks: false,
+        labels: { enabled: true, rotation: 45 },
+        gridLines: true,
+      },
+    });
   });
 
   it('deep-merges nested objects (axis labels)', () => {

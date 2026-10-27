@@ -12,6 +12,7 @@ import {
   NlqTranslationResult,
 } from '../../../types.js';
 import { processNode } from '../../shared/expression/process-node.js';
+import { isConditionalColor } from '../../shared/utils/conditional-color.js';
 import type { SchemaIndex } from '../../shared/utils/schema-index.js';
 import {
   FunctionCall,
@@ -23,6 +24,8 @@ import {
   MeasureTranslationItem,
   StyledMeasureColumnJSON,
 } from '../../types.js';
+
+const UNKNOWN_ERROR_MESSAGE = 'Unknown error';
 
 /**
  * Validates sortType for error reporting. Does not apply sort.
@@ -65,12 +68,49 @@ export const translateMeasureFromJSONFunctionCall = (
     }
     return { success: true, data: measure };
   } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+    const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MESSAGE;
     return {
       success: false,
       errors: [{ ...errorContext, message: errorMsg }],
     };
   }
+};
+
+/**
+ * Translates each formula-driven color condition's `valueMeasure` from a `FunctionCall` to a
+ * {@link Measure}, so the chart can query the threshold it compares against.
+ *
+ * @param color - The `color` style of a styled measure column JSON item.
+ * @param dataSource - Data source.
+ * @param schemaIndex - Schema index.
+ * @returns The color style with translated condition measures.
+ * @throws Error when a condition measure is not a valid measure function call.
+ */
+const translateColorConditionMeasuresFromJSON = (
+  color: unknown,
+  dataSource: JaqlDataSourceForDto,
+  schemaIndex: SchemaIndex,
+): unknown => {
+  if (!isConditionalColor<{ valueMeasure?: unknown }>(color)) return color;
+  return {
+    ...color,
+    conditions: color.conditions.map((condition, index) => {
+      if (condition?.valueMeasure === undefined) return condition;
+      const pathPrefix = `color.conditions[${index}].valueMeasure`;
+      const invalidMessage = `${pathPrefix}: Expected a measure function call (function/args).`;
+      if (!isFunctionCall(condition.valueMeasure)) {
+        throw new Error(invalidMessage);
+      }
+      const valueMeasure = processNode({
+        data: condition.valueMeasure,
+        context: { dataSource, schemaIndex, pathPrefix },
+      });
+      if (!isMeasureElement(valueMeasure)) {
+        throw new Error(invalidMessage);
+      }
+      return { ...condition, valueMeasure };
+    }),
+  };
 };
 
 /**
@@ -101,13 +141,26 @@ const processStyledMeasureColumn = (
     };
   }
 
+  const style = omit(styledMeasure, 'column') as ValueStyle & SeriesStyle;
+
   const sortError = validateMeasureSortType(styledMeasure.sortType, context);
   if (sortError) {
-    const style = omit(styledMeasure, 'column') as ValueStyle & SeriesStyle;
     return { measure: measureElement, style, error: sortError };
   }
 
-  const style = omit(styledMeasure, 'column') as ValueStyle & SeriesStyle;
+  if (style.color !== undefined) {
+    try {
+      style.color = translateColorConditionMeasuresFromJSON(
+        style.color,
+        dataSource,
+        schemaIndex,
+      ) as ValueStyle['color'];
+    } catch (error) {
+      const message = error instanceof Error ? error.message : UNKNOWN_ERROR_MESSAGE;
+      return { measure: measureElement, style, error: { ...context, message } };
+    }
+  }
+
   return { measure: measureElement, style };
 };
 
@@ -208,7 +261,7 @@ export const translateMeasuresFromJSON = (
         );
       }
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MESSAGE;
       errors.push({ ...context, message: errorMsg });
     }
   });

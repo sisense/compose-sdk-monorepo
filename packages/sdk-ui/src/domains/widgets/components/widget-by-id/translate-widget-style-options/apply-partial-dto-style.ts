@@ -4,18 +4,22 @@ import type { WidgetStyle } from '../types.js';
 import type { UnsupportedStyleOptions } from './extract-unsupported-style-options.js';
 
 /**
- * Layers `partialStyle` (the unsupported style fields snapshot from the original
- * Fusion DTO, see {@link extractUnsupportedStyleOptions}) underneath the freshly
- * `rebuiltStyle` produced by `to*WidgetStyle`.
+ * Layers the unsupported style fields snapshot from the original Fusion DTO over the
+ * freshly rebuilt style. The snapshot comes from {@link extractUnsupportedStyleOptions};
+ * the rebuilt style comes from a `to*WidgetStyle` translator.
  *
- * Priority (highest to lowest):
- *   1. `rebuiltStyle` — values produced by the SDK → DTO translation.
- *   2. `partialStyle` — values plucked from the original DTO.
+ * Values in `partialStyle` win. They are fields the CSDK model does not capture, such as
+ * axis `inactive`, `ticks` and `labels.rotation`, for which `rebuiltStyle` holds only the
+ * Fusion defaults. So a value set in Fusion (a hidden `y2Axis`, say) survives the rebuild
+ * instead of being reset to the default. Every value the model derives from the current
+ * props still comes from `rebuiltStyle`, because the snapshot never holds such a value.
  *
- * Implemented with `lodash-es/merge`, which performs a deep merge and skips
- * `undefined` source values, so any field the rebuild does emit takes precedence
- * while gap fields the rebuild leaves untouched are filled in from `partialStyle`.
+ * Implemented with `lodash-es/merge`, which performs a deep merge (arrays by index) and
+ * skips `undefined` source values.
  *
+ * @param rebuiltStyle - The style rebuilt from the widget model.
+ * @param partialStyle - The unsupported style fields snapshot from the original DTO.
+ * @returns The rebuilt style with the snapshot values restored.
  * @internal
  */
 export function applyPartialDtoStyle<T extends WidgetStyle>(
@@ -23,5 +27,5 @@ export function applyPartialDtoStyle<T extends WidgetStyle>(
   partialStyle?: UnsupportedStyleOptions,
 ): T {
   if (!partialStyle || Object.keys(partialStyle).length === 0) return rebuiltStyle;
-  return merge({}, partialStyle, rebuiltStyle) as T;
+  return merge({}, rebuiltStyle, partialStyle) as T;
 }

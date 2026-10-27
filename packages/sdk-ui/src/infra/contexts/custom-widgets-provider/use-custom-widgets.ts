@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
+import { useWidgetDefinitionRegistry } from '@/infra/plugins/use-widget-definition-registry';
 import type { CustomVisualization } from '@/infra/plugins/widget-plugins/types';
 
 import { CustomWidgetComponent, CustomWidgetComponentProps } from './types';
@@ -30,24 +30,28 @@ import { CustomWidgetComponent, CustomWidgetComponentProps } from './types';
  * @group Dashboards
  */
 export const useCustomWidgets = (): UseCustomWidgetsResult => {
-  const widgetRegistry = useWidgetPluginRegistry();
+  const widgetRegistry = useWidgetDefinitionRegistry();
 
   const registerCustomWidget = useCallback(
     <T = unknown>(customWidgetType: string, customWidget: CustomWidgetComponent<T>) => {
-      widgetRegistry.register(customWidgetType, customWidget as CustomVisualization, 'legacy');
+      widgetRegistry.registerComponent(
+        customWidgetType,
+        customWidget as CustomVisualization,
+        'legacy',
+      );
     },
     [widgetRegistry],
   );
 
   const unregisterCustomWidget = useCallback(
     (customWidgetType: string) => {
-      widgetRegistry.unregister(customWidgetType, 'legacy');
+      widgetRegistry.unregisterComponent(customWidgetType, 'legacy');
     },
     [widgetRegistry],
   );
 
   const hasCustomWidget = useCallback(
-    (customWidgetType: string) => widgetRegistry.has(customWidgetType, 'legacy'),
+    (customWidgetType: string) => widgetRegistry.hasComponent(customWidgetType, 'legacy'),
     [widgetRegistry],
   );
 
